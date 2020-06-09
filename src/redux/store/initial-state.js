@@ -1,6 +1,6 @@
 export default {
   user: {
-    token: '',
+    token: "",
     session: null,
     user: null,
     mentor: null,

@@ -1,7 +1,7 @@
-import {reducer as formReducer} from 'redux-form';
-import {combineReducers} from 'redux';
+import { reducer as formReducer } from "redux-form";
+import { combineReducers } from "redux";
 
-import userReducer from './user.reducer';
+import userReducer from "./user.reducer";
 
 const rootReducer = combineReducers({
   user: userReducer,

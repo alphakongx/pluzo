@@ -1,6 +1,6 @@
-import {createReducer} from 'reduxsauce';
-import {UserTypes} from '../actions';
-import storeInitialState from '../store/initial-state';
+import { createReducer } from "reduxsauce";
+import { UserTypes } from "../actions";
+import storeInitialState from "../store/initial-state";
 export const INITIAL_STATE = storeInitialState.user;
 
 const logout = (state, action) => INITIAL_STATE;

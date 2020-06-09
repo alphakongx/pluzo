@@ -1,8 +1,8 @@
-import {createActions} from 'reduxsauce';
+import { createActions } from "reduxsauce";
 
-const {Types, Creators} = createActions({
-  requestLogin: ['params'],
-  loginSuccess: ['sessionData'],
+const { Types, Creators } = createActions({
+  requestLogin: ["params"],
+  loginSuccess: ["sessionData"],
   loginFailure: null,
 
   logout: null,
