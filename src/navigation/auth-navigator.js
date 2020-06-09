@@ -4,10 +4,10 @@ import navigationConfig from "./navigation-config";
 
 const AuthStack = createStackNavigator(
   {
-    Login: { screen: Login },
+    LOGIN: { screen: Login },
   },
   {
-    initialRouteName: "Welcome",
+    initialRouteName: "LOGIN",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {
