@@ -6,6 +6,10 @@ import {
   View,
 } from "react-native";
 import styles from "./text-input.style.js";
+const PLACEHOLDER_SMALL_POSITION = 3;
+const PLACEHOLDER_SMALL_SIZE = 11;
+const PLACEHOLDER_LARGE_POSITION = 11;
+const PLACEHOLDER_LARGE_SIZE = 14;
 
 const TextInput: () => React$Node = props => {
   const { onChangeText, placeholder, value } = props;
@@ -13,10 +17,14 @@ const TextInput: () => React$Node = props => {
   const [hasText, setHasText] = useState(props.text ? true : false);
   const [isFocused, setIsFocused] = useState(false);
   const [placeholderFontSize] = useState(
-    new Animated.Value(value ? 12 : 16),
+    new Animated.Value(
+      value ? PLACEHOLDER_SMALL_SIZE : PLACEHOLDER_LARGE_SIZE,
+    ),
   );
   const [placeholderPosition] = useState(
-    new Animated.Value(value ? 3 : 9),
+    new Animated.Value(
+      value ? PLACEHOLDER_SMALL_POSITION : PLACEHOLDER_LARGE_POSITION,
+    ),
   );
   let inputFieldRef = null;
 
@@ -29,15 +37,20 @@ const TextInput: () => React$Node = props => {
   }, [text]);
 
   useEffect(() => {
-    console.log("STATE CHANGED: ", isFocused, hasText);
     Animated.parallel([
       Animated.timing(placeholderFontSize, {
-        toValue: isFocused || hasText ? 12 : 16,
+        toValue:
+          isFocused || hasText
+            ? PLACEHOLDER_SMALL_SIZE
+            : PLACEHOLDER_LARGE_SIZE,
         duration: 200,
         useNativeDriver: false,
       }),
       Animated.timing(placeholderPosition, {
-        toValue: isFocused || hasText ? 3 : 9,
+        toValue:
+          isFocused || hasText
+            ? PLACEHOLDER_SMALL_POSITION
+            : PLACEHOLDER_LARGE_POSITION,
         duration: 200,
         useNativeDriver: false,
       }),

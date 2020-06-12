@@ -1,21 +1,20 @@
 import { Platform, StyleSheet } from "react-native";
-import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
-    borderRadius: 5,
-    height: 56,
-    backgroundColor: COLOR.CARD_BACKGROUND,
-    borderColor: COLOR.SEARCH_INPUT_BORDER,
+    borderRadius: 50,
+    height: 45,
+    backgroundColor: "white",
+    borderColor: "white",
     borderWidth: 1,
   },
   touchableInputContainer: {
     flex: 1,
     flexDirection: "row",
-    paddingLeft: 12,
+    paddingLeft: 16,
     paddingRight: 16.96,
-    paddingBottom: 5,
-    paddingTop: 5,
+    paddingBottom: 2,
+    paddingTop: 2,
     justifyContent: "space-between",
   },
   placeholderContainer: {
@@ -27,7 +26,8 @@ export default StyleSheet.create({
   },
   placeholder: {
     paddingLeft: 1,
-    color: COLOR.TEXT_PLACEHOLDER,
+    fontSize: 14,
+    color: "#9892A3",
   },
   inputFieldContainer: {
     flexDirection: "row",
@@ -36,8 +36,8 @@ export default StyleSheet.create({
   },
   inputField: {
     flex: 1,
-    fontSize: 16,
-    color: COLOR.TEXT_PRIMARY_2,
+    fontSize: 14,
+    color: "black",
     paddingTop: 0,
     paddingBottom: Platform.OS === "android" ? 2 : 5,
   },
