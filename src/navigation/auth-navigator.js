@@ -1,5 +1,8 @@
 import { createStackNavigator } from "react-navigation-stack";
 import Login from "../screens/login";
+import ForgotPassword from "../screens/forgot-password";
+import ResetPasswordCodeVerification from "../screens/reset-password-code-verification";
+import ResetPassword from "../screens/reset-password";
 import SignupFirstName from "../screens/signup-first-name";
 import SignupGenderSelect from "../screens/signup-gender-select";
 import SignupUsername from "../screens/signup-username";
@@ -12,6 +15,9 @@ import navigationConfig from "./navigation-config";
 const AuthStack = createStackNavigator(
   {
     LOGIN: { screen: Login },
+    FORGOT_PASSWORD: { screen: ForgotPassword },
+    RESET_PASSWORD_CODE_VERIFICATION: { screen: ResetPasswordCodeVerification },
+    RESET_PASSWORD: { screen: ResetPassword },
     SIGNUP_FIRST_NAME: { screen: SignupFirstName },
     SIGNUP_GENDER_SELECT: { screen: SignupGenderSelect },
     SIGNUP_USERNAME: { screen: SignupUsername },
@@ -21,7 +27,7 @@ const AuthStack = createStackNavigator(
     SIGNUP_SUCCESS: { screen: SignupSuccess },
   },
   {
-    initialRouteName: "SIGNUP_FIRST_NAME",
+    initialRouteName: "LOGIN",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {
