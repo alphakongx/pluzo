@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-import {
-  Platform,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-} from "react-native";
+import { Platform, TouchableOpacity, TouchableNativeFeedback } from "react-native";
 
 class Touchable extends Component {
   render() {
@@ -11,18 +7,12 @@ class Touchable extends Component {
 
     if (native && Platform.OS === "android") {
       return (
-        <TouchableNativeFeedback {...this.props}>
-          {children}
-        </TouchableNativeFeedback>
+        <TouchableNativeFeedback {...this.props}>{children}</TouchableNativeFeedback>
       );
     }
 
     return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        underlayColor={"transparent"}
-        {...this.props}
-      >
+      <TouchableOpacity activeOpacity={0.8} underlayColor={"transparent"} {...this.props}>
         {children}
       </TouchableOpacity>
     );

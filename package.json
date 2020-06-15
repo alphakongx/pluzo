@@ -14,7 +14,9 @@
     "@react-native-community/masked-view": "^0.1.10",
     "react": "16.11.0",
     "react-native": "0.62.2",
+    "react-native-confirmation-code-input": "^1.0.4",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-image-picker": "^2.3.1",
     "react-native-keyboard-manager": "^4.0.13-16",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-safe-area-context": "^3.0.2",
@@ -57,7 +59,7 @@
   },
   "rnpm": {
     "assets": [
-      "assets/fonts/Sarpanch"
+      "assets/fonts/MontserratAlternates"
     ]
   }
 }

@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Animated,
-  TextInput as RNTextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Animated, TextInput as RNTextInput, TouchableOpacity, View } from "react-native";
 import styles from "./text-input.style.js";
 const PLACEHOLDER_SMALL_POSITION = 3;
 const PLACEHOLDER_SMALL_SIZE = 11;
@@ -17,14 +12,10 @@ const TextInput: () => React$Node = props => {
   const [hasText, setHasText] = useState(props.text ? true : false);
   const [isFocused, setIsFocused] = useState(false);
   const [placeholderFontSize] = useState(
-    new Animated.Value(
-      value ? PLACEHOLDER_SMALL_SIZE : PLACEHOLDER_LARGE_SIZE,
-    ),
+    new Animated.Value(value ? PLACEHOLDER_SMALL_SIZE : PLACEHOLDER_LARGE_SIZE),
   );
   const [placeholderPosition] = useState(
-    new Animated.Value(
-      value ? PLACEHOLDER_SMALL_POSITION : PLACEHOLDER_LARGE_POSITION,
-    ),
+    new Animated.Value(value ? PLACEHOLDER_SMALL_POSITION : PLACEHOLDER_LARGE_POSITION),
   );
   let inputFieldRef = null;
 
@@ -33,24 +24,19 @@ const TextInput: () => React$Node = props => {
   };
 
   useEffect(() => {
-    setHasText(text ? true : false);
+    setHasText(text.length > 0);
   }, [text]);
 
   useEffect(() => {
     Animated.parallel([
       Animated.timing(placeholderFontSize, {
-        toValue:
-          isFocused || hasText
-            ? PLACEHOLDER_SMALL_SIZE
-            : PLACEHOLDER_LARGE_SIZE,
+        toValue: isFocused || hasText ? PLACEHOLDER_SMALL_SIZE : PLACEHOLDER_LARGE_SIZE,
         duration: 200,
         useNativeDriver: false,
       }),
       Animated.timing(placeholderPosition, {
         toValue:
-          isFocused || hasText
-            ? PLACEHOLDER_SMALL_POSITION
-            : PLACEHOLDER_LARGE_POSITION,
+          isFocused || hasText ? PLACEHOLDER_SMALL_POSITION : PLACEHOLDER_LARGE_POSITION,
         duration: 200,
         useNativeDriver: false,
       }),
@@ -72,17 +58,11 @@ const TextInput: () => React$Node = props => {
       >
         <View style={styles.inputFieldContainer}>
           <Animated.View
-            style={[
-              styles.placeholderContainer,
-              { paddingTop: placeholderPosition },
-            ]}
+            style={[styles.placeholderContainer, { paddingTop: placeholderPosition }]}
           >
             <Animated.Text
               numberOfLines={1}
-              style={[
-                styles.placeholder,
-                { fontSize: placeholderFontSize },
-              ]}
+              style={[styles.placeholder, { fontSize: placeholderFontSize }]}
             >
               {placeholder}
             </Animated.Text>
@@ -99,7 +79,7 @@ const TextInput: () => React$Node = props => {
             style={[styles.inputField]}
             onChangeText={t => {
               onChangeText && onChangeText(t);
-              setText({ text: t });
+              setText(t);
             }}
           />
         </View>

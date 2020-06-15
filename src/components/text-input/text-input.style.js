@@ -1,4 +1,5 @@
 import { Platform, StyleSheet } from "react-native";
+import { FontHelper } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -24,23 +25,25 @@ export default StyleSheet.create({
     zIndex: 1,
     flexDirection: "row",
   },
-  placeholder: {
+  placeholder: FontHelper.font({
     paddingLeft: 1,
     fontSize: 14,
+    fontWeight: "700",
     color: "#9892A3",
-  },
+  }),
   inputFieldContainer: {
     flexDirection: "row",
     flex: 1,
     paddingTop: 20,
   },
-  inputField: {
+  inputField: FontHelper.font({
     flex: 1,
     fontSize: 14,
+    fontWeight: "600",
     color: "black",
     paddingTop: 0,
     paddingBottom: Platform.OS === "android" ? 2 : 5,
-  },
+  }),
   iconContainer: {
     justifyContent: "center",
     paddingLeft: 5,
