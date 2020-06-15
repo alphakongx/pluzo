@@ -10,13 +10,12 @@ class Text extends Component {
     let propsStyle;
 
     if (style instanceof Array) {
-      propsStyle = _.map(
-        style,
-        s => s && FontHelper.font(StyleSheet.flatten(s)),
-      );
+      propsStyle = _.map(style, s => s && FontHelper.font(StyleSheet.flatten(s)));
+      console.log("Logging: ", propsStyle);
       propsStyle = Object.assign({}, ...propsStyle);
     } else {
       propsStyle = FontHelper.font(StyleSheet.flatten(style || {}));
+      console.log("Logging: ", propsStyle);
     }
 
     const defaultStyle = { color: link ? "blue" : "black" };

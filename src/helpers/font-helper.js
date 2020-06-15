@@ -1,27 +1,31 @@
 import _ from "lodash";
 
 // use post script names for font families
-const DomaineDisplay = {
-  // '400':          { fontFamily: 'DomaineDisp-Regular' },
-  // '600':          { fontFamily: 'DomaineDispSemibold' },
-};
-
-const Lato = {
-  // '100':          { fontFamily: 'Lato-Hairline' },
-  // '100italic':    { fontFamily: 'Lato-HairlineItalic' },
-  // '200':          { fontFamily: 'Lato-Light' },
-  // '200italic':    { fontFamily: 'Lato-LightItalic' },
-  // '400':          { fontFamily: 'Lato-Regular' },
-  // '400italic':    { fontFamily: 'Lato-Italic' },
-  // '700':          { fontFamily: 'Lato-Bold' },
-  // '700italic':    { fontFamily: 'Lato-BoldItalic' },
-  // '800':          { fontFamily: 'Lato-Black' },
-  // '800italic':    { fontFamily: 'Lato-BlackItalic' },
+const Monsterrat = {
+  "100": { fontFamily: "MontserratAlternates-Thin" },
+  "100italic": { fontFamily: "MontserratAlternates-ThinItalic" },
+  "200": { fontFamily: "MontserratAlternates-ExtraLight" },
+  "200italic": { fontFamily: "MontserratAlternates-ExtraLightItalic" },
+  "300": { fontFamily: "MontserratAlternates-Light" },
+  "300italic": { fontFamily: "MontserratAlternates-LightItalic" },
+  "400": { fontFamily: "MontserratAlternates-Regular" },
+  "400italic": { fontFamily: "MontserratAlternates-Italic" },
+  "500": { fontFamily: "MontserratAlternates-Medium" },
+  "500italic": { fontFamily: "MontserratAlternates-MediumItalic" },
+  "600": { fontFamily: "MontserratAlternates-SemiBold" },
+  "600italic": { fontFamily: "MontserratAlternates-SemiBoldItalic" },
+  "700": { fontFamily: "MontserratAlternates-Bold" },
+  "700italic": { fontFamily: "MontserratAlternates-BoldItalic" },
+  bold: { fontFamily: "MontserratAlternates-Bold" },
+  bolditalic: { fontFamily: "MontserratAlternates-BoldItalic" },
+  "800": { fontFamily: "MontserratAlternates-Black" },
+  "800italic": { fontFamily: "MontserratAlternates-BlackItalic" },
+  "900": { fontFamily: "MontserratAlternates-ExtraBold" },
+  "900italic": { fontFamily: "MontserratAlternates-ExtraBoldItalic" },
 };
 
 const FONTS = {
-  DomaineDisplay,
-  Lato,
+  Monsterrat,
 };
 
 /*
@@ -30,16 +34,12 @@ const FONTS = {
 class FontHelper {
   static font(fontParams) {
     let { fontFamily, fontWeight, fontStyle } = fontParams;
-    fontFamily = fontFamily || "Lato";
+    fontFamily = fontFamily || "Monsterrat";
     fontWeight = fontWeight || "400";
     fontStyle = fontStyle || "";
 
     const styles = {
-      ..._.omit(fontParams, [
-        "fontFamily",
-        "fontWeight",
-        "fontStyle",
-      ]),
+      ..._.omit(fontParams, ["fontFamily", "fontWeight", "fontStyle"]),
       ...FONTS[fontFamily][fontWeight + fontStyle],
     };
 

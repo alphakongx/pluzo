@@ -1,7 +1,4 @@
-import {
-  createSwitchNavigator,
-  createAppContainer,
-} from "react-navigation";
+import { createSwitchNavigator, createAppContainer } from "react-navigation";
 import { AuthStack } from "../navigation/auth-navigator";
 import { SCREENS } from "@constants";
 
