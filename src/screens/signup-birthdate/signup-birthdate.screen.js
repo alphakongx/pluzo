@@ -1,14 +1,8 @@
 import React from "react";
 import { Image, View } from "react-native";
-import {
-  GradientButton,
-  ProgressBar,
-  Screen,
-  Text,
-  TextInput,
-  Touchable,
-} from "@components";
-import styles from "./signup-first-name.style.js";
+import { GradientButton, ProgressBar, Screen, Text, Touchable } from "@components";
+import styles from "./signup-birthdate.style.js";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const SignupFirstName: () => React$Node = props => {
   const goBack = () => {
@@ -26,15 +20,22 @@ const SignupFirstName: () => React$Node = props => {
         </Touchable>
         <View style={styles.contentContainer}>
           <View style={styles.titleFieldContainer}>
-            <Text style={styles.titleText}>What's your first name?</Text>
+            <Text style={styles.titleText}>When were you born?</Text>
 
-            <TextInput placeholder={"First name"} />
+            <DateTimePicker
+              testID='dateTimePicker'
+              value={new Date(1598051730000)}
+              mode={"date"}
+              is24Hour={true}
+              display='default'
+              textColor='white'
+            />
           </View>
 
           <View style={styles.buttonContainer}>
             <GradientButton
               onPress={() => {
-                props.navigation.navigate("SIGNUP_BIRTH_DATE", {});
+                props.navigation.navigate("SIGNUP_GENDER_SELECT", {});
               }}
               title={"Continue"}
             />

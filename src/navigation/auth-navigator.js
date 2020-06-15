@@ -4,6 +4,7 @@ import ForgotPassword from "../screens/forgot-password";
 import ResetPasswordCodeVerification from "../screens/reset-password-code-verification";
 import ResetPassword from "../screens/reset-password";
 import SignupFirstName from "../screens/signup-first-name";
+import SignupBirthDate from "../screens/signup-birthdate";
 import SignupGenderSelect from "../screens/signup-gender-select";
 import SignupUsername from "../screens/signup-username";
 import SignupImage from "../screens/signup-image";
@@ -19,6 +20,7 @@ const AuthStack = createStackNavigator(
     RESET_PASSWORD_CODE_VERIFICATION: { screen: ResetPasswordCodeVerification },
     RESET_PASSWORD: { screen: ResetPassword },
     SIGNUP_FIRST_NAME: { screen: SignupFirstName },
+    SIGNUP_BIRTH_DATE: { screen: SignupBirthDate },
     SIGNUP_GENDER_SELECT: { screen: SignupGenderSelect },
     SIGNUP_USERNAME: { screen: SignupUsername },
     SIGNUP_IMAGE: { screen: SignupImage },
