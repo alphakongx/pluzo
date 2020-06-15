@@ -30,7 +30,12 @@ const LoginScreen: () => React$Node = props => {
 
         <BorderButton text={"Login with phone number"} />
 
-        <Touchable style={styles.forgotPasswordContainer}>
+        <Touchable
+          onPress={() => {
+            props.navigation.navigate("FORGOT_PASSWORD", {});
+          }}
+          style={styles.forgotPasswordContainer}
+        >
           <Text style={styles.forgotPasswordText}>Forgot Password</Text>
         </Touchable>
       </View>
