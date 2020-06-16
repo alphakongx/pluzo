@@ -1,13 +1,12 @@
 import { Platform, StyleSheet } from "react-native";
 import { FontHelper } from "@helpers";
+import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
     borderRadius: 50,
     height: 45,
-    backgroundColor: "white",
-    borderColor: "white",
-    borderWidth: 1,
+    backgroundColor: COLOR.TEXT_INPUT_BACKGROUND,
   },
   touchableInputContainer: {
     flex: 1,
@@ -29,7 +28,7 @@ export default StyleSheet.create({
     paddingLeft: 1,
     fontSize: 14,
     fontWeight: "700",
-    color: "#9892A3",
+    color: COLOR.TEXT_INPUT_PLACEHOLDER,
   }),
   inputFieldContainer: {
     flexDirection: "row",
@@ -40,7 +39,7 @@ export default StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: "600",
-    color: "black",
+    color: COLOR.TEXT_INPUT,
     paddingTop: 0,
     paddingBottom: Platform.OS === "android" ? 2 : 5,
   }),

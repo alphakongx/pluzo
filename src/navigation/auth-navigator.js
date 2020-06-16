@@ -11,6 +11,8 @@ import SignupImage from "../screens/signup-image";
 import SignupPhoneNumber from "../screens/signup-phone-number";
 import SignupCodeVerification from "../screens/signup-code-verification";
 import SignupSuccess from "../screens/signup-success";
+
+import Inbox from "../screens/inbox";
 import navigationConfig from "./navigation-config";
 
 const AuthStack = createStackNavigator(
@@ -27,9 +29,11 @@ const AuthStack = createStackNavigator(
     SIGNUP_PHONE_NUMBER: { screen: SignupPhoneNumber },
     SIGNUP_CODE_VERIFICATION: { screen: SignupCodeVerification },
     SIGNUP_SUCCESS: { screen: SignupSuccess },
+
+    INBOX: { screen: Inbox },
   },
   {
-    initialRouteName: "LOGIN",
+    initialRouteName: "INBOX",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {
