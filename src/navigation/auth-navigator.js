@@ -13,6 +13,8 @@ import SignupCodeVerification from "../screens/signup-code-verification";
 import SignupSuccess from "../screens/signup-success";
 
 import Inbox from "../screens/inbox";
+import Chat from "../screens/chat";
+
 import navigationConfig from "./navigation-config";
 
 const AuthStack = createStackNavigator(
@@ -31,9 +33,10 @@ const AuthStack = createStackNavigator(
     SIGNUP_SUCCESS: { screen: SignupSuccess },
 
     INBOX: { screen: Inbox },
+    CHAT: { screen: Chat },
   },
   {
-    initialRouteName: "INBOX",
+    initialRouteName: "CHAT",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {
