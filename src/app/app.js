@@ -6,7 +6,7 @@ import KeyboardManager from "react-native-keyboard-manager";
 import { connect } from "react-redux";
 
 if (Platform.OS === "ios") {
-  KeyboardManager.setKeyboardDistanceFromTextField(65);
+  KeyboardManager.setKeyboardDistanceFromTextField(100);
 }
 
 const App: () => React$Node = props => {
