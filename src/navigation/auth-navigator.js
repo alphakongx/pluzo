@@ -36,7 +36,7 @@ const AuthStack = createStackNavigator(
     CHAT: { screen: Chat },
   },
   {
-    initialRouteName: "CHAT",
+    initialRouteName: "INBOX",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {

@@ -50,4 +50,8 @@ export default StyleSheet.create({
     borderRadius: 3,
     backgroundColor: COLOR.MESSAGE_UNREAD_ICON,
   },
+  separator: {
+    height: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+  },
 });

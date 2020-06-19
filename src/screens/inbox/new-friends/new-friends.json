@@ -40,5 +40,23 @@
     name: "",
     online: false,
     favourite: false
+  },
+  {
+    id: "8",
+    name: "",
+    online: false,
+    favourite: false
+  },
+  {
+    id: "9",
+    name: "",
+    online: false,
+    favourite: false
+  },
+  {
+    id: "10",
+    name: "",
+    online: false,
+    favourite: false
   }
 ];
