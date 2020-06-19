@@ -24,4 +24,9 @@ export default StyleSheet.create({
   contentContainer: {
     flex: 1,
   },
+  separator: {
+    height: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    marginTop: 20,
+  },
 });

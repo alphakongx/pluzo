@@ -31,7 +31,8 @@ class Inbox extends Component {
           </View>
           <View style={styles.contentContainer}>
             <NewFriends />
-            <Messages />
+            <View style={styles.separator} />
+            <Messages onPressItem={() => this.props.navigation.navigate("CHAT", {})} />
           </View>
         </SafeAreaView>
       </LinearGradient>
