@@ -15,6 +15,7 @@ import SignupSuccess from "../screens/signup-success";
 import Inbox from "../screens/inbox";
 import Chat from "../screens/chat";
 import ProfileView from "../screens/profile-view";
+import Swipe from "../screens/swipe";
 
 import navigationConfig from "./navigation-config";
 
