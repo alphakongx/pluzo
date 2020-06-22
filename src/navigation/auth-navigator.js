@@ -14,6 +14,7 @@ import SignupSuccess from "../screens/signup-success";
 
 import Inbox from "../screens/inbox";
 import Chat from "../screens/chat";
+import ProfileView from "../screens/profile-view";
 
 import navigationConfig from "./navigation-config";
 
@@ -34,9 +35,10 @@ const AuthStack = createStackNavigator(
 
     INBOX: { screen: Inbox },
     CHAT: { screen: Chat },
+    PROFILE_VIEW: { screen: ProfileView },
   },
   {
-    initialRouteName: "INBOX",
+    initialRouteName: "LOGIN",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {
