@@ -37,9 +37,10 @@ const AuthStack = createStackNavigator(
     INBOX: { screen: Inbox },
     CHAT: { screen: Chat },
     PROFILE_VIEW: { screen: ProfileView },
+    SWIPE: { screen: Swipe },
   },
   {
-    initialRouteName: "LOGIN",
+    initialRouteName: "SWIPE",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {
