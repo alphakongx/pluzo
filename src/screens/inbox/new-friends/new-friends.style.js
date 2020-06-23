@@ -42,6 +42,5 @@ export default StyleSheet.create({
     position: "absolute",
     bottom: -9,
     alignSelf: "center",
-    // backgroundColor: "pink",
   },
 });
