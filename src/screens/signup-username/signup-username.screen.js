@@ -60,7 +60,7 @@ const SignupUsername: () => React$Node = props => {
             onPress={() => {
               props.navigation.navigate("SIGNUP_IMAGE", {});
             }}
-            title={"Continue"}
+            text={"Continue"}
           />
         </View>
       </View>

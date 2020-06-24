@@ -70,7 +70,7 @@ const SignupImage: () => React$Node = props => {
             onPress={() => {
               props.navigation.navigate("SIGNUP_PHONE_NUMBER", {});
             }}
-            title={"Continue"}
+            text={"Continue"}
           />
         </View>
       </View>

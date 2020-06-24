@@ -53,7 +53,7 @@ const SignupPhoneNumber: () => React$Node = props => {
             onPress={() => {
               props.navigation.navigate("RESET_PASSWORD_CODE_VERIFICATION", {});
             }}
-            title={"Send code"}
+            text={"Send code"}
           />
         </View>
       </View>

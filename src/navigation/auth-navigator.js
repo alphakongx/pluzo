@@ -1,4 +1,5 @@
 import { createStackNavigator } from "react-navigation-stack";
+import AuthSelection from "../screens/auth-selection";
 import Login from "../screens/login";
 import ForgotPassword from "../screens/forgot-password";
 import ResetPasswordCodeVerification from "../screens/reset-password-code-verification";
@@ -19,6 +20,7 @@ import navigationConfig from "./navigation-config";
 
 const AuthStack = createStackNavigator(
   {
+    AUTH_SELECTION: { screen: AuthSelection },
     LOGIN: { screen: Login },
     FORGOT_PASSWORD: { screen: ForgotPassword },
     RESET_PASSWORD_CODE_VERIFICATION: { screen: ResetPasswordCodeVerification },
@@ -36,7 +38,7 @@ const AuthStack = createStackNavigator(
     CHAT: { screen: Chat },
   },
   {
-    initialRouteName: "INBOX",
+    initialRouteName: "AUTH_SELECTION",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {
