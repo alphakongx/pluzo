@@ -10,13 +10,10 @@ export default StyleSheet.create({
   },
   safeAreaContainer: {
     flex: 1,
-    // backgroundColor: "green",
-    // flexDirection: "row",
   },
   contentContainer: {
     flexDirection: "row",
     flex: 1,
-    // backgroundColor: "pink",
   },
   attachmentsButtonContainer: {
     paddingHorizontal: 10,
