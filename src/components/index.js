@@ -3,6 +3,7 @@ export * from "./image";
 export * from "./progress-bar";
 export * from "./screen";
 export * from "./search-input";
+export * from "./tab-bar-icon";
 export * from "./text";
 export * from "./text-input";
 export * from "./touchable";

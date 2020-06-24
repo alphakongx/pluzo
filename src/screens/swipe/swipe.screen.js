@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Text } from "@components";
+import { GradientButton, Image, ProgressBar, Text, } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-deck-swiper";
 import Header from "./header";
@@ -23,9 +23,11 @@ const Swipe: () => React$Node = props => {
   const renderCard = (card, index) => {
     return (
       <View style={styles.card}>
-        <Text style={styles.text}>
-          {card} - {index}
-        </Text>
+        <Image
+          resizeMode={"cover"}
+          source={{ uri: "https://placeimg.com/640/640/any" }}
+          style={styles.cardImage}
+        />
       </View>
     );
   };
@@ -49,7 +51,6 @@ const Swipe: () => React$Node = props => {
       end={{ x: 0, y: 1 }}
       style={styles.container}
     >
-      <Header />
       <View style={styles.contentContainer}>
         <Swiper
           ref={swiper => {
@@ -63,7 +64,9 @@ const Swipe: () => React$Node = props => {
           onTapCard={swipeLeft}
           cards={cards}
           cardIndex={cardIndex}
-          cardVerticalMargin={80}
+          cardVerticalMargin={0}
+          cardHorizontalMargin={0}
+          backgroundColor={"#FFFFFF"}
           renderCard={renderCard}
           onSwipedAll={onSwipedAllCards}
           stackSize={3}
@@ -141,9 +144,7 @@ const Swipe: () => React$Node = props => {
           animateOverlayLabelsOpacity
           animateCardOpacity
           swipeBackCard
-        >
-          {/*<Button onPress={() => this.swiper.swipeBack()} title='Swipe Back' />*/}
-        </Swiper>
+        />
       </View>
     </LinearGradient>
   );
