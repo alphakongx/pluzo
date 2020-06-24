@@ -36,7 +36,7 @@ const SignupFirstName: () => React$Node = props => {
               onPress={() => {
                 props.navigation.navigate("SIGNUP_BIRTH_DATE", {});
               }}
-              title={"Continue"}
+              text={"Continue"}
             />
           </View>
         </View>

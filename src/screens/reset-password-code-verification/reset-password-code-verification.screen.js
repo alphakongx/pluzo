@@ -44,7 +44,7 @@ const ResetPasswordCodeVerification: () => React$Node = props => {
             </View>
 
             <View style={styles.resendButtonContainer}>
-              <GradientButton title={"Resend"} />
+              <GradientButton text={"Resend"} />
             </View>
 
             <View style={styles.instructionContainer}>
@@ -58,7 +58,7 @@ const ResetPasswordCodeVerification: () => React$Node = props => {
             onPress={() => {
               props.navigation.navigate("RESET_PASSWORD", {});
             }}
-            title={"Change password"}
+            text={"Change password"}
           />
         </View>
       </View>

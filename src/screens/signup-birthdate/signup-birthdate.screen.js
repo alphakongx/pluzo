@@ -37,7 +37,7 @@ const SignupFirstName: () => React$Node = props => {
               onPress={() => {
                 props.navigation.navigate("SIGNUP_GENDER_SELECT", {});
               }}
-              title={"Continue"}
+              text={"Continue"}
             />
           </View>
         </View>

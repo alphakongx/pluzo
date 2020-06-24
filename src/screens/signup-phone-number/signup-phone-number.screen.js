@@ -53,7 +53,7 @@ const SignupPhoneNumber: () => React$Node = props => {
             onPress={() => {
               props.navigation.navigate("SIGNUP_CODE_VERIFICATION", {});
             }}
-            title={"Create Account"}
+            text={"Create Account"}
           />
         </View>
       </View>

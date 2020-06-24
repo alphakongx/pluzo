@@ -6,7 +6,7 @@ import { GRADIENT } from "@config";
 
 class GradientButton extends Component {
   render() {
-    var { onPress, title, disabled } = this.props;
+    var { onPress, text, disabled } = this.props;
 
     return (
       <Touchable disabled={disabled} onPress={onPress}>
@@ -16,7 +16,7 @@ class GradientButton extends Component {
           end={{ x: 1, y: 0 }}
           style={styles.container}
         >
-          <Text style={styles.buttonText}>{title}</Text>
+          <Text style={styles.buttonText}>{text}</Text>
         </LinearGradient>
       </Touchable>
     );

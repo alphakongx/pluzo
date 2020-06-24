@@ -4,10 +4,11 @@ export default StyleSheet.create({
   container: {
     justifyContent: "center",
     flex: 1,
+    paddingBottom: 20,
   },
   backButtonContainer: {
-    width: 35,
-    height: 35,
+    width: 60,
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
   },
