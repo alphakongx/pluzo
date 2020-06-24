@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { FontHelper } from "@helpers";
 import { COLOR } from "@config";
 
@@ -41,7 +41,8 @@ export default StyleSheet.create({
     fontWeight: "600",
     color: COLOR.TEXT_INPUT,
     paddingTop: 0,
-    paddingBottom: Platform.OS === "android" ? 2 : 5,
+    paddingBottom: 5,
+    paddingLeft: 0,
   }),
   iconContainer: {
     justifyContent: "center",
