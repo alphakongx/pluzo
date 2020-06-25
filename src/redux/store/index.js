@@ -8,7 +8,7 @@ import storage from "@react-native-community/async-storage";
 import { rootSaga } from "../sagas";
 
 const persistConfig = {
-  key: "cialfo_students",
+  key: "pluzo",
   storage,
   whitelist: ["session", "recentFilters"],
 };

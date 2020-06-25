@@ -1,3 +1,1 @@
-import TextInput from "./text-input";
-
-export { TextInput };
+export TextInput from "./text-input";
