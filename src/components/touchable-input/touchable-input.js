@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Image, View } from "react-native";
 import { Text } from "@components";
 import { Touchable } from "@components";
-import styles from "./touchable-input.styles";
+import styles from "./touchable-input.style";
 
 class TouchableInput extends Component {
   render() {

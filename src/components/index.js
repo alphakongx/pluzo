@@ -1,4 +1,5 @@
 export * from "./button";
+export * from "./country-code-picker";
 export * from "./image";
 export * from "./progress-bar";
 export * from "./screen";
@@ -7,3 +8,4 @@ export * from "./tab-bar-icon";
 export * from "./text";
 export * from "./text-input";
 export * from "./touchable";
+export * from "./touchable-input";

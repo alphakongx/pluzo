@@ -3,14 +3,12 @@ import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: COLOR.CARD_BACKGROUND,
-    borderRadius: 5,
-    borderColor: COLOR.SEARCH_INPUT_BORDER,
-    borderWidth: 1,
-    paddingLeft: 12,
+    backgroundColor: COLOR.TEXT_INPUT_BACKGROUND,
+    borderRadius: 50,
+    paddingLeft: 16,
     paddingRight: 16.96,
     paddingVertical: 5,
-    minHeight: 56,
+    minHeight: 45,
     justifyContent: "center",
   },
   disabled: {
@@ -38,17 +36,18 @@ export default StyleSheet.create({
   },
   placeholder: {
     marginBottom: -7,
-    fontSize: 12,
-    fontWeight: "400",
+    fontSize: 11,
+    fontWeight: "700",
+    color: COLOR.TEXT_INPUT_PLACEHOLDER,
   },
   placeholderTextColor: {
-    color: COLOR.TEXT_PLACEHOLDER,
+    color: COLOR.TEXT_INPUT_PLACEHOLDER,
   },
   required: {
     color: COLOR.WARNING,
   },
   value: {
-    fontSize: 16,
-    color: COLOR.TEXT_PRIMARY_2,
+    fontSize: 14,
+    color: COLOR.TEXT_INPUT,
   },
 });
