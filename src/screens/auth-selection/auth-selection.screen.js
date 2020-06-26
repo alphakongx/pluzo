@@ -4,6 +4,7 @@ import { Image, SolidButton, GradientButton, Screen, Text } from "@components";
 import styles from "./auth-selection.style.js";
 
 const AuthSelection: () => React$Node = props => {
+  const { t } = props;
   const navigateToLogin = () => {
     props.navigation.navigate("LOGIN", {});
   };
@@ -17,24 +18,23 @@ const AuthSelection: () => React$Node = props => {
       <View style={styles.container}>
         <View style={styles.logoContainer}>
           <Image source={require("@assets/images/logo.png")} />
-          <Text style={styles.titleText}>Make new friends</Text>
+          <Text style={styles.titleText}>{t("authSelection.logoText")}</Text>
         </View>
 
         <View style={styles.bottomContentContainer}>
           <View style={styles.buttonContainer}>
-            <GradientButton onPress={navigateToLogin} text={"Login"} />
+            <GradientButton onPress={navigateToLogin} text={t("authSelection.login")} />
           </View>
           <View style={styles.buttonContainer}>
-            <SolidButton onPress={navigateToSignup} text={"Register"} />
+            <SolidButton onPress={navigateToSignup} text={t("authSelection.register")} />
           </View>
 
           <View style={styles.termPolicyContainer}>
+            <Text style={styles.termPolicyText}>{t("authSelection.termsPolicy")}</Text>
             <Text style={styles.termPolicyText}>
-              With your registration you agree to our
-            </Text>
-            <Text style={styles.termPolicyText}>
-              <Text style={styles.underline}>Terms of Use</Text> and{" "}
-              <Text style={styles.underline}>Data Policy.</Text>
+              <Text style={styles.underline}>{t("authSelection.terms")}</Text>{" "}
+              {t("authSelection.and")}{" "}
+              <Text style={styles.underline}>{t("authSelection.policy")}</Text>
             </Text>
           </View>
         </View>

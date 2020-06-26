@@ -1,5 +1,6 @@
-import { takeEvery } from "redux-saga/effects";
-import { UserTypes } from "../actions";
+import { call, put, takeEvery } from "redux-saga/effects";
+import { UserCreators, UserTypes } from "../actions";
+import { login } from "@redux/api";
 
 export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_LOGIN, requestLogin);
@@ -7,5 +8,10 @@ export function* watchUserRequests() {
 
 function* requestLogin(action) {
   try {
-  } catch (error) {}
+    const response = yield call(login);
+
+    yield put(UserCreators.loginSuccess(response.data));
+  } catch (error) {
+    yield put(UserCreators.loginFailure());
+  }
 }
