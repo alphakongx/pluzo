@@ -7,7 +7,7 @@ const logout = (state, action) => INITIAL_STATE;
 
 const schoolLoginSuccess = (state, action) => ({
   ...state,
-  ...action.user,
+  ...action.sessionData,
 });
 
 export const HANDLERS = {

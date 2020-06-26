@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ActivityIndicator } from "react-native";
 import { Text, Touchable } from "@components";
 import styles from "./gradient-button.style";
 import LinearGradient from "react-native-linear-gradient";
@@ -6,7 +7,7 @@ import { GRADIENT } from "@config";
 
 class GradientButton extends Component {
   render() {
-    var { onPress, text, disabled } = this.props;
+    var { onPress, text, disabled, loading } = this.props;
 
     return (
       <Touchable disabled={disabled} onPress={onPress}>
@@ -16,7 +17,11 @@ class GradientButton extends Component {
           end={{ x: 1, y: 0 }}
           style={styles.container}
         >
-          <Text style={styles.buttonText}>{text}</Text>
+          {loading ? (
+            <ActivityIndicator size={"small"} color={"white"} />
+          ) : (
+            <Text style={styles.buttonText}>{text}</Text>
+          )}
         </LinearGradient>
       </Touchable>
     );

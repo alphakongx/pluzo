@@ -1,3 +1,4 @@
 import LoginScreen from "./login.screen";
+import { withTranslation } from "react-i18next";
 
-export default LoginScreen;
+export default withTranslation()(LoginScreen);

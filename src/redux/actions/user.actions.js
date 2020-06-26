@@ -2,7 +2,7 @@ import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
   requestLogin: ["params"],
-  loginSuccess: ["sessionData"],
+  loginSuccess: ["user"],
   loginFailure: null,
 
   logout: null,
