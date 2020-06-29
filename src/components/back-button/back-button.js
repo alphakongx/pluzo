@@ -5,7 +5,7 @@ import styles from "./back-button.style";
 
 const BackButton: () => React$Node = props => {
   return (
-    <Touchable onPress={props.onPress}>
+    <Touchable disabled={props.disabled} onPress={props.onPress}>
       <View style={styles.container}>
         <Image source={require("@assets/images/chevron-left.png")} />
       </View>

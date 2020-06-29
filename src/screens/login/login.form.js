@@ -28,7 +28,11 @@ const LoginForm: () => React$Node = props => {
       />
 
       <View style={styles.buttonContainer}>
-        <GradientButton text={t("login.submitButton")} />
+        <GradientButton
+          loading={props.isLoggingIn}
+          text={t("login.submitButton")}
+          onPress={props.handleSubmit(props.onSubmit)}
+        />
       </View>
     </View>
   );

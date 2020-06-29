@@ -8,7 +8,7 @@ const PLACEHOLDER_LARGE_SIZE = 14;
 
 const TextInput: () => React$Node = props => {
   const { onChangeText, placeholder, value } = props;
-  const [text, setText] = useState("");
+  const [text, setText] = useState(value ? value : "");
   const [hasText, setHasText] = useState(props.text ? true : false);
   const [isFocused, setIsFocused] = useState(false);
   const [placeholderFontSize] = useState(

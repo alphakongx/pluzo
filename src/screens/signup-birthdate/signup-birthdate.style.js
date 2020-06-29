@@ -27,8 +27,8 @@ export default StyleSheet.create({
     textAlign: "center",
     marginBottom: 50,
   },
-  inputFieldSeparator: {
-    marginBottom: 24,
+  selectedDateContainer: {
+    flexDirection: "row",
   },
   buttonContainer: {
     marginTop: 40,

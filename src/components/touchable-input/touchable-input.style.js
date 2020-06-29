@@ -34,20 +34,24 @@ export default StyleSheet.create({
     flex: 1,
     marginRight: 5,
   },
-  placeholder: {
-    marginBottom: -7,
+  placeholderSmall: {
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: "bold",
     color: COLOR.TEXT_INPUT_PLACEHOLDER,
   },
-  placeholderTextColor: {
+  placeholderLarge: {
+    // textAlign: "center",
+    fontSize: 14,
+    fontWeight: "bold",
     color: COLOR.TEXT_INPUT_PLACEHOLDER,
   },
   required: {
     color: COLOR.WARNING,
   },
   value: {
+    // textAlign: "center",
     fontSize: 14,
+    fontWeight: "bold",
     color: COLOR.TEXT_INPUT,
   },
 });

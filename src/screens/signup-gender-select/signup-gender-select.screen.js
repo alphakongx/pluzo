@@ -14,6 +14,9 @@ const SignupGenderSelect: () => React$Node = props => {
   const goBack = () => {
     props.navigation.goBack();
   };
+  const navigateNext = () => {
+    props.navigation.navigate("SIGNUP_USERNAME", {});
+  };
 
   return (
     <Screen>
@@ -29,22 +32,29 @@ const SignupGenderSelect: () => React$Node = props => {
 
           <View style={styles.selectionContainer}>
             <View style={styles.buttonContainer}>
-              <SolidButton text={"Male"} />
+              {props.gender === "m" ? (
+                <GradientButton onPress={() => props.setGender("m")} text={"Male"} />
+              ) : (
+                <SolidButton onPress={() => props.setGender("m")} text={"Male"} />
+              )}
             </View>
 
             <View style={styles.buttonSeparator} />
 
             <View style={styles.buttonContainer}>
-              <SolidButton text={"Female"} />
+              {props.gender === "f" ? (
+                <GradientButton onPress={() => props.setGender("f")} text={"Female"} />
+              ) : (
+                <SolidButton onPress={() => props.setGender("f")} text={"Female"} />
+              )}
             </View>
           </View>
         </View>
 
         <View style={styles.footer}>
           <GradientButton
-            onPress={() => {
-              props.navigation.navigate("SIGNUP_USERNAME", {});
-            }}
+            disabled={!props.gender}
+            onPress={navigateNext}
             text={"Continue"}
           />
         </View>

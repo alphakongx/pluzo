@@ -1,14 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View } from "react-native";
-import {
-  BackButton,
-  BorderButton,
-  GradientButton,
-  Screen,
-  Text,
-  TextInput,
-  Touchable,
-} from "@components";
+import { BackButton, BorderButton, Screen, Text, Touchable } from "@components";
 import LoginForm from "./login.form";
 import styles from "./login.style.js";
 
@@ -16,7 +8,16 @@ const LoginScreen: () => React$Node = props => {
   const goBack = () => {
     props.navigation.goBack();
   };
-  const { t } = props;
+
+  const onLogin = values => {
+    props.login(values);
+  };
+
+  useEffect(() => {
+    if (props.token) {
+      alert("Login Success");
+    }
+  }, [props.token]);
 
   return (
     <Screen>
@@ -24,7 +25,7 @@ const LoginScreen: () => React$Node = props => {
         <BackButton onPress={goBack} />
         <View style={styles.centeredContentContainer}>
           <Text style={styles.titleText}>Login</Text>
-          <LoginForm />
+          <LoginForm isLoggingIn={props.isLoggingIn} onSubmit={onLogin} />
           <Text style={styles.orText}>OR</Text>
 
           <BorderButton text={"Login with phone number"} />
