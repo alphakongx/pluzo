@@ -1,40 +1,65 @@
-import React from "react";
-import { Image, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View } from "react-native";
 import {
+  BackButton,
   GradientButton,
   ProgressBar,
   Screen,
   Text,
   TextInput,
-  Touchable,
 } from "@components";
+import { Notification } from "@helpers";
 import styles from "./signup-phone-number.style.js";
 
 const SignupPhoneNumber: () => React$Node = props => {
+  const [phoneCode, setPhoneCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const { setPhoneNumber: setPhoneNumberAction } = props;
+
   const goBack = () => {
     props.navigation.goBack();
   };
+  const registerAccount = () => {
+    props.requestRegistration();
+  };
+
+  useEffect(() => {
+    setPhoneNumberAction(phoneCode + " " + phoneNumber);
+  }, [phoneCode, phoneNumber, setPhoneNumberAction]);
+
+  useEffect(() => {
+    if (props.token) {
+      Notification.alert("Signup Success", "Your account has been created", null, () => {
+        props.logout();
+        props.navigation.popToTop();
+      });
+    }
+  }, [props.token, props.navigation, props]);
 
   return (
     <Screen>
       <View style={styles.container}>
         <ProgressBar />
-        <Touchable onPress={goBack}>
-          <View style={styles.backButtonContainer}>
-            <Image source={require("@assets/images/chevron-left.png")} />
-          </View>
-        </Touchable>
+        <BackButton onPress={goBack} disabled={props.isRegistring} />
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>What is your phone number?</Text>
 
           <View style={styles.phoneContainer}>
             <View style={styles.phoneCodeContainer}>
               <Text style={styles.phoneLabel}>PHONE CODE</Text>
-              <TextInput placeholder={"+1"} />
+              <TextInput
+                value={phoneCode}
+                onChangeText={setPhoneCode}
+                placeholder={"Code"}
+              />
             </View>
             <View style={styles.phoneSeparator} />
             <View style={styles.phoneNumberContainer}>
-              <TextInput placeholder={"Your phone number"} />
+              <TextInput
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                placeholder={"Your phone number"}
+              />
             </View>
           </View>
 
@@ -50,9 +75,9 @@ const SignupPhoneNumber: () => React$Node = props => {
 
         <View style={styles.footer}>
           <GradientButton
-            onPress={() => {
-              props.navigation.navigate("SIGNUP_CODE_VERIFICATION", {});
-            }}
+            loading={props.isRegistring}
+            disabled={!phoneNumber || !phoneCode}
+            onPress={registerAccount}
             text={"Create Account"}
           />
         </View>

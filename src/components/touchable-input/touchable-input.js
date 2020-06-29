@@ -6,7 +6,7 @@ import styles from "./touchable-input.style";
 
 class TouchableInput extends Component {
   render() {
-    var { disabled, placeholder, required, value } = this.props;
+    var { disabled, placeholder, required, value, isFloatingLabel } = this.props;
     var requiredComponent = required ? <Text style={styles.required}>{" *"}</Text> : null;
     placeholder = placeholder || "";
 
@@ -16,23 +16,19 @@ class TouchableInput extends Component {
           <View style={styles.contentContainer}>
             {value ? (
               <View style={styles.flexContainer}>
-                <Text style={[styles.placeholder, styles.placeholderTextColor]}>
-                  {this.props.placeholder}
-                  {requiredComponent}
-                </Text>
+                {isFloatingLabel ? (
+                  <Text style={styles.placeholderSmall}>
+                    {this.props.placeholder}
+                    {requiredComponent}
+                  </Text>
+                ) : null}
                 <Text numberOfLines={1} style={[styles.value, this.props.textStyle]}>
                   {value}
                 </Text>
               </View>
             ) : (
               <View style={styles.flexContainer}>
-                <Text
-                  style={[
-                    styles.value,
-                    styles.placeholderTextColor,
-                    this.props.textStyle,
-                  ]}
-                >
+                <Text style={styles.placeholderLarge}>
                   {placeholder}
                   {requiredComponent}
                 </Text>
@@ -49,5 +45,9 @@ class TouchableInput extends Component {
     );
   }
 }
+
+TouchableInput.defaultProps = {
+  isFloatingLabel: true,
+};
 
 export default TouchableInput;

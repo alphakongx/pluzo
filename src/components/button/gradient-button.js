@@ -12,7 +12,7 @@ class GradientButton extends Component {
     return (
       <Touchable disabled={disabled} onPress={onPress}>
         <LinearGradient
-          colors={GRADIENT.BUTTON}
+          colors={disabled ? GRADIENT.BUTTON_DISABLED : GRADIENT.BUTTON}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.container}
@@ -20,7 +20,9 @@ class GradientButton extends Component {
           {loading ? (
             <ActivityIndicator size={"small"} color={"white"} />
           ) : (
-            <Text style={styles.buttonText}>{text}</Text>
+            <Text style={disabled ? styles.buttonTextDisabled : styles.buttonText}>
+              {text}
+            </Text>
           )}
         </LinearGradient>
       </Touchable>

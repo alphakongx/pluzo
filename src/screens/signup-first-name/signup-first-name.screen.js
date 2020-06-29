@@ -14,6 +14,9 @@ const SignupFirstName: () => React$Node = props => {
   const goBack = () => {
     props.navigation.goBack();
   };
+  const navigateNext = () => {
+    props.navigation.navigate("SIGNUP_BIRTH_DATE", {});
+  };
 
   return (
     <Screen>
@@ -28,14 +31,19 @@ const SignupFirstName: () => React$Node = props => {
           <View style={styles.titleFieldContainer}>
             <Text style={styles.titleText}>What's your first name?</Text>
 
-            <TextInput placeholder={"First name"} />
+            <TextInput
+              value={props.firstName}
+              onChangeText={text => {
+                props.setFirstName(text);
+              }}
+              placeholder={"First name"}
+            />
           </View>
 
           <View style={styles.buttonContainer}>
             <GradientButton
-              onPress={() => {
-                props.navigation.navigate("SIGNUP_BIRTH_DATE", {});
-              }}
+              disabled={!props.firstName}
+              onPress={navigateNext}
               text={"Continue"}
             />
           </View>

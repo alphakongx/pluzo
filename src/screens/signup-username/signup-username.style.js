@@ -45,6 +45,15 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  instructionInvalidIcon: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#FFFFFF",
+    marginTop: 3,
+    marginRight: 5,
+  },
   instructionValidIcon: {
     width: 7,
     height: 7,

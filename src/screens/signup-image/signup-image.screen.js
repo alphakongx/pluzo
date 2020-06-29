@@ -12,7 +12,6 @@ import styles from "./signup-image.style.js";
 import ImagePicker from "react-native-image-picker";
 
 const SignupImage: () => React$Node = props => {
-  const [userImage, setUserImage] = useState(null);
   const onPressUpload = () => {
     const options = {
       title: "Select Avatar",
@@ -28,13 +27,16 @@ const SignupImage: () => React$Node = props => {
       } else if (response.error) {
       } else if (response.customButton) {
       } else {
-        setUserImage(response);
+        props.setPicture(response);
       }
     });
   };
 
   const goBack = () => {
     props.navigation.goBack();
+  };
+  const navigateNext = () => {
+    props.navigation.navigate("SIGNUP_PHONE_NUMBER", {});
   };
 
   return (
@@ -51,8 +53,8 @@ const SignupImage: () => React$Node = props => {
           <Text style={styles.subTitleText}>Upload a profile picture.</Text>
 
           <View style={styles.imageUploadContainer}>
-            {userImage ? (
-              <Image style={styles.imageContainer} source={{ uri: userImage.uri }} />
+            {props.picture ? (
+              <Image style={styles.imageContainer} source={{ uri: props.picture.uri }} />
             ) : (
               <View style={styles.imageContainer}>
                 <Image source={require("@assets/images/image.png")} />
@@ -67,9 +69,8 @@ const SignupImage: () => React$Node = props => {
 
         <View style={styles.footer}>
           <GradientButton
-            onPress={() => {
-              props.navigation.navigate("SIGNUP_PHONE_NUMBER", {});
-            }}
+            disabled={!props.picture}
+            onPress={navigateNext}
             text={"Continue"}
           />
         </View>

@@ -9,10 +9,20 @@ import {
   Touchable,
 } from "@components";
 import styles from "./signup-username.style.js";
+// import validator from "validator";
+function hasUpperCase(str) {
+  return /[A-Z]/.test(str);
+}
+function hasNumber(str) {
+  return /[0-9]/.test(str);
+}
 
 const SignupUsername: () => React$Node = props => {
   const goBack = () => {
     props.navigation.goBack();
+  };
+  const navigateNext = () => {
+    props.navigation.navigate("SIGNUP_IMAGE", {});
   };
 
   return (
@@ -29,27 +39,54 @@ const SignupUsername: () => React$Node = props => {
             Select your username and choose a password.
           </Text>
 
-          <TextInput placeholder={"Username"} />
+          <TextInput
+            onChangeText={text => props.setUsername(text)}
+            value={props.username}
+            placeholder={"Username"}
+          />
 
           <View style={styles.inputFieldSeparator} />
 
-          <TextInput placeholder={"Password"} secureTextEntry />
+          <TextInput
+            onChangeText={text => props.setPassword(text)}
+            value={props.password}
+            placeholder={"Password"}
+            secureTextEntry
+          />
 
           <View style={styles.informationContainer}>
             <Text style={styles.passwordRequirementTitle}>Password requires</Text>
 
             <View style={styles.instructionContainer}>
-              <View style={styles.instructionValidIcon} />
+              <View
+                style={
+                  props.password.length >= 8
+                    ? styles.instructionValidIcon
+                    : styles.instructionInvalidIcon
+                }
+              />
               <Text style={styles.passwordRequirement}>Have atleast 8 characters</Text>
             </View>
             <View style={styles.instructionContainer}>
-              <View style={styles.instructionValidIcon} />
+              <View
+                style={
+                  hasUpperCase(props.password)
+                    ? styles.instructionValidIcon
+                    : styles.instructionInvalidIcon
+                }
+              />
               <Text style={styles.passwordRequirement}>
                 Have atleast 1 capital letter
               </Text>
             </View>
             <View style={styles.instructionContainer}>
-              <View style={styles.instructionValidIcon} />
+              <View
+                style={
+                  hasNumber(props.password)
+                    ? styles.instructionValidIcon
+                    : styles.instructionInvalidIcon
+                }
+              />
               <Text style={styles.passwordRequirement}>Have atleast 1 number</Text>
             </View>
           </View>
@@ -57,9 +94,14 @@ const SignupUsername: () => React$Node = props => {
 
         <View style={styles.footer}>
           <GradientButton
-            onPress={() => {
-              props.navigation.navigate("SIGNUP_IMAGE", {});
-            }}
+            disabled={
+              !props.username ||
+              !props.password ||
+              props.password.length < 8 ||
+              !hasUpperCase(props.password) ||
+              !hasNumber(props.password)
+            }
+            onPress={navigateNext}
             text={"Continue"}
           />
         </View>
