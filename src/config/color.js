@@ -24,6 +24,9 @@ export const COLOR = {
 
   TEXT_PRIMARY: "#FFFFFF",
   TEXT_SECONDARY: "#9892A3",
+  TEXT_SECONDARY_2: "#E8E6FF",
+  TEXT_SECONDARY_3: "#0B0516",
+  TEXT_SECONDARY_4: "#ABA7D5",
 };
 
 export const GRADIENT = {
@@ -31,4 +34,5 @@ export const GRADIENT = {
   BUTTON_DISABLED: ["rgba(70, 70, 70, 100)", "rgba(120, 120, 120, 100)"],
   FRIEND_ONLINE_ICON: ["#617FFF", "#02FFF3"],
   SCREEN_BACKGROUND: ["#0B0516", "#1A023E"],
+  FADE: ["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0)"],
 };
