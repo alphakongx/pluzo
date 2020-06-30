@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Image } from "@components";
+import { Image, Text, Touchable, ProgressBar } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-deck-swiper";
+import ProfileDetails from "./profile-details";
 import { GRADIENT } from "@config";
 
 import styles from "./swipe.style";
@@ -65,7 +66,7 @@ const Swipe: () => React$Node = props => {
           cardIndex={cardIndex}
           cardVerticalMargin={0}
           cardHorizontalMargin={0}
-          backgroundColor={"#FFFFFF"}
+          backgroundColor={"transparent"}
           renderCard={renderCard}
           onSwipedAll={onSwipedAllCards}
           stackSize={3}
@@ -144,6 +145,60 @@ const Swipe: () => React$Node = props => {
           animateCardOpacity
           swipeBackCard
         />
+
+        <LinearGradient
+          colors={GRADIENT.FADE}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.topActions}
+        >
+          <ProgressBar />
+          <View style={[styles.topActionRow, styles.topRowMargin]}>
+            <Text style={styles.topBarName}>Lara Cruse</Text>
+            <LinearGradient
+              colors={GRADIENT.BUTTON}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.onlineStatus}
+            />
+            <Text style={styles.topBarName}>21</Text>
+            <View style={styles.flexSpace} />
+            <Image source={require("@assets/images/swipe-screen/info.png")} />
+          </View>
+          <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
+            <Image source={require("@assets/images/swipe-screen/location.png")} />
+            <Text style={styles.topBarLocation}>LOS ANGELES, CALIFORNIA</Text>
+          </View>
+        </LinearGradient>
+        <ProfileDetails />
+        {/*<View style={styles.bottomActions}>
+          <View style={[styles.buttonRow]}>
+            <Touchable>
+              <Image
+                style={styles.buttonSmall}
+                source={require("@assets/images/swipe-screen/swipe-refresh.png")}
+              />
+            </Touchable>
+            <Touchable>
+              <Image
+                style={styles.buttonSmall}
+                source={require("@assets/images/swipe-screen/swipe-rocket.png")}
+              />
+            </Touchable>
+          </View>
+          <View style={[styles.buttonRow, styles.buttonRowMargin]}>
+            <Touchable>
+              <Image source={require("@assets/images/swipe-screen/swipe-cross.png")} />
+            </Touchable>
+            <Touchable>
+              <Image source={require("@assets/images/swipe-screen/swipe-star.png")} />
+            </Touchable>
+            <Touchable>
+              <Image source={require("@assets/images/swipe-screen/swipe-heart.png")} />
+            </Touchable>
+          </View>
+        </View>
+        */}
       </View>
     </LinearGradient>
   );
