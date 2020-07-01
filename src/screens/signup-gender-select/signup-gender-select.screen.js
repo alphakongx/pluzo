@@ -21,7 +21,7 @@ const SignupGenderSelect: () => React$Node = props => {
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar />
+        <ProgressBar width={30} />
         <Touchable onPress={goBack}>
           <View style={styles.backButtonContainer}>
             <Image source={require("@assets/images/chevron-left.png")} />
@@ -32,20 +32,23 @@ const SignupGenderSelect: () => React$Node = props => {
 
           <View style={styles.selectionContainer}>
             <View style={styles.buttonContainer}>
-              {props.gender === "m" ? (
-                <GradientButton onPress={() => props.setGender("m")} text={"Male"} />
+              {props.gender === "male" ? (
+                <GradientButton onPress={() => props.setGender("male")} text={"Male"} />
               ) : (
-                <SolidButton onPress={() => props.setGender("m")} text={"Male"} />
+                <SolidButton onPress={() => props.setGender("male")} text={"Male"} />
               )}
             </View>
 
             <View style={styles.buttonSeparator} />
 
             <View style={styles.buttonContainer}>
-              {props.gender === "f" ? (
-                <GradientButton onPress={() => props.setGender("f")} text={"Female"} />
+              {props.gender === "female" ? (
+                <GradientButton
+                  onPress={() => props.setGender("female")}
+                  text={"Female"}
+                />
               ) : (
-                <SolidButton onPress={() => props.setGender("f")} text={"Female"} />
+                <SolidButton onPress={() => props.setGender("female")} text={"Female"} />
               )}
             </View>
           </View>

@@ -4,7 +4,7 @@ import createSagaMiddleware from "redux-saga";
 import { persistStore, persistReducer } from "redux-persist";
 import logger from "redux-logger";
 import storage from "@react-native-community/async-storage";
-// import { eventBusMiddleware } from '../middlewares';
+import { eventBusMiddleware } from "../middlewares";
 import { rootSaga } from "../sagas";
 
 const persistConfig = {
@@ -17,6 +17,7 @@ const middlewares = [];
 const sagaMiddleware = createSagaMiddleware();
 middlewares.push(sagaMiddleware);
 middlewares.push(logger);
+middlewares.push(eventBusMiddleware);
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

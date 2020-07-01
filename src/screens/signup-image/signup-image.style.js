@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 20,
   },
   backButtonContainer: {
     width: 60,
@@ -48,5 +47,6 @@ export default StyleSheet.create({
   footer: {
     marginTop: 40,
     paddingHorizontal: 37,
+    paddingBottom: 20,
   },
 });

@@ -6,6 +6,8 @@ export default {
     mentor: null,
     isLoggingIn: false,
     isRegistring: false,
+    isSendingPhoneVerificationCode: false,
+    isConfirmingPhoneVerificationCode: false,
   },
   registration: {
     firstName: "",
@@ -14,6 +16,6 @@ export default {
     username: "",
     password: "",
     picture: null,
-    phoneNumber: null,
+    phoneNumber: "+1321123321123",
   },
 };

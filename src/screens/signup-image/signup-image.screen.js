@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Image, View } from "react-native";
 import {
   GradientButton,
@@ -27,7 +27,15 @@ const SignupImage: () => React$Node = props => {
       } else if (response.error) {
       } else if (response.customButton) {
       } else {
-        props.setPicture(response);
+        let photoUriSplit = response.uri.split("/");
+
+        const image = {
+          uri: response.uri,
+          name: photoUriSplit[photoUriSplit.length - 1],
+          type: "multipart/form-data",
+        };
+
+        props.setPicture(image);
       }
     });
   };
@@ -42,7 +50,7 @@ const SignupImage: () => React$Node = props => {
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar />
+        <ProgressBar width={50} />
         <Touchable onPress={goBack}>
           <View style={styles.backButtonContainer}>
             <Image source={require("@assets/images/chevron-left.png")} />

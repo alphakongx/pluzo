@@ -15,7 +15,12 @@ function navigate(routeName, params) {
   );
 }
 
+function popToTop(routeName, params) {
+  _navigator.dispatch(NavigationActions.popToTop());
+}
+
 export default {
+  popToTop,
   navigate,
   setTopLevelNavigator,
 };

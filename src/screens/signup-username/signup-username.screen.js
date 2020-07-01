@@ -9,7 +9,6 @@ import {
   Touchable,
 } from "@components";
 import styles from "./signup-username.style.js";
-// import validator from "validator";
 function hasUpperCase(str) {
   return /[A-Z]/.test(str);
 }
@@ -28,7 +27,7 @@ const SignupUsername: () => React$Node = props => {
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar />
+        <ProgressBar width={40} />
         <Touchable onPress={goBack}>
           <View style={styles.backButtonContainer}>
             <Image source={require("@assets/images/chevron-left.png")} />
@@ -40,6 +39,7 @@ const SignupUsername: () => React$Node = props => {
           </Text>
 
           <TextInput
+            autoCapitalize={"none"}
             onChangeText={text => props.setUsername(text)}
             value={props.username}
             placeholder={"Username"}

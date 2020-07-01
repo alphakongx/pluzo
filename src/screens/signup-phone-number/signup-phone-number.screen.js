@@ -8,7 +8,6 @@ import {
   Text,
   TextInput,
 } from "@components";
-import { Notification } from "@helpers";
 import styles from "./signup-phone-number.style.js";
 
 const SignupPhoneNumber: () => React$Node = props => {
@@ -29,17 +28,14 @@ const SignupPhoneNumber: () => React$Node = props => {
 
   useEffect(() => {
     if (props.token) {
-      Notification.alert("Signup Success", "Your account has been created", null, () => {
-        props.logout();
-        props.navigation.popToTop();
-      });
+      props.navigation.navigate("SIGNUP_CODE_VERIFICATION", {});
     }
-  }, [props.token, props.navigation, props]);
+  }, [props.token, props.navigation]);
 
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar />
+        <ProgressBar width={70} />
         <BackButton onPress={goBack} disabled={props.isRegistring} />
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>What is your phone number?</Text>

@@ -11,7 +11,6 @@ export class API {
   static headers() {
     return {
       "Content-Type": "application/json",
-      // "x-api-key": "UBjBoE9HTzaMSybJW1kgRaQi5tMQrmPT7m6h7sE0",
       platform: "mobile",
     };
   }
@@ -50,13 +49,13 @@ export class API {
           })
             .then(response => {
               if (!options.silent)
-                Notification.error(i18n.t(`alerts.failure.serverNotResponding`));
+                Notification.alert(i18n.t(`alerts.failure.serverNotResponding`));
 
               throw error;
             })
             .catch(err => {
               if (!options.silent) {
-                Notification.error(i18n.t(`alerts.failure.checkInternetConnection`));
+                Notification.alert(i18n.t(`alerts.failure.checkInternetConnection`));
               }
               throw err;
             });

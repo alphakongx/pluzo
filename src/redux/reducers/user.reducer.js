@@ -11,7 +11,8 @@ const requestLogin = (state, action) => ({
 });
 const loginSuccess = (state, action) => ({
   ...state,
-  token: action.sessionData.usertoken,
+  // token: action.sessionData.token,
+  // user: action.sessionData,
   isLoggingIn: false,
 });
 const loginFailure = (state, action) => ({
@@ -25,12 +26,39 @@ const requestRegistration = (state, action) => ({
 });
 const registrationSuccess = (state, action) => ({
   ...state,
-  token: action.sessionData.token,
+  // token: action.sessionData.token,
+  // user: action.sessionData,
   isRegistring: false,
 });
 const registrationFailure = (state, action) => ({
   ...state,
   isRegistring: false,
+});
+
+const requestPhoneVerificationSendCode = (state, action) => ({
+  ...state,
+  isSendingPhoneVerificationCode: true,
+});
+const phoneVerificationSendCodeSuccess = (state, action) => ({
+  ...state,
+  isSendingPhoneVerificationCode: false,
+});
+const phoneVerificationSendCodeFailure = (state, action) => ({
+  ...state,
+  isSendingPhoneVerificationCode: false,
+});
+
+const requestPhoneVerificationConfirmCode = (state, action) => ({
+  ...state,
+  isConfirmingPhoneVerificationCode: true,
+});
+const phoneVerificationConfirmCodeSuccess = (state, action) => ({
+  ...state,
+  isConfirmingPhoneVerificationCode: false,
+});
+const phoneVerificationConfirmCodeFailure = (state, action) => ({
+  ...state,
+  isConfirmingPhoneVerificationCode: false,
 });
 
 export const HANDLERS = {
@@ -41,6 +69,14 @@ export const HANDLERS = {
   [UserTypes.REQUEST_REGISTRATION]: requestRegistration,
   [UserTypes.REGISTRATION_SUCCESS]: registrationSuccess,
   [UserTypes.REGISTRATION_FAILURE]: registrationFailure,
+
+  [UserTypes.REQUEST_PHONE_VERIFICATION_SEND_CODE]: requestPhoneVerificationSendCode,
+  [UserTypes.PHONE_VERIFICATION_SEND_CODE_SUCCESS]: phoneVerificationSendCodeSuccess,
+  [UserTypes.PHONE_VERIFICATION_SEND_CODE_FAILURE]: phoneVerificationSendCodeFailure,
+
+  [UserTypes.REQUEST_PHONE_VERIFICATION_CONFIRM_CODE]: requestPhoneVerificationConfirmCode,
+  [UserTypes.PHONE_VERIFICATION_CONFIRM_CODE_SUCCESS]: phoneVerificationConfirmCodeSuccess,
+  [UserTypes.PHONE_VERIFICATION_CONFIRM_CODE_FAILURE]: phoneVerificationConfirmCodeFailure,
 
   [UserTypes.LOGOUT]: logout,
 };
