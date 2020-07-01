@@ -9,6 +9,14 @@ const { Types, Creators } = createActions({
   registrationSuccess: ["sessionData"],
   registrationFailure: null,
 
+  requestPhoneVerificationSendCode: ["phoneNumber"],
+  phoneVerificationSendCodeSuccess: null,
+  phoneVerificationSendCodeFailure: null,
+
+  requestPhoneVerificationConfirmCode: ["code"],
+  phoneVerificationConfirmCodeSuccess: ["sessionData"],
+  phoneVerificationConfirmCodeFailure: null,
+
   logout: null,
 });
 

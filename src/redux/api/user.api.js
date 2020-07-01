@@ -5,6 +5,9 @@ export function login(data, accessToken) {
   return API.request({
     method: "post",
     url: `${API_ENDPOINTS.LOGIN}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     data,
   }).then(response => response);
 }
@@ -14,8 +17,29 @@ export function register(data, accessToken) {
     method: "post",
     url: `${API_ENDPOINTS.REGISTER}`,
     headers: {
-      // "Content-Type": "multipart/form-data",
-      "x-api-key": "UBjBoE9HTzaMSybJW1kgRaQi5tMQrmPT7m6h7sE0",
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}
+
+export function phoneVerificationSendCode(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.VERIFY_PHONE_SEND_CODE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}
+
+export function phoneVerificationConfirmCode(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.VERIFY_PHONE_CONFIRM_CODE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
     },
     data,
   }).then(response => response);

@@ -9,7 +9,6 @@ export default StyleSheet.create({
     paddingHorizontal: 4,
   },
   gradientFill: {
-    width: "20%",
     height: 2,
   },
   remainingFill: {

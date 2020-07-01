@@ -1,22 +1,13 @@
 import React from "react";
 import { Image, View } from "react-native";
-import { GradientButton, ProgressBar, Screen, Text, Touchable } from "@components";
+import { GradientButton, ProgressBar, Screen, Text } from "@components";
 import styles from "./signup-success.style.js";
 
 const SignupSuccess: () => React$Node = props => {
-  const goBack = () => {
-    props.navigation.goBack();
-  };
-
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar />
-        <Touchable onPress={goBack}>
-          <View style={styles.backButtonContainer}>
-            <Image source={require("@assets/images/chevron-left.png")} />
-          </View>
-        </Touchable>
+        <ProgressBar width={100} />
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>Congratulations!</Text>
           <Text style={styles.subTitleText}>

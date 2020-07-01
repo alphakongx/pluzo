@@ -1,3 +1,16 @@
 import SignupCodeVerification from "./signup-code-verification.screen";
+import { connect } from "react-redux";
+import { UserCreators } from "@redux/actions";
 
-export default SignupCodeVerification;
+function mapStateToProps(state) {
+  return {
+    verificationInProgress: state.user.isConfirmingPhoneVerificationCode,
+  };
+}
+
+const mapDispatchToProps = {
+  requestPhoneVerificationSendCode: UserCreators.requestPhoneVerificationSendCode,
+  requestPhoneVerificationConfirmCode: UserCreators.requestPhoneVerificationConfirmCode,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupCodeVerification);

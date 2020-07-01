@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Image, Text, Touchable, ProgressBar } from "@components";
+import { Image, Text, ProgressBar } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-deck-swiper";
 import ProfileDetails from "./profile-details";

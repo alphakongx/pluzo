@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View } from "react-native";
 import { BackButton, BorderButton, Screen, Text, Touchable } from "@components";
 import LoginForm from "./login.form";
@@ -12,12 +12,6 @@ const LoginScreen: () => React$Node = props => {
   const onLogin = values => {
     props.login(values);
   };
-
-  useEffect(() => {
-    if (props.token) {
-      alert("Login Success");
-    }
-  }, [props.token]);
 
   return (
     <Screen>
