@@ -1,4 +1,4 @@
-import { NavigationActions } from "react-navigation";
+import { NavigationActions, StackActions } from "react-navigation";
 
 let _navigator;
 
@@ -16,10 +16,10 @@ function navigate(routeName, params) {
 }
 
 function popToTop(routeName, params) {
-  _navigator.dispatch(NavigationActions.popToTop());
+  _navigator.dispatch(StackActions.popToTop());
 }
 
-export default {
+export const NavigationService = {
   popToTop,
   navigate,
   setTopLevelNavigator,

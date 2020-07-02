@@ -26,8 +26,8 @@ const requestRegistration = (state, action) => ({
 });
 const registrationSuccess = (state, action) => ({
   ...state,
-  // token: action.sessionData.token,
-  // user: action.sessionData,
+  token: action.sessionData.token,
+  user: action.sessionData,
   isRegistring: false,
 });
 const registrationFailure = (state, action) => ({
@@ -61,6 +61,45 @@ const phoneVerificationConfirmCodeFailure = (state, action) => ({
   isConfirmingPhoneVerificationCode: false,
 });
 
+const requestForgotPasswordSendCode = (state, action) => ({
+  ...state,
+  isSendingForgotPasswordCode: true,
+});
+const forgotPasswordSendCodeSuccess = (state, action) => ({
+  ...state,
+  isSendingForgotPasswordCode: false,
+});
+const forgotPasswordSendCodeFailure = (state, action) => ({
+  ...state,
+  isSendingForgotPasswordCode: false,
+});
+
+const requestForgotPasswordConfirmCode = (state, action) => ({
+  ...state,
+  isConfirmingForgotPasswordCode: true,
+});
+const forgotPasswordConfirmCodeSuccess = (state, action) => ({
+  ...state,
+  isConfirmingForgotPasswordCode: false,
+});
+const forgotPasswordConfirmCodeFailure = (state, action) => ({
+  ...state,
+  isConfirmingForgotPasswordCode: false,
+});
+
+const requestResetPassword = (state, action) => ({
+  ...state,
+  isResettingPassword: true,
+});
+const resetPasswordSuccess = (state, action) => ({
+  ...state,
+  isResettingPassword: false,
+});
+const resetPasswordFailure = (state, action) => ({
+  ...state,
+  isResettingPassword: false,
+});
+
 export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
@@ -77,6 +116,18 @@ export const HANDLERS = {
   [UserTypes.REQUEST_PHONE_VERIFICATION_CONFIRM_CODE]: requestPhoneVerificationConfirmCode,
   [UserTypes.PHONE_VERIFICATION_CONFIRM_CODE_SUCCESS]: phoneVerificationConfirmCodeSuccess,
   [UserTypes.PHONE_VERIFICATION_CONFIRM_CODE_FAILURE]: phoneVerificationConfirmCodeFailure,
+
+  [UserTypes.REQUEST_FORGOT_PASSWORD_SEND_CODE]: requestForgotPasswordSendCode,
+  [UserTypes.FORGOT_PASSWORD_SEND_CODE_SUCCESS]: forgotPasswordSendCodeSuccess,
+  [UserTypes.FORGOT_PASSWORD_SEND_CODE_FAILURE]: forgotPasswordSendCodeFailure,
+
+  [UserTypes.REQUEST_FORGOT_PASSWORD_CONFIRM_CODE]: requestForgotPasswordConfirmCode,
+  [UserTypes.FORGOT_PASSWORD_CONFIRM_CODE_SUCCESS]: forgotPasswordConfirmCodeSuccess,
+  [UserTypes.FORGOT_PASSWORD_CONFIRM_CODE_FAILURE]: forgotPasswordConfirmCodeFailure,
+
+  [UserTypes.REQUEST_RESET_PASSWORD]: requestResetPassword,
+  [UserTypes.RESET_PASSWORD_SUCCESS]: resetPasswordSuccess,
+  [UserTypes.RESET_PASSWORD_FAILURE]: resetPasswordFailure,
 
   [UserTypes.LOGOUT]: logout,
 };

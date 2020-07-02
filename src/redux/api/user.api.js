@@ -44,3 +44,36 @@ export function phoneVerificationConfirmCode(data, accessToken) {
     data,
   }).then(response => response);
 }
+
+export function forgotPasswordSendCode(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.FORGOT_PASSWORD_SEND_CODE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}
+
+export function forgotPasswordConfirmCode(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.FORGOT_PASSWORD_CONFIRM_CODE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}
+
+export function resetPassword(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.RESET_PASSWORD}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}

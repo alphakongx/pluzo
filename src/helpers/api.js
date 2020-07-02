@@ -62,6 +62,8 @@ export class API {
         } else {
           if (error.response && error.response.status === 401) {
             Notification.alert("Invalid username/password");
+          } else if (error.response && error.response.data && error.response.data.error) {
+            Notification.alert(error.response.data.message);
           }
           // if (
           //   error.response &&

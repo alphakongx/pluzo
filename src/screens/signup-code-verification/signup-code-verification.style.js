@@ -62,5 +62,6 @@ export default StyleSheet.create({
   footer: {
     marginTop: 40,
     paddingHorizontal: 37,
+    paddingBottom: 20,
   },
 });

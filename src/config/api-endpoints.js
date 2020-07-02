@@ -9,4 +9,9 @@ export const API_ENDPOINTS = {
 
   VERIFY_PHONE_SEND_CODE: `${BASE_URL}/verify-sms-send`,
   VERIFY_PHONE_CONFIRM_CODE: `${BASE_URL}/verify-sms-code`,
+
+  FORGOT_PASSWORD_SEND_CODE: `${BASE_URL}/forgot-sms-send`,
+  FORGOT_PASSWORD_CONFIRM_CODE: `${BASE_URL}/forgot-sms-code`,
+
+  RESET_PASSWORD: `${BASE_URL}/new-pass-code`,
 };

@@ -10,7 +10,7 @@ class GradientButton extends Component {
     var { onPress, text, disabled, loading } = this.props;
 
     return (
-      <Touchable disabled={disabled} onPress={onPress}>
+      <Touchable disabled={loading || disabled} onPress={onPress}>
         <LinearGradient
           colors={disabled ? GRADIENT.BUTTON_DISABLED : GRADIENT.BUTTON}
           start={{ x: 0, y: 0 }}

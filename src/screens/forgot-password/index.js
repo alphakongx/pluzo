@@ -1,3 +1,15 @@
 import ForgotPassword from "./forgot-password.screen";
+import { connect } from "react-redux";
+import { UserCreators } from "@redux/actions";
 
-export default ForgotPassword;
+function mapStateToProps(state) {
+  return {
+    isSendingCode: state.user.isSendingForgotPasswordCode,
+  };
+}
+
+const mapDispatchToProps = {
+  requestForgotPasswordSendCode: UserCreators.requestForgotPasswordSendCode,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);

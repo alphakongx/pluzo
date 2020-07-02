@@ -17,6 +17,18 @@ const { Types, Creators } = createActions({
   phoneVerificationConfirmCodeSuccess: ["sessionData"],
   phoneVerificationConfirmCodeFailure: null,
 
+  requestForgotPasswordSendCode: ["phoneNumber", "shouldNavigate"],
+  forgotPasswordSendCodeSuccess: null,
+  forgotPasswordSendCodeFailure: null,
+
+  requestForgotPasswordConfirmCode: ["phoneNumber", "code"],
+  forgotPasswordConfirmCodeSuccess: null,
+  forgotPasswordConfirmCodeFailure: null,
+
+  requestResetPassword: ["phoneNumber", "passwordResetToken", "password"],
+  resetPasswordSuccess: null,
+  resetPasswordFailure: null,
+
   logout: null,
 });
 
