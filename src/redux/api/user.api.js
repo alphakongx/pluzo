@@ -12,6 +12,28 @@ export function login(data, accessToken) {
   }).then(response => response);
 }
 
+export function phoneLoginSendCode(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.LOGIN_PHONE_SEND_CODE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}
+
+export function phoneLoginConfirmCode(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.LOGIN_PHONE_VERIFY_CODE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}
+
 export function register(data, accessToken) {
   return API.request({
     method: "post",

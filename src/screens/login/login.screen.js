@@ -9,6 +9,10 @@ const LoginScreen: () => React$Node = props => {
     props.navigation.goBack();
   };
 
+  const navigateToPhoneLogin = () => {
+    props.navigation.navigate("LOGIN_PHONE_NUMBER");
+  };
+
   const onLogin = values => {
     props.login(values);
   };
@@ -22,7 +26,7 @@ const LoginScreen: () => React$Node = props => {
           <LoginForm isLoggingIn={props.isLoggingIn} onSubmit={onLogin} />
           <Text style={styles.orText}>OR</Text>
 
-          <BorderButton text={"Login with phone number"} />
+          <BorderButton onPress={navigateToPhoneLogin} text={"Login with phone number"} />
 
           <Touchable
             onPress={() => {

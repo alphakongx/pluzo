@@ -1,6 +1,8 @@
 import { createStackNavigator } from "react-navigation-stack";
 import AuthSelection from "../screens/auth-selection";
 import Login from "../screens/login";
+import LoginPhoneNumber from "../screens/login-phone-number";
+import LoginPhoneCodeVerification from "../screens/login-phone-code-verification";
 import ForgotPassword from "../screens/forgot-password";
 import ResetPasswordCodeVerification from "../screens/reset-password-code-verification";
 import ResetPassword from "../screens/reset-password";
@@ -24,6 +26,8 @@ const AuthStack = createStackNavigator(
   {
     AUTH_SELECTION: { screen: AuthSelection },
     LOGIN: { screen: Login },
+    LOGIN_PHONE_NUMBER: { screen: LoginPhoneNumber },
+    LOGIN_PHONE_CODE_VERIFICATION: { screen: LoginPhoneCodeVerification },
     FORGOT_PASSWORD: { screen: ForgotPassword },
     RESET_PASSWORD_CODE_VERIFICATION: { screen: ResetPasswordCodeVerification },
     RESET_PASSWORD: { screen: ResetPassword },
