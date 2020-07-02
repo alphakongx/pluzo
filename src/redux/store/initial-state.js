@@ -8,6 +8,9 @@ export default {
     isRegistring: false,
     isSendingPhoneVerificationCode: false,
     isConfirmingPhoneVerificationCode: false,
+    isSendingForgotPasswordCode: false,
+    isConfirmingForgotPasswordCode: false,
+    isResettingPassword: false,
   },
   registration: {
     firstName: "",

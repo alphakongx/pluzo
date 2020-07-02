@@ -5,9 +5,12 @@ import {
   register,
   phoneVerificationSendCode,
   phoneVerificationConfirmCode,
+  forgotPasswordSendCode,
+  forgotPasswordConfirmCode,
+  resetPassword,
 } from "@redux/api";
 import { registrationSelector } from "../selectors";
-import { Notification } from "@helpers";
+import { NavigationService, Notification } from "@helpers";
 
 export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_LOGIN, requestLogin);
@@ -20,6 +23,15 @@ export function* watchUserRequests() {
     UserTypes.REQUEST_PHONE_VERIFICATION_CONFIRM_CODE,
     requestPhoneVerificationConfirmCode,
   );
+  yield takeEvery(
+    UserTypes.REQUEST_FORGOT_PASSWORD_SEND_CODE,
+    requestForgotPasswordSendCode,
+  );
+  yield takeEvery(
+    UserTypes.REQUEST_FORGOT_PASSWORD_CONFIRM_CODE,
+    requestForgotPasswordConfirmCode,
+  );
+  yield takeEvery(UserTypes.REQUEST_RESET_PASSWORD, requestResetPassword);
 }
 
 function* requestLogin(action) {
@@ -44,17 +56,18 @@ function* requestRegistration(action) {
     const params = new FormData();
 
     params.append("first_name", registrationData.firstName);
-    params.append("dob", registrationData.birthDate);
+    // params.append("dob", registrationData.birthDate);
     params.append("gender", registrationData.gender);
     params.append("username", registrationData.username);
     params.append("password", registrationData.password);
     params.append("phone", registrationData.phoneNumber);
-    params.append("image", registrationData.picture);
+    // params.append("image", registrationData.picture);
 
     const response = yield call(register, params);
 
     yield put(UserCreators.registrationSuccess(response.data.data));
   } catch (error) {
+    console.log(error);
     yield put(UserCreators.registrationFailure());
   }
 }
@@ -88,5 +101,61 @@ function* requestPhoneVerificationConfirmCode(action) {
     yield put(UserCreators.phoneVerificationConfirmCodeSuccess());
   } catch (error) {
     yield put(UserCreators.phoneVerificationConfirmCodeFailure());
+  }
+}
+
+function* requestForgotPasswordSendCode(action) {
+  try {
+    const { phoneNumber, shouldNavigate } = action;
+    const params = new FormData();
+
+    params.append("phone", phoneNumber);
+
+    yield call(forgotPasswordSendCode, params);
+
+    if (shouldNavigate)
+      NavigationService.navigate("RESET_PASSWORD_CODE_VERIFICATION", { phoneNumber });
+
+    yield put(UserCreators.forgotPasswordSendCodeSuccess());
+  } catch (error) {
+    yield put(UserCreators.forgotPasswordSendCodeFailure());
+  }
+}
+
+function* requestForgotPasswordConfirmCode(action) {
+  try {
+    const { phoneNumber, code } = action;
+    const params = new FormData();
+
+    params.append("phone", phoneNumber);
+    params.append("code", code);
+
+    const response = yield call(forgotPasswordConfirmCode, params);
+    const passwordResetToken = response.data.data.pass_code;
+
+    NavigationService.navigate("RESET_PASSWORD", { phoneNumber, passwordResetToken });
+    yield put(UserCreators.forgotPasswordConfirmCodeSuccess());
+  } catch (error) {
+    yield put(UserCreators.forgotPasswordConfirmCodeFailure());
+  }
+}
+
+function* requestResetPassword(action) {
+  try {
+    const { phoneNumber, passwordResetToken, password } = action;
+    const params = new FormData();
+
+    params.append("phone", phoneNumber);
+    params.append("pass_code", passwordResetToken);
+    params.append("password", password);
+
+    yield call(resetPassword, params);
+
+    Notification.alert("Password Updated", "Password Updated Successfully", null, () => {
+      NavigationService.popToTop();
+    });
+    yield put(UserCreators.resetPasswordSuccess());
+  } catch (error) {
+    yield put(UserCreators.resetPasswordFailure());
   }
 }

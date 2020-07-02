@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, View } from "react-native";
 import {
   GradientButton,
@@ -9,10 +9,23 @@ import {
   Touchable,
 } from "@components";
 import styles from "./reset-password.style.js";
+function hasUpperCase(str) {
+  return /[A-Z]/.test(str);
+}
+function hasNumber(str) {
+  return /[0-9]/.test(str);
+}
 
 const ResetPassword: () => React$Node = props => {
+  const { phoneNumber, passwordResetToken } = props.navigation.state.params;
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const goBack = () => {
     props.navigation.goBack();
+  };
+  const submit = () => {
+    props.requestResetPassword(phoneNumber, passwordResetToken, password);
   };
 
   return (
@@ -29,27 +42,55 @@ const ResetPassword: () => React$Node = props => {
             Select your username and choose a password.
           </Text>
 
-          <TextInput placeholder={"Password"} secureTextEntry />
+          <TextInput
+            value={password}
+            onChangeText={text => setPassword(text)}
+            placeholder={"Password"}
+            secureTextEntry
+          />
 
           <View style={styles.inputFieldSeparator} />
 
-          <TextInput placeholder={"Enter your password again"} secureTextEntry />
+          <TextInput
+            value={confirmPassword}
+            onChangeText={text => setConfirmPassword(text)}
+            placeholder={"Enter your password again"}
+            secureTextEntry
+          />
 
           <View style={styles.informationContainer}>
             <Text style={styles.passwordRequirementTitle}>Password requires</Text>
 
             <View style={styles.instructionContainer}>
-              <View style={styles.instructionValidIcon} />
+              <View
+                style={
+                  password.length >= 8
+                    ? styles.instructionValidIcon
+                    : styles.instructionInvalidIcon
+                }
+              />
               <Text style={styles.passwordRequirement}>Have atleast 8 characters</Text>
             </View>
             <View style={styles.instructionContainer}>
-              <View style={styles.instructionValidIcon} />
+              <View
+                style={
+                  hasUpperCase(password)
+                    ? styles.instructionValidIcon
+                    : styles.instructionInvalidIcon
+                }
+              />
               <Text style={styles.passwordRequirement}>
                 Have atleast 1 capital letter
               </Text>
             </View>
             <View style={styles.instructionContainer}>
-              <View style={styles.instructionValidIcon} />
+              <View
+                style={
+                  hasNumber(password)
+                    ? styles.instructionValidIcon
+                    : styles.instructionInvalidIcon
+                }
+              />
               <Text style={styles.passwordRequirement}>Have atleast 1 number</Text>
             </View>
           </View>
@@ -57,9 +98,16 @@ const ResetPassword: () => React$Node = props => {
 
         <View style={styles.footer}>
           <GradientButton
-            onPress={() => {
-              props.navigation.navigate("SIGNUP_IMAGE", {});
-            }}
+            loading={props.isResettingPassword}
+            disabled={
+              !password ||
+              !confirmPassword ||
+              password !== confirmPassword ||
+              password.length < 8 ||
+              !hasUpperCase(password) ||
+              !hasNumber(password)
+            }
+            onPress={submit}
             text={"Continue"}
           />
         </View>

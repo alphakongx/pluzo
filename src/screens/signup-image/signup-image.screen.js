@@ -32,8 +32,9 @@ const SignupImage: () => React$Node = props => {
         const image = {
           uri: response.uri,
           name: photoUriSplit[photoUriSplit.length - 1],
-          type: "multipart/form-data",
+          type: response.type,
         };
+        console.log(response);
 
         props.setPicture(image);
       }

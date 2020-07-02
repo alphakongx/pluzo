@@ -1,40 +1,51 @@
-import React from "react";
-import { Image, View } from "react-native";
+import React, { useState } from "react";
+import { View } from "react-native";
 import {
+  BackButton,
   GradientButton,
   ProgressBar,
   Screen,
   Text,
   TextInput,
-  Touchable,
 } from "@components";
 import styles from "./forgot-password.style.js";
 
 const SignupPhoneNumber: () => React$Node = props => {
+  const [phoneCode, setPhoneCode] = useState("+1");
+  const [phoneNumber, setPhoneNumber] = useState("123456789");
+
   const goBack = () => {
     props.navigation.goBack();
+  };
+
+  const sendCode = () => {
+    props.requestForgotPasswordSendCode(phoneCode + " " + phoneNumber, true);
   };
 
   return (
     <Screen>
       <View style={styles.container}>
         <ProgressBar />
-        <Touchable onPress={goBack}>
-          <View style={styles.backButtonContainer}>
-            <Image source={require("@assets/images/chevron-left.png")} />
-          </View>
-        </Touchable>
+        <BackButton onPress={goBack} />
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>Forgot Password?</Text>
 
           <View style={styles.phoneContainer}>
             <View style={styles.phoneCodeContainer}>
               <Text style={styles.phoneLabel}>PHONE CODE</Text>
-              <TextInput placeholder={"+1"} />
+              <TextInput
+                value={phoneCode}
+                onChangeText={setPhoneCode}
+                placeholder={"Code"}
+              />
             </View>
             <View style={styles.phoneSeparator} />
             <View style={styles.phoneNumberContainer}>
-              <TextInput placeholder={"Your phone number"} />
+              <TextInput
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                placeholder={"Your phone number"}
+              />
             </View>
           </View>
 
@@ -50,9 +61,9 @@ const SignupPhoneNumber: () => React$Node = props => {
 
         <View style={styles.footer}>
           <GradientButton
-            onPress={() => {
-              props.navigation.navigate("RESET_PASSWORD_CODE_VERIFICATION", {});
-            }}
+            loading={props.isSendingCode}
+            disabled={!phoneNumber || !phoneCode}
+            onPress={sendCode}
             text={"Send code"}
           />
         </View>

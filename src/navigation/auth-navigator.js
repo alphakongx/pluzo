@@ -42,7 +42,7 @@ const AuthStack = createStackNavigator(
     SWIPE: { screen: Swipe },
   },
   {
-    initialRouteName: "SIGNUP_FIRST_NAME",
+    initialRouteName: "AUTH_SELECTION",
     headerMode: "none",
     defaultNavigationOptions: {
       cardStyle: {
