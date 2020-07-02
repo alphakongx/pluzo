@@ -20,6 +20,32 @@ const loginFailure = (state, action) => ({
   isLoggingIn: false,
 });
 
+const requestPhoneLoginSendCode = (state, action) => ({
+  ...state,
+  isSendingPhoneLoginCode: true,
+});
+const phoneLoginSendCodeSuccess = (state, action) => ({
+  ...state,
+  isSendingPhoneLoginCode: false,
+});
+const phoneLoginSendCodeFailure = (state, action) => ({
+  ...state,
+  isSendingPhoneLoginCode: false,
+});
+
+const requestPhoneLoginConfirmCode = (state, action) => ({
+  ...state,
+  isConfirmingPhoneLoginCode: true,
+});
+const phoneLoginConfirmCodeSuccess = (state, action) => ({
+  ...state,
+  isConfirmingPhoneLoginCode: false,
+});
+const phoneLoginConfirmCodeFailure = (state, action) => ({
+  ...state,
+  isConfirmingPhoneLoginCode: false,
+});
+
 const requestRegistration = (state, action) => ({
   ...state,
   isRegistring: true,
@@ -104,6 +130,14 @@ export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
   [UserTypes.LOGIN_FAILURE]: loginFailure,
+
+  [UserTypes.REQUEST_PHONE_LOGIN_SEND_CODE]: requestPhoneLoginSendCode,
+  [UserTypes.PHONE_LOGIN_SEND_CODE_SUCCESS]: phoneLoginSendCodeSuccess,
+  [UserTypes.PHONE_LOGIN_SEND_CODE_FAILURE]: phoneLoginSendCodeFailure,
+
+  [UserTypes.REQUEST_PHONE_LOGIN_CONFIRM_CODE]: requestPhoneLoginConfirmCode,
+  [UserTypes.PHONE_LOGIN_CONFIRM_CODE_SUCCESS]: phoneLoginConfirmCodeSuccess,
+  [UserTypes.PHONE_LOGIN_CONFIRM_CODE_FAILURE]: phoneLoginConfirmCodeFailure,
 
   [UserTypes.REQUEST_REGISTRATION]: requestRegistration,
   [UserTypes.REGISTRATION_SUCCESS]: registrationSuccess,

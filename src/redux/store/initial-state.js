@@ -6,6 +6,8 @@ export default {
     mentor: null,
     isLoggingIn: false,
     isRegistring: false,
+    isSendingPhoneLoginCode: false,
+    isConfirmingPhoneLoginCode: false,
     isSendingPhoneVerificationCode: false,
     isConfirmingPhoneVerificationCode: false,
     isSendingForgotPasswordCode: false,

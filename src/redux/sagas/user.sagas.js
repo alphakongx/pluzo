@@ -2,6 +2,8 @@ import { call, put, takeEvery, select } from "redux-saga/effects";
 import { UserCreators, UserTypes } from "../actions";
 import {
   login,
+  phoneLoginSendCode,
+  phoneLoginConfirmCode,
   register,
   phoneVerificationSendCode,
   phoneVerificationConfirmCode,
@@ -32,6 +34,11 @@ export function* watchUserRequests() {
     requestForgotPasswordConfirmCode,
   );
   yield takeEvery(UserTypes.REQUEST_RESET_PASSWORD, requestResetPassword);
+  yield takeEvery(UserTypes.REQUEST_PHONE_LOGIN_SEND_CODE, requestPhoneLoginSendCode);
+  yield takeEvery(
+    UserTypes.REQUEST_PHONE_LOGIN_CONFIRM_CODE,
+    requestPhoneLoginConfirmCode,
+  );
 }
 
 function* requestLogin(action) {
@@ -157,5 +164,42 @@ function* requestResetPassword(action) {
     yield put(UserCreators.resetPasswordSuccess());
   } catch (error) {
     yield put(UserCreators.resetPasswordFailure());
+  }
+}
+
+function* requestPhoneLoginSendCode(action) {
+  try {
+    const { phoneNumber, shouldNavigate } = action;
+    const params = new FormData();
+
+    params.append("phone", phoneNumber);
+
+    yield call(phoneLoginSendCode, params);
+
+    if (shouldNavigate)
+      NavigationService.navigate("LOGIN_PHONE_CODE_VERIFICATION", { phoneNumber });
+
+    yield put(UserCreators.phoneLoginSendCodeSuccess());
+  } catch (error) {
+    yield put(UserCreators.phoneLoginSendCodeFailure());
+  }
+}
+
+function* requestPhoneLoginConfirmCode(action) {
+  try {
+    const { phoneNumber, code } = action;
+    const params = new FormData();
+
+    params.append("phone", phoneNumber);
+    params.append("code", code);
+
+    yield call(phoneLoginConfirmCode, params);
+
+    Notification.alert("Login Success", "Logged in Successfully", null, () => {
+      NavigationService.popToTop();
+    });
+    yield put(UserCreators.phoneLoginConfirmCodeSuccess());
+  } catch (error) {
+    yield put(UserCreators.phoneLoginConfirmCodeFailure());
   }
 }
