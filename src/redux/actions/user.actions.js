@@ -21,7 +21,7 @@ const { Types, Creators } = createActions({
   phoneVerificationSendCodeSuccess: null,
   phoneVerificationSendCodeFailure: null,
 
-  requestPhoneVerificationConfirmCode: ["code"],
+  requestPhoneVerificationConfirmCode: ["code", "isSignUp"],
   phoneVerificationConfirmCodeSuccess: ["sessionData"],
   phoneVerificationConfirmCodeFailure: null,
 

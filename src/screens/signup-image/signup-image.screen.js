@@ -34,8 +34,6 @@ const SignupImage: () => React$Node = props => {
           name: photoUriSplit[photoUriSplit.length - 1],
           type: response.type,
         };
-        console.log(response);
-
         props.setPicture(image);
       }
     });

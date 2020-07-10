@@ -38,7 +38,7 @@ export default StyleSheet.create({
     flex: 1,
     fontSize: 12,
     fontWeight: "600",
-    color: COLOR.SEARCH_INPUT_TEXT,
+    color: COLOR.TEXT_INPUT,
     backgroundColor: "white",
   }),
 });

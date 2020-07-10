@@ -34,7 +34,12 @@ const SignupUsername: () => React$Node = props => {
           </View>
         </Touchable>
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>
+          <Text
+            style={styles.titleText}
+            numberOfLines={2}
+            adjustsFontSizeToFit
+            minimumFontScale={0.5}
+          >
             Select your username and choose a password.
           </Text>
 

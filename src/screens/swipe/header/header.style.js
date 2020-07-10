@@ -2,48 +2,34 @@ import { StyleSheet } from "react-native";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
-  headerContainer: {
-    backgroundColor: COLOR.HEADER_BACKGROUND,
-  },
-  header: {
-    height: 60,
-    flexDirection: "row",
-  },
-  backButtonContainer: {
-    justifyContent: "center",
-    paddingHorizontal: 10,
-  },
-  backButtonTouchable: {
-    width: 35,
-    height: 35,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  headerContentContainer: {
-    flex: 1,
+  topActionRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    paddingHorizontal: 20,
   },
-  headerImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginHorizontal: 10,
+  topRowMargin: {
+    marginTop: 20,
   },
-  headerTitle: {
-    fontSize: 14,
-    fontWeight: "700",
+  topRowMarginSmall: {
+    marginTop: 8,
+  },
+  onlineStatus: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 5,
+  },
+  topBarName: {
+    fontSize: 26,
+    fontWeight: "600",
     color: COLOR.TEXT_PRIMARY,
   },
-  reportButtonContainer: {
-    justifyContent: "center",
-    paddingHorizontal: 10,
+  topBarLocation: {
+    fontSize: 10,
+    color: COLOR.TEXT_SECONDARY_2,
+    marginLeft: 5,
   },
-  reportButtonTouchable: {
-    width: 35,
-    height: 35,
-    justifyContent: "center",
-    alignItems: "center",
+  flexSpace: {
+    flex: 1,
   },
 });

@@ -1,5 +1,6 @@
 import React from "react";
-import { ImageBackground, SafeAreaView, View } from "react-native";
+import { ImageBackground, View } from "react-native";
+import { SafeAreaView } from "react-navigation";
 import styles from "./screen.style";
 
 const Screen: () => React$Node = props => {

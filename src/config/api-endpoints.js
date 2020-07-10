@@ -14,4 +14,11 @@ export const API_ENDPOINTS = {
   FORGOT_PASSWORD_CONFIRM_CODE: `${BASE_URL}/forgot-sms-code`,
 
   RESET_PASSWORD: `${BASE_URL}/new-pass-code`,
+
+  GET_CHAT: `${BASE_URL}/get-chat`,
+
+  GET_CARDS: `${BASE_URL}/swipe`,
+  SEND_LIKE: `${BASE_URL}/send-like`,
+  SEND_LIKE_ALL: `${BASE_URL}/send-like-all`,
+  GET_MATCH: `${BASE_URL}/get-match`,
 };

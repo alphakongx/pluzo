@@ -24,8 +24,13 @@ const Monsterrat = {
   "900italic": { fontFamily: "MontserratAlternates-ExtraBoldItalic" },
 };
 
+const OpenSans = {
+  "400": { fontFamily: "OpenSans-Regular" },
+};
+
 const FONTS = {
   Monsterrat,
+  OpenSans,
 };
 
 /*

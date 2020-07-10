@@ -7,6 +7,10 @@ export default StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
   },
+  viewContainer: {
+    flex: 1,
+    marginBottom: 50,
+  },
   header: {
     flexDirection: "row",
     height: 70,

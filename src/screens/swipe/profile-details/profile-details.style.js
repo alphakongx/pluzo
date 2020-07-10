@@ -8,8 +8,12 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 1000,
+    backgroundColor: COLOR.HEADER_BACKGROUND,
+  },
+  contentContainer: {
     padding: 20,
     overflow: "visible",
+    marginBottom: 50,
   },
   closeButton: {
     position: "absolute",

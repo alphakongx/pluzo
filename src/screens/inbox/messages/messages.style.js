@@ -5,6 +5,11 @@ export default StyleSheet.create({
   container: {
     flex: 1,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   messageContainer: {
     height: 100,
     flexDirection: "row",

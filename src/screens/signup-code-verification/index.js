@@ -4,6 +4,7 @@ import { UserCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
+    isSendingPhoneVerificationCode: state.user.isSendingPhoneVerificationCode,
     verificationInProgress: state.user.isConfirmingPhoneVerificationCode,
   };
 }

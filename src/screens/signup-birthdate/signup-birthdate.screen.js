@@ -31,7 +31,9 @@ const SignupFirstName: () => React$Node = props => {
           <View style={styles.titleFieldContainer}>
             <Text style={styles.titleText}>When were you born?</Text>
             <DateTimePicker
-              onChange={date => props.setBirthDate(date)}
+              onChange={date => {
+                props.setBirthDate(date);
+              }}
               value={props.birthDate}
             />
           </View>

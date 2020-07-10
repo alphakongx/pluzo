@@ -5,6 +5,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import NewFriends from "./new-friends";
 import Messages from "./messages";
+import { SCREENS } from "@constants";
 
 import styles from "./inbox.style.js";
 
@@ -18,21 +19,25 @@ class Inbox extends Component {
         style={styles.container}
       >
         <SafeAreaView style={styles.safeAreaContainer}>
-          <View style={styles.header}>
-            <View style={styles.searchFieldContainer}>
-              <SearchInput />
-            </View>
+          <View style={styles.viewContainer}>
+            <View style={styles.header}>
+              <View style={styles.searchFieldContainer}>
+                <SearchInput />
+              </View>
 
-            <View style={styles.newChatIconContainer}>
-              <Touchable>
-                <Image source={require("@assets/images/new-chat.png")} />
-              </Touchable>
+              <View style={styles.newChatIconContainer}>
+                <Touchable>
+                  <Image source={require("@assets/images/new-chat.png")} />
+                </Touchable>
+              </View>
             </View>
-          </View>
-          <View style={styles.contentContainer}>
-            <NewFriends />
-            <View style={styles.separator} />
-            <Messages onPressItem={() => this.props.navigation.navigate("CHAT", {})} />
+            <View style={styles.contentContainer}>
+              <NewFriends />
+              <View style={styles.separator} />
+              <Messages
+                onPressItem={() => this.props.navigation.navigate(SCREENS.CHAT, {})}
+              />
+            </View>
           </View>
         </SafeAreaView>
       </LinearGradient>

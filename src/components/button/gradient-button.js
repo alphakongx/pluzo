@@ -6,13 +6,17 @@ import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 
 class GradientButton extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-    var { onPress, text, disabled, loading } = this.props;
+    var { onPress, text, disabled, loading, colors } = this.props;
 
     return (
       <Touchable disabled={loading || disabled} onPress={onPress}>
         <LinearGradient
-          colors={disabled ? GRADIENT.BUTTON_DISABLED : GRADIENT.BUTTON}
+          colors={disabled ? GRADIENT.BUTTON_DISABLED : colors}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.container}
@@ -29,5 +33,9 @@ class GradientButton extends Component {
     );
   }
 }
+
+GradientButton.defaultProps = {
+  colors: GRADIENT.BUTTON,
+};
 
 export default GradientButton;
