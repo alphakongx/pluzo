@@ -11,8 +11,10 @@ import {
   forgotPasswordConfirmCode,
   resetPassword,
 } from "@redux/api";
+import moment from "moment";
 import { registrationSelector } from "../selectors";
 import { NavigationService, Notification } from "@helpers";
+import { SCREENS } from "@constants";
 
 export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_LOGIN, requestLogin);
@@ -49,8 +51,6 @@ function* requestLogin(action) {
     requestParams.append("password", params.password);
     const response = yield call(login, requestParams);
 
-    Notification.alert("Login Success");
-
     yield put(UserCreators.loginSuccess(response.data.data));
   } catch (error) {
     yield put(UserCreators.loginFailure());
@@ -63,7 +63,7 @@ function* requestRegistration(action) {
     const params = new FormData();
 
     params.append("first_name", registrationData.firstName);
-    // params.append("dob", registrationData.birthDate);
+    params.append("birthday", moment(registrationData.birthDate).unix());
     params.append("gender", registrationData.gender);
     params.append("username", registrationData.username);
     params.append("password", registrationData.password);
@@ -97,13 +97,15 @@ function* requestPhoneVerificationSendCode(action) {
 function* requestPhoneVerificationConfirmCode(action) {
   try {
     const { phoneNumber } = yield select(registrationSelector);
-    const { code } = action;
+    const { code, isSignUp } = action;
     const params = new FormData();
 
     params.append("phone", phoneNumber);
     params.append("code", code);
 
-    yield call(phoneVerificationConfirmCode, params);
+    const response = yield call(phoneVerificationConfirmCode, params);
+    if (isSignUp)
+      NavigationService.navigate(SCREENS.SIGNUP_SUCCESS, { user: response.data.data });
 
     yield put(UserCreators.phoneVerificationConfirmCodeSuccess());
   } catch (error) {
@@ -121,7 +123,9 @@ function* requestForgotPasswordSendCode(action) {
     yield call(forgotPasswordSendCode, params);
 
     if (shouldNavigate)
-      NavigationService.navigate("RESET_PASSWORD_CODE_VERIFICATION", { phoneNumber });
+      NavigationService.navigate(SCREENS.RESET_PASSWORD_CODE_VERIFICATION, {
+        phoneNumber,
+      });
 
     yield put(UserCreators.forgotPasswordSendCodeSuccess());
   } catch (error) {
@@ -177,7 +181,7 @@ function* requestPhoneLoginSendCode(action) {
     yield call(phoneLoginSendCode, params);
 
     if (shouldNavigate)
-      NavigationService.navigate("LOGIN_PHONE_CODE_VERIFICATION", { phoneNumber });
+      NavigationService.navigate(SCREENS.LOGIN_PHONE_CODE_VERIFICATION, { phoneNumber });
 
     yield put(UserCreators.phoneLoginSendCodeSuccess());
   } catch (error) {
@@ -193,11 +197,9 @@ function* requestPhoneLoginConfirmCode(action) {
     params.append("phone", phoneNumber);
     params.append("code", code);
 
-    yield call(phoneLoginConfirmCode, params);
+    const response = yield call(phoneLoginConfirmCode, params);
 
-    Notification.alert("Login Success", "Logged in Successfully", null, () => {
-      NavigationService.popToTop();
-    });
+    yield put(UserCreators.loginSuccess(response.data.data));
     yield put(UserCreators.phoneLoginConfirmCodeSuccess());
   } catch (error) {
     yield put(UserCreators.phoneLoginConfirmCodeFailure());

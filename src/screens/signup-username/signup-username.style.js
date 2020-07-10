@@ -13,8 +13,8 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
     paddingHorizontal: 37,
+    justifyContent: "center",
   },
   titleText: {
     fontSize: 24,

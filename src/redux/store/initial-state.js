@@ -21,6 +21,16 @@ export default {
     username: "",
     password: "",
     picture: null,
-    phoneNumber: "+1321123321123",
+    phoneNumber: "",
+  },
+  inbox: {
+    channels: [],
+    isLoadingChannels: false,
+  },
+  swipe: {
+    cards: [],
+    likecount: 0,
+    isLoadingCards: false,
+    isLoadingMatch: false,
   },
 };

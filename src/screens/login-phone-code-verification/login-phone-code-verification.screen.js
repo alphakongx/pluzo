@@ -86,7 +86,7 @@ const LoginPhoneCodeVerification: () => React$Node = props => {
           <GradientButton
             loading={props.verificationInProgress}
             onPress={submit}
-            text={"Change password"}
+            text={"Confirm account"}
           />
         </View>
       </View>

@@ -11,8 +11,8 @@ const requestLogin = (state, action) => ({
 });
 const loginSuccess = (state, action) => ({
   ...state,
-  // token: action.sessionData.token,
-  // user: action.sessionData,
+  token: action.sessionData.token,
+  user: action.sessionData,
   isLoggingIn: false,
 });
 const loginFailure = (state, action) => ({

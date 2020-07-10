@@ -10,7 +10,7 @@ import { rootSaga } from "../sagas";
 const persistConfig = {
   key: "pluzo",
   storage,
-  whitelist: [],
+  whitelist: ["user"],
 };
 
 const middlewares = [];
