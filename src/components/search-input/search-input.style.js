@@ -20,6 +20,7 @@ export default StyleSheet.create({
   inputField: FontHelper.font({
     flex: 1,
     fontSize: 12,
+    padding: 0,
     fontWeight: "600",
     color: COLOR.SEARCH_INPUT_TEXT,
   }),

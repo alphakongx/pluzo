@@ -5,6 +5,7 @@ export * from "./date-time-picker";
 export * from "./date-time-picker-modal";
 export * from "./image";
 export * from "./progress-bar";
+export * from "./card-progress-bar";
 export * from "./screen";
 export * from "./search-input";
 export * from "./tab-bar";

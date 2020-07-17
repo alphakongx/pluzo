@@ -11,7 +11,15 @@ class GradientButton extends Component {
   }
 
   render() {
-    var { onPress, text, disabled, loading, colors } = this.props;
+    var {
+      onPress,
+      text,
+      disabled,
+      loading,
+      colors,
+      containerStyle,
+      textStyle,
+    } = this.props;
 
     return (
       <Touchable disabled={loading || disabled} onPress={onPress}>
@@ -19,12 +27,18 @@ class GradientButton extends Component {
           colors={disabled ? GRADIENT.BUTTON_DISABLED : colors}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          style={styles.container}
+          style={[styles.container, containerStyle]}
         >
           {loading ? (
             <ActivityIndicator size={"small"} color={"white"} />
           ) : (
-            <Text style={disabled ? styles.buttonTextDisabled : styles.buttonText}>
+            <Text
+              style={[
+                styles.buttonText,
+                textStyle,
+                disabled ? styles.buttonTextDisabled : {},
+              ]}
+            >
               {text}
             </Text>
           )}

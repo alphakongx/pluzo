@@ -1,3 +1,18 @@
 import ProfileSettings from "./profile-settings.screen";
+import { connect } from "react-redux";
+import { UserCreators } from "@redux/actions";
 
-export default ProfileSettings;
+function mapStateToProps(state) {
+  return {
+    token: state.user.token,
+    user: state.user.user,
+    deletingImageId: state.user.isDeletingImage,
+  };
+}
+
+const mapDispatchToProps = {
+  uploadImage: UserCreators.requestUpdateUser,
+  deleteImage: UserCreators.requestDeleteImage,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileSettings);

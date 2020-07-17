@@ -22,6 +22,11 @@ export default StyleSheet.create({
     paddingHorizontal: 5,
     paddingBottom: 5,
   },
+  friendImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
   onlineIconContainer: {
     position: "absolute",
     right: 0,

@@ -4,6 +4,7 @@ export default {
     session: null,
     user: null,
     mentor: null,
+    location: null,
     isLoggingIn: false,
     isRegistring: false,
     isSendingPhoneLoginCode: false,
@@ -13,6 +14,7 @@ export default {
     isSendingForgotPasswordCode: false,
     isConfirmingForgotPasswordCode: false,
     isResettingPassword: false,
+    isDeletingImage: 0,
   },
   registration: {
     firstName: "",
@@ -26,6 +28,11 @@ export default {
   inbox: {
     channels: [],
     isLoadingChannels: false,
+    friends: [],
+    isLoadingFriends: false,
+    pendingFriends: [],
+    isLoadingPendingFriends: false,
+    isAddingFriend: false,
   },
   swipe: {
     cards: [],
@@ -33,4 +40,11 @@ export default {
     isLoadingCards: false,
     isLoadingMatch: false,
   },
+  search: {
+    friends: [],
+    chat: [],
+    people: [],
+    live: [],
+    isSearching: false,
+  }
 };

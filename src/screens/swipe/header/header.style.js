@@ -32,4 +32,8 @@ export default StyleSheet.create({
   flexSpace: {
     flex: 1,
   },
+  infoIcon: {
+    width: 20,
+    height: 20,
+  },
 });

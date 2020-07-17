@@ -10,9 +10,11 @@ import {
   forgotPasswordSendCode,
   forgotPasswordConfirmCode,
   resetPassword,
+  updateUser,
+  deleteImage,
 } from "@redux/api";
 import moment from "moment";
-import { registrationSelector } from "../selectors";
+import { registrationSelector, userSelector } from "../selectors";
 import { NavigationService, Notification } from "@helpers";
 import { SCREENS } from "@constants";
 
@@ -41,6 +43,8 @@ export function* watchUserRequests() {
     UserTypes.REQUEST_PHONE_LOGIN_CONFIRM_CODE,
     requestPhoneLoginConfirmCode,
   );
+  yield takeEvery(UserTypes.REQUEST_UPDATE_USER, requestUpdateUser);
+  yield takeEvery(UserTypes.REQUEST_DELETE_IMAGE, requestDeleteImage);
 }
 
 function* requestLogin(action) {
@@ -60,6 +64,7 @@ function* requestLogin(action) {
 function* requestRegistration(action) {
   try {
     const registrationData = yield select(registrationSelector);
+    const userData = yield select(userSelector);
     const params = new FormData();
 
     params.append("first_name", registrationData.firstName);
@@ -68,7 +73,11 @@ function* requestRegistration(action) {
     params.append("username", registrationData.username);
     params.append("password", registrationData.password);
     params.append("phone", registrationData.phoneNumber);
-    // params.append("image", registrationData.picture);
+    params.append("image", registrationData.picture);
+    if (userData.location !== null) {
+      params.append("latitude", userData.location.coords.latitude);
+      params.append("longitude", userData.location.coords.longitude);
+    }
 
     const response = yield call(register, params);
 
@@ -81,10 +90,12 @@ function* requestRegistration(action) {
 
 function* requestPhoneVerificationSendCode(action) {
   try {
-    const { phoneNumber } = yield select(registrationSelector);
+    const { phoneNumber } = action;
+    const { regPhoneNumber} = yield select(registrationSelector);
+
     const params = new FormData();
 
-    params.append("phone", phoneNumber);
+    params.append("phone", phoneNumber === "" ? regPhoneNumber : phoneNumber);
 
     yield call(phoneVerificationSendCode, params);
 
@@ -96,11 +107,11 @@ function* requestPhoneVerificationSendCode(action) {
 
 function* requestPhoneVerificationConfirmCode(action) {
   try {
-    const { phoneNumber } = yield select(registrationSelector);
-    const { code, isSignUp } = action;
+    const { regPhoneNumber} = yield select(registrationSelector);    
+    const { phoneNumber, code, isSignUp } = action;
     const params = new FormData();
 
-    params.append("phone", phoneNumber);
+    params.append("phone", phoneNumber === "" ? regPhoneNumber : phoneNumber);
     params.append("code", code);
 
     const response = yield call(phoneVerificationConfirmCode, params);
@@ -203,5 +214,36 @@ function* requestPhoneLoginConfirmCode(action) {
     yield put(UserCreators.phoneLoginConfirmCodeSuccess());
   } catch (error) {
     yield put(UserCreators.phoneLoginConfirmCodeFailure());
+  }
+}
+
+function* requestUpdateUser(action) {
+  try {
+    const { params, token } = action;
+
+    const response = yield call(updateUser, params, token);
+
+    yield put(UserCreators.updateUserSuccess(response.data.data));
+  } catch (error) {
+    yield put(UserCreators.updateUserFailure());
+  }
+}
+
+function* requestDeleteImage(action) {
+  try {
+    const { imageId, token } = action;
+    const userData = yield select(userSelector);
+
+    const params = new FormData();
+    params.append("image_id", imageId);
+    yield call(deleteImage, params, token);
+
+    const user = userData.user;
+    if (user !== null && user.images !== null) {
+      user.images = yield user.images.filter((image) => image.id !== imageId);
+    }
+    yield put(UserCreators.deleteImageSuccess(user));
+  } catch (error) {
+    yield put(UserCreators.deleteImageFailure());
   }
 }

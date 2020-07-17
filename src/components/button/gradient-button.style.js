@@ -14,9 +14,6 @@ export default StyleSheet.create({
     color: "white",
   },
   buttonTextDisabled: {
-    fontSize: 18,
-    fontWeight: "bold",
-    lineHeight: 30,
     color: "rgba(200, 200, 200, 1)",
   },
 });
