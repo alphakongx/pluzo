@@ -10,6 +10,15 @@ export default StyleSheet.create({
     height: 90,
     borderRadius: 45,
   },
+  absoluteFill: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   textContainer: {
     justifyContent: "center",
     alignItems: "flex-start",

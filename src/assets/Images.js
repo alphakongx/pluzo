@@ -9,6 +9,8 @@ const Images = {
     icSetting: require("@assets/images/settings.png"),
     icCheck: require("@assets/images/ic-check.png"),
     pluzoPlus: require("@assets/images/pluzo-plus.png"),
+    purchaseBg: require("@assets/images/purchase-bg.png"),
+    icCross: require("@assets/images/cross.png"),
   },
   live: {
     tagPicture: require("@assets/images/live-screen/tag-picture.png"),

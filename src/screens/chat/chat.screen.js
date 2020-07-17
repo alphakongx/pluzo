@@ -35,47 +35,54 @@ const messages = [
   },
 ];
 
-const Chat: () => React$Node = props => {
-  useEffect(() => {
+class Chat extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
     if (Platform.OS === "ios") {
       KeyboardManager.setKeyboardDistanceFromTextField(0);
       KeyboardManager.setEnable(false);
     }
+  }
 
-    return () => {
-      if (Platform.OS === "ios") {
-        KeyboardManager.setKeyboardDistanceFromTextField(65);
-        KeyboardManager.setEnable(true);
-      }
-    };
-  });
+  componentWillUnmount() {
+    if (Platform.OS === "ios") {
+      KeyboardManager.setKeyboardDistanceFromTextField(65);
+      KeyboardManager.setEnable(true);
+    }
+  }
 
-  return (
-    <Screen hasHeader style={styles.container}>
-      <Header />
-      <View style={styles.body}>
-        <GiftedChat
-          messages={messages}
-          isTyping={true}
-          isKeyboardInternallyHandled={true}
-          renderBubble={bubbleProps => (
-            <MessageBubble
-              {...bubbleProps}
-              onLongPress={this._onOpenActionSheet}
-              onPress={this._openAttachment}
-            />
-          )}
-          renderAvatar={avatarProps => {
-            return <Avatar {...avatarProps} />;
-          }}
-          renderInputToolbar={InputToolbar}
-          user={{
-            _id: 2,
-          }}
-        />
-      </View>
-    </Screen>
-  );
+  render() {
+    return (
+      <Screen hasHeader style={styles.container}>
+        <Header 
+          onBack={() => this.props.navigation.goBack()} />
+        <View style={styles.body}>
+          <GiftedChat
+            messages={messages}
+            isTyping={true}
+            isKeyboardInternallyHandled={true}
+            renderBubble={bubbleProps => (
+              <MessageBubble
+                {...bubbleProps}
+                onLongPress={this._onOpenActionSheet}
+                onPress={this._openAttachment}
+              />
+            )}
+            renderAvatar={avatarProps => {
+              return <Avatar {...avatarProps} />;
+            }}
+            renderInputToolbar={InputToolbar}
+            user={{
+              _id: 2,
+            }}
+          />
+        </View>
+      </Screen>
+    );
+  }  
 };
 
 export default Chat;

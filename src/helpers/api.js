@@ -15,7 +15,7 @@ export class API {
     };
   }
 
-  static request(options) {
+  static request(options, isAlert = true) {
     options.headers = _.merge(this.headers(), options.headers);
     const source = CancelToken.source();
     options.cancelToken = source.token;
@@ -63,7 +63,9 @@ export class API {
           if (error.response && error.response.status === 401) {
             Notification.alert("Invalid username/password");
           } else if (error.response && error.response.data && error.response.data.error) {
-            Notification.alert(error.response.data.message);
+            if (isAlert === true) {
+              Notification.alert(error.response.data.message);
+            }
           }
           // if (
           //   error.response &&

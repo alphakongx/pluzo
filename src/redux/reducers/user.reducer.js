@@ -11,9 +11,9 @@ const requestLogin = (state, action) => ({
 });
 const loginSuccess = (state, action) => ({
   ...state,
+  isLoggingIn: false,
   token: action.sessionData.token,
   user: action.sessionData,
-  isLoggingIn: false,
 });
 const loginFailure = (state, action) => ({
   ...state,
@@ -126,6 +126,36 @@ const resetPasswordFailure = (state, action) => ({
   isResettingPassword: false,
 });
 
+const requestUpdateUser = (state, action) => ({
+  ...state,
+});
+const updateUserSuccess = (state, action) => ({
+  ...state,
+  user: action.sessionData,
+});
+const updateUserFailure = (state, action) => ({
+  ...state,
+});
+
+const updateLocation = (state, action) => ({
+  ...state,
+  location: action.location,
+});
+
+const requestDeleteImage = (state, action) => ({
+  ...state,
+  isDeletingImage: action.imageId,
+});
+const deleteImageSuccess = (state, action) => ({
+  ...state,
+  isDeletingImage: 0,
+  user: action.sessionData,
+});
+const deleteImageFailure = (state, action) => ({
+  ...state,
+  deleteImageFailure: 0,
+});
+
 export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
@@ -162,6 +192,16 @@ export const HANDLERS = {
   [UserTypes.REQUEST_RESET_PASSWORD]: requestResetPassword,
   [UserTypes.RESET_PASSWORD_SUCCESS]: resetPasswordSuccess,
   [UserTypes.RESET_PASSWORD_FAILURE]: resetPasswordFailure,
+
+  [UserTypes.REQUEST_UPDATE_USER]: requestUpdateUser,
+  [UserTypes.UPDATE_USER_SUCCESS]: updateUserSuccess,
+  [UserTypes.UPDATE_USER_FAILURE]: updateUserFailure,
+
+  [UserTypes.UPDATE_LOCATION]: updateLocation,
+
+  [UserTypes.REQUEST_DELETE_IMAGE]: requestDeleteImage,
+  [UserTypes.DELETE_IMAGE_SUCCESS]: deleteImageSuccess,
+  [UserTypes.DELETE_IMAGE_FAILURE]: deleteImageFailure,
 
   [UserTypes.LOGOUT]: logout,
 };

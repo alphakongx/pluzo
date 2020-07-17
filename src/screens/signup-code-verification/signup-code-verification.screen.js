@@ -25,7 +25,7 @@ class SignupCodeVerification extends Component {
       UserTypes.PHONE_VERIFICATION_SEND_CODE_SUCCESS,
       this.startCountDown,
     );
-    this.props.requestPhoneVerificationSendCode();
+    this.resendCode();
   }
 
   componentWillUnmount() {
@@ -37,7 +37,12 @@ class SignupCodeVerification extends Component {
   };
 
   resendCode = () => {
-    this.props.requestPhoneVerificationSendCode();
+    var phoneNumber = "";
+    if (this.props.navigation.state.params !== undefined) {
+      phoneNumber = this.props.navigation.state.params.phoneNumber;
+    }
+    console.log("PHONE", phoneNumber);
+    this.props.requestPhoneVerificationSendCode(phoneNumber);
   };
 
   startCountDown = () => {
@@ -49,8 +54,12 @@ class SignupCodeVerification extends Component {
 
   submit = () => {
     const { code } = this.state;
-
-    this.props.requestPhoneVerificationConfirmCode(code, true);
+    var phoneNumber = "";
+    if (this.props.navigation.state.params !== undefined) {
+      phoneNumber = this.props.navigation.state.params.phoneNumber;
+    }
+    
+    this.props.requestPhoneVerificationConfirmCode(phoneNumber, code, true);
   };
 
   render() {

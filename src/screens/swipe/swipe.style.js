@@ -12,16 +12,6 @@ export default StyleSheet.create({
   contentContainer: {
     flex: 1,
   },
-  card: {
-    flex: 1,
-    borderRadius: 4,
-    justifyContent: "center",
-    backgroundColor: "transparent",
-  },
-  cardImage: {
-    width: "100%",
-    flex: 1,
-  },
   heartIcon: {
     width: 120,
     height: 120,

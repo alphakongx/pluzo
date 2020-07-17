@@ -11,7 +11,6 @@ class Header extends React.Component {
   }
 
   onSettings = () => {
-    console.log("OK");
     this.props.navigation.navigate(SCREENS.SETTINGS);
   };
 

@@ -7,7 +7,7 @@ const BackButton: () => React$Node = props => {
   return (
     <Touchable disabled={props.disabled} onPress={props.onPress}>
       <View style={styles.container}>
-        <Image source={require("@assets/images/chevron-left.png")} />
+        <Image source={props.icon === undefined ? require("@assets/images/chevron-left.png") : props.icon} />
       </View>
     </Touchable>
   );

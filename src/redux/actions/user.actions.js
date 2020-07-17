@@ -21,7 +21,7 @@ const { Types, Creators } = createActions({
   phoneVerificationSendCodeSuccess: null,
   phoneVerificationSendCodeFailure: null,
 
-  requestPhoneVerificationConfirmCode: ["code", "isSignUp"],
+  requestPhoneVerificationConfirmCode: ["phoneNumber", "code", "isSignUp"],
   phoneVerificationConfirmCodeSuccess: ["sessionData"],
   phoneVerificationConfirmCodeFailure: null,
 
@@ -36,6 +36,16 @@ const { Types, Creators } = createActions({
   requestResetPassword: ["phoneNumber", "passwordResetToken", "password"],
   resetPasswordSuccess: null,
   resetPasswordFailure: null,
+
+  requestUpdateUser: ["params", "token"],
+  updateUserSuccess: ["sessionData"],
+  updateUserFailure: null,
+
+  updateLocation: ["location"],
+
+  requestDeleteImage: ["imageId", "token"],
+  deleteImageSuccess: ["sessionData"],
+  deleteImageFailure: null,
 
   logout: null,
 });

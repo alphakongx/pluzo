@@ -1,3 +1,12 @@
 import ProfileDetails from "./profile-details";
+import { connect } from "react-redux";
 
-export default ProfileDetails;
+function mapStateToProps(state) {
+  return {
+    location: state.user.location,
+  };
+}
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileDetails);

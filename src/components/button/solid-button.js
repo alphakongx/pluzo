@@ -6,15 +6,18 @@ import styles from "./solid-button.style";
 
 class WhiteButton extends Component {
   render() {
-    var { onPress, text, disabled, loading } = this.props;
+    var { onPress, text, disabled, loading, containerStyle, textStyle } = this.props;
 
     return (
       <Touchable disabled={disabled} onPress={onPress}>
-        <View style={styles.container}>
+        <View style={[styles.container, containerStyle]}>
           {loading ? (
             <ActivityIndicator size={"small"} color={"white"} />
           ) : (
-            <Text style={styles.buttonText}>{text}</Text>
+            <Text style={[
+              styles.buttonText,
+              textStyle,
+            ]}>{text}</Text>
           )}
         </View>
       </Touchable>

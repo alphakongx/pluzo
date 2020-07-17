@@ -99,3 +99,27 @@ export function resetPassword(data, accessToken) {
     data,
   }).then(response => response);
 }
+
+export function updateUser(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.UPDATE_USER}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}
+
+export function deleteImage(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.DELETE_IMAGE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}

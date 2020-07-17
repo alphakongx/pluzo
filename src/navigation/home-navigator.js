@@ -11,6 +11,7 @@ import Chat from "../screens/chat";
 import Inbox from "../screens/inbox";
 import ProfileSettings from "../screens/profile-settings";
 import Settings from "../screens/settings";
+import SearchScreen from "../screens/search";
 
 import navigationConfig from "./navigation-config";
 
@@ -61,6 +62,7 @@ const HomeStack = createStackNavigator(
     [SCREENS.LIVE_STREAM]: LiveStream,
     [SCREENS.SETTINGS]: Settings,
     [SCREENS.CHAT]: Chat,
+    [SCREENS.SEARCH]: SearchScreen,
   },
   {
     initialRouteName: SCREENS.MAIN,

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
@@ -18,7 +19,27 @@ export default StyleSheet.create({
   },
   searchFieldContainer: {
     flex: 1,
+    flexDirection: "row",
+    height: 35,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: COLOR.SEARCH_INPUT_BORDER,
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  searchIconContainer: {
+    width: 30,
     justifyContent: "center",
+    alignItems: "flex-end",
+    paddingRight: 5,
+    paddingTop: 1,
+  },
+  searchText: {
+    flex: 1,
+    fontSize: 12,
+    padding: 0,
+    fontWeight: "600",
+    color: COLOR.SEARCH_INPUT_TEXT,
   },
   newChatIconContainer: {
     width: 50,

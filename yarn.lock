@@ -5409,6 +5409,11 @@ react-native-deck-swiper@^1.6.7:
   dependencies:
     prop-types "15.5.10"
 
+react-native-draggable-dynamic-flatlist@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-draggable-dynamic-flatlist/-/react-native-draggable-dynamic-flatlist-1.0.4.tgz#9195ffb6220edeedabed7fb2069779013503c7f7"
+  integrity sha512-FSpwSaN6riqqLF70izzcQOZ5D+LvYWV0EzFWll5tBtIzLWI88tXrwFd/rNH8IKl3X5Bd4pl2MNUCEbP1LO51xw==
+
 react-native-geolocation-service@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/react-native-geolocation-service/-/react-native-geolocation-service-5.0.0.tgz#eaf0541c99db9cbed5af5e2ad2822d166e3a7543"

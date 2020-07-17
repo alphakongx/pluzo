@@ -9,7 +9,8 @@ const Header: () => React$Node = props => {
       <SafeAreaView>
         <View style={styles.header}>
           <View style={styles.backButtonContainer}>
-            <Touchable style={styles.backButtonTouchable}>
+            <Touchable style={styles.backButtonTouchable}
+              onPress={() => {props.onBack()}}>
               <Image source={require("@assets/images/chevron-left.png")} />
             </Touchable>
           </View>

@@ -11,3 +11,61 @@ export function getChat(accessToken) {
     },
   }).then(response => response);
 }
+
+export function getFriends(accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.GET_FRIENDS}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+  }).then(response => response);
+}
+
+export function acceptFriend(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.ACCEPT_FRIEND_REQUEST}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}
+
+export function rejectFriend(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.REJECT_FRIEND_REQUEST}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}
+
+export function addFriendByUsername(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.ADD_FRIEND_USERNAME}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }, false).then(response => response);
+}
+
+export function getPendingRequests(accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.GET_FRIEND_REQUESTS}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+  }).then(response => response);
+}

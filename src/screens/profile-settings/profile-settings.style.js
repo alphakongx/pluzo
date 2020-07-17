@@ -22,14 +22,27 @@ export default StyleSheet.create({
   imageScrollView: {
     marginVertical: 10,
   },
+  imageItem: {
+    position: "relative",
+  },
   profileImage: {
     width: (width - 80) / 3,
     aspectRatio: 2 / 3,
     borderRadius: 22,
     marginRight: 10,
   },
+  imageLoadingContainer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   addImageButton: {
     width: (width - 80) / 3,
+    height: (width - 80) / 2,
     borderWidth: 2,
     borderColor: "white",
     borderRadius: 22,

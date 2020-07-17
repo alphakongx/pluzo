@@ -1,7 +1,7 @@
 import React from "react";
 import { View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-navigation";
-import { Image, ProgressBar, Text } from "@components";
+import { Image, CardProgressBar, Text } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-deck-swiper";
 import ProfileDetails from "./profile-details";
@@ -11,6 +11,7 @@ import { Notification } from "@helpers";
 import styles from "./swipe.style";
 import Header from "./header";
 import ActionButtonsView from "./action-buttons-view";
+import Card from "./card";
 
 class Swipe extends React.Component {
   constructor(props) {
@@ -95,7 +96,6 @@ class Swipe extends React.Component {
   render() {
     const { isLoadingCards, cards } = this.props;
     const { cardIndex, showDetail } = this.state;
-    const placeholderImage = require("@assets/images/live-screen/user-temp3.png");
 
     if (isLoadingCards) {
       return (
@@ -148,13 +148,7 @@ class Swipe extends React.Component {
             backgroundColor={"transparent"}
             renderCard={(card, index) => {
               return (
-                <View style={styles.card}>
-                  <Image
-                    resizeMode={"cover"}
-                    source={card.image === null ? placeholderImage : { uri: card.image }}
-                    style={styles.cardImage}
-                  />
-                </View>
+                <Card card={card} imageIndex={0} />
               );
             }}
             onSwipedAll={this.onSwipedAllCards}
@@ -225,7 +219,7 @@ class Swipe extends React.Component {
             style={styles.topActions}
           >
             <SafeAreaView>
-              <ProgressBar />
+              <CardProgressBar count={cards[cardIndex].images.length + 1} />
               {!showDetail && (
                 <Header item={cards[cardIndex]} onInfoClicked={this.changeShowDetail} />
               )}
