@@ -4,19 +4,12 @@ import { FontHelper } from "@helpers";
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: COLOR.MESSAGE_INPUT_TOOLBAR_BACKGROUND,
     borderTopWidth: 1,
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  contentContainer: {
-    flexDirection: "row",
-    flex: 1,
+    borderTopColor: "#FFFFFF10",
   },
   attachmentsButtonContainer: {
-    paddingHorizontal: 10,
+    marginLeft: 10,
   },
   attachmentIcon: {
     width: 35,
@@ -24,21 +17,28 @@ export default StyleSheet.create({
     borderRadius: 17.5,
     justifyContent: "center",
     alignItems: "center",
-  },
-  inputFieldContainer: {
-    flex: 1,
-    flexDirection: "row",
-    height: 35,
-    borderRadius: 25,
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    marginRight: 10,
+    marginBottom: 3,
   },
   inputField: FontHelper.font({
-    flex: 1,
+    fontFamily: "OpenSans",
     fontSize: 12,
-    fontWeight: "600",
     color: COLOR.TEXT_INPUT,
+    borderRadius: 25,
+    marginRight: 10,
+    paddingTop: 8,
+    paddingLeft: 15,
+    paddingRight: 40,
     backgroundColor: "white",
   }),
+  sendButton: {
+    width: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    bottom: 0,
+  },
+  sendButtonIcon: {
+    tintColor: COLOR.TEXT_SECONDARY,
+  },
 });

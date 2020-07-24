@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Image, View } from "react-native";
-import { Text } from "@components";
-import { Touchable } from "@components";
+import { Text } from "../text";
+import { Touchable } from "../touchable";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import Images from "@assets/Images";

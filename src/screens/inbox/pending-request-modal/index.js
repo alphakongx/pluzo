@@ -14,6 +14,7 @@ const mapDispatchToProps = {
   loadRequests: InboxCreators.requestPendingFriends,
   acceptRequest: InboxCreators.requestAcceptFriend,
   rejectRequest: InboxCreators.requestRejectFriend,
+  updatePendings: InboxCreators.updatePendingFriends,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PendingRequestModal);

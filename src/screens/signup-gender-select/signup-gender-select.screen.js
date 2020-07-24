@@ -21,7 +21,7 @@ const SignupGenderSelect: () => React$Node = props => {
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar width={30} />
+        <ProgressBar width={50} />
         <Touchable onPress={goBack}>
           <View style={styles.backButtonContainer}>
             <Image source={require("@assets/images/chevron-left.png")} />

@@ -16,7 +16,7 @@ class Header extends React.Component {
     var name = "no name";
     if (user !== null) {
       if (user.image !== null) {
-        userImage = {uri: user.image};
+        userImage = { uri: user.image };
       }
       if (user.first_name !== null) {
         name = user.first_name;
@@ -27,12 +27,11 @@ class Header extends React.Component {
       <View style={styles.userContainer}>
         <Touchable onPress={this.props.onAvatarClick}>
           <Image source={userImage} style={styles.avatarImage} />
-          {
-            loading && 
+          {loading && (
             <View style={styles.absoluteFill}>
               <ActivityIndicator size={"small"} color={"white"} />
             </View>
-          }
+          )}
         </Touchable>
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
@@ -40,7 +39,7 @@ class Header extends React.Component {
             <Image source={Images.live.tagLove} style={styles.badgeImage} />
             <Image source={Images.live.tagBox} style={styles.badgeImage} />
           </View>
-          <Text style={styles.usernameText}>{user !== null ? user.username: ""}</Text>
+          <Text style={styles.usernameText}>{user !== null ? user.username : ""}</Text>
           <UserCount
             count={1734}
             style={styles.friendsContainer}

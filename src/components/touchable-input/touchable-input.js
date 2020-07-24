@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Image, View } from "react-native";
-import { Text } from "@components";
-import { Touchable } from "@components";
+import { Text } from "../text";
+import { Touchable } from "../touchable";
 import styles from "./touchable-input.style";
 
 class TouchableInput extends Component {

@@ -2,7 +2,8 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
-import { Image, Text } from "@components";
+import { Text } from "../text";
+import { Image } from "../image";
 import Images from "@assets/Images";
 
 import styles from "./user-count.style";

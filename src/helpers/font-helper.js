@@ -26,6 +26,8 @@ const Monsterrat = {
 
 const OpenSans = {
   "400": { fontFamily: "OpenSans-Regular" },
+  "600": { fontFamily: "OpenSans-SemiBold" },
+  "700": { fontFamily: "OpenSans-Bold" },
 };
 
 const FONTS = {

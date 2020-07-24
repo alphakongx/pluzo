@@ -3,7 +3,14 @@ import { watchUserRequests } from "./user.sagas";
 import { watchInboxRequests } from "./inbox.sagas";
 import { watchSwipeRequests } from "./swipe.sagas";
 import { watchSearchRequests } from "./search.sagas";
+import { watchChatRequests } from "./chat.sagas";
 
 export function* rootSaga() {
-  yield all([watchUserRequests(), watchInboxRequests(), watchSwipeRequests(), watchSearchRequests()]);
+  yield all([
+    watchUserRequests(),
+    watchInboxRequests(),
+    watchSwipeRequests(),
+    watchSearchRequests(),
+    watchChatRequests(),
+  ]);
 }

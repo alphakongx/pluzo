@@ -3,15 +3,18 @@ import { Image } from "@components";
 import styles from "./avatar.style";
 
 const Avatar: () => React$Node = props => {
-  // const {
-  //   currentMessage: { user },
-  // } = props;
+  const {
+    currentMessage: { user },
+  } = props;
 
-  // return <Image style={styles.container} source={{ uri: user.avatar }} />;/
   return (
     <Image
       style={styles.container}
-      source={require("@assets/images/message-image.png")}
+      source={
+        user.avatar !== null
+          ? { uri: user.avatar }
+          : require("@assets/images/message-image.png")
+      }
     />
   );
 };

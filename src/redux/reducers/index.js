@@ -6,11 +6,13 @@ import userReducer from "./user.reducer";
 import inboxReducer from "./inbox.reducer";
 import swipeReducer from "./swipe.reducer";
 import searchReducer from "./search.reducer";
+import chatReducer from "./chat.reducer";
 
 const rootReducer = combineReducers({
   registration: regitrationReducer,
   user: userReducer,
   inbox: inboxReducer,
+  chat: chatReducer,
   swipe: swipeReducer,
   search: searchReducer,
   form: formReducer,

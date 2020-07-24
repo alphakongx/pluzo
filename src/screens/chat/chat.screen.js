@@ -1,88 +1,196 @@
-import React, { useEffect } from "react";
-import { Platform, View } from "react-native";
+import React from "react";
+import { Platform, View, Keyboard, ActivityIndicator } from "react-native";
+import ImagePicker from "react-native-image-picker";
 import { Screen } from "@components";
-import Header from "./header";
+import { SCREENS } from "@constants";
 import { GiftedChat } from "react-native-gifted-chat";
 import KeyboardManager from "react-native-keyboard-manager";
+import EventBus from "eventing-bus";
+import moment from "moment";
+import Header from "./header";
 import MessageBubble from "./message-bubble";
 import Avatar from "./avatar";
 import InputToolbar from "./input-toolbar";
 
 import styles from "./chat.style";
 
-const messages = [
-  {
-    _id: 1,
-    text:
-      "Hi, how are you? Typing this really long message just to test Pluzo development. A long message will just help me test what happens when something this long gets sent.",
-    createdAt: new Date(),
-    user: {
-      _id: 2,
-      name: "React Native",
-    },
-  },
-  {
-    _id: 2,
-    text:
-      "HELLOOOO! Typing this really long message just to test Pluzo development. A long message will just help me test what happens when something this long gets sent.",
-    createdAt: new Date(),
-    image: "https://placeimg.com/640/640/any",
-    user: {
-      _id: 1,
-      name: "React Native",
-      avatar: "https://placeimg.com/140/140/any",
-    },
-  },
-];
-
 class Chat extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      chatId: null,
+      msgText: "",
+    };
   }
 
   componentDidMount() {
     if (Platform.OS === "ios") {
       KeyboardManager.setKeyboardDistanceFromTextField(0);
       KeyboardManager.setEnable(false);
+      KeyboardManager.setEnableAutoToolbar(false);
     }
+
+    this.chatIdAction = EventBus.on("NEW_CHAT_ID", chatId => {
+      this.setState({ chatId });
+    });
+
+    this.newMessageAction = EventBus.on("NEW_MSG", data => {
+      console.log(typeof data);
+      const { messages } = this.props;
+      let arrData = JSON.parse(data);
+      let lastMsgTime = messages.length > 0 ? moment(messages[0].createdAt).unix() : 0;
+      let filteredMessages = arrData.filter(message => {
+        return message.created_at > lastMsgTime;
+      });
+      let newMessages = [];
+      filteredMessages.forEach(message => {
+        newMessages.push({
+          _id: message.id,
+          text: message.text,
+          image: message.image,
+          createdAt: moment.unix(message.created_at).toDate(),
+          user: {
+            _id: message.user._id,
+            name: message.user.name,
+            avatar: message.user.avatar,
+          },
+        });
+      });
+      this.props.updateMessages(newMessages.concat(messages));
+    });
+
+    const { token, chatUser, chatId } = this.props;
+    this.props.requestMessages(chatId, chatUser.id || chatUser._id, token);
   }
 
   componentWillUnmount() {
     if (Platform.OS === "ios") {
       KeyboardManager.setKeyboardDistanceFromTextField(65);
       KeyboardManager.setEnable(true);
+      KeyboardManager.setEnableAutoToolbar(true);
     }
+    this.chatIdAction();
+    this.newMessageAction();
   }
 
+  onAddAttachment = () => {
+    Keyboard.dismiss();
+    const options = {
+      title: "Select Image",
+      storageOptions: {
+        skipBackup: true,
+        path: "images",
+      },
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else if (response.customButton) {
+      } else {
+        let photoUriSplit = response.uri.split("/");
+
+        const image = {
+          uri: response.uri,
+          name: photoUriSplit[photoUriSplit.length - 1],
+          type: response.type,
+        };
+
+        this.props.updateMessages(
+          [
+            {
+              _id: moment().unix(),
+              text: this.state.msgText,
+              image: response.uri,
+              createdAt: new Date(),
+              user: {
+                _id: this.props.user.id,
+                name: this.props.user.name,
+                avatar: this.props.user.image,
+              },
+            },
+          ].concat(this.props.messages),
+        );
+
+        const { chatUser } = this.props;
+        const params = {
+          chatId: this.state.chatId,
+          text: this.state.msgText,
+          image: image,
+          sendTo: chatUser.id || chatUser._id,
+        };
+        const { token } = this.props;
+        this.props.sendMessage(params, token);
+        this.setState({ msgText: "" });
+      }
+    });
+  };
+
+  onSend = (messages = []) => {
+    this.props.updateMessages([messages[0]].concat(this.props.messages));
+
+    const { chatUser } = this.props;
+    const params = {
+      chatId: this.state.chatId,
+      text: messages[0].text,
+      image: null,
+      sendTo: chatUser.id || chatUser._id,
+    };
+    const { token } = this.props;
+    this.props.sendMessage(params, token);
+  };
+
   render() {
+    const { chatUser, loading } = this.props;
     return (
       <Screen hasHeader style={styles.container}>
-        <Header 
-          onBack={() => this.props.navigation.goBack()} />
+        <Header
+          user={chatUser}
+          onBack={() => this.props.navigation.goBack()}
+          onProfileView={() => {
+            this.props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: chatUser });
+          }}
+        />
         <View style={styles.body}>
-          <GiftedChat
-            messages={messages}
-            isTyping={true}
-            isKeyboardInternallyHandled={true}
-            renderBubble={bubbleProps => (
-              <MessageBubble
-                {...bubbleProps}
-                onLongPress={this._onOpenActionSheet}
-                onPress={this._openAttachment}
-              />
-            )}
-            renderAvatar={avatarProps => {
-              return <Avatar {...avatarProps} />;
-            }}
-            renderInputToolbar={InputToolbar}
-            user={{
-              _id: 2,
-            }}
-          />
+          {loading ? (
+            <ActivityIndicator
+              size={"large"}
+              color={"white"}
+              style={styles.loadingIndicator}
+            />
+          ) : (
+            <GiftedChat
+              messages={this.props.messages}
+              text={this.state.msgText}
+              isTyping={true}
+              isKeyboardInternallyHandled={true}
+              renderBubble={bubbleProps => (
+                <MessageBubble
+                  {...bubbleProps}
+                  onLongPress={this._onOpenActionSheet}
+                  onPress={this._openAttachment}
+                />
+              )}
+              renderAvatar={avatarProps => {
+                return <Avatar {...avatarProps} />;
+              }}
+              renderInputToolbar={props => {
+                return <InputToolbar {...props} onAttachment={this.onAddAttachment} />;
+              }}
+              renderTime={props => {
+                return <View />;
+              }}
+              user={{
+                _id: this.props.user.id,
+              }}
+              onSend={messages => this.onSend(messages)}
+              onInputTextChanged={msgText => this.setState({ msgText })}
+            />
+          )}
         </View>
       </Screen>
     );
-  }  
-};
+  }
+}
 
 export default Chat;

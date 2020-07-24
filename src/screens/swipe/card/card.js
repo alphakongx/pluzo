@@ -1,23 +1,39 @@
-import React, { useState } from "react";
-import { View } from "react-native";
-import { Image } from "@components";
+import React from "react";
+import { Dimensions } from "react-native";
+import { Image, Touchable } from "@components";
 import styles from "./card.style";
+
+const screenWidth = Dimensions.get("window").width;
+const placeholderImage = require("@assets/images/live-screen/user-temp3.png");
 
 const Card: () => React$Node = props => {
   const { card, imageIndex } = props;
-  const placeholderImage = require("@assets/images/live-screen/user-temp3.png");
-
   var images = card.image === null ? [placeholderImage] : [card.image];
-  images.concat(card.images);
+  card.images.forEach(image => {
+    images.push(image.path);
+  });
 
   return (
-    <View style={styles.card}>
+    <Touchable
+      style={styles.card}
+      onPress={e => {
+        if (e.nativeEvent.locationX < screenWidth / 2) {
+          props.onPressItem && props.onPressItem("left");
+        } else {
+          props.onPressItem && props.onPressItem("right");
+        }
+      }}
+    >
       <Image
         resizeMode={"cover"}
-        source={typeof(images[imageIndex]) === "string" ? { uri: images[imageIndex] } : images[imageIndex]}
+        source={
+          typeof images[imageIndex] === "string"
+            ? { uri: images[imageIndex] }
+            : images[imageIndex]
+        }
         style={styles.cardImage}
       />
-    </View>
+    </Touchable>
   );
 };
 

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { View } from "react-native";
-import { Image } from "@components";
+import { Image } from "../image";
 
 import styles from "./vertical-image.style";
 

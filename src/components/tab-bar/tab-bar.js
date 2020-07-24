@@ -1,6 +1,6 @@
 import React from "react";
 import { SafeAreaView } from "react-native";
-import { Touchable } from "@components";
+import { Touchable } from "../touchable";
 import styles from "./tab-bar.style";
 import { GRADIENT } from "@config";
 import LinearGradient from "react-native-linear-gradient";

@@ -1,3 +1,12 @@
 import Card from "./card";
+import { connect } from "react-redux";
 
-export default Card;
+function mapStateToProps(state) {
+  return {
+    imageIndex: state.swipe.cardImageIndex,
+  };
+}
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

@@ -30,7 +30,7 @@ class Inbox extends Component {
 
   onSearch = () => {
     this.props.navigation.navigate(SCREENS.SEARCH);
-  }
+  };
 
   render() {
     const { visibleAddFriend, visiblePendingRequest } = this.state;
@@ -44,9 +44,7 @@ class Inbox extends Component {
         <SafeAreaView style={styles.safeAreaContainer}>
           <View style={styles.viewContainer}>
             <View style={styles.header}>
-              <Touchable
-                onPress={this.onSearch}
-                style={styles.searchFieldContainer}>
+              <Touchable onPress={this.onSearch} style={styles.searchFieldContainer}>
                 <View style={styles.searchIconContainer}>
                   <Image source={require("@assets/images/search.png")} />
                 </View>
@@ -63,7 +61,10 @@ class Inbox extends Component {
               <NewFriends navigation={this.props.navigation} />
               <View style={styles.separator} />
               <Messages
-                onPressItem={() => this.props.navigation.navigate(SCREENS.CHAT, {})}
+                navigation={this.props.navigation}
+                onPressItem={(chatId, chatUser) => {
+                  this.props.navigation.navigate(SCREENS.CHAT, { chatId, chatUser });
+                }}
               />
             </View>
           </View>

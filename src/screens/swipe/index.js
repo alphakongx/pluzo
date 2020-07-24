@@ -17,6 +17,7 @@ const mapDispatchToProps = {
   addLike: SwipeCreators.addLike,
   addDisLike: SwipeCreators.addDisLike,
   addSuperLike: SwipeCreators.addSuperLike,
+  udpateImageIndex: SwipeCreators.updateCardImageIndex,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Swipe);

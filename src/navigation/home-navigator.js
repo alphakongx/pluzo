@@ -12,6 +12,7 @@ import Inbox from "../screens/inbox";
 import ProfileSettings from "../screens/profile-settings";
 import Settings from "../screens/settings";
 import SearchScreen from "../screens/search";
+import ProfileView from "../screens/profile-view";
 
 import navigationConfig from "./navigation-config";
 
@@ -63,6 +64,14 @@ const HomeStack = createStackNavigator(
     [SCREENS.SETTINGS]: Settings,
     [SCREENS.CHAT]: Chat,
     [SCREENS.SEARCH]: SearchScreen,
+    [SCREENS.PROFILE_VIEW]: {
+      screen: ProfileView,
+      navigationOptions: {
+        cardStyle: {
+          backgroundColor: "transparent",
+        },
+      },
+    },
   },
   {
     initialRouteName: SCREENS.MAIN,

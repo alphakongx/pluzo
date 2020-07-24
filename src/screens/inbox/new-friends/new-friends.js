@@ -17,16 +17,16 @@ class NewFriends extends React.Component {
 
   componentDidMount() {
     this.requestFriends();
-    this.props.navigation.addListener('willFocus', this.requestFriends);
+    this.props.navigation.addListener("willFocus", this.requestFriends);
   }
 
   requestFriends = () => {
     this.props.loadFriends(this.props.token);
-  }
-  
-  onFriendClick = (friend) => {
-    NavigationService.navigate(SCREENS.CHAT, {user: friend});
-  }
+  };
+
+  onFriendClick = friend => {
+    NavigationService.navigate(SCREENS.CHAT, { chatUser: friend });
+  };
 
   render() {
     const { friends } = this.props;
@@ -41,10 +41,15 @@ class NewFriends extends React.Component {
           keyExtractor={item => item.id}
           renderItem={({ item: friend, index }) => (
             <Touchable
-              onPress={() => {this.onFriendClick(friend)}}>
+              onPress={() => {
+                this.onFriendClick(friend);
+              }}
+            >
               <View style={styles.friendItemContainer}>
-                <Image source={friend.image === null ? placeHolder : {uri: friend.image}} 
-                  style={styles.friendImage}/>
+                <Image
+                  source={friend.image === null ? placeHolder : { uri: friend.image }}
+                  style={styles.friendImage}
+                />
                 {friend.premium === 1 ? (
                   <View style={styles.favouriteIcon}>
                     <Image source={require("@assets/images/favourite.png")} />
@@ -68,6 +73,6 @@ class NewFriends extends React.Component {
       </View>
     );
   }
-};
+}
 
 export default NewFriends;

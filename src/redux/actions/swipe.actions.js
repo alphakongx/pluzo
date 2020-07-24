@@ -19,6 +19,8 @@ const { Types, Creators } = createActions({
   requestMatch: ["token"],
   requestMatchSuccess: null,
   requestMatchFail: null,
+
+  updateCardImageIndex: ["index"],
 });
 
 export const SwipeTypes = Types;

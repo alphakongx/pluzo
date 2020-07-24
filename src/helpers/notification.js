@@ -13,11 +13,11 @@ export class Notification {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "OK", onPress: onConfirm }
+        { text: "OK", onPress: onConfirm },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
   }
 }

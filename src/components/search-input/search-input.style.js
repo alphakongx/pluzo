@@ -17,6 +17,10 @@ export default StyleSheet.create({
     paddingRight: 5,
     paddingTop: 1,
   },
+  searchIcon: {
+    width: 15,
+    height: 15,
+  },
   inputField: FontHelper.font({
     flex: 1,
     fontSize: 12,

@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, ScrollView, View, ViewPropTypes } from "react-native";
+import { ScrollView, View, ViewPropTypes } from "react-native";
 import PropTypes from "prop-types";
 import styles from "./masonry-layout.style";
 
@@ -38,13 +38,16 @@ class Column extends React.Component {
   render() {
     return (
       <View style={styles.columnContainer}>
-        <FlatList
+        {this.state.data.map((data, index) => {
+          return this.renderItem(data);
+        })}
+        {/* <FlatList
           style={styles.container}
           listKey={this.props.listKey}
           data={this.state.data}
           keyExtractor={this.props.keyExtractor}
           renderItem={this.renderItem.bind(this)}
-        />
+        /> */}
       </View>
     );
   }
@@ -57,9 +60,10 @@ class Column extends React.Component {
     this.setState({ data: [...this.state.data, ...items] });
   }
 
-  renderItem({ item }) {
+  renderItem(item) {
     return (
       <Item
+        key={item.key}
         renderItem={this.props.renderItem}
         item={item}
         onLayout={event => {

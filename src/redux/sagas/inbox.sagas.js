@@ -1,7 +1,8 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { InboxCreators, InboxTypes } from "../actions";
+import EventBus from "eventing-bus";
 import {
-  getChat,
+  getChatList,
   getFriends,
   acceptFriend,
   rejectFriend,
@@ -22,28 +23,35 @@ export function* watchInboxRequests() {
 function* requestChannels(action) {
   try {
     const { token } = action;
-    const response = yield call(getChat, token);
+    const params = new FormData();
+    params.append("limit", 1);
+    const response = yield call(getChatList, params, token);
 
-    console.log(response);
-
-    yield put(InboxCreators.loadChannelsDone());
+    let channels = response.data.data;
+    channels = channels.sort(
+      (channel1, channel2) =>
+        channel1.messages[0].createdAt < channel2.messages[0].createdAt,
+    );
+    yield put(InboxCreators.loadChannelsDone(channels));
   } catch (error) {
-    yield put(InboxCreators.loadChannelsDone());
+    yield put(InboxCreators.loadChannelsDone([]));
   }
 }
 
 /** Friends */
 function* requestAddFriend(action) {
+  const { username, token } = action;
   try {
-    const { username, token } = action;
     const params = new FormData();
     params.append("username", username);
     console.log("ADD FRIEND:", username);
     yield call(addFriendByUsername, params, token);
 
+    EventBus.publish("ADDFRIEND", username, true);
     yield put(InboxCreators.addFriendSuccess());
   } catch (error) {
     console.log(error);
+    EventBus.publish("ADDFRIEND", username, false);
     yield put(InboxCreators.addFriendFailure());
   }
 }
@@ -77,7 +85,7 @@ function* requestRejectFriend(action) {
 function* requestPendingFriends(action) {
   try {
     const { token } = action;
-    
+
     const response = yield call(getPendingRequests, token);
     yield put(InboxCreators.pendingFriendsSuccess(response.data.data));
   } catch (error) {
@@ -88,7 +96,7 @@ function* requestPendingFriends(action) {
 function* requestFriends(action) {
   try {
     const { token } = action;
-    
+
     const response = yield call(getFriends, token);
     yield put(InboxCreators.requestFriendsSuccess(response.data.data));
   } catch (error) {

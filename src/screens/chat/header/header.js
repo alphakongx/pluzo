@@ -1,26 +1,41 @@
 import React from "react";
 import { View, SafeAreaView } from "react-native";
 import { Image, Text, Touchable } from "@components";
+import Images from "@assets/Images";
 import styles from "./header.style";
 
 const Header: () => React$Node = props => {
+  const { first_name, image, avatar } = props.user;
+  let name = first_name === null ? "No Name" : first_name;
+  let userImage = image || avatar;
+  let picture = userImage === null ? Images.app.userPlaceholder : userImage;
+
   return (
     <View style={styles.headerContainer}>
       <SafeAreaView>
         <View style={styles.header}>
           <View style={styles.backButtonContainer}>
-            <Touchable style={styles.backButtonTouchable}
-              onPress={() => {props.onBack()}}>
+            <Touchable
+              style={styles.backButtonTouchable}
+              onPress={() => {
+                props.onBack();
+              }}
+            >
               <Image source={require("@assets/images/chevron-left.png")} />
             </Touchable>
           </View>
-          <View style={styles.headerContentContainer}>
+          <Touchable
+            onPress={() => {
+              props.onProfileView();
+            }}
+            style={styles.headerContentContainer}
+          >
             <Image
               style={styles.headerImage}
-              source={require("@assets/images/message-image.png")}
+              source={typeof picture === "string" ? { uri: picture } : picture}
             />
-            <Text style={styles.headerTitle}>{"Lara Cruse"}</Text>
-          </View>
+            <Text style={styles.headerTitle}>{name}</Text>
+          </Touchable>
           <View style={styles.reportButtonContainer}>
             <Touchable style={styles.reportButtonTouchable}>
               <Image source={require("@assets/images/report.png")} />

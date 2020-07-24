@@ -12,6 +12,7 @@ import {
   resetPassword,
   updateUser,
   deleteImage,
+  getProfile,
 } from "@redux/api";
 import moment from "moment";
 import { registrationSelector, userSelector } from "../selectors";
@@ -21,6 +22,7 @@ import { SCREENS } from "@constants";
 export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_LOGIN, requestLogin);
   yield takeEvery(UserTypes.REQUEST_REGISTRATION, requestRegistration);
+  yield takeEvery(UserTypes.REQUEST_PROFILE, requestProfile);
   yield takeEvery(
     UserTypes.REQUEST_PHONE_VERIFICATION_SEND_CODE,
     requestPhoneVerificationSendCode,
@@ -88,10 +90,22 @@ function* requestRegistration(action) {
   }
 }
 
+function* requestProfile(action) {
+  try {
+    const { token } = action;
+
+    const response = yield call(getProfile, token);
+
+    yield put(UserCreators.loadProfileSuccess(response.data.data));
+  } catch (error) {
+    yield put(UserCreators.loadProfileFailure());
+  }
+}
+
 function* requestPhoneVerificationSendCode(action) {
   try {
     const { phoneNumber } = action;
-    const { regPhoneNumber} = yield select(registrationSelector);
+    const { regPhoneNumber } = yield select(registrationSelector);
 
     const params = new FormData();
 
@@ -107,7 +121,7 @@ function* requestPhoneVerificationSendCode(action) {
 
 function* requestPhoneVerificationConfirmCode(action) {
   try {
-    const { regPhoneNumber} = yield select(registrationSelector);    
+    const { regPhoneNumber } = yield select(registrationSelector);
     const { phoneNumber, code, isSignUp } = action;
     const params = new FormData();
 
@@ -240,7 +254,7 @@ function* requestDeleteImage(action) {
 
     const user = userData.user;
     if (user !== null && user.images !== null) {
-      user.images = yield user.images.filter((image) => image.id !== imageId);
+      user.images = yield user.images.filter(image => image.id !== imageId);
     }
     yield put(UserCreators.deleteImageSuccess(user));
   } catch (error) {

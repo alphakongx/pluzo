@@ -38,18 +38,18 @@ class AddFriendModal extends Component {
   }
 
   onAddingSuccess = () => {
-    this.setState({requestSuccess: "success"});
-  }
+    this.setState({ requestSuccess: "success" });
+  };
 
   onAddingFailure = () => {
-    this.setState({requestSuccess: "fail"});
-  }
+    this.setState({ requestSuccess: "fail" });
+  };
 
   onBack = () => {
-    this.setState({username: "", requestSuccess: "none"}, () => {
+    this.setState({ username: "", requestSuccess: "none" }, () => {
       this.props.dismissModal();
     });
-  }
+  };
 
   onAddFriend = () => {
     const { username } = this.state;
@@ -61,10 +61,9 @@ class AddFriendModal extends Component {
     }
     Keyboard.dismiss();
     this.props.addFriend(username, token);
-  }
+  };
 
   render() {
-
     const { username, requestSuccess } = this.state;
     const { isAddingFriend } = this.props;
 
@@ -93,9 +92,7 @@ class AddFriendModal extends Component {
           style={styles.container}
         >
           <View style={styles.headerContainer}>
-            <BackButton 
-              icon={Images.app.icBackLeft}
-              onPress={this.onBack} />
+            <BackButton icon={Images.app.icBackLeft} onPress={this.onBack} />
             <Touchable onPress={this.props.pendingRequest}>
               <View style={styles.requestContainer}>
                 <Text style={styles.requestText}>Pending Requests</Text>
@@ -112,7 +109,9 @@ class AddFriendModal extends Component {
             <View style={styles.inputContainer}>
               <TextInput
                 value={username}
-                onChangeText={value => this.setState({ username: value, requestSuccess: "none" })}
+                onChangeText={value =>
+                  this.setState({ username: value, requestSuccess: "none" })
+                }
                 placeholder={"Username"}
                 autoCapitalize={"none"}
               />

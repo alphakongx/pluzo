@@ -58,7 +58,7 @@ class SignupCodeVerification extends Component {
     if (this.props.navigation.state.params !== undefined) {
       phoneNumber = this.props.navigation.state.params.phoneNumber;
     }
-    
+
     this.props.requestPhoneVerificationConfirmCode(phoneNumber, code, true);
   };
 
@@ -69,7 +69,7 @@ class SignupCodeVerification extends Component {
     return (
       <Screen>
         <View style={styles.container}>
-          <ProgressBar width={90} />
+          <ProgressBar width={100} />
           <BackButton onPress={this.goBack} />
           <View style={styles.contentContainer}>
             <Text style={styles.titleText}>Check your messages.</Text>

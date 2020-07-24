@@ -35,7 +35,7 @@ const SignupPhoneNumber: () => React$Node = props => {
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar width={70} />
+        <ProgressBar width={100} />
         <BackButton onPress={goBack} disabled={props.isRegistring} />
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>What is your phone number?</Text>

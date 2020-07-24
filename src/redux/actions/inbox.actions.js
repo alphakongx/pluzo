@@ -2,9 +2,7 @@ import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
   requestChannels: ["token"],
-  loadChannelsDone: null,
-
-  // requestMessages: ["limit", "token"],
+  loadChannelsDone: ["channels"],
 
   requestAddFriend: ["username", "token"],
   addFriendSuccess: null,
@@ -21,6 +19,7 @@ const { Types, Creators } = createActions({
   requestPendingFriends: ["token"],
   pendingFriendsSuccess: ["pendingData"],
   pendingFriendsFailure: null,
+  updatePendingFriends: ["pendingFriends"],
 
   requestFriends: ["token"],
   requestFriendsSuccess: ["friends"],

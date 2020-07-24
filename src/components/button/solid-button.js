@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { ActivityIndicator } from "react-native";
 import { View } from "react-native";
-import { Text, Touchable } from "@components";
+import { Text } from "../text";
+import { Touchable } from "../touchable";
 import styles from "./solid-button.style";
 
 class WhiteButton extends Component {
@@ -14,10 +15,7 @@ class WhiteButton extends Component {
           {loading ? (
             <ActivityIndicator size={"small"} color={"white"} />
           ) : (
-            <Text style={[
-              styles.buttonText,
-              textStyle,
-            ]}>{text}</Text>
+            <Text style={[styles.buttonText, textStyle]}>{text}</Text>
           )}
         </View>
       </Touchable>
