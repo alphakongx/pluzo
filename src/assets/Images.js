@@ -1,5 +1,6 @@
 const Images = {
   app: {
+    userPlaceholder: require("@assets/images/live-screen/user-temp3.png"),
     icUser: require("@assets/images/live-screen/live-user.png"),
     icBack: require("@assets/images/chevron.png"),
     icBackLeft: require("@assets/images/chevron-left.png"),

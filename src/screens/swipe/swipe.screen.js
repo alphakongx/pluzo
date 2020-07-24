@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ActivityIndicator } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import { Image, CardProgressBar, Text } from "@components";
 import LinearGradient from "react-native-linear-gradient";
@@ -18,7 +18,9 @@ class Swipe extends React.Component {
     super(props);
     this.state = {
       showDetail: false,
+      cards: [],
       cardIndex: 0,
+      cardImageIndex: 0,
       likeCount: 0,
     };
 
@@ -61,6 +63,19 @@ class Swipe extends React.Component {
     this.props.loadCards(this.props.token);
   };
 
+  onTapCard = (direction, card) => {
+    const { cardImageIndex } = this.state;
+    if (direction === "left") {
+      let index = cardImageIndex > 0 ? cardImageIndex - 1 : card.images.length;
+      this.props.udpateImageIndex(index);
+      this.setState({ cardImageIndex: index });
+    } else {
+      let index = cardImageIndex < card.images.length ? cardImageIndex + 1 : 0;
+      this.props.udpateImageIndex(index);
+      this.setState({ cardImageIndex: index });
+    }
+  };
+
   onSwipedAllCards = () => {
     this.props.loadCards(this.props.token);
   };
@@ -69,7 +84,8 @@ class Swipe extends React.Component {
     if (index === this.props.cards.length - 1) {
       return;
     }
-    this.setState({ cardIndex: index + 1 });
+    this.props.udpateImageIndex(0);
+    this.setState({ cardIndex: index + 1, cardImageIndex: 0 });
   };
 
   onSwipedWithDirection = (index, type) => {
@@ -95,7 +111,7 @@ class Swipe extends React.Component {
 
   render() {
     const { isLoadingCards, cards } = this.props;
-    const { cardIndex, showDetail } = this.state;
+    const { cardIndex, cardImageIndex, showDetail } = this.state;
 
     if (isLoadingCards) {
       return (
@@ -148,7 +164,10 @@ class Swipe extends React.Component {
             backgroundColor={"transparent"}
             renderCard={(card, index) => {
               return (
-                <Card card={card} imageIndex={0} />
+                <Card
+                  card={card}
+                  onPressItem={direction => this.onTapCard(direction, card)}
+                />
               );
             }}
             onSwipedAll={this.onSwipedAllCards}
@@ -219,7 +238,14 @@ class Swipe extends React.Component {
             style={styles.topActions}
           >
             <SafeAreaView>
-              <CardProgressBar count={cards[cardIndex].images.length + 1} />
+              <CardProgressBar
+                count={cards[cardIndex].images.length + 1}
+                activeIndex={cardImageIndex}
+                onPress={index => {
+                  this.props.udpateImageIndex(index);
+                  this.setState({ cardImageIndex: index });
+                }}
+              />
               {!showDetail && (
                 <Header item={cards[cardIndex]} onInfoClicked={this.changeShowDetail} />
               )}

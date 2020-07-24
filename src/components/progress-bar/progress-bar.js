@@ -7,7 +7,7 @@ const ProgressBar: () => React$Node = props => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#617FFF", "#02FFF3"]}
+        colors={["#02FFF3", "#617FFF"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={[styles.gradientFill, { width: props.width + "%" }]}

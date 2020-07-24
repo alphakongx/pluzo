@@ -23,10 +23,17 @@ class ProfileDetails extends React.Component {
     }
     birthday = moment.duration(moment().diff(moment.unix(birthday))).years();
     var distance = " - ";
+    console.log(location);
+    console.log(latitude, longitude);
     if (latitude !== null && longitude !== null && location !== null) {
-      distance = Distance.getDistance(latitude, longitude, location.coords.latitude, location.coords.longitude);
+      distance = Distance.getDistance(
+        latitude,
+        longitude,
+        location.coords.latitude,
+        location.coords.longitude,
+      );
     }
-  
+
     return (
       <View style={styles.container}>
         <SafeAreaView>
@@ -62,12 +69,12 @@ class ProfileDetails extends React.Component {
             </View>
             <View style={[styles.row, styles.rowMarginTop]}>
               <Image source={require("@assets/images/swipe-screen/location.png")} />
-              <Text style={styles.smallText}>{address === null ? "no address" : address}</Text>
+              <Text style={styles.smallText}>
+                {address === null ? "no address" : address}
+              </Text>
             </View>
             <View style={styles.descriptionContainer}>
-              <Text style={styles.descriptionText}>
-                {bio}
-              </Text>
+              <Text style={styles.descriptionText}>{bio}</Text>
             </View>
             <View style={[styles.buttonRow, styles.buttonRowMargin]}>
               <Touchable onPress={() => this.props.onDisLike()}>
@@ -84,7 +91,7 @@ class ProfileDetails extends React.Component {
         </SafeAreaView>
       </View>
     );
-  }  
-};
+  }
+}
 
 export default ProfileDetails;

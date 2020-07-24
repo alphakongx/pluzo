@@ -61,9 +61,7 @@ export default StyleSheet.create({
     color: COLOR.TEXT_SECONDARY_4,
   },
 
-  sectionContainer: {
-    
-  },
+  sectionContainer: {},
   sectionText: {
     fontWeight: "bold",
     fontSize: 16,

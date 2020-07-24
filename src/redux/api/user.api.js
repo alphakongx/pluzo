@@ -12,6 +12,17 @@ export function login(data, accessToken) {
   }).then(response => response);
 }
 
+export function getProfile(accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.PROFILE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+  }).then(response => response);
+}
+
 export function phoneLoginSendCode(data, accessToken) {
   return API.request({
     method: "post",

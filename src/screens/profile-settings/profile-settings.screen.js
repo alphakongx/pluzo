@@ -56,13 +56,13 @@ class ProfileSettings extends React.Component {
 
   onAvatarClick = () => {
     this.onSelectImage("avatar");
-  }
+  };
 
   onAddImage = () => {
     this.onSelectImage("images");
   };
 
-  onSelectImage = (type) => {
+  onSelectImage = type => {
     const options = {
       title: "Select Image",
       storageOptions: {
@@ -98,13 +98,13 @@ class ProfileSettings extends React.Component {
         }
       }
     });
-  }
+  };
 
-  onDeleteImage = (imageId) => {
+  onDeleteImage = imageId => {
     Notification.confirmAlert("Delete", "Do you want to delete this image?", () => {
-        this.props.deleteImage(imageId, this.props.token);
-      });
-  }
+      this.props.deleteImage(imageId, this.props.token);
+    });
+  };
 
   render() {
     const { user, deletingImageId } = this.props;
@@ -114,10 +114,11 @@ class ProfileSettings extends React.Component {
       <Screen>
         <ScrollView style={styles.container}>
           <Header navigation={this.props.navigation} />
-          <UserProfile 
+          <UserProfile
             user={user}
             loading={avatarUploading}
-            onAvatarClick={this.onAvatarClick} />
+            onAvatarClick={this.onAvatarClick}
+          />
           <View style={styles.chooseBadgeButton}>
             <SolidButton
               text={"Choose Badges"}
@@ -130,19 +131,17 @@ class ProfileSettings extends React.Component {
               {user !== null &&
                 user.images.map((image, index) => {
                   return (
-                    <Touchable key={index}
+                    <Touchable
+                      key={index}
                       style={styles.imageItem}
-                      onLongPress={() => this.onDeleteImage(image.id)}>
-                      <Image
-                        source={{ uri: image.path }}
-                        style={styles.profileImage}
-                      />
-                      {
-                        deletingImageId === image.id &&
+                      onLongPress={() => this.onDeleteImage(image.id)}
+                    >
+                      <Image source={{ uri: image.path }} style={styles.profileImage} />
+                      {deletingImageId === image.id && (
                         <View style={styles.imageLoadingContainer}>
                           <ActivityIndicator size={"small"} color={"white"} />
                         </View>
-                      }
+                      )}
                     </Touchable>
                   );
                 })}

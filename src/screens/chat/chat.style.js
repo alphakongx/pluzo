@@ -7,4 +7,8 @@ export default StyleSheet.create({
   body: {
     flex: 1,
   },
+  loadingIndicator: {
+    alignSelf: "center",
+    marginTop: 200,
+  },
 });

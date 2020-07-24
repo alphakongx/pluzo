@@ -20,6 +20,21 @@ const loginFailure = (state, action) => ({
   isLoggingIn: false,
 });
 
+const requestProfile = (state, action) => ({
+  ...state,
+  isLoadingProfile: true,
+});
+const loadProfileSuccess = (state, action) => ({
+  ...state,
+  isLoadingProfile: false,
+  token: action.sessionData.token,
+  user: action.sessionData,
+});
+const loadProfileFailure = (state, action) => ({
+  ...state,
+  isLoadingProfile: false,
+});
+
 const requestPhoneLoginSendCode = (state, action) => ({
   ...state,
   isSendingPhoneLoginCode: true,
@@ -160,6 +175,10 @@ export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
   [UserTypes.LOGIN_FAILURE]: loginFailure,
+
+  [UserTypes.REQUEST_PROFILE]: requestProfile,
+  [UserTypes.LOAD_PROFILE_SUCCESS]: loadProfileSuccess,
+  [UserTypes.LOAD_PROFILE_FAILURE]: loadProfileFailure,
 
   [UserTypes.REQUEST_PHONE_LOGIN_SEND_CODE]: requestPhoneLoginSendCode,
   [UserTypes.PHONE_LOGIN_SEND_CODE_SUCCESS]: phoneLoginSendCodeSuccess,

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { FontHelper } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -24,12 +25,19 @@ export default StyleSheet.create({
     fontWeight: "700",
     color: COLOR.TEXT_PRIMARY,
   },
-  preview: {
+
+  preview: FontHelper.font({
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "600",
     color: COLOR.MESSAGE_PREVIEW,
     marginTop: 2,
-  },
+  }),
+  previewBold: FontHelper.font({
+    fontSize: 12,
+    fontWeight: "bold",
+    color: COLOR.TEXT_PRIMARY,
+    marginTop: 2,
+  }),
   timeContainer: {
     flexDirection: "row",
     marginHorizontal: 10,

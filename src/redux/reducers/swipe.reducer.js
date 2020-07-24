@@ -62,6 +62,11 @@ const requestMatchFail = (state, action) => ({
   isLoadingMatch: false,
 });
 
+const updateCardImageIndex = (state, action) => ({
+  ...state,
+  cardImageIndex: action.index,
+});
+
 export const HANDLERS = {
   [SwipeTypes.REQUEST_CARDS]: requestCards,
   [SwipeTypes.REQUEST_CARDS_SUCCESS]: requestCardsSuccess,
@@ -81,6 +86,8 @@ export const HANDLERS = {
   [SwipeTypes.REQUEST_MATCH]: requestMatch,
   [SwipeTypes.REQUEST_MATCH_SUCCESS]: requestMatchSuccess,
   [SwipeTypes.REQUEST_MATCH_FAIL]: requestMatchFail,
+
+  [SwipeTypes.UPDATE_CARD_IMAGE_INDEX]: updateCardImageIndex,
 
   [UserTypes.LOGOUT]: logout,
 };

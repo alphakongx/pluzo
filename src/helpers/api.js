@@ -1,7 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
 import EventBus from "eventing-bus";
-import { Notification } from "./";
+import { Notification } from "./notification";
 import i18n from "i18next";
 import { CANCEL } from "redux-saga";
 
@@ -15,7 +15,7 @@ export class API {
     };
   }
 
-  static request(options, isAlert = true) {
+  static request(options) {
     options.headers = _.merge(this.headers(), options.headers);
     const source = CancelToken.source();
     options.cancelToken = source.token;
@@ -63,7 +63,7 @@ export class API {
           if (error.response && error.response.status === 401) {
             Notification.alert("Invalid username/password");
           } else if (error.response && error.response.data && error.response.data.error) {
-            if (isAlert === true) {
+            if (!options.silent) {
               Notification.alert(error.response.data.message);
             }
           }

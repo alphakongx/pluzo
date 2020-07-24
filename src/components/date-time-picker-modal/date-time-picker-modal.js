@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Platform, View } from "react-native";
-import { Text, Touchable } from "@components";
+import { Text } from "../text";
+import { Touchable } from "../touchable";
 import Modal from "react-native-modal";
 import DateTimePicker from "@react-native-community/datetimepicker";
 

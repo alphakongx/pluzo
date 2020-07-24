@@ -24,6 +24,7 @@ export default StyleSheet.create({
     borderRadius: 25,
   },
   messageContentContainer: {
+    flex: 1,
     justifyContent: "center",
   },
   subject: {
@@ -40,6 +41,7 @@ export default StyleSheet.create({
   timeContainer: {
     flexDirection: "row",
     paddingLeft: 5,
+    paddingRight: 10,
   },
   time: {
     marginTop: 35,

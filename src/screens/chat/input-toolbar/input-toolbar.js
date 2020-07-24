@@ -1,36 +1,59 @@
 import React from "react";
-import { SafeAreaView, TextInput as RNTextInput, View } from "react-native";
-import { Image } from "@components";
+import { Image, Touchable } from "@components";
+import { COLOR } from "@config";
 import styles from "./input-toolbar.style";
 import LinearGradient from "react-native-linear-gradient";
+import { InputToolbar as RNInputToolbar, Send, Composer } from "react-native-gifted-chat";
 
-const InputToolbar: () => React$Node = props => {
-  return (
-    <View style={styles.container}>
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.contentContainer}>
-          <View style={styles.attachmentsButtonContainer}>
-            <LinearGradient
-              colors={["#02FFF3", "#617FFF"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.attachmentIcon}
-            >
-              <Image source={require("@assets/images/message-attachment-icon.png")} />
-            </LinearGradient>
-            {/*<Image style={{backgroundColor: "white"}} source={require("@assets/images/message-attachment.png")} /> */}
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <RNTextInput
-              placeholder={"Search"}
-              // placeholderTextColor={COLOR.TEXT_INPUT_BACKGROUND}
-              style={styles.inputField}
-            />
-          </View>
-        </View>
-      </SafeAreaView>
-    </View>
-  );
-};
+class InputToolbar extends React.Component {
+  renderActions = props => {
+    return (
+      <Touchable onPress={props.onAttachment} style={styles.attachmentsButtonContainer}>
+        <LinearGradient
+          colors={["#02FFF3", "#617FFF"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.attachmentIcon}
+        >
+          <Image source={require("@assets/images/message-attachment-icon.png")} />
+        </LinearGradient>
+      </Touchable>
+    );
+  };
+
+  renderComposer = props => {
+    return (
+      <Composer
+        {...props}
+        placeholder={"Enter a message..."}
+        placeholderTextColor={COLOR.TEXT_SECONDARY}
+        textInputStyle={styles.inputField}
+      />
+    );
+  };
+
+  renderSend = props => {
+    return (
+      <Send {...props} containerStyle={styles.sendButton}>
+        <Image
+          source={require("@assets/images/ic-message-send.png")}
+          style={styles.sendButtonIcon}
+        />
+      </Send>
+    );
+  };
+
+  render() {
+    return (
+      <RNInputToolbar
+        {...this.props}
+        containerStyle={styles.container}
+        renderActions={this.renderActions}
+        renderSend={this.renderSend}
+        renderComposer={this.renderComposer}
+      />
+    );
+  }
+}
 
 export default InputToolbar;

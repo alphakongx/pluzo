@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { ActivityIndicator } from "react-native";
-import { Text, Touchable } from "@components";
+import { Text } from "../text";
+import { Touchable } from "../touchable";
 import styles from "./gradient-button.style";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";

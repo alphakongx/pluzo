@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { View } from "react-native";
-import { Image, Text } from "@components";
+import { Text } from "../text";
+import { Image } from "../image";
 import styles from "./tab-bar-icon.style";
 
 const TabBarIcon: () => React$Node = props => {
@@ -34,6 +35,7 @@ const TabBarIcon: () => React$Node = props => {
     >
       <Image
         source={tabIcons[tabName].icon}
+        resizeMode={"contain"}
         style={[styles.tabIcon, props.focused ? {} : styles.inactiveText]}
       />
       <Text style={[styles.tabText, props.focused ? {} : styles.inactiveText]}>

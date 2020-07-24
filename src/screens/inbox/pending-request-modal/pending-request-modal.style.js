@@ -32,6 +32,7 @@ export default StyleSheet.create({
     height: (screenHeight * 50) / 100,
     justifyContent: "center",
     alignItems: "center",
+    marginVertical: 20,
   },
 
   requesterList: {

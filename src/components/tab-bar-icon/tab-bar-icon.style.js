@@ -29,7 +29,6 @@ export default StyleSheet.create({
   tabIcon: {
     width: 18,
     height: 18,
-    resizeMode: "contain",
   },
   tabText: {
     color: COLOR.TEXT_PRIMARY,

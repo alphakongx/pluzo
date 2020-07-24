@@ -40,7 +40,7 @@ export const HANDLERS = {
   [SearchTypes.SEARCH_FAILURE]: searchFailure,
 
   [SearchTypes.INITIALIZE_SEARCH]: initializeSearch,
-  
+
   [UserTypes.LOGOUT]: logout,
 };
 

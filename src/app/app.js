@@ -1,21 +1,18 @@
 import React from "react";
-import {
-  StatusBar,
-  Linking,
-  PermissionsAndroid,
-  Platform,
-  ToastAndroid,
-} from "react-native";
+import { StatusBar, Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import KeyboardManager from "react-native-keyboard-manager";
 import Geolocation from "react-native-geolocation-service";
+import AsyncStorage from "@react-native-community/async-storage";
+import EventBus from "eventing-bus";
 import { connect } from "react-redux";
 import { AppContainer } from "../screens";
+import Loading from "../screens/loading";
 import { NavigationService } from "@helpers";
 import { SCREENS } from "@constants";
 import { COLOR } from "../config/color";
-import { Notification } from "@helpers";
-import { UserCreators } from "../redux/actions";
+import { getLocationUpdates } from "@helpers";
+import { UserCreators, InboxCreators } from "../redux/actions";
 
 if (Platform.OS === "ios") {
   KeyboardManager.setKeyboardDistanceFromTextField(100);
@@ -25,10 +22,20 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.watchId = null;
+    this.wsSocket = null;
   }
 
-  componentDidMount() {
-    this.getLocationUpdates();
+  async componentDidMount() {
+    this.watchId = getLocationUpdates(this.props.updateLocation);
+
+    try {
+      let userToken = await AsyncStorage.getItem("USER_TOKEN");
+      if (userToken) {
+        this.props.requestProfile(userToken);
+      }
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
   }
 
   componentWillUnmount() {
@@ -45,110 +52,54 @@ class App extends React.Component {
 
   checkingLogin = () => {
     const { user, token } = this.props;
-    if (user !== null && token !== "") {
+    if (user !== null && token !== "" && token !== null) {
       if (user.status === 1) {
+        this.connectSocket(user.id);
+        AsyncStorage.setItem("USER_TOKEN", token);
         NavigationService.navigate(SCREENS.HOMESTACK);
       } else {
-        NavigationService.navigate(SCREENS.SIGNUP_CODE_VERIFICATION, {phoneNumber: user.phone});
+        NavigationService.navigate(SCREENS.SIGNUP_CODE_VERIFICATION, {
+          phoneNumber: user.phone,
+        });
       }
     } else {
+      if (this.wsSocket !== null) {
+        this.wsSocket.close();
+        this.wsSocket = null;
+      }
+      AsyncStorage.removeItem("USER_TOKEN");
       NavigationService.navigate(SCREENS.AUTHSTACK);
     }
   };
 
-  hasLocationPermissionIOS = async () => {
-    const openSetting = () => {
-      Linking.openSettings().catch(() => {
-        Notification.alert("Unable to open settings");
-      });
+  connectSocket = userId => {
+    if (this.wsSocket !== null) {
+      this.wsSocket.close();
+      this.wsSocket = null;
+    }
+    this.wsSocket = new WebSocket("ws://3.134.208.235:27800?user=" + userId);
+    this.wsSocket.onmessage = ev => {
+      let data = JSON.parse(ev.data);
+      if (data.action === "Friends") {
+        this.props.updateFriends(data.data);
+      } else if (data.action === "Chat") {
+        EventBus.publish("NEW_MSG", data.data);
+      } else {
+        console.log("Socket: >>", data);
+      }
     };
-    const status = await Geolocation.requestAuthorization("whenInUse");
-
-    if (status === "granted") {
-      return true;
-    }
-
-    if (status === "denied") {
-      Notification.alert("Location permission denied");
-    }
-
-    if (status === "disabled") {
-      Notification.alert(
-        `Turn on Location Services to allow Pluzo to determine your location.`,
-        "",
-        [
-          { text: "Go to Settings", onPress: openSetting },
-          { text: "Don't Use Location", onPress: () => {} },
-        ],
-      );
-    }
-
-    return false;
-  };
-
-  hasLocationPermission = async () => {
-    if (Platform.OS === "ios") {
-      const hasPermission = await this.hasLocationPermissionIOS();
-      return hasPermission;
-    }
-
-    if (Platform.OS === "android" && Platform.Version < 23) {
-      return true;
-    }
-
-    const hasPermission = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-
-    if (hasPermission) {
-      return true;
-    }
-
-    const status = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-
-    if (status === PermissionsAndroid.RESULTS.GRANTED) {
-      return true;
-    }
-
-    if (status === PermissionsAndroid.RESULTS.DENIED) {
-      ToastAndroid.show("Location permission denied by user.", ToastAndroid.LONG);
-    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-      ToastAndroid.show("Location permission revoked by user.", ToastAndroid.LONG);
-    }
-
-    return false;
-  };
-
-  getLocationUpdates = async () => {
-    const hasLocationPermission = await this.hasLocationPermission();
-
-    if (!hasLocationPermission) {
-      return;
-    }
-
-    this.watchId = Geolocation.watchPosition(
-      position => {
-        this.props.updateLocation(position);
-        console.log(position);
-      },
-      error => {
-        console.log(error);
-      },
-      {
-        enableHighAccuracy: true,
-        distanceFilter: 100,
-        interval: 6000,
-        fastestInterval: 10000,
-        forceRequestLocation: true,
-        showLocationDialog: true,
-        useSignificantChanges: true,
-      },
-    );
   };
 
   render() {
+    if (this.props.loading) {
+      return (
+        <SafeAreaProvider>
+          <StatusBar barStyle='light-content' backgroundColor={COLOR.HEADER_BACKGROUND} />
+          <Loading />
+        </SafeAreaProvider>
+      );
+    }
+
     return (
       <SafeAreaProvider>
         <StatusBar barStyle='light-content' backgroundColor={COLOR.HEADER_BACKGROUND} />
@@ -167,11 +118,14 @@ function mapStateToProps(state) {
   return {
     token: state.user.token,
     user: state.user.user,
+    loading: state.user.isLoadingProfile,
   };
 }
 
 const mapDispatchToProps = {
+  requestProfile: UserCreators.requestProfile,
   updateLocation: UserCreators.updateLocation,
+  updateFriends: InboxCreators.requestFriendsSuccess,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

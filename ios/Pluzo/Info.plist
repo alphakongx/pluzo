@@ -38,13 +38,13 @@
 		</dict>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-  <string>$(PRODUCT_NAME) would like access to your photo gallery to upload profile picture</string>
-  <key>NSCameraUsageDescription</key>
-  <string>$(PRODUCT_NAME) would like to use your camera to take your profile picture</string>
-  <key>NSPhotoLibraryAddUsageDescription</key>
-  <string>$(PRODUCT_NAME) would like to save photos to your photo gallery to upload profile picture</string>
-  <key>NSMicrophoneUsageDescription</key>
-  <string>$(PRODUCT_NAME) would like to use your microphone for live stream</string>
+	<string>$(PRODUCT_NAME) would like access to your photo gallery to upload profile picture</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your camera to take your profile picture</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery to upload profile picture</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your microphone for live stream</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your location to find friends</string>
 	<key>UILaunchStoryboardName</key>
@@ -82,6 +82,8 @@
 		<string>MontserratAlternates-Thin.ttf</string>
 		<string>MontserratAlternates-ThinItalic.ttf</string>
 		<string>OpenSans-Regular.ttf</string>
+		<string>OpenSans-Bold.ttf</string>
+		<string>OpenSans-SemiBold.ttf</string>
 	</array>
 </dict>
 </plist>

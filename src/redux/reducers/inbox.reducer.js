@@ -8,10 +8,11 @@ const logout = (state, action) => INITIAL_STATE;
 const requestChannels = (state, action) => ({
   ...state,
   isLoadingChannels: true,
+  channels: action.channels,
 });
-
 const loadChannelsDone = (state, action) => ({
   ...state,
+  channels: action.channels,
   isLoadingChannels: false,
 });
 
@@ -61,6 +62,10 @@ const pendingFriendsFailure = (state, action) => ({
   ...state,
   isLoadingPendingFriends: false,
 });
+const updatePendingFriends = (state, action) => ({
+  ...state,
+  pendingFriends: action.pendingFriends,
+});
 
 const requestFriends = (state, action) => ({
   ...state,
@@ -79,9 +84,9 @@ const requestFriendsFailure = (state, action) => ({
 export const HANDLERS = {
   [InboxTypes.REQUEST_CHANNELS]: requestChannels,
   [InboxTypes.LOAD_CHANNELS_DONE]: loadChannelsDone,
-  
+
   [InboxTypes.REQUEST_ADD_FRIEND]: requestAddFriend,
-  [InboxTypes.ADD_FRIEND_SUCCESS]: addFriendSuccess, 
+  [InboxTypes.ADD_FRIEND_SUCCESS]: addFriendSuccess,
   [InboxTypes.ADD_FRIEND_FAILURE]: addFriendFailure,
 
   [InboxTypes.REQUEST_ACCEPT_FRIEND]: requestAcceptFriend,
@@ -95,11 +100,12 @@ export const HANDLERS = {
   [InboxTypes.REQUEST_PENDING_FRIENDS]: requestPendingFriends,
   [InboxTypes.PENDING_FRIENDS_SUCCESS]: pendingFriendsSuccess,
   [InboxTypes.PENDING_FRIENDS_FAILURE]: pendingFriendsFailure,
+  [InboxTypes.UPDATE_PENDING_FRIENDS]: updatePendingFriends,
 
   [InboxTypes.REQUEST_FRIENDS]: requestFriends,
   [InboxTypes.REQUEST_FRIENDS_SUCCESS]: requestFriendsSuccess,
   [InboxTypes.REQUEST_FRIENDS_FAILURE]: requestFriendsFailure,
-  
+
   [UserTypes.LOGOUT]: logout,
 };
 

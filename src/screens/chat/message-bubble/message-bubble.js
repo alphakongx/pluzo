@@ -7,31 +7,41 @@ const MessageBubble: () => React$Node = props => {
   const { currentMessage, user } = props;
   const isCurrentUser = currentMessage.user._id === user._id;
   const hasImage = currentMessage.image ? true : false;
+  const hasText =
+    currentMessage.text !== null && currentMessage.text !== "" ? true : false;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, hasImage && hasText ? {} : styles.containerMargin]}>
       {hasImage ? (
         <Image
-          source={{ uri: currentMessage.image + " asd " }}
-          style={styles.messageImage}
+          source={{ uri: currentMessage.image }}
+          style={[
+            styles.messageImage,
+            hasText ? styles.imageTextRound : styles.imageFullRound,
+          ]}
           resizeMode={"cover"}
         />
       ) : null}
-      <View
-        style={[
-          styles.textContainer,
-          isCurrentUser ? styles.currentUserTextContainer : styles.otherUserTextContainer,
-        ]}
-      >
-        <Text
+      {currentMessage.text !== null && currentMessage.text !== "" && (
+        <View
           style={[
-            styles.text,
-            isCurrentUser ? styles.currentUserText : styles.otherUserText,
+            styles.textContainer,
+            isCurrentUser
+              ? styles.currentUserTextContainer
+              : styles.otherUserTextContainer,
+            hasImage ? styles.imageText : {},
           ]}
         >
-          {currentMessage.text}
-        </Text>
-      </View>
+          <Text
+            style={[
+              styles.text,
+              isCurrentUser ? styles.currentUserText : styles.otherUserText,
+            ]}
+          >
+            {currentMessage.text}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

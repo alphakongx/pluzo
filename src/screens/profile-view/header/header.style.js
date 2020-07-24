@@ -3,7 +3,7 @@ import { COLOR } from "@config";
 
 export default StyleSheet.create({
   headerContainer: {
-    backgroundColor: COLOR.HEADER_BACKGROUND,
+    // backgroundColor: COLOR.HEADER_BACKGROUND,
   },
   header: {
     height: 60,

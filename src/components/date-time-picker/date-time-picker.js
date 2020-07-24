@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { TouchableInput, DateTimePickerModal } from "@components";
+import { TouchableInput } from "../touchable-input";
+import { DateTimePickerModal } from "../date-time-picker-modal";
 import { Format } from "@helpers";
 
 const DateTimePicker: () => React$Node = props => {

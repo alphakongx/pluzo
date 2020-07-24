@@ -31,13 +31,17 @@ const Header: () => React$Node = props => {
             props.onInfoClicked(true);
           }}
         >
-          <Image source={require("@assets/images/swipe-screen/info.png")}
-            style={styles.infoIcon} />
+          <Image
+            source={require("@assets/images/swipe-screen/info.png")}
+            style={styles.infoIcon}
+          />
         </Touchable>
       </View>
       <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
         <Image source={require("@assets/images/swipe-screen/location.png")} />
-        <Text style={styles.topBarLocation}>{address === null ? "no address" : address}</Text>
+        <Text style={styles.topBarLocation}>
+          {address === null ? "no address" : address}
+        </Text>
       </View>
     </View>
   );

@@ -1,47 +1,78 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
+import EventBus from "eventing-bus";
 import { Image, Text, Touchable, GradientButton, SolidButton } from "@components";
+import { NavigationService } from "@helpers";
+import { SCREENS } from "@constants";
 import styles from "./search-people-item.style";
 
 const SearchPeopleItem: () => React$Node = props => {
-  const { image, first_name, username } = props.item;
+  const [adding, setAdding] = useState(false);
+  const [isFriend, setIsFriend] = useState(props.item.friend === 2);
+  const { image, avatar, first_name, username } = props.item;
+  const peoplePicture = image || avatar;
+
+  useEffect(() => {
+    let addAction = EventBus.on("ADDFRIEND", (userName, success) => {
+      setAdding(false);
+      console.log(success);
+      setIsFriend(success);
+    });
+    return addAction;
+  });
+
+  onRequestFriend = () => {
+    setAdding(true);
+    props.addFriend(username, props.token);
+  }
+
   return (
-    <Touchable onPress={props.onPressItem}>
+    <Touchable onPress={() => {
+      NavigationService.navigate(SCREENS.PROFILE_VIEW, {user: props.item});
+    }}>
       <View style={styles.messageContainer}>
         <View style={styles.imageContainer}>
           <Image
-            source={image === null ? require("@assets/images/message-image.png") : {uri: image}}
+            source={
+              peoplePicture === null
+                ? require("@assets/images/message-image.png")
+                : { uri: peoplePicture }
+            }
             style={styles.image}
           />
         </View>
         <View style={styles.messageContentContainer}>
-          <Text style={styles.subject}>{first_name === null ? "no name" : first_name}</Text>
+          <Text style={styles.subject}>
+            {first_name === null ? "no name" : first_name}
+          </Text>
           <Text style={styles.preview}>{username}</Text>
         </View>
         <View style={styles.timeContainer}>
-        {
-          props.friend ? (
+          {props.friend ? (
             <GradientButton
               containerStyle={styles.addButton}
               textStyle={styles.addButtonText}
               text={"Chat"}
+              onPress={() => {
+                NavigationService.navigate(SCREENS.CHAT, { chatUser: props.item });
+              }}
             />
-          ):(
-            props.isSent ? (
-              <SolidButton
-                containerStyle={styles.addButton}
-                textStyle={styles.addButtonText}
-                text={"Sent"}
-              />
-            ) :(
-              <GradientButton
-                containerStyle={styles.addButton}
-                textStyle={styles.addButtonText}
-                text={"Add"}
-              />
-            )
-          )
-        }
+          ) : isFriend === true ? (
+            <SolidButton
+              containerStyle={styles.addButton}
+              textStyle={styles.addButtonText}
+              disabled={true}
+              text={"Sent"}
+            />
+          ) : (
+            <GradientButton
+              containerStyle={styles.addButton}
+              textStyle={styles.addButtonText}
+              text={"Add"}
+              loading={adding}
+              onPress={onRequestFriend}
+            />
+          )}
         </View>
       </View>
     </Touchable>

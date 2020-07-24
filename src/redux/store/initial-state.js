@@ -7,6 +7,7 @@ export default {
     location: null,
     isLoggingIn: false,
     isRegistring: false,
+    isLoadingProfile: false,
     isSendingPhoneLoginCode: false,
     isConfirmingPhoneLoginCode: false,
     isSendingPhoneVerificationCode: false,
@@ -34,9 +35,15 @@ export default {
     isLoadingPendingFriends: false,
     isAddingFriend: false,
   },
+  chat: {
+    chatId: null,
+    messages: [],
+    isLoadingMessages: false,
+  },
   swipe: {
     cards: [],
     likecount: 0,
+    cardImageIndex: 0,
     isLoadingCards: false,
     isLoadingMatch: false,
   },
@@ -46,5 +53,5 @@ export default {
     people: [],
     live: [],
     isSearching: false,
-  }
+  },
 };

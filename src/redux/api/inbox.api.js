@@ -12,6 +12,18 @@ export function getChat(accessToken) {
   }).then(response => response);
 }
 
+export function getChatList(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.GET_CHAT_MSG}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}
+
 export function getFriends(accessToken) {
   return API.request({
     method: "post",
@@ -56,7 +68,8 @@ export function addFriendByUsername(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-  }, false).then(response => response);
+    slient: true,
+  }).then(response => response);
 }
 
 export function getPendingRequests(accessToken) {

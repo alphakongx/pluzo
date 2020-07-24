@@ -5,6 +5,10 @@ const { Types, Creators } = createActions({
   loginSuccess: ["sessionData"],
   loginFailure: null,
 
+  requestProfile: ["token"],
+  loadProfileSuccess: ["sessionData"],
+  loadProfileFailure: null,
+
   requestPhoneLoginSendCode: ["phoneNumber", "shouldNavigate"],
   phoneLoginSendCodeSuccess: null,
   phoneLoginSendCodeFailure: null,
