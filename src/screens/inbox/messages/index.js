@@ -1,4 +1,5 @@
 import Messages from "./messages";
+import { withNavigationFocus } from "react-navigation";
 import { connect } from "react-redux";
 import { InboxCreators } from "@redux/actions";
 
@@ -14,4 +15,4 @@ const mapDispatchToProps = {
   requestChannels: InboxCreators.requestChannels,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Messages);
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigationFocus(Messages));

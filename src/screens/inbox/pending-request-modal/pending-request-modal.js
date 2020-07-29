@@ -23,19 +23,20 @@ class PendingRequestModal extends Component {
   onAcceptRequest = userId => {
     this.props.acceptRequest(userId, this.props.token);
     const { pendingFriends } = this.props;
-    let requests = pendingFriends.filter(value => value.id !== userId);
+    let requests = pendingFriends.filter(value => value._id !== userId);
     this.props.updatePendings(requests);
   };
 
   onRejectRequest = userId => {
     this.props.rejectRequest(userId, this.props.token);
     const { pendingFriends } = this.props;
-    let requests = pendingFriends.filter(value => value.id !== userId);
+    let requests = pendingFriends.filter(value => value._id !== userId);
     this.props.updatePendings(requests);
   };
 
   render() {
     const { isLoadingPendingFriends, pendingFriends } = this.props;
+    console.log(pendingFriends);
     return (
       <Modal
         {...this.props}
@@ -77,25 +78,30 @@ class PendingRequestModal extends Component {
               <FlatList
                 style={styles.requesterList}
                 data={pendingFriends}
-                keyExtractor={item => `pending-requests-${item.id}`}
+                keyExtractor={item => `pending-requests-${item._id}`}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 renderItem={({ item: item, index }) => (
-                  <Touchable>
+                  <Touchable key={`pending-requests-${item._id}`}>
                     <View style={styles.requestContainer}>
                       <View style={styles.imageContainer}>
-                        <Image source={{ uri: item.image }} style={styles.image} />
+                        <Image source={{ uri: item.image || item.avatar }} style={styles.image} />
                       </View>
                       <View style={styles.userContainer}>
                         <Text style={styles.firstname}>{item.first_name}</Text>
                         <Text style={styles.username}>{item.username}</Text>
                       </View>
-                      <Touchable style={styles.crossButton}>
+                      <Touchable
+                        style={styles.crossButton}
+                        onPress={() => {
+                          this.onRejectRequest(item._id);
+                        }}
+                      >
                         <Image source={Images.app.icCross} style={styles.crossIcon} />
                       </Touchable>
                       <Touchable
                         style={styles.checkButton}
                         onPress={() => {
-                          this.onAcceptRequest(item.id);
+                          this.onAcceptRequest(item._id);
                         }}
                       >
                         <Image source={Images.app.icCheck} style={styles.checkIcon} />

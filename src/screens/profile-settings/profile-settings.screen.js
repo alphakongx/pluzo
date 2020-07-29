@@ -43,6 +43,7 @@ class ProfileSettings extends React.Component {
       UserTypes.UPDATE_USER_FAILURE,
       this.uploadingDone,
     );
+    console.log(this.props.user);
   }
 
   componentWillUnmount() {

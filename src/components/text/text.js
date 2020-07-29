@@ -11,7 +11,7 @@ class Text extends Component {
     if (style instanceof Array) {
       propsStyle = FontHelper.font(StyleSheet.flatten(style));
     } else {
-      propsStyle = FontHelper.font(style);
+      propsStyle = FontHelper.font(style || {});
     }
 
     const defaultStyle = { color: link ? "blue" : "black" };

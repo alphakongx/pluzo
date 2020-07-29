@@ -8,7 +8,7 @@ const logout = (state, action) => INITIAL_STATE;
 const requestChannels = (state, action) => ({
   ...state,
   isLoadingChannels: true,
-  channels: action.channels,
+  // channels: action.channels,
 });
 const loadChannelsDone = (state, action) => ({
   ...state,

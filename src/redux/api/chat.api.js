@@ -36,3 +36,15 @@ export function sendMsg(data, accessToken) {
     data,
   }).then(response => response);
 }
+
+export function readMsg(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.READ_MSG}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}

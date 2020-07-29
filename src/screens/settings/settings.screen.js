@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { View, FlatList } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import { Touchable, Image, Text, TouchableSettingItem } from "@components";
+import { SCREENS } from "@constants";
 import Images from "@assets/Images";
+import Header from "./header";
 
 import styles from "./settings.style";
 
@@ -41,17 +43,19 @@ class Settings extends Component {
     this.props.logout();
   };
 
+  onItemPressed = (itemId) => {
+    if (itemId === "5") {
+      this.props.navigation.navigate(SCREENS.SWIPE_SETTINGS);
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.safeAreaContainer}>
-          <View style={styles.headerContainer}>
-            <Touchable style={styles.backButton} onPress={this.goBack}>
-              <Image source={Images.app.icBackLeft} style={styles.backButtonIcon} />
-            </Touchable>
-          </View>
-
-          <Text style={styles.settingText}>{"Settings"}</Text>
+          <Header 
+            title={"Settings"}
+            onBack={this.goBack} />
 
           <FlatList
             data={settingData}
@@ -65,6 +69,7 @@ class Settings extends Component {
                       text={item.name}
                       icon
                       iconUri={item.iconUri}
+                      onPress={() => this.onItemPressed(item.id)}
                     />
                   );
                 case 1:

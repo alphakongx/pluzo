@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { ChatCreators, ChatTypes } from "../actions";
-import { getCurrentChat, getChatUser, sendMsg } from "@redux/api";
+import { getCurrentChat, getChatUser, sendMsg, readMsg } from "@redux/api";
 import moment from "moment";
 import EventBus from "eventing-bus";
 
@@ -8,6 +8,7 @@ export function* watchChatRequests() {
   yield takeEvery(ChatTypes.REQUEST_GET_CURRENT_CHAT, requestCurrentChat);
 
   yield takeEvery(ChatTypes.REQUEST_SEND_MSG, requestSendMsg);
+  yield takeEvery(ChatTypes.REQUEST_READ_MSG, requestReadMsg);
 }
 
 function* requestCurrentChat(action) {
@@ -86,6 +87,21 @@ function* requestSendMsg(action) {
       let messages = response.data.data;
       EventBus.publish("NEW_CHAT_ID", messages[0].chat_id);
     }
+  } catch (error) {
+    console.log("send message >>", error);
+  }
+}
+
+function* requestReadMsg(action) {
+  try {
+    const { params, token } = action;
+
+    const requestParams = new FormData();
+    params.forEach(msgId => {
+      requestParams.append("message_id[]", msgId);
+    });
+    yield call(readMsg, requestParams, token);
+    
   } catch (error) {
     console.log("send message >>", error);
   }

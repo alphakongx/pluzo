@@ -1,5 +1,6 @@
 import React from "react";
 import { FlatList, Image, View, ActivityIndicator } from "react-native";
+import EventBus from "eventing-bus";
 import moment from "moment";
 import { Text, Touchable } from "@components";
 import styles from "./messages.style";
@@ -7,21 +8,37 @@ import styles from "./messages.style";
 class Messages extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      firstLoading: true,
+    }
   }
 
   componentDidMount() {
     this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
       this.props.requestChannels(this.props.token);
     });
+    this.actionNewMessage = EventBus.on("NEW_MSG", (messages) => {
+      if(this.props.isFocused === true) {
+        this.props.requestChannels(this.props.token);
+      }
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.isLoadingChannels === true && prevState.firstLoading === true) {
+      this.setState({firstLoading: false});
+    }
   }
 
   componentWillUnmount() {
     this._unsubscribe;
+    this.actionNewMessage();
   }
 
   render() {
     const { isLoadingChannels, channels } = this.props;
-    if (isLoadingChannels) {
+    const { firstLoading } = this.state;
+    if (isLoadingChannels && firstLoading === true) {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size={"large"} color={"white"} />
@@ -64,13 +81,17 @@ class Messages extends React.Component {
                 </View>
                 <View style={styles.messageContentContainer}>
                   <Text style={styles.subject}>{name}</Text>
-                  <Text style={styles.preview} lines={1}>
+                  <Text style={[styles.preview, isRead ? {} : styles.previewNew]} lines={1}>
+                    {
+                      channel.messages[0].user._id !== partner._id &&
+                      "You: "
+                    }
                     {channel.messages[0].text}
                   </Text>
                 </View>
                 <View style={styles.timeContainer}>
                   <Text style={styles.time}>{timeAgo}</Text>
-                  {isRead && <View style={styles.unread} />}
+                  {(channel.messages[0].user._id === partner._id && !isRead) && <View style={styles.unread} />}
                 </View>
               </View>
             </Touchable>

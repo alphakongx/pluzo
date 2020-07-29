@@ -1,13 +1,12 @@
-import StreamPlayer from "./stream-player";
+import NoUsers from "./no-users";
 import { connect } from "react-redux";
 
 function mapStateToProps(state) {
   return {
-    token: state.user.token,
     user: state.user.user,
   };
 }
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(StreamPlayer);
+export default connect(mapStateToProps, mapDispatchToProps)(NoUsers);

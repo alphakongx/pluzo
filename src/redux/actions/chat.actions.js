@@ -1,10 +1,6 @@
 import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
-  // requestGetChatMsg: ["limit", "token"],
-  // getChatMsgSuccess: null,
-  // getChatMsgFailure: null,
-
   requestGetCurrentChat: ["chartId", "chatUserId", "token"],
   getCurrentChatSuccess: ["messages"],
   getCurrentChatFailure: null,
@@ -13,7 +9,7 @@ const { Types, Creators } = createActions({
 
   requestSendMsg: ["params", "token"],
 
-  // requestSendMsg:
+  requestReadMsg: ["params", "token"],
 });
 
 export const ChatTypes = Types;

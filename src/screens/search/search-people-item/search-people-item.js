@@ -14,9 +14,10 @@ const SearchPeopleItem: () => React$Node = props => {
 
   useEffect(() => {
     let addAction = EventBus.on("ADDFRIEND", (userName, success) => {
-      setAdding(false);
-      console.log(success);
-      setIsFriend(success);
+      if (userName === username) {
+        setAdding(false);
+        setIsFriend(success);
+      }
     });
     return addAction;
   });

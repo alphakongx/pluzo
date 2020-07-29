@@ -3,14 +3,14 @@ import { SafeAreaView, View, FlatList } from "react-native";
 import { Image, Touchable } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import Images from "@assets/Images";
-import StreamPlayer from "./stream-player/stream-player";
+import StreamPlayer from "./stream-player";
 import UserCount from "../../components/user-count/user-count";
 
 import styles from "./live-stream.style";
 
-import StreamUserIcon from "./stream-user-icon/stream-user-icon";
+import StreamUserIcon from "./stream-user-icon";
 import StreamMessageBox from "./stream-message-box";
-import StreamUsers from "./stream-users/stream-users";
+import StreamUsers from "./stream-users";
 
 class LiveStream extends Component {
   constructor(props) {
