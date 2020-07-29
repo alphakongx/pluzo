@@ -12,11 +12,14 @@ export default StyleSheet.create({
     bottom: 0,
     top: 0,
   },
-  contentContainer: {
+  touchArea: {
     flex: 1,
     marginTop: 15,
     marginBottom: 35,
     marginHorizontal: 15,
+  },
+  contentContainer: {
+    flex: 1,
     borderRadius: 22,
     alignItems: "center",
     overflow: "hidden",

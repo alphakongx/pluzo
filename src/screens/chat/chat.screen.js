@@ -35,28 +35,30 @@ class Chat extends React.Component {
     });
 
     this.newMessageAction = EventBus.on("NEW_MSG", data => {
-      console.log(typeof data);
-      const { messages } = this.props;
+      const { messages, token, user } = this.props;
       let arrData = JSON.parse(data);
-      let lastMsgTime = messages.length > 0 ? moment(messages[0].createdAt).unix() : 0;
-      let filteredMessages = arrData.filter(message => {
-        return message.created_at > lastMsgTime;
-      });
+      console.log(typeof(arrData[0].chat_id), typeof(this.state.chatId));
+      // checking chat_id
+      if (parseInt(arrData[0].chat_id) !== parseInt(this.state.chatId)) {
+        return;
+      }
+      
       let newMessages = [];
-      filteredMessages.forEach(message => {
-        newMessages.push({
-          _id: message.id,
-          text: message.text,
-          image: message.image,
-          createdAt: moment.unix(message.created_at).toDate(),
-          user: {
-            _id: message.user._id,
-            name: message.user.name,
-            avatar: message.user.avatar,
-          },
-        });
+      newMessages.push({
+        _id: arrData[0].id,
+        text: arrData[0].text,
+        image: arrData[0].image,
+        createdAt: moment.unix(arrData[0].created_at).toDate(),
+        user: {
+          _id: arrData[0].user._id,
+          name: arrData[0].user.name,
+          avatar: arrData[0].user.avatar,
+        },
       });
       this.props.updateMessages(newMessages.concat(messages));
+      if ( arrData[0].user._id !== user.id) {
+        this.props.readMessage([arrData[0].id], token);
+      }
     });
 
     const { token, chatUser, chatId } = this.props;

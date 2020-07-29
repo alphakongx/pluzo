@@ -8,6 +8,7 @@ import EventBus from "eventing-bus";
 import { connect } from "react-redux";
 import { AppContainer } from "../screens";
 import Loading from "../screens/loading";
+import { WS } from "@components";
 import { NavigationService } from "@helpers";
 import { SCREENS } from "@constants";
 import { COLOR } from "../config/color";
@@ -22,7 +23,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.watchId = null;
-    this.wsSocket = null;
   }
 
   async componentDidMount() {
@@ -44,18 +44,21 @@ class App extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.token !== this.props.token) {
-      this.checkingLogin();
-    }
-  }
-
-  checkingLogin = () => {
+  isLogin = () => {
     const { user, token } = this.props;
     if (user !== null && token !== "" && token !== null) {
       if (user.status === 1) {
-        this.connectSocket(user.id);
-        AsyncStorage.setItem("USER_TOKEN", token);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  checkingLogin = async () => {
+    const { user, token } = this.props;
+    if (user !== null && token !== "" && token !== null) {
+      if (user.status === 1) {
+        await AsyncStorage.setItem("USER_TOKEN", token);
         NavigationService.navigate(SCREENS.HOMESTACK);
       } else {
         NavigationService.navigate(SCREENS.SIGNUP_CODE_VERIFICATION, {
@@ -63,31 +66,21 @@ class App extends React.Component {
         });
       }
     } else {
-      if (this.wsSocket !== null) {
-        this.wsSocket.close();
-        this.wsSocket = null;
-      }
-      AsyncStorage.removeItem("USER_TOKEN");
+      await AsyncStorage.removeItem("USER_TOKEN");
       NavigationService.navigate(SCREENS.AUTHSTACK);
     }
   };
 
-  connectSocket = userId => {
-    if (this.wsSocket !== null) {
-      this.wsSocket.close();
-      this.wsSocket = null;
+  onMessage = (ev) => {
+    let data = JSON.parse(ev.data);
+    console.log("Socket: >>", this.props.user.id, data);
+    if (data.action === "Friends") {
+      this.props.updateFriends(data.data);
+    } else if (data.action === "Chat") {
+      EventBus.publish("NEW_MSG", data.data);
+    } else {
+      // console.log("Socket: >>", this.props.user.id, data);
     }
-    this.wsSocket = new WebSocket("ws://3.134.208.235:27800?user=" + userId);
-    this.wsSocket.onmessage = ev => {
-      let data = JSON.parse(ev.data);
-      if (data.action === "Friends") {
-        this.props.updateFriends(data.data);
-      } else if (data.action === "Chat") {
-        EventBus.publish("NEW_MSG", data.data);
-      } else {
-        console.log("Socket: >>", data);
-      }
-    };
   };
 
   render() {
@@ -109,6 +102,15 @@ class App extends React.Component {
             this.checkingLogin();
           }}
         />
+        {
+          this.isLogin() && 
+          <WS 
+            url={"ws://3.134.208.235:27800?user=" + this.props.user.id}
+            onMessage={this.onMessage}
+            onError={console.log}
+            onClose={console.log}
+            reconnect />
+        }
       </SafeAreaProvider>
     );
   }

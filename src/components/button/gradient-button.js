@@ -26,8 +26,8 @@ class GradientButton extends Component {
       <Touchable disabled={loading || disabled} onPress={onPress}>
         <LinearGradient
           colors={disabled ? GRADIENT.BUTTON_DISABLED : colors}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          start={{ x: 1, y: 0 }}
+          end={{ x: 0, y: 0 }}
           style={[styles.container, containerStyle]}
         >
           {loading ? (

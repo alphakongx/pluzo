@@ -19,3 +19,4 @@ export * from "./vertical-image-layout";
 export * from "./user-count";
 export * from "./touchable-setting-item";
 export * from "./text-styled";
+export * from "./web-socket";

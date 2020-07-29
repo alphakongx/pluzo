@@ -17,6 +17,7 @@ const mapDispatchToProps = {
   requestMessages: ChatCreators.requestGetCurrentChat,
   updateMessages: ChatCreators.updateCurrentMsg,
   sendMessage: ChatCreators.requestSendMsg,
+  readMessage: ChatCreators.requestReadMsg,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

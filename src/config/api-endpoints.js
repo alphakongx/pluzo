@@ -24,6 +24,7 @@ export const API_ENDPOINTS = {
   GET_CHAT_MSG: `${BASE_URL}/get-chat-msg`,
   DELETE_CHAT: `${BASE_URL}/delete-chat`,
   SEND_MSG: `${BASE_URL}/send-msg`,
+  READ_MSG: `${BASE_URL}/read-message`,
   UPDATE_MSG: `${BASE_URL}/update-msg`,
   DELETE_MSG: `${BASE_URL}/delete-msg`,
   GET_CURRENT_CHAT: `${BASE_URL}/get-current-chat`,

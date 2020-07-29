@@ -33,10 +33,14 @@ export default StyleSheet.create({
     color: COLOR.TEXT_PRIMARY,
   },
   preview: {
+    fontFamily: "OpenSans",
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "400",
     color: COLOR.MESSAGE_PREVIEW,
     marginTop: 2,
+  },
+  previewNew: {
+    fontWeight: "700",
   },
   timeContainer: {
     flexDirection: "row",

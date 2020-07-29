@@ -77,10 +77,10 @@ export const getLocationUpdates = async callback => {
   return Geolocation.watchPosition(
     position => {
       callback(position);
-      console.log(position);
+      // console.log(position);
     },
     error => {
-      console.log(error);
+      // console.log(error);
     },
     {
       enableHighAccuracy: true,

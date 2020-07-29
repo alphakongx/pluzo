@@ -10,9 +10,10 @@ import Swipe from "../screens/swipe";
 import Chat from "../screens/chat";
 import Inbox from "../screens/inbox";
 import ProfileSettings from "../screens/profile-settings";
-import Settings from "../screens/settings";
 import SearchScreen from "../screens/search";
 import ProfileView from "../screens/profile-view";
+import Settings from "../screens/settings";
+import SwipeSettings from "../screens/settings/swipe-settings";
 
 import navigationConfig from "./navigation-config";
 
@@ -61,7 +62,6 @@ const HomeStack = createStackNavigator(
   {
     [SCREENS.MAIN]: TabStack,
     [SCREENS.LIVE_STREAM]: LiveStream,
-    [SCREENS.SETTINGS]: Settings,
     [SCREENS.CHAT]: Chat,
     [SCREENS.SEARCH]: SearchScreen,
     [SCREENS.PROFILE_VIEW]: {
@@ -71,6 +71,15 @@ const HomeStack = createStackNavigator(
           backgroundColor: "transparent",
         },
       },
+    },
+
+    // Settings
+    [SCREENS.SETTINGS]: Settings,
+    [SCREENS.SWIPE_SETTINGS]: {
+      screen: SwipeSettings,
+      navigationOptions: {
+        gestureEnabled: false,
+      }
     },
   },
   {

@@ -15,7 +15,7 @@ const Header: () => React$Node = props => {
             </Touchable>
           </View>
           <View style={styles.headerContentContainer}>
-            <Text style={styles.headerTitle}>{user.username}</Text>
+            <Text style={styles.headerTitle}>{user.name || user.username}</Text>
           </View>
           <View style={styles.reportButtonContainer}>
             <Touchable style={styles.reportButtonTouchable}>

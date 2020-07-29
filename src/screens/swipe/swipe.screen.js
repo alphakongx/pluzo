@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-navigation";
-import { Image, CardProgressBar, Text } from "@components";
+import { Image, CardProgressBar } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-deck-swiper";
 import ProfileDetails from "./profile-details";
@@ -12,6 +12,7 @@ import styles from "./swipe.style";
 import Header from "./header";
 import ActionButtonsView from "./action-buttons-view";
 import Card from "./card";
+import NoUsers from "./no-users";
 
 class Swipe extends React.Component {
   constructor(props) {
@@ -130,11 +131,11 @@ class Swipe extends React.Component {
       return (
         <LinearGradient
           colors={GRADIENT.SCREEN_BACKGROUND}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
+          start={{ x: 0, y: 1 }}
+          end={{ x: 0, y: 0 }}
           style={styles.emptyContainer}
         >
-          <Text style={styles.noUsers}>{"No more users"}</Text>
+          <NoUsers />
         </LinearGradient>
       );
     }
