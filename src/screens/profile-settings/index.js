@@ -11,7 +11,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  uploadImage: UserCreators.requestUpdateUser,
+  updateUser: UserCreators.requestUpdateUser,
   deleteImage: UserCreators.requestDeleteImage,
 };
 

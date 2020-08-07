@@ -10,15 +10,15 @@ class Messages extends React.Component {
     super(props);
     this.state = {
       firstLoading: true,
-    }
+    };
   }
 
   componentDidMount() {
     this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
       this.props.requestChannels(this.props.token);
     });
-    this.actionNewMessage = EventBus.on("NEW_MSG", (messages) => {
-      if(this.props.isFocused === true) {
+    this.actionNewMessage = EventBus.on("NEW_MSG", messages => {
+      if (this.props.isFocused === true) {
         this.props.requestChannels(this.props.token);
       }
     });
@@ -26,7 +26,7 @@ class Messages extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.isLoadingChannels === true && prevState.firstLoading === true) {
-      this.setState({firstLoading: false});
+      this.setState({ firstLoading: false });
     }
   }
 
@@ -57,7 +57,7 @@ class Messages extends React.Component {
             channel.messages[0].created_at || channel.messages[0].createdAt;
           let timeAgo = moment.unix(createdTime).fromNow(true);
           let partner = channel.partner_info;
-          let image = partner.image || partner.avatar;
+          let image = partner.images[0] || null;
           let name = partner.first_name === null ? "No Name" : partner.first_name;
           let isRead = channel.messages[0].status === 1;
 
@@ -81,17 +81,19 @@ class Messages extends React.Component {
                 </View>
                 <View style={styles.messageContentContainer}>
                   <Text style={styles.subject}>{name}</Text>
-                  <Text style={[styles.preview, isRead ? {} : styles.previewNew]} lines={1}>
-                    {
-                      channel.messages[0].user._id !== partner._id &&
-                      "You: "
-                    }
+                  <Text
+                    style={[styles.preview, isRead ? {} : styles.previewNew]}
+                    lines={1}
+                  >
+                    {channel.messages[0].user._id !== partner._id && "You: "}
                     {channel.messages[0].text}
                   </Text>
                 </View>
                 <View style={styles.timeContainer}>
                   <Text style={styles.time}>{timeAgo}</Text>
-                  {(channel.messages[0].user._id === partner._id && !isRead) && <View style={styles.unread} />}
+                  {channel.messages[0].user._id === partner._id && !isRead && (
+                    <View style={styles.unread} />
+                  )}
                 </View>
               </View>
             </Touchable>

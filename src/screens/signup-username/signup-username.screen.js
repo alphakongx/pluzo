@@ -21,7 +21,7 @@ const SignupUsername: () => React$Node = props => {
     props.navigation.goBack();
   };
   const navigateNext = () => {
-    props.navigation.navigate("SIGNUP_IMAGE", {});
+    props.checkUsername(props.username);
   };
 
   return (
@@ -106,6 +106,7 @@ const SignupUsername: () => React$Node = props => {
               !hasUpperCase(props.password) ||
               !hasNumber(props.password)
             }
+            loading={props.isChecking}
             onPress={navigateNext}
             text={"Continue"}
           />

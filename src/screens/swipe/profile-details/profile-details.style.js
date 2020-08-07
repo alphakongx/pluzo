@@ -32,6 +32,14 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  buttonNormal: {
+    width: 70,
+    height: 70,
+  },
+  buttonSmall: {
+    width: 50,
+    height: 50,
+  },
   largeText: {
     fontSize: 26,
     fontWeight: "600",
@@ -70,6 +78,7 @@ export default StyleSheet.create({
     color: COLOR.TEXT_SECONDARY_3,
   },
   followerUnit: {
+    fontFamily: "OpenSans",
     fontSize: 12,
     fontWeight: "400",
     color: COLOR.TEXT_SECONDARY_3,

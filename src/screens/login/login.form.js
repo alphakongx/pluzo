@@ -22,7 +22,7 @@ const LoginForm: () => React$Node = props => {
       <View style={styles.inputFieldSeparator} />
 
       <Field
-        secureTextEntry
+        secureTextEntry={true}
         name={"password"}
         component={TextInputField}
         placeholder={t("login.password")}

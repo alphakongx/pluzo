@@ -8,24 +8,27 @@ import {
   Text,
   TextInput,
 } from "@components";
+import { SCREENS } from "@constants";
 import styles from "./login-phone-number.style.js";
 
 const LoginPhoneNumber: () => React$Node = props => {
-  const [phoneCode, setPhoneCode] = useState("+1");
-  const [phoneNumber, setPhoneNumber] = useState("123456789");
+  const [phoneCode, setPhoneCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const goBack = () => {
     props.navigation.goBack();
   };
 
   const sendCode = () => {
-    props.requestPhoneLoginSendCode(phoneCode + " " + phoneNumber, true);
+    // props.requestPhoneLoginSendCode(phoneCode + " " + phoneNumber, true);
+    let fullNumber = phoneCode + " " + phoneNumber;
+    props.navigation.navigate(SCREENS.LOGIN_PHONE_CODE_VERIFICATION, {phoneNumber: fullNumber});
   };
 
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar />
+        <ProgressBar width={50} />
         <BackButton onPress={goBack} />
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>Login with phone number</Text>

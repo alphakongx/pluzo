@@ -7,4 +7,8 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  iconSize: {
+    width: 20,
+    height: 20,
+  },
 });

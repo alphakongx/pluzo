@@ -26,12 +26,6 @@ const SignupPhoneNumber: () => React$Node = props => {
     setPhoneNumberAction(phoneCode + " " + phoneNumber);
   }, [phoneCode, phoneNumber, setPhoneNumberAction]);
 
-  useEffect(() => {
-    if (props.token) {
-      props.navigation.navigate("SIGNUP_CODE_VERIFICATION", {});
-    }
-  }, [props.token, props.navigation]);
-
   return (
     <Screen>
       <View style={styles.container}>

@@ -53,7 +53,7 @@ function* requestCurrentChat(action) {
           user: {
             _id: 1,
             name: message.user.name,
-            avatar: message.user.avatar,
+            avatar: message.user.images[0],
           },
         });
       });
@@ -101,7 +101,6 @@ function* requestReadMsg(action) {
       requestParams.append("message_id[]", msgId);
     });
     yield call(readMsg, requestParams, token);
-    
   } catch (error) {
     console.log("send message >>", error);
   }

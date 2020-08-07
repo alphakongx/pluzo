@@ -19,12 +19,13 @@ export default {
   },
   registration: {
     firstName: "",
-    birthDate: "",
+    birthDate: null,
     gender: "",
     username: "",
     password: "",
     picture: null,
     phoneNumber: "",
+    isCheckingUsername: false,
   },
   inbox: {
     channels: [],

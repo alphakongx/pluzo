@@ -18,18 +18,18 @@ export default StyleSheet.create({
   },
   titleFieldContainer: {
     flex: 1,
-    paddingTop: 120,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: -90,
   },
   titleText: {
     fontSize: 24,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 50,
+    marginBottom: 10,
   },
-  selectedDateContainer: {
-    flexDirection: "row",
-  },
+
   buttonContainer: {
     marginTop: 40,
   },

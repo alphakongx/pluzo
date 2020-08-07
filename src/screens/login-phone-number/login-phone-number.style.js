@@ -13,8 +13,8 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
     paddingHorizontal: 37,
+    justifyContent: "center",
   },
   titleText: {
     fontSize: 24,
@@ -71,7 +71,7 @@ export default StyleSheet.create({
     marginRight: 5,
   },
   footer: {
-    marginTop: 40,
+    marginBottom: 40,
     paddingHorizontal: 37,
   },
 });

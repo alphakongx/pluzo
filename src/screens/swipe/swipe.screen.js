@@ -185,9 +185,8 @@ class Swipe extends React.Component {
                 style: {
                   wrapper: {
                     flexDirection: "column",
-                    alignItems: "flex-end",
+                    alignItems: "center",
                     justifyContent: "center",
-                    marginLeft: -30,
                     marginTop: showDetail ? -60 : 0,
                   },
                 },
@@ -202,9 +201,8 @@ class Swipe extends React.Component {
                 style: {
                   wrapper: {
                     flexDirection: "column",
-                    alignItems: "flex-start",
+                    alignItems: "center",
                     justifyContent: "center",
-                    marginLeft: 30,
                     marginTop: showDetail ? -60 : 0,
                   },
                 },
@@ -226,16 +224,17 @@ class Swipe extends React.Component {
                 },
               },
             }}
-            animateOverlayLabelsOpacity
+            animateOverlayLabelsOpacity={false}
+            overlayOpacityHorizontalThreshold={10}
             animateCardOpacity
             swipeBackCard
-            showSecondCard={false}
+            showSecondCard={true}
           />
 
           <LinearGradient
-            colors={GRADIENT.FADE}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
+            colors={GRADIENT.FADE_UP}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 0, y: 0 }}
             style={styles.topActions}
           >
             <SafeAreaView>

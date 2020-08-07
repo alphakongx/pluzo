@@ -13,15 +13,15 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
     paddingHorizontal: 37,
+    justifyContent: "center",
   },
   titleText: {
     fontSize: 24,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: 50,
   },
   phoneContainer: {
     flexDirection: "row",
@@ -71,7 +71,8 @@ export default StyleSheet.create({
     marginRight: 5,
   },
   footer: {
-    marginTop: 40,
+    marginTop: 30,
+    marginBottom: 40,
     paddingHorizontal: 37,
   },
 });

@@ -25,13 +25,22 @@ const ActionButtonsView: () => React$Node = props => {
           </View>
           <View style={[styles.buttonRow, styles.buttonRowMargin]}>
             <Touchable onPress={() => props.onDisLike()}>
-              <Image source={require("@assets/images/swipe-screen/swipe-cross.png")} />
+              <Image
+                source={require("@assets/images/swipe-screen/swipe-cross.png")}
+                style={styles.buttonNormal}
+              />
             </Touchable>
             <Touchable onPress={() => props.onSuperLike()}>
-              <Image source={require("@assets/images/swipe-screen/swipe-star.png")} />
+              <Image
+                source={require("@assets/images/swipe-screen/swipe-star.png")}
+                style={styles.buttonSmall}
+              />
             </Touchable>
             <Touchable onPress={() => props.onLike()}>
-              <Image source={require("@assets/images/swipe-screen/swipe-heart.png")} />
+              <Image
+                source={require("@assets/images/swipe-screen/swipe-heart.png")}
+                style={styles.buttonNormal}
+              />
             </Touchable>
           </View>
         </View>

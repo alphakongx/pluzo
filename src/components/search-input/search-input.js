@@ -8,8 +8,7 @@ const SearchInput: () => React$Node = prop => {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <Image source={require("@assets/images/search.png")}
-          style={styles.searchIcon} />
+        <Image source={require("@assets/images/search.png")} style={styles.searchIcon} />
       </View>
       <RNTextInput
         placeholder={"Search"}

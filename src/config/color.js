@@ -48,4 +48,5 @@ export const GRADIENT = {
   SCREEN_BACKGROUND: ["#0B0516", "#1A023E"],
   FADE: ["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0)"],
   FADE_UP: ["rgba(11, 5, 22, 0)", "rgba(11, 5, 22, 1)"],
+  WHEEL_BACKGROUND: ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"],
 };

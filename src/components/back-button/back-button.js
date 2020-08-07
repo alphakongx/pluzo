@@ -15,7 +15,7 @@ const BackButton: () => React$Node = props => {
               : props.icon
           }
           resizeMode={"contain"}
-          style={{width: 20, height: 20}}
+          style={styles.iconSize}
         />
       </View>
     </Touchable>

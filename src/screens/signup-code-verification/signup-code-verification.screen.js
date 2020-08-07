@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View, Platform, Keyboard } from "react-native";
 import { BackButton, GradientButton, ProgressBar, Screen, Text } from "@components";
-import CodeInput from "react-native-confirmation-code-input";
+import OTPInputView from "@twotalltotems/react-native-otp-input";
+import RNOtpVerify from "react-native-otp-verify";
+import Clipboard from '@react-native-community/clipboard';
 import { Countdown } from "react-native-countdown-text";
 import moment from "moment";
 import EventBus from "eventing-bus";
@@ -16,7 +18,7 @@ class SignupCodeVerification extends Component {
     this.state = {
       code: "",
       canResend: false,
-      countdownTime: moment().add(15, "seconds").unix(),
+      countdownTime: moment().add(60, "seconds").unix(),
     };
   }
 
@@ -25,11 +27,31 @@ class SignupCodeVerification extends Component {
       UserTypes.PHONE_VERIFICATION_SEND_CODE_SUCCESS,
       this.startCountDown,
     );
+    if (Platform.OS === "android") {
+      RNOtpVerify.getOtp()
+        .then(p => {
+          RNOtpVerify.addListener(this.otpHandler)
+        })
+        .catch(p => console.log(p));
+    }
     this.resendCode();
   }
 
   componentWillUnmount() {
     this.codeActionSubscription();
+    if (Platform.OS === "android") {
+      RNOtpVerify.removeListener();
+    }
+  }
+
+  otpHandler = (message) => {
+    const otp = /(\d{4})/.exec(message);
+    console.log("SMS::", otp);
+    if (otp !== null) {
+      Clipboard.setString(otp[1]);
+      RNOtpVerify.removeListener();
+      Keyboard.dismiss();
+    }
   }
 
   goBack = () => {
@@ -41,13 +63,12 @@ class SignupCodeVerification extends Component {
     if (this.props.navigation.state.params !== undefined) {
       phoneNumber = this.props.navigation.state.params.phoneNumber;
     }
-    console.log("PHONE", phoneNumber);
     this.props.requestPhoneVerificationSendCode(phoneNumber);
   };
 
   startCountDown = () => {
     this.setState({
-      countdownTime: moment().add(15, "seconds").unix(),
+      countdownTime: moment().add(60, "seconds").unix(),
       canResend: false,
     });
   };
@@ -72,22 +93,18 @@ class SignupCodeVerification extends Component {
           <ProgressBar width={100} />
           <BackButton onPress={this.goBack} />
           <View style={styles.contentContainer}>
-            <Text style={styles.titleText}>Check your messages.</Text>
+            <Text style={styles.titleText}>Have Text Grab from your messages</Text>
             <Text style={styles.subTitleText}>
               We've sent you a verification code to ensure you are you.
             </Text>
 
             <View style={styles.codeContainer}>
-              <CodeInput
-                className={"border-b"}
-                codeLength={4}
-                space={10}
-                size={68}
-                inputPosition='center'
-                onFulfill={c => this.setState({ code: c })}
-                activeColor={"#9892A3"}
-                cellBorderWidth={0}
-                codeInputStyle={styles.codeInputStyle}
+              <OTPInputView
+                codeInputFieldStyle={styles.codeInputStyle}
+                style={styles.codeContentContainer}
+                pinCount={4}
+                autoFocusOnLoad
+                onCodeFilled={c => this.setState({ code: c })}
               />
             </View>
 

@@ -40,6 +40,16 @@ const setPhoneNumber = (state, action) => ({
   phoneNumber: action.phoneNumber,
 });
 
+const requestCheckUsername = (state, action) => ({
+  ...state,
+  isCheckingUsername: true,
+});
+
+const checkUsernameDone = (state, action) => ({
+  ...state,
+  isCheckingUsername: false,
+});
+
 const resetRegisration = (state, params) => INITIAL_STATE;
 
 export const HANDLERS = {
@@ -51,6 +61,8 @@ export const HANDLERS = {
   [Types.SET_PICTURE]: setPicture,
   [Types.SET_PHONE_NUMBER]: setPhoneNumber,
   [Types.RESET_REGISTRATION]: resetRegisration,
+  [Types.REQUEST_CHECK_USERNAME]: requestCheckUsername,
+  [Types.CHECK_USERNAME_DONE]: checkUsernameDone,
   [UserTypes.LOGOUT]: logout,
 };
 

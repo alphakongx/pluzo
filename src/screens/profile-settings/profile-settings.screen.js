@@ -1,8 +1,9 @@
 import React from "react";
-import { View, ScrollView, ActivityIndicator } from "react-native";
+import { View, ScrollView, ActivityIndicator, TextInput } from "react-native";
 import ImagePicker from "react-native-image-picker";
 import EventBus from "eventing-bus";
 import { UserTypes } from "@redux/actions";
+import { SCREENS } from "@constants";
 
 import {
   Screen,
@@ -31,6 +32,7 @@ class ProfileSettings extends React.Component {
       visibleChooseBadge: false,
       avatarUploading: false,
       uploading: false,
+      bioText: this.props.user.bio || "",
     };
   }
 
@@ -55,8 +57,8 @@ class ProfileSettings extends React.Component {
     this.setState({ uploading: false, avatarUploading: false });
   };
 
-  onAvatarClick = () => {
-    this.onSelectImage("avatar");
+  onProfileClick = () => {
+    this.props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: this.props.user });
   };
 
   onAddImage = () => {
@@ -88,13 +90,13 @@ class ProfileSettings extends React.Component {
           this.setState({ avatarUploading: true }, () => {
             const params = new FormData();
             params.append("image", image);
-            this.props.uploadImage(params, this.props.token);
+            this.props.updateUser(params, this.props.token);
           });
         } else {
           this.setState({ uploading: true }, () => {
             const params = new FormData();
             params.append("images[]", image);
-            this.props.uploadImage(params, this.props.token);
+            this.props.updateUser(params, this.props.token);
           });
         }
       }
@@ -102,6 +104,7 @@ class ProfileSettings extends React.Component {
   };
 
   onDeleteImage = imageId => {
+    if (this.props.user.images.length === 1) return;
     Notification.confirmAlert("Delete", "Do you want to delete this image?", () => {
       this.props.deleteImage(imageId, this.props.token);
     });
@@ -111,14 +114,18 @@ class ProfileSettings extends React.Component {
     const { user, deletingImageId } = this.props;
     const { uploading, avatarUploading } = this.state;
 
+    let reverseImages = [...user.images];
+    reverseImages.sort((a, b) => a.sort < b.sort);
+
     return (
       <Screen>
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} bounces={false}>
           <Header navigation={this.props.navigation} />
           <UserProfile
             user={user}
             loading={avatarUploading}
-            onAvatarClick={this.onAvatarClick}
+            onAvatarClick={this.onProfileClick}
+            onNameClick={this.onProfileClick}
           />
           <View style={styles.chooseBadgeButton}>
             <SolidButton
@@ -129,12 +136,23 @@ class ProfileSettings extends React.Component {
           <View style={styles.imageContainer}>
             <Text style={styles.sectionText}>Images</Text>
             <ScrollView horizontal style={styles.imageScrollView}>
-              {user !== null &&
-                user.images.map((image, index) => {
+              <Touchable disabled={uploading} onPress={() => this.onAddImage()}>
+                <View style={styles.addImageButton}>
+                  {uploading ? (
+                    <ActivityIndicator size={"small"} color={"white"} />
+                  ) : (
+                    <Image source={Images.live.plusFav} />
+                  )}
+                </View>
+              </Touchable>
+              {reverseImages.map((image, index) => {
                   return (
                     <Touchable
                       key={index}
                       style={styles.imageItem}
+                      onPress={() => {
+                        this.props.navigation.navigate(SCREENS.IMAGES_REORDER, {});
+                      }}
                       onLongPress={() => this.onDeleteImage(image.id)}
                     >
                       <Image source={{ uri: image.path }} style={styles.profileImage} />
@@ -146,19 +164,28 @@ class ProfileSettings extends React.Component {
                     </Touchable>
                   );
                 })}
-              <Touchable disabled={uploading} onPress={() => this.onAddImage()}>
-                <View style={styles.addImageButton}>
-                  {uploading ? (
-                    <ActivityIndicator size={"small"} color={"white"} />
-                  ) : (
-                    <Image source={Images.live.plusFav} />
-                  )}
-                </View>
-              </Touchable>
             </ScrollView>
           </View>
 
           <View style={styles.settingsContainer}>
+            <Text style={styles.settingsText}>About Me</Text>
+            <View style={styles.bioContainer}>
+              <TextInput
+                style={styles.bigTextInput}
+                multiline
+                maxLength={200}
+                placeholder={"Bio"}
+                placeholderTextColor={"#E8E6FF"}
+                selectionColor={"white"}
+                value={this.state.bioText}
+                onChangeText={text => this.setState({ bioText: text })}
+                onEndEditing={() => {
+                  const params = new FormData();
+                  params.append("bio", this.state.bioText);
+                  this.props.updateUser(params, this.props.token);
+                }}
+              />
+            </View>
             <Text style={styles.settingsText}>Profile Settings</Text>
             <View style={styles.separatorLine} />
             <TouchableSettingItem style={styles.settingsItem} text={"All Badges"} />

@@ -28,8 +28,7 @@ class ProfileView extends React.Component {
   render() {
     const { user } = this.props.navigation.state.params;
     const { imageIndex } = this.state;
-    let userImage = user.image || user.avatar || null;
-    let allImages = userImage === null ? [Images.app.userPlaceholder] : [userImage];
+    let allImages = [];
     let images = user.images || [];
     images.forEach(image => {
       allImages.push(image.path);
@@ -47,7 +46,7 @@ class ProfileView extends React.Component {
         <SafeAreaView style={styles.container}>
           <Touchable
             style={styles.touchArea}
-            onPress={(e) => {
+            onPress={e => {
               let index = imageIndex;
               if (e.nativeEvent.pageX < screenWidth / 2) {
                 index -= 1;
@@ -56,8 +55,9 @@ class ProfileView extends React.Component {
                 index += 1;
                 if (index >= allImages.length) index = 0;
               }
-              this.setState({imageIndex: index});
-            }}>
+              this.setState({ imageIndex: index });
+            }}
+          >
             <ImageBackground
               style={styles.contentContainer}
               source={

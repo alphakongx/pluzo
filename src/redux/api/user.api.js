@@ -45,6 +45,17 @@ export function phoneLoginConfirmCode(data, accessToken) {
   }).then(response => response);
 }
 
+export function checkUsername(data) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.CHECK_USERNAME}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}
+
 export function register(data, accessToken) {
   return API.request({
     method: "post",
@@ -127,6 +138,18 @@ export function deleteImage(data, accessToken) {
   return API.request({
     method: "post",
     url: `${API_ENDPOINTS.DELETE_IMAGE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}
+
+export function reorderImages(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.REORDER_IMAGES}`,
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: "Bearer " + accessToken,

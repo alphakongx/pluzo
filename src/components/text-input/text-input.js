@@ -73,6 +73,7 @@ const TextInput: () => React$Node = props => {
               inputFieldRef = input;
             }}
             placeholder=''
+            autoCorrect={false}
             underlineColorAndroid='transparent'
             onFocus={() => onFocusChanged(true)}
             onBlur={() => onFocusChanged(false)}

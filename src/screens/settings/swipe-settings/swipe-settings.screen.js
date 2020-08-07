@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, ScrollView, Dimensions } from "react-native";
 import { SafeAreaView } from "react-navigation";
-import { Touchable, Image, Text } from "@components";
+import { Image, Text } from "@components";
 import { Switch } from "react-native-switch";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import Images from "@assets/Images";
@@ -20,7 +20,7 @@ class SwipeSettings extends Component {
       minAge: 18,
       maxAge: 25,
       aroundWorld: false,
-    }
+    };
   }
 
   goBack = () => {
@@ -31,16 +31,13 @@ class SwipeSettings extends Component {
   disableScroll = () => this.setState({ scrollEnabled: false });
 
   render() {
-
     const { distance, minAge, maxAge, aroundWorld } = this.state;
 
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.safeAreaContainer}>
           <ScrollView scrollEnabled={this.state.scrollEnabled}>
-            <Header 
-              title={"Discovery"}
-              onBack={this.goBack} />
+            <Header title={"Discovery"} onBack={this.goBack} />
 
             <View style={[styles.flexRow, styles.itemPadding]}>
               <Text style={styles.titleText}>Location</Text>
@@ -48,8 +45,7 @@ class SwipeSettings extends Component {
                 <Text style={styles.valueText}>My Current Location</Text>
                 <Text style={styles.subValueText}>LOS ANGELES, CALIFORNIA</Text>
               </View>
-              <Image source={Images.app.icRight}
-                style={styles.arrowRight} />
+              <Image source={Images.app.icRight} style={styles.arrowRight} />
             </View>
             <View style={styles.separator} />
 
@@ -59,16 +55,14 @@ class SwipeSettings extends Component {
                 <Text style={styles.valueText}>{distance} mi</Text>
               </View>
             </View>
-            <MultiSlider 
+            <MultiSlider
               onValuesChangeStart={this.disableScroll}
-              onValuesChangeFinish={this.enableScroll} 
-              onValuesChange={(value) => {
-                this.setState({distance: value[0]});
+              onValuesChangeFinish={this.enableScroll}
+              onValuesChange={value => {
+                this.setState({ distance: value[0] });
               }}
               customMarker={() => {
-                return (
-                  <View style={styles.thumbMaker} />
-                )
+                return <View style={styles.thumbMaker} />;
               }}
               containerStyle={styles.sliderContainer}
               trackStyle={styles.tracker}
@@ -79,14 +73,13 @@ class SwipeSettings extends Component {
               max={100}
               values={[distance]}
             />
-            
+
             <View style={[styles.flexRow, styles.itemPadding]}>
               <Text style={styles.titleText}>Show Me</Text>
               <View>
                 <Text style={styles.valueText}>Women</Text>
               </View>
-              <Image source={Images.app.icRight}
-                style={styles.arrowRight} />
+              <Image source={Images.app.icRight} style={styles.arrowRight} />
             </View>
             <View style={styles.separator} />
 
@@ -96,16 +89,14 @@ class SwipeSettings extends Component {
                 <Text style={styles.valueText}>{`${minAge}-${maxAge}`}</Text>
               </View>
             </View>
-            <MultiSlider 
+            <MultiSlider
               onValuesChangeStart={this.disableScroll}
-              onValuesChangeFinish={this.enableScroll} 
-              onValuesChange={(value) => {
-                this.setState({minAge: value[0], maxAge: value[1]});
+              onValuesChangeFinish={this.enableScroll}
+              onValuesChange={value => {
+                this.setState({ minAge: value[0], maxAge: value[1] });
               }}
               customMarker={() => {
-                return (
-                  <View style={styles.thumbMaker} />
-                )
+                return <View style={styles.thumbMaker} />;
               }}
               containerStyle={styles.sliderContainer}
               trackStyle={styles.tracker}
@@ -122,7 +113,7 @@ class SwipeSettings extends Component {
               <Text style={styles.titleText}>Global</Text>
               <Switch
                 value={aroundWorld}
-                onValueChange={(val) => this.setState({aroundWorld: val})}
+                onValueChange={val => this.setState({ aroundWorld: val })}
                 circleSize={20}
                 barHeight={24}
                 circleBorderWidth={0}
@@ -138,9 +129,9 @@ class SwipeSettings extends Component {
             </View>
 
             <Text style={styles.description}>
-              Going gobal will allow you to see people from around the world after you've run out of profile nearby.
+              Going gobal will allow you to see people from around the world after you've
+              run out of profile nearby.
             </Text>
-            
           </ScrollView>
         </SafeAreaView>
       </View>

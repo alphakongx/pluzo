@@ -59,7 +59,7 @@ class SearchScreen extends Component {
   };
 
   render() {
-    const { currentFilter, addingUsers } = this.state;
+    const { currentFilter } = this.state;
     const { isSearching, friends, chat, people } = this.props;
     return (
       <LinearGradient
