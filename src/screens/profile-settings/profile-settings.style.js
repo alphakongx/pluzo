@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { FontHelper } from "@helpers";
 import { COLOR } from "@config";
 
 const { width } = Dimensions.get("window");
@@ -29,7 +30,7 @@ export default StyleSheet.create({
     width: (width - 80) / 3,
     aspectRatio: 2 / 3,
     borderRadius: 22,
-    marginRight: 10,
+    marginLeft: 10,
   },
   imageLoadingContainer: {
     position: "absolute",
@@ -71,6 +72,25 @@ export default StyleSheet.create({
   settingsItem: {
     marginHorizontal: 20,
     marginVertical: 10,
+  },
+  bioContainer: {
+    backgroundColor: "#211533",
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+  },
+  bigTextInput: FontHelper.font({
+    fontFamily: "OpenSans",
+    fontWeight: "400",
+    fontSize: 14,
+    maxHeight: 100,
+    color: COLOR.TEXT_SECONDARY_2,
+  }),
+  bigTextLength: {
+    fontFamily: "OpenSans",
+    fontWeight: "400",
+    fontSize: 14,
+    color: COLOR.TEXT_SECONDARY_4,
+    textAlign: "right",
   },
 
   plusContainer: {

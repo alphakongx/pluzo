@@ -43,19 +43,17 @@ class Settings extends Component {
     this.props.logout();
   };
 
-  onItemPressed = (itemId) => {
+  onItemPressed = itemId => {
     if (itemId === "5") {
       this.props.navigation.navigate(SCREENS.SWIPE_SETTINGS);
     }
-  }
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.safeAreaContainer}>
-          <Header 
-            title={"Settings"}
-            onBack={this.goBack} />
+          <Header title={"Settings"} onBack={this.goBack} />
 
           <FlatList
             data={settingData}

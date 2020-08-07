@@ -11,8 +11,8 @@ const Avatar: () => React$Node = props => {
     <Image
       style={styles.container}
       source={
-        user.avatar !== null
-          ? { uri: user.avatar }
+        user.images.length > 0
+          ? { uri: user.images[0] }
           : require("@assets/images/message-image.png")
       }
     />

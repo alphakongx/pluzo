@@ -17,6 +17,8 @@ import { UserCreators, InboxCreators } from "../redux/actions";
 
 if (Platform.OS === "ios") {
   KeyboardManager.setKeyboardDistanceFromTextField(100);
+  KeyboardManager.setEnableAutoToolbar(false);
+  KeyboardManager.setShouldResignOnTouchOutside(true);
 }
 
 class App extends React.Component {
@@ -52,13 +54,13 @@ class App extends React.Component {
       }
     }
     return false;
-  }
+  };
 
   checkingLogin = async () => {
     const { user, token } = this.props;
     if (user !== null && token !== "" && token !== null) {
       if (user.status === 1) {
-        await AsyncStorage.setItem("USER_TOKEN", token);
+        AsyncStorage.setItem("USER_TOKEN", token);
         NavigationService.navigate(SCREENS.HOMESTACK);
       } else {
         NavigationService.navigate(SCREENS.SIGNUP_CODE_VERIFICATION, {
@@ -66,12 +68,12 @@ class App extends React.Component {
         });
       }
     } else {
-      await AsyncStorage.removeItem("USER_TOKEN");
+      AsyncStorage.removeItem("USER_TOKEN");
       NavigationService.navigate(SCREENS.AUTHSTACK);
     }
   };
 
-  onMessage = (ev) => {
+  onMessage = ev => {
     let data = JSON.parse(ev.data);
     console.log("Socket: >>", this.props.user.id, data);
     if (data.action === "Friends") {
@@ -102,15 +104,15 @@ class App extends React.Component {
             this.checkingLogin();
           }}
         />
-        {
-          this.isLogin() && 
-          <WS 
+        {this.isLogin() && (
+          <WS
             url={"ws://3.134.208.235:27800?user=" + this.props.user.id}
             onMessage={this.onMessage}
             onError={console.log}
             onClose={console.log}
-            reconnect />
-        }
+            reconnect
+          />
+        )}
       </SafeAreaProvider>
     );
   }

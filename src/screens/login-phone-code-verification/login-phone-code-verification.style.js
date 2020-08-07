@@ -34,8 +34,13 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+  codeContentContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
   codeInputStyle: {
     backgroundColor: "white",
+    width: 58,
     height: 42,
     color: "#9892A3",
     borderRadius: 25,

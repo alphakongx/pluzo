@@ -56,7 +56,12 @@ class Live extends Component {
   }
 
   onNewStream = () => {
-    this.props.navigation.navigate(SCREENS.LIVE_STREAM);
+    const { user } = this.props;
+    let channelName = `channel-${user.id}`;
+    this.props.navigation.navigate(SCREENS.LIVE_STREAM, {
+      channelName,
+      isBroadcaster: true,
+    });
   };
 
   render() {
@@ -104,7 +109,16 @@ class Live extends Component {
                 </View>
               }
               renderItem={item => (
-                <View style={styles.itemContainer} key={"session" + item.key}>
+                <Touchable
+                  style={styles.itemContainer}
+                  key={"session" + item.key}
+                  onPress={() => {
+                    this.props.navigation.navigate(SCREENS.LIVE_STREAM, {
+                      channelName: "channel-xx",
+                      isBroadcaster: false,
+                    });
+                  }}
+                >
                   <VerticalImagesLayout images={item.images} />
                   <View style={styles.itemDataContainer}>
                     <Text style={styles.userName} numberOfLines={1}>
@@ -129,7 +143,7 @@ class Live extends Component {
                       </View>
                     </View>
                   </View>
-                </View>
+                </Touchable>
               )}
               containerStyle={styles.masonryContainer}
             />

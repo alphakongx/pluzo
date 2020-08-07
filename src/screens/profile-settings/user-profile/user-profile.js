@@ -15,8 +15,8 @@ class Header extends React.Component {
     var userImage = require("@assets/images/live-screen/user-temp3.png");
     var name = "no name";
     if (user !== null) {
-      if (user.image !== null) {
-        userImage = { uri: user.image };
+      if (user.images.length > 0) {
+        userImage = { uri: user.images[0].path };
       }
       if (user.first_name !== null) {
         name = user.first_name;
@@ -35,7 +35,9 @@ class Header extends React.Component {
         </Touchable>
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>{name}</Text>
+            <Touchable onPress={this.props.onNameClick}>
+              <Text style={styles.nameText}>{name}</Text>
+            </Touchable>
             <Image source={Images.live.tagLove} style={styles.badgeImage} />
             <Image source={Images.live.tagBox} style={styles.badgeImage} />
           </View>

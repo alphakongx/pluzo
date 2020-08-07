@@ -9,8 +9,8 @@ import styles from "./search-people-item.style";
 const SearchPeopleItem: () => React$Node = props => {
   const [adding, setAdding] = useState(false);
   const [isFriend, setIsFriend] = useState(props.item.friend === 2);
-  const { image, avatar, first_name, username } = props.item;
-  const peoplePicture = image || avatar;
+  const { image, images, avatar, first_name, username } = props.item;
+  const peoplePicture = images[0] || image || avatar;
 
   useEffect(() => {
     let addAction = EventBus.on("ADDFRIEND", (userName, success) => {
@@ -22,15 +22,17 @@ const SearchPeopleItem: () => React$Node = props => {
     return addAction;
   });
 
-  onRequestFriend = () => {
+  const onRequestFriend = () => {
     setAdding(true);
     props.addFriend(username, props.token);
-  }
+  };
 
   return (
-    <Touchable onPress={() => {
-      NavigationService.navigate(SCREENS.PROFILE_VIEW, {user: props.item});
-    }}>
+    <Touchable
+      onPress={() => {
+        NavigationService.navigate(SCREENS.PROFILE_VIEW, { user: props.item });
+      }}
+    >
       <View style={styles.messageContainer}>
         <View style={styles.imageContainer}>
           <Image

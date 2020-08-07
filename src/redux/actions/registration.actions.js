@@ -9,6 +9,9 @@ const { Types, Creators } = createActions({
   setPicture: ["picture"],
   setPhoneNumber: ["phoneNumber"],
   resetRegistration: null,
+
+  requestCheckUsername: ["username"],
+  checkUsernameDone: null,
 });
 
 export const RegistrationTypes = Types;

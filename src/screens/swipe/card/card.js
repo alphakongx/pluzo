@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, Vibration } from "react-native";
 import { Image, Touchable } from "@components";
 import styles from "./card.style";
 
@@ -16,12 +16,14 @@ const Card: () => React$Node = props => {
   return (
     <Touchable
       style={styles.card}
+      activeOpacity={1}
       onPress={e => {
         if (e.nativeEvent.locationX < screenWidth / 2) {
           props.onPressItem && props.onPressItem("left");
         } else {
           props.onPressItem && props.onPressItem("right");
         }
+        Vibration.vibrate([10]);
       }}
     >
       <Image

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, ScrollView } from "react-native";
-import DraggableFlatList from "react-native-draggable-dynamic-flatlist";
-import { Image, Text, BackButton, Touchable } from "@components";
+import { Image, Text, BackButton, Touchable, AutoDragSortableView } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
@@ -42,6 +41,7 @@ class ChooseBadgeModal extends Component {
     this.state = {
       badges,
       arrBadges,
+      dragIndex: -1,
     };
   }
 
@@ -50,7 +50,11 @@ class ChooseBadgeModal extends Component {
 
     arrBadges[index].selected = !arrBadges[index].selected;
     if (arrBadges[index].selected) {
-      badges.push({ id: arrBadges[index].id, icon: arrBadges[index].icon });
+      let newBadges = [
+        ...badges,
+        { id: arrBadges[index].id, icon: arrBadges[index].icon },
+      ];
+      this.setState({ badges: newBadges });
     } else {
       let newBadges = badges.filter(item => item.id !== arrBadges[index].id);
       this.setState({ badges: newBadges });
@@ -90,29 +94,35 @@ class ChooseBadgeModal extends Component {
           </View>
 
           <View style={styles.myBadgeScroll}>
-            <DraggableFlatList
-              horizontal
-              data={badges}
-              scrollPercent={5}
-              scaleSelectionFactor={1}
-              renderItem={({ item, index, move, moveEnd, isActive }) => {
-                return (
-                  <Touchable
-                    onLongPress={move}
-                    onPressOut={moveEnd}
-                    style={styles.myBadgeContainer}
-                  >
-                    <View
-                      style={[styles.myBadgeView, isActive ? styles.badgeActive : {}]}
-                    >
-                      <Image source={item.icon} style={styles.badgeImage} />
-                    </View>
-                  </Touchable>
-                );
+            <AutoDragSortableView
+              horizontal={true}
+              dataSource={badges}
+              parentWidth={badges.length * 46}
+              childrenWidth={36}
+              childrenHeight={36}
+              marginChildrenLeft={10}
+              maxScale={1}
+              onDragStart={index => {
+                this.setState({ dragIndex: index });
               }}
-              keyExtractor={(item, index) => `draggable-item-${item.id}`}
-              onMoveEnd={({ data }) => {
+              onDragEnd={() => {
+                this.setState({ dragIndex: -1 });
+              }}
+              onDataChange={data => {
                 this.setState({ badges: data });
+              }}
+              keyExtractor={(item, index) => item.id}
+              renderItem={(item, index) => {
+                return (
+                  <View
+                    style={[
+                      styles.myBadgeView,
+                      this.state.dragIndex === index ? styles.badgeActive : {},
+                    ]}
+                  >
+                    <Image source={item.icon} style={styles.badgeImage} />
+                  </View>
+                );
               }}
             />
           </View>

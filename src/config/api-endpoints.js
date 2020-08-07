@@ -7,6 +7,8 @@ export const API_ENDPOINTS = {
 
   REGISTER: `${BASE_URL}/signup`,
 
+  CHECK_USERNAME: `${BASE_URL}/check-username`,
+  REORDER_IMAGES: `${BASE_URL}/sort-image`,
   PROFILE: `${BASE_URL}/profile`,
 
   VERIFY_PHONE_SEND_CODE: `${BASE_URL}/verify-sms-send`,

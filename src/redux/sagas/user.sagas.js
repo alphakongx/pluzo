@@ -1,5 +1,10 @@
 import { call, put, takeEvery, select } from "redux-saga/effects";
-import { UserCreators, UserTypes } from "../actions";
+import {
+  UserCreators,
+  UserTypes,
+  RegistrationCreators,
+  RegistrationTypes,
+} from "../actions";
 import {
   login,
   phoneLoginSendCode,
@@ -13,6 +18,8 @@ import {
   updateUser,
   deleteImage,
   getProfile,
+  checkUsername,
+  reorderImages,
 } from "@redux/api";
 import moment from "moment";
 import { registrationSelector, userSelector } from "../selectors";
@@ -21,6 +28,7 @@ import { SCREENS } from "@constants";
 
 export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_LOGIN, requestLogin);
+  yield takeEvery(RegistrationTypes.REQUEST_CHECK_USERNAME, requestCheckUsername);
   yield takeEvery(UserTypes.REQUEST_REGISTRATION, requestRegistration);
   yield takeEvery(UserTypes.REQUEST_PROFILE, requestProfile);
   yield takeEvery(
@@ -47,6 +55,7 @@ export function* watchUserRequests() {
   );
   yield takeEvery(UserTypes.REQUEST_UPDATE_USER, requestUpdateUser);
   yield takeEvery(UserTypes.REQUEST_DELETE_IMAGE, requestDeleteImage);
+  yield takeEvery(UserTypes.REQUEST_REORDER_IMAGES, requestReorderImages);
 }
 
 function* requestLogin(action) {
@@ -60,6 +69,20 @@ function* requestLogin(action) {
     yield put(UserCreators.loginSuccess(response.data.data));
   } catch (error) {
     yield put(UserCreators.loginFailure());
+  }
+}
+
+function* requestCheckUsername(action) {
+  try {
+    const { username } = action;
+    const requestParams = new FormData();
+    requestParams.append("username", username);
+    yield call(checkUsername, requestParams);
+
+    yield put(RegistrationCreators.checkUsernameDone());
+    NavigationService.navigate(SCREENS.SIGNUP_IMAGE, {});
+  } catch (error) {
+    yield put(RegistrationCreators.checkUsernameDone());
   }
 }
 
@@ -259,5 +282,14 @@ function* requestDeleteImage(action) {
     yield put(UserCreators.deleteImageSuccess(user));
   } catch (error) {
     yield put(UserCreators.deleteImageFailure());
+  }
+}
+
+function* requestReorderImages(action) {
+  try {
+    const { params, token } = action;
+    yield call(reorderImages, params, token);
+  } catch (error) {
+    console.log(error);
   }
 }

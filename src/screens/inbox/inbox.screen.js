@@ -20,6 +20,12 @@ class Inbox extends Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.visibleAddFriend === true || prevState.visiblePendingRequest === true) {
+      this.props.loadFriends(this.props.token);
+    }
+  }
+
   onPendingRequest = () => {
     this.setState({ visibleAddFriend: false }, () => {
       setTimeout(() => {
@@ -79,7 +85,6 @@ class Inbox extends Component {
         <PendingRequestModal
           isVisible={visiblePendingRequest}
           dismissModal={() => this.setState({ visiblePendingRequest: false })}
-          pendingRequest={() => this.onPendingRequest()}
         />
       </LinearGradient>
     );

@@ -57,6 +57,7 @@ export default StyleSheet.create({
     color: COLOR.TEXT_SECONDARY_3,
   },
   distanceUnit: {
+    fontFamily: "OpenSans",
     fontSize: 12,
     fontWeight: "400",
     color: COLOR.TEXT_SECONDARY_3,

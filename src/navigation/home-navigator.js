@@ -10,6 +10,7 @@ import Swipe from "../screens/swipe";
 import Chat from "../screens/chat";
 import Inbox from "../screens/inbox";
 import ProfileSettings from "../screens/profile-settings";
+import OrderImages from "../screens/profile-images-reorder";
 import SearchScreen from "../screens/search";
 import ProfileView from "../screens/profile-view";
 import Settings from "../screens/settings";
@@ -73,13 +74,15 @@ const HomeStack = createStackNavigator(
       },
     },
 
+    [SCREENS.IMAGES_REORDER]: OrderImages,
+
     // Settings
     [SCREENS.SETTINGS]: Settings,
     [SCREENS.SWIPE_SETTINGS]: {
       screen: SwipeSettings,
       navigationOptions: {
         gestureEnabled: false,
-      }
+      },
     },
   },
   {

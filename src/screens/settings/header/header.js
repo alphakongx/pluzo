@@ -9,11 +9,14 @@ const Header: () => React$Node = props => {
   return (
     <View>
       <View style={styles.headerContainer}>
-        <Touchable style={styles.backButton} onPress={() => {
-          if (props.onBack) {
-            props.onBack();
-          }
-        }}>
+        <Touchable
+          style={styles.backButton}
+          onPress={() => {
+            if (props.onBack) {
+              props.onBack();
+            }
+          }}
+        >
           <Image source={Images.app.icBackLeft} style={styles.backButtonIcon} />
         </Touchable>
       </View>

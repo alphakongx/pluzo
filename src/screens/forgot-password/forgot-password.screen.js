@@ -8,24 +8,27 @@ import {
   Text,
   TextInput,
 } from "@components";
+import { SCREENS } from "@constants";
 import styles from "./forgot-password.style.js";
 
 const SignupPhoneNumber: () => React$Node = props => {
-  const [phoneCode, setPhoneCode] = useState("+1");
-  const [phoneNumber, setPhoneNumber] = useState("123456789");
+  const [phoneCode, setPhoneCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const goBack = () => {
     props.navigation.goBack();
   };
 
   const sendCode = () => {
-    props.requestForgotPasswordSendCode(phoneCode + " " + phoneNumber, true);
+    // props.requestForgotPasswordSendCode(phoneCode + " " + phoneNumber, false);
+    let fullNumber = phoneCode + " " + phoneNumber;
+    props.navigation.navigate(SCREENS.RESET_PASSWORD_CODE_VERIFICATION, {phoneNumber: fullNumber});
   };
 
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar />
+        <ProgressBar width={50} />
         <BackButton onPress={goBack} />
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>Forgot Password?</Text>

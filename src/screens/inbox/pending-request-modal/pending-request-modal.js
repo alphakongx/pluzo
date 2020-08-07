@@ -36,7 +36,6 @@ class PendingRequestModal extends Component {
 
   render() {
     const { isLoadingPendingFriends, pendingFriends } = this.props;
-    console.log(pendingFriends);
     return (
       <Modal
         {...this.props}
@@ -84,7 +83,10 @@ class PendingRequestModal extends Component {
                   <Touchable key={`pending-requests-${item._id}`}>
                     <View style={styles.requestContainer}>
                       <View style={styles.imageContainer}>
-                        <Image source={{ uri: item.image || item.avatar }} style={styles.image} />
+                        <Image
+                          source={{ uri: item.images[0] || item.avatar }}
+                          style={styles.image}
+                        />
                       </View>
                       <View style={styles.userContainer}>
                         <Text style={styles.firstname}>{item.first_name}</Text>

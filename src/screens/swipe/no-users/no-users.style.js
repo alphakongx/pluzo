@@ -3,12 +3,16 @@ import { COLOR } from "@config";
 
 const screenWidth = Dimensions.get("window").width;
 export const circleWidthA = screenWidth - 40;
-export const circleWidthB = screenWidth * 58 / 100;
-export const circleWidthC = screenWidth * 32 / 100;
+export const circleWidthB = (screenWidth * 58) / 100;
+export const circleWidthC = (screenWidth * 32) / 100;
 
 export default StyleSheet.create({
   rootContainer: {
-    marginBottom: 50,
+    // marginBottom: 50,
+  },
+  animationContainer: {
+    flex: 1,
+    justifyContent: "center",
   },
   container: {
     width: screenWidth,
@@ -43,8 +47,8 @@ export default StyleSheet.create({
     position: "absolute",
   },
   userImage: {
-    width: screenWidth * 21 / 100,
-    height: screenWidth * 21 / 100,
+    width: (screenWidth * 21) / 100,
+    height: (screenWidth * 21) / 100,
     borderRadius: screenWidth / 2,
     position: "absolute",
   },
@@ -114,6 +118,7 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: 50,
+    marginBottom: 80,
   },
 
   flexFill: {
@@ -121,5 +126,5 @@ export default StyleSheet.create({
   },
   modalContainer: {
     borderRadius: 22,
-  }
+  },
 });

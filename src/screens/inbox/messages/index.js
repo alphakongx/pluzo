@@ -15,4 +15,7 @@ const mapDispatchToProps = {
   requestChannels: InboxCreators.requestChannels,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withNavigationFocus(Messages));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withNavigationFocus(Messages));

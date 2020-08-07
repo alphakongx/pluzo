@@ -51,6 +51,8 @@ const { Types, Creators } = createActions({
   deleteImageSuccess: ["sessionData"],
   deleteImageFailure: null,
 
+  requestReorderImages: ["params", "token"],
+
   logout: null,
 });
 

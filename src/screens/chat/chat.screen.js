@@ -27,7 +27,6 @@ class Chat extends React.Component {
     if (Platform.OS === "ios") {
       KeyboardManager.setKeyboardDistanceFromTextField(0);
       KeyboardManager.setEnable(false);
-      KeyboardManager.setEnableAutoToolbar(false);
     }
 
     this.chatIdAction = EventBus.on("NEW_CHAT_ID", chatId => {
@@ -37,12 +36,12 @@ class Chat extends React.Component {
     this.newMessageAction = EventBus.on("NEW_MSG", data => {
       const { messages, token, user } = this.props;
       let arrData = JSON.parse(data);
-      console.log(typeof(arrData[0].chat_id), typeof(this.state.chatId));
+      console.log(typeof arrData[0].chat_id, typeof this.state.chatId);
       // checking chat_id
-      if (parseInt(arrData[0].chat_id) !== parseInt(this.state.chatId)) {
+      if (parseInt(arrData[0].chat_id, 10) !== parseInt(this.state.chatId, 10)) {
         return;
       }
-      
+
       let newMessages = [];
       newMessages.push({
         _id: arrData[0].id,
@@ -52,11 +51,11 @@ class Chat extends React.Component {
         user: {
           _id: arrData[0].user._id,
           name: arrData[0].user.name,
-          avatar: arrData[0].user.avatar,
+          avatar: arrData[0].user.images[0],
         },
       });
       this.props.updateMessages(newMessages.concat(messages));
-      if ( arrData[0].user._id !== user.id) {
+      if (arrData[0].user._id !== user.id) {
         this.props.readMessage([arrData[0].id], token);
       }
     });
@@ -69,7 +68,6 @@ class Chat extends React.Component {
     if (Platform.OS === "ios") {
       KeyboardManager.setKeyboardDistanceFromTextField(65);
       KeyboardManager.setEnable(true);
-      KeyboardManager.setEnableAutoToolbar(true);
     }
     this.chatIdAction();
     this.newMessageAction();
@@ -108,7 +106,7 @@ class Chat extends React.Component {
               user: {
                 _id: this.props.user.id,
                 name: this.props.user.name,
-                avatar: this.props.user.image,
+                avatar: this.props.user.images[0],
               },
             },
           ].concat(this.props.messages),

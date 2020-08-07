@@ -54,7 +54,7 @@ class LiveStream extends Component {
 
     return (
       <View style={styles.container}>
-        <StreamPlayer style={styles.streamPlayer} />
+        <StreamPlayer navigation={this.props.navigation} style={styles.streamPlayer} />
 
         <SafeAreaView style={styles.safeAreaContainer}>
           <View style={styles.safeAreaContainer}>
