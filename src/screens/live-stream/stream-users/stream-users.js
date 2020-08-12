@@ -114,7 +114,9 @@ class StreamUsers extends Component {
       >
         <SafeAreaView style={styles.safeAreaContainer}>
           <View style={styles.header}>
-            <Touchable style={styles.headerButtonTouchable}>
+            <Touchable 
+              style={styles.headerButtonTouchable}
+              onPress={this.props.onReport}>
               <Image source={require("@assets/images/report.png")} />
             </Touchable>
             <View style={styles.headerTitleContainer}>
@@ -130,7 +132,8 @@ class StreamUsers extends Component {
             </View>
           </View>
 
-          <BorderButton text={"Invite friends"} />
+          <BorderButton text={"Invite friends"}
+            onPress={this.props.onInviteFriends} />
 
           <ScrollView style={styles.scrollView}>
             {/** stream users */}

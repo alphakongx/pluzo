@@ -8,6 +8,8 @@ import {
   Touchable,
   WheelDatePicker,
 } from "@components";
+import { Notification } from "@helpers";
+import moment from "moment";
 import styles from "./signup-birthdate.style.js";
 
 class SignupFirstName extends React.Component {
@@ -19,6 +21,12 @@ class SignupFirstName extends React.Component {
     this.props.navigation.goBack();
   };
   navigateNext = () => {
+    const { birthDate } = this.props;
+    let age = moment.duration(moment().diff(moment(birthDate))).years();
+    if (age < 13) {
+      Notification.alert("You must be at least 13 years old to make an account");
+      return;
+    }
     this.props.navigation.navigate("SIGNUP_GENDER_SELECT", {});
   };
 

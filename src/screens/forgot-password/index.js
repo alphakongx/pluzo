@@ -4,12 +4,12 @@ import { UserCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
-    isSendingCode: state.user.isSendingForgotPasswordCode,
+    isCheckingPhone: state.user.isCheckingPhone,
   };
 }
 
 const mapDispatchToProps = {
-  requestForgotPasswordSendCode: UserCreators.requestForgotPasswordSendCode,
+  requestCheckPhone: UserCreators.requestCheckPhone,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);

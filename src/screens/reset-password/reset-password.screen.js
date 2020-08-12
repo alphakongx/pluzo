@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, View } from "react-native";
+import { Image, View, Text as RNText } from "react-native";
 import {
   GradientButton,
   ProgressBar,
@@ -38,8 +38,8 @@ const ResetPassword: () => React$Node = props => {
           </View>
         </Touchable>
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>
-            Select your username and choose a password.
+          <Text style={styles.titleText} numberOfLines={1} adjustsFontSizeToFit={true}>
+            Set your new password.
           </Text>
 
           <TextInput

@@ -7,7 +7,7 @@ import styles from "./header.style";
 const Header: () => React$Node = props => {
   const { first_name, images, avatar } = props.user;
   let name = first_name === null ? "No Name" : first_name;
-  let userImage = images[0] || avatar;
+  let userImage = images[0].path || avatar;
   let picture = userImage === null ? Images.app.userPlaceholder : userImage;
 
   return (

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, Keyboard } from "react-native";
-import { Text, BackButton, Touchable, GradientButton, TextInput } from "@components";
+import { View, Keyboard, FlatList } from "react-native";
+import { Text, BackButton, Touchable, GradientButton, TextInput, DiscoverPeopleItem } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
@@ -131,6 +131,20 @@ class AddFriendModal extends Component {
             {requestSuccess === "fail" && (
               <Text style={styles.failText}>User doesn't exist</Text>
             )}
+            
+            <Text style={styles.subtitleText}>
+              Discover New People
+            </Text>
+            <FlatList 
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.peopleList}
+              data={[1, 2, 3, 4]}
+              keyExtractor={(item, index) => `new-people-${item}`}
+              renderItem={({item: item, index}) => {
+                return <DiscoverPeopleItem />;
+              }}
+            />
           </View>
         </LinearGradient>
       </Modal>

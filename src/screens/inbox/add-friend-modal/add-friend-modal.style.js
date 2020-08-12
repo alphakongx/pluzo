@@ -58,8 +58,9 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   addButtonText: {
-    fontWeight: "bold",
-    fontSize: 14,
+    fontFamily: "OpenSans",
+    fontWeight: "700",
+    fontSize: 12,
     color: "black",
   },
   successText: {
@@ -72,4 +73,18 @@ export default StyleSheet.create({
     fontSize: 12,
     color: COLOR.TEXT_SECONDARY_5,
   },
+
+  subtitleText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+    marginTop: 35,
+    marginHorizontal: 30,
+    alignSelf: "flex-start",
+  },
+  peopleList: {
+    marginTop: 8,
+    paddingLeft: 30,
+    paddingRight: 15,
+  }
 });

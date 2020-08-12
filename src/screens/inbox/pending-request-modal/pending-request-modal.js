@@ -84,7 +84,7 @@ class PendingRequestModal extends Component {
                     <View style={styles.requestContainer}>
                       <View style={styles.imageContainer}>
                         <Image
-                          source={{ uri: item.images[0] || item.avatar }}
+                          source={{ uri: item.images[0].path || item.avatar }}
                           style={styles.image}
                         />
                       </View>

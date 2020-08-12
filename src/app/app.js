@@ -14,6 +14,7 @@ import { SCREENS } from "@constants";
 import { COLOR } from "../config/color";
 import { getLocationUpdates } from "@helpers";
 import { UserCreators, InboxCreators } from "../redux/actions";
+import SplashScreen from "react-native-splash-screen";
 
 if (Platform.OS === "ios") {
   KeyboardManager.setKeyboardDistanceFromTextField(100);
@@ -38,6 +39,7 @@ class App extends React.Component {
     } catch (error) {
       console.log("Something went wrong", error);
     }
+    SplashScreen.hide();
   }
 
   componentWillUnmount() {

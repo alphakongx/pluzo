@@ -23,6 +23,17 @@ export function getProfile(accessToken) {
   }).then(response => response);
 }
 
+export function checkPhone(data) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.CHECK_PHONE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  }).then(response => response);
+}
+
 export function phoneLoginSendCode(data, accessToken) {
   return API.request({
     method: "post",
@@ -155,5 +166,16 @@ export function reorderImages(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
+  }).then(response => response);
+}
+
+export function deleteAccount(accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.DELETE_ACCOUNT}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
   }).then(response => response);
 }

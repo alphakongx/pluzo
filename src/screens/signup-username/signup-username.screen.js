@@ -38,7 +38,6 @@ const SignupUsername: () => React$Node = props => {
             style={styles.titleText}
             numberOfLines={2}
             adjustsFontSizeToFit
-            minimumFontScale={0.5}
           >
             Select your username and choose a password.
           </Text>

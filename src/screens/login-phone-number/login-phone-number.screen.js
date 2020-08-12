@@ -7,6 +7,7 @@ import {
   Screen,
   Text,
   TextInput,
+  CountryCodePicker,
 } from "@components";
 import { SCREENS } from "@constants";
 import styles from "./login-phone-number.style.js";
@@ -20,9 +21,7 @@ const LoginPhoneNumber: () => React$Node = props => {
   };
 
   const sendCode = () => {
-    // props.requestPhoneLoginSendCode(phoneCode + " " + phoneNumber, true);
-    let fullNumber = phoneCode + " " + phoneNumber;
-    props.navigation.navigate(SCREENS.LOGIN_PHONE_CODE_VERIFICATION, {phoneNumber: fullNumber});
+    props.requestCheckPhone(`+${phoneCode} ${phoneNumber}`, SCREENS.LOGIN_PHONE_CODE_VERIFICATION);
   };
 
   return (
@@ -31,15 +30,23 @@ const LoginPhoneNumber: () => React$Node = props => {
         <ProgressBar width={50} />
         <BackButton onPress={goBack} />
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>Login with phone number</Text>
+          <View style={styles.informationContainer}>
+            <View style={styles.instructionContainer}>
+              <Text style={styles.instructionText}>
+                We will send you a code to your phone number. Enter the code on the next
+                page to login
+              </Text>
+            </View>
+          </View>
 
           <View style={styles.phoneContainer}>
             <View style={styles.phoneCodeContainer}>
               <Text style={styles.phoneLabel}>PHONE CODE</Text>
-              <TextInput
-                value={phoneCode}
-                onChangeText={setPhoneCode}
-                placeholder={"Code"}
+              <CountryCodePicker
+                country={{"iso2": "us", "dialCode": "1"}}
+                onChange={(country) => {
+                  setPhoneCode(country.dialCode);
+                }}
               />
             </View>
             <View style={styles.phoneSeparator} />
@@ -52,19 +59,12 @@ const LoginPhoneNumber: () => React$Node = props => {
             </View>
           </View>
 
-          <View style={styles.informationContainer}>
-            <View style={styles.instructionContainer}>
-              <Text style={styles.instructionText}>
-                We will send you a code to your phone number. Enter the code on the next
-                page to login
-              </Text>
-            </View>
-          </View>
+          <Text style={styles.titleText}>Login with phone number</Text>
         </View>
 
         <View style={styles.footer}>
           <GradientButton
-            loading={props.isSendingCode}
+            loading={props.isCheckingPhone}
             disabled={!phoneNumber || !phoneCode}
             onPress={sendCode}
             text={"Send code"}

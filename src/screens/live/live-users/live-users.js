@@ -1,6 +1,6 @@
 import React from "react";
-import { FlatList } from "react-native";
-import { Image, Touchable } from "@components";
+import { FlatList, View } from "react-native";
+import { Image, Touchable, BoxShadow } from "@components";
 import { NavigationService } from "@helpers";
 import { SCREENS } from "@constants";
 
@@ -26,7 +26,20 @@ const LiveUsers: () => React$Node = props => {
             });
           }}
         >
-          <Image source={require("./data/friend-1.png")} style={styles.itemImage} />
+          <View>
+            <BoxShadow setting={{
+              width: 50,
+              height: 50,
+              color: "#00FFF6",
+              opacity: 0.36,
+              _borderRadius: 25,
+              spread: 0,
+              blur: 10,
+              offsetX: 0,
+              offsetY: 0,
+            }}/>
+            <Image source={require("@assets/images/live-screen/user-temp1.png")} style={styles.itemImage} />
+          </View>
         </Touchable>
       )}
     />

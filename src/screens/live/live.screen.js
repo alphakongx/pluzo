@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { View, SafeAreaView } from "react-native";
 import {} from "react-navigation";
-import { Masonry, VerticalImagesLayout, Text, Image, Touchable } from "@components";
-import { SCREENS } from "@constants";
+import { Masonry, VerticalImagesLayout, Text, Image, Touchable, BoxShadow } from "@components";
+import { SCREENS, StreamStatus } from "@constants";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-swiper";
 import { GRADIENT } from "@config";
@@ -61,6 +61,7 @@ class Live extends Component {
     this.props.navigation.navigate(SCREENS.LIVE_STREAM, {
       channelName,
       isBroadcaster: true,
+      streamStatus: StreamStatus.STARTING,
     });
   };
 
@@ -76,6 +77,7 @@ class Live extends Component {
           <View style={styles.contentContainer}>
             <Masonry
               sorted
+              keyboardShouldPersistTaps={"always"}
               ref={ref => (this.masonryRef = ref)}
               header={
                 <View>
@@ -149,10 +151,21 @@ class Live extends Component {
             />
 
             <Touchable style={styles.favContainer} onPress={this.onNewStream}>
+              <BoxShadow setting={{
+                width: 60,
+                height: 60,
+                color: "#1900FF",
+                opacity: 0.38,
+                _borderRadius: 30,
+                spread: 0,
+                blur: 10,
+                offsetX: 0,
+                offsetY: 0,
+              }}/>
               <LinearGradient
                 colors={GRADIENT.BUTTON}
                 start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 0 }}
                 style={styles.plusFav}
               >
                 <Image source={require("@assets/images/live-screen/plus-fav.png")} />

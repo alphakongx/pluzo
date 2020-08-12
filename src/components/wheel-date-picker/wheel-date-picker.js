@@ -31,7 +31,8 @@ export default class WheelDatePicker extends React.Component {
     const dayNum = mdate.daysInMonth();
     this.state.dayRange = this.genDateRange(dayNum);
     
-    for (let i = minYear; i <= mdate.year(); i += 1) {
+    let currentYear = moment(new Date()).year();
+    for (let i = minYear; i <= currentYear; i += 1) {
       this.state.yearRange.push(i);
     }
   }

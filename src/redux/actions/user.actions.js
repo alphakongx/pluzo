@@ -9,6 +9,10 @@ const { Types, Creators } = createActions({
   loadProfileSuccess: ["sessionData"],
   loadProfileFailure: null,
 
+  requestCheckPhone: ["phoneNumber", "screenName"],
+  checkPhoneSuccess: null,
+  checkPhoneFailure: null,
+
   requestPhoneLoginSendCode: ["phoneNumber", "shouldNavigate"],
   phoneLoginSendCodeSuccess: null,
   phoneLoginSendCodeFailure: null,
@@ -52,6 +56,10 @@ const { Types, Creators } = createActions({
   deleteImageFailure: null,
 
   requestReorderImages: ["params", "token"],
+
+  requestDeleteAccount: ["token"],
+  deleteAccountSuccess: null,
+  deleteAccountFailure: null,
 
   logout: null,
 });

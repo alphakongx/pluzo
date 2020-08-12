@@ -93,3 +93,21 @@ export const getLocationUpdates = async callback => {
     },
   );
 };
+
+export const getCurrentLocation = async callback => {
+  let hasPermission = await hasLocationPermission();
+
+  if (!hasPermission) {
+    return;
+  }
+
+  return Geolocation.getCurrentPosition(
+      (position) => {
+        callback(position);
+      },
+      (error) => {
+        console.log(error.code, error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+  );
+}

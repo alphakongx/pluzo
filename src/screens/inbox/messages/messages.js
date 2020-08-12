@@ -57,7 +57,7 @@ class Messages extends React.Component {
             channel.messages[0].created_at || channel.messages[0].createdAt;
           let timeAgo = moment.unix(createdTime).fromNow(true);
           let partner = channel.partner_info;
-          let image = partner.images[0] || null;
+          let image = partner.images[0].path || null;
           let name = partner.first_name === null ? "No Name" : partner.first_name;
           let isRead = channel.messages[0].status === 1;
 
