@@ -7,6 +7,7 @@ import {
   Screen,
   Text,
   TextInput,
+  CountryCodePicker,
 } from "@components";
 import styles from "./signup-phone-number.style.js";
 
@@ -23,7 +24,7 @@ const SignupPhoneNumber: () => React$Node = props => {
   };
 
   useEffect(() => {
-    setPhoneNumberAction(phoneCode + " " + phoneNumber);
+    setPhoneNumberAction(`+${phoneCode} ${phoneNumber}`);
   }, [phoneCode, phoneNumber, setPhoneNumberAction]);
 
   return (
@@ -32,15 +33,23 @@ const SignupPhoneNumber: () => React$Node = props => {
         <ProgressBar width={100} />
         <BackButton onPress={goBack} disabled={props.isRegistring} />
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>What is your phone number?</Text>
+          <View style={styles.informationContainer}>
+            <View style={styles.instructionContainer}>
+              <Text style={styles.instructionText}>
+                We need your phone number solely for the login. Your number won't be
+                visible for others.
+              </Text>
+            </View>
+          </View>
 
           <View style={styles.phoneContainer}>
             <View style={styles.phoneCodeContainer}>
               <Text style={styles.phoneLabel}>PHONE CODE</Text>
-              <TextInput
-                value={phoneCode}
-                onChangeText={setPhoneCode}
-                placeholder={"Code"}
+              <CountryCodePicker
+                country={{"iso2": "us", "dialCode": "1"}}
+                onChange={(country) => {
+                  setPhoneCode(country.dialCode);
+                }}
               />
             </View>
             <View style={styles.phoneSeparator} />
@@ -53,14 +62,7 @@ const SignupPhoneNumber: () => React$Node = props => {
             </View>
           </View>
 
-          <View style={styles.informationContainer}>
-            <View style={styles.instructionContainer}>
-              <Text style={styles.instructionText}>
-                We need your phone number solely for the login. Your number won't be
-                visible for others.
-              </Text>
-            </View>
-          </View>
+          <Text style={styles.titleText}>What is your phone number?</Text>
         </View>
 
         <View style={styles.footer}>

@@ -53,7 +53,7 @@ function* requestCurrentChat(action) {
           user: {
             _id: 1,
             name: message.user.name,
-            avatar: message.user.images[0],
+            avatar: message.user.images[0].path,
           },
         });
       });

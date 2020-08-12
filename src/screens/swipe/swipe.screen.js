@@ -6,7 +6,7 @@ import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-deck-swiper";
 import ProfileDetails from "./profile-details";
 import { GRADIENT } from "@config";
-import { Notification } from "@helpers";
+import { Notification, getCurrentLocation } from "@helpers";
 
 import styles from "./swipe.style";
 import Header from "./header";
@@ -23,6 +23,7 @@ class Swipe extends React.Component {
       cardIndex: 0,
       cardImageIndex: 0,
       likeCount: 0,
+      location: null,
     };
 
     this.swiper = React.createRef();
@@ -30,6 +31,9 @@ class Swipe extends React.Component {
 
   componentDidMount() {
     this.props.loadCards(this.props.token);
+    getCurrentLocation((position) => {
+      this.setState({location: position});
+    })
   }
 
   changeShowDetail = show => {
@@ -269,6 +273,7 @@ class Swipe extends React.Component {
               onLike={this.onLikeClicked}
               onDisLike={this.onDisLikeClicked}
               onSuperLike={this.onSuperLikeClicked}
+              location={this.state.location}
             />
           )}
         </SafeAreaView>

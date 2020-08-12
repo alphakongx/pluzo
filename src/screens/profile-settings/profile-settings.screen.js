@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ScrollView, ActivityIndicator, TextInput } from "react-native";
+import { View, ScrollView, ActivityIndicator, TextInput, } from "react-native";
 import ImagePicker from "react-native-image-picker";
 import EventBus from "eventing-bus";
 import { UserTypes } from "@redux/actions";
@@ -13,6 +13,7 @@ import {
   Touchable,
   TouchableSettingItem,
   GradientButton,
+  BoxShadow,
 } from "@components";
 import { Notification } from "@helpers";
 import Images from "@assets/Images";
@@ -22,7 +23,7 @@ import Header from "./header";
 import UserProfile from "./user-profile";
 import PurchaseModal from "./purchase-modal";
 import ChooseBadgeModal from "./choose-badge-modal";
-import styles from "./profile-settings.style";
+import styles, { width } from "./profile-settings.style";
 
 class ProfileSettings extends React.Component {
   constructor(props) {
@@ -199,11 +200,25 @@ class ProfileSettings extends React.Component {
             <TouchableSettingItem style={styles.settingsItem} text={"Biography"} />
 
             <View style={styles.plusContainer}>
-              <Image source={Images.app.pluzoPlus} style={styles.premiumImage} />
+              <View>
+                <BoxShadow setting={{
+                  width: width - 40,
+                  height: ((width - 40) * 169) / 336,
+                  color: "#FF0000",
+                  opacity: 0.15,
+                  _borderRadius: 22,
+                  spread: 0,
+                  blur: 40,
+                  offsetX: 0,
+                  offsetY: 0,
+                }}/>
+                <Image source={Images.app.pluzoPlus} style={styles.premiumImage} />
+              </View>
               <View style={styles.buttonContainer}>
                 <GradientButton
                   text={"Get Pluzo Plus"}
                   colors={GRADIENT.PURCHASE_BUTTON}
+                  shadowColor={"#FF6F00"}
                   onPress={() => this.setState({ visible: true })}
                 />
               </View>

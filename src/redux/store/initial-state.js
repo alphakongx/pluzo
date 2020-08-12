@@ -7,6 +7,7 @@ export default {
     location: null,
     isLoggingIn: false,
     isRegistring: false,
+    isCheckingPhone: false,
     isLoadingProfile: false,
     isSendingPhoneLoginCode: false,
     isConfirmingPhoneLoginCode: false,
@@ -16,6 +17,7 @@ export default {
     isConfirmingForgotPasswordCode: false,
     isResettingPassword: false,
     isDeletingImage: 0,
+    isDeletingAccount: false,
   },
   registration: {
     firstName: "",

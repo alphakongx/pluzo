@@ -7,36 +7,6 @@ export default StyleSheet.create({
     flexDirection: "column-reverse",
   },
 
-  inputContainer: {
-    flexDirection: "row",
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 2,
-    borderColor: "white",
-    marginHorizontal: 10,
-  },
-  inputField: {
-    flex: 1,
-    fontSize: 12,
-    fontWeight: "600",
-    color: COLOR.TEXT_PRIMARY,
-    marginHorizontal: 10,
-    padding: 0,
-  },
-  sendButton: {
-    width: 25,
-    height: 25,
-    alignSelf: "center",
-    marginHorizontal: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  sendIcon: {
-    width: 15,
-    height: 15,
-    resizeMode: "contain",
-  },
-
   defaultButtonsContainer: {
     padding: 10,
   },
@@ -49,6 +19,7 @@ export default StyleSheet.create({
     marginRight: 5,
   },
   defaultButtonText: {
+    fontFamily: "OpenSans",
     color: "white",
     fontSize: 12,
     fontWeight: "400",

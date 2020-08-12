@@ -12,7 +12,8 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
+    flexDirection: "column-reverse",
+    justifyContent: "center",
     paddingHorizontal: 37,
   },
   titleText: {
@@ -26,13 +27,15 @@ export default StyleSheet.create({
     flexDirection: "row",
   },
   phoneLabel: {
+    fontFamily: "OpenSans",
     textAlign: "center",
-    fontSize: 11,
+    fontSize: 8,
+    fontWeight: "700",
     color: "rgba(255, 255, 255, 0.5)",
     height: 20,
   },
   phoneCodeContainer: {
-    width: 90,
+    width: 70,
   },
   phoneNumberContainer: {
     paddingTop: 20,
@@ -51,9 +54,11 @@ export default StyleSheet.create({
     textDecorationLine: "underline",
   },
   instructionText: {
+    fontFamily: "OpenSans",
     textAlign: "center",
     marginTop: 3,
     fontSize: 14,
+    fontWeight: "400",
     color: "rgba(255, 255, 255, 0.5)",
   },
   instructionContainer: {

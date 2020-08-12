@@ -1,8 +1,8 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { FontHelper } from "@helpers";
 import { COLOR } from "@config";
 
-const { width } = Dimensions.get("window");
+export const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -76,7 +76,7 @@ export default StyleSheet.create({
   bioContainer: {
     backgroundColor: "#211533",
     paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingVertical: Platform.OS === "ios" ? 15 : 5,
   },
   bigTextInput: FontHelper.font({
     fontFamily: "OpenSans",

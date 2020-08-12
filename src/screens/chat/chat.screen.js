@@ -51,7 +51,7 @@ class Chat extends React.Component {
         user: {
           _id: arrData[0].user._id,
           name: arrData[0].user.name,
-          avatar: arrData[0].user.images[0],
+          avatar: arrData[0].user.images[0].path,
         },
       });
       this.props.updateMessages(newMessages.concat(messages));
@@ -106,7 +106,7 @@ class Chat extends React.Component {
               user: {
                 _id: this.props.user.id,
                 name: this.props.user.name,
-                avatar: this.props.user.images[0],
+                avatar: this.props.user.images[0].path,
               },
             },
           ].concat(this.props.messages),

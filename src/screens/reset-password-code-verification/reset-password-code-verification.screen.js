@@ -73,7 +73,7 @@ class ResetPasswordCodeVerification extends React.Component {
         <View style={styles.container}>
           <BackButton onPress={this.goBack} />
           <View style={styles.contentContainer}>
-            <Text style={styles.titleText}>Have Text Grab from your messages</Text>
+            <Text style={styles.titleText}>Phone Verification</Text>
             <Text style={styles.subTitleText}>
               We've sent you a verification code to ensure you are you.
             </Text>

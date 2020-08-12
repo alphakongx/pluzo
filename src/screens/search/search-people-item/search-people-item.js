@@ -10,7 +10,7 @@ const SearchPeopleItem: () => React$Node = props => {
   const [adding, setAdding] = useState(false);
   const [isFriend, setIsFriend] = useState(props.item.friend === 2);
   const { image, images, avatar, first_name, username } = props.item;
-  const peoplePicture = images[0] || image || avatar;
+  const peoplePicture = images.length === 0 ? null : images[0].path;
 
   useEffect(() => {
     let addAction = EventBus.on("ADDFRIEND", (userName, success) => {

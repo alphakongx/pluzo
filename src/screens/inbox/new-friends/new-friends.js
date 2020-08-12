@@ -47,7 +47,7 @@ class NewFriends extends React.Component {
             >
               <View style={styles.friendItemContainer}>
                 <Image
-                  source={friend.images[0] === null ? placeHolder : { uri: friend.images[0] }}
+                  source={friend.images[0] === null ? placeHolder : { uri: friend.images[0].path }}
                   style={styles.friendImage}
                 />
                 {friend.premium === 1 ? (

@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import {
   View,
-  TextInput as RNTextInput,
   ScrollView,
   FlatList,
   SafeAreaView,
@@ -11,7 +10,9 @@ import {
 } from "react-native";
 import { Touchable, Image, Text } from "@components";
 import KeyboardManager from "react-native-keyboard-manager";
+import { StreamStatus } from "@constants";
 import Images from "@assets/Images";
+import StreamMessageInput from "./stream-message-input";
 
 import styles from "./stream-message-box.style.js";
 
@@ -66,60 +67,67 @@ class StreamMessageBox extends Component {
 
   render() {
     const { messages } = this.state;
+    const { streamStatus } = this.props;
 
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.inputContainer}>
-          <RNTextInput
-            style={styles.inputField}
-            placeholder={"Enter a message..."}
-            placeholderTextColor={"#FFFFFF"}
-            numberOfLines={1}
-          />
-          <Touchable style={styles.sendButton}>
-            <Image source={Images.app.icSend} style={styles.sendIcon} />
-          </Touchable>
-        </View>
+        <StreamMessageInput 
+          onGameControls={this.props.onGameControls}
+          onPlayerSetting={this.props.onPlayerSetting} />
 
         <View style={styles.defaultButtonsContainer}>
-          <ScrollView horizontal>
-            <Touchable style={styles.defaultButton}>
-              <Text style={styles.defaultButtonText}>Hello!</Text>
-            </Touchable>
-            <Touchable style={styles.defaultButton}>
-              <Image source={Images.live.emojiLaugh} />
-            </Touchable>
-            <Touchable style={styles.defaultButton}>
-              <Text style={styles.defaultButtonText}>Invite me please</Text>
-            </Touchable>
-            <Touchable style={styles.defaultButton}>
-              <Text style={styles.defaultButtonText}>LMAO</Text>
-            </Touchable>
-          </ScrollView>
+          {
+            streamStatus === StreamStatus.WAITING ? (
+              <View style={styles.defaultButton}>
+                <Text style={styles.defaultButtonText}>
+                  Hold on!. We're telling your friends to join
+                </Text>
+              </View>
+            ) : (
+              <ScrollView horizontal>
+                <Touchable style={styles.defaultButton}>
+                  <Text style={styles.defaultButtonText}>Hello!</Text>
+                </Touchable>
+                <Touchable style={styles.defaultButton}>
+                  <Image source={Images.live.emojiLaugh} />
+                </Touchable>
+                <Touchable style={styles.defaultButton}>
+                  <Text style={styles.defaultButtonText}>Invite me please</Text>
+                </Touchable>
+                <Touchable style={styles.defaultButton}>
+                  <Text style={styles.defaultButtonText}>LMAO</Text>
+                </Touchable>
+              </ScrollView>
+            )
+          }
         </View>
 
-        <FlatList
-          style={styles.messageList}
-          data={messages}
-          inverted
-          keyExtractor={item => item.id}
-          renderItem={({ item: message, index }) => {
-            return (
-              <View style={styles.messageItemContainer}>
-                <View style={styles.messageTextContainer}>
-                  <Text style={styles.messageUser}>{message.name}</Text>
-                  {message.message === "laugh" && (
-                    <Image source={Images.live.emojiLaugh} />
-                  )}
-                  {message.message !== "laugh" && (
-                    <Text style={styles.messageText}>{message.message}</Text>
-                  )}
+        {
+          streamStatus === StreamStatus.STARTED &&
+          <FlatList
+            style={styles.messageList}
+            data={messages}
+            inverted
+            keyExtractor={item => item.id}
+            renderItem={({ item: message, index }) => {
+              return (
+                <View style={styles.messageItemContainer}>
+                  <View style={styles.messageTextContainer}>
+                    <Text style={styles.messageUser}>{message.name}</Text>
+                    {message.message === "laugh" && (
+                      <Image source={Images.live.emojiLaugh} />
+                    )}
+                    {message.message !== "laugh" && (
+                      <Text style={styles.messageText}>{message.message}</Text>
+                    )}
+                  </View>
+                  <Image source={message.avatar} style={styles.messageAvatar} />
                 </View>
-                <Image source={message.avatar} style={styles.messageAvatar} />
-              </View>
-            );
-          }}
-        />
+              );
+            }}
+          />
+        }
+        
       </SafeAreaView>
     );
   }

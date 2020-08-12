@@ -35,6 +35,19 @@ const loadProfileFailure = (state, action) => ({
   isLoadingProfile: false,
 });
 
+const requestCheckPhone = (state, action) => ({
+  ...state,
+  isCheckingPhone: true,
+});
+const checkPhoneSuccess = (state, action) => ({
+  ...state,
+  isCheckingPhone: false,
+});
+const checkPhoneFailure = (state, action) => ({
+  ...state,
+  isCheckingPhone: false,
+});
+
 const requestPhoneLoginSendCode = (state, action) => ({
   ...state,
   isSendingPhoneLoginCode: true,
@@ -171,6 +184,19 @@ const deleteImageFailure = (state, action) => ({
   deleteImageFailure: 0,
 });
 
+const requestDeleteAccount = (state, action) => ({
+  ...state,
+  isDeletingAccount: true,
+});
+const deleteAccountSuccess = (state, action) => ({
+  ...state,
+  isDeletingAccount: false,
+});
+const deleteAccountFailure = (state, action) => ({
+  ...state,
+  isDeletingAccount: false,
+});
+
 export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
@@ -179,6 +205,10 @@ export const HANDLERS = {
   [UserTypes.REQUEST_PROFILE]: requestProfile,
   [UserTypes.LOAD_PROFILE_SUCCESS]: loadProfileSuccess,
   [UserTypes.LOAD_PROFILE_FAILURE]: loadProfileFailure,
+
+  [UserTypes.REQUEST_CHECK_PHONE]: requestCheckPhone,
+  [UserTypes.CHECK_PHONE_SUCCESS]: checkPhoneSuccess,
+  [UserTypes.CHECK_PHONE_FAILURE]: checkPhoneFailure,
 
   [UserTypes.REQUEST_PHONE_LOGIN_SEND_CODE]: requestPhoneLoginSendCode,
   [UserTypes.PHONE_LOGIN_SEND_CODE_SUCCESS]: phoneLoginSendCodeSuccess,
@@ -223,6 +253,10 @@ export const HANDLERS = {
   [UserTypes.DELETE_IMAGE_FAILURE]: deleteImageFailure,
 
   [UserTypes.LOGOUT]: logout,
+
+  [UserTypes.REQUEST_DELETE_ACCOUNT]: requestDeleteAccount,
+  [UserTypes.DELETE_ACCOUNT_SUCCESS]: deleteAccountSuccess,
+  [UserTypes.DELETE_ACCOUNT_FAILURE]: deleteAccountFailure,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

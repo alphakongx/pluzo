@@ -4,12 +4,12 @@ import { UserCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
-    isSendingCode: state.user.isSendingPhoneLoginCode,
+    isCheckingPhone: state.user.isCheckingPhone,
   };
 }
 
 const mapDispatchToProps = {
-  requestPhoneLoginSendCode: UserCreators.requestPhoneLoginSendCode,
+  requestCheckPhone: UserCreators.requestCheckPhone,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPhoneNumber);

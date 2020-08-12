@@ -11,6 +11,8 @@ export const API_ENDPOINTS = {
   REORDER_IMAGES: `${BASE_URL}/sort-image`,
   PROFILE: `${BASE_URL}/profile`,
 
+  CHECK_PHONE: `${BASE_URL}/check-number`,
+
   VERIFY_PHONE_SEND_CODE: `${BASE_URL}/verify-sms-send`,
   VERIFY_PHONE_CONFIRM_CODE: `${BASE_URL}/verify-sms-code`,
 
@@ -21,6 +23,7 @@ export const API_ENDPOINTS = {
 
   UPDATE_USER: `${BASE_URL}/update`,
   DELETE_IMAGE: `${BASE_URL}/delete-image`,
+  DELETE_ACCOUNT: `${BASE_URL}/delete-account`,
 
   GET_CHAT: `${BASE_URL}/get-chat`,
   GET_CHAT_MSG: `${BASE_URL}/get-chat-msg`,

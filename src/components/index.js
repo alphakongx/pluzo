@@ -1,8 +1,6 @@
 export * from "./back-button";
 export * from "./button";
 export * from "./country-code-picker";
-export * from "./date-time-picker";
-export * from "./date-time-picker-modal";
 export * from "./image";
 export * from "./progress-bar";
 export * from "./card-progress-bar";
@@ -23,3 +21,6 @@ export * from "./web-socket";
 export * from "./drag-drop-view";
 export * from "./wheel-scroll";
 export * from "./wheel-date-picker";
+export * from "./dialog-input";
+export * from "./discover-people-item";
+export * from "./shadow";

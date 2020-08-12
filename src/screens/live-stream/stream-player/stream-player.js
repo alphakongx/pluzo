@@ -65,7 +65,13 @@ class StreamPlayer extends Component {
     } else {
       this._engine.setClientRole(Types.ClientRole.Audience);
     }
-    this._engine.channel;
+    this._engine.setVideoEncoderConfiguration({
+      frameRate: Types.VideoFrameRate.Fps60,
+      minFrameRate: Types.VideoFrameRate.Fps30,
+      degradationPrefer: Types.DegradationPreference.MaintainQuality,
+    }).catch(e => {
+      console.log(e);
+    });
     await this._engine.enableVideo();
     this.addRtcListeners();
     this._engine.joinChannel(null, channelName, null, this.props.user.id);

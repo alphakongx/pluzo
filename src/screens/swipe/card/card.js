@@ -1,10 +1,15 @@
 import React from "react";
-import { Dimensions, Vibration } from "react-native";
+import { Dimensions, Vibration, Platform } from "react-native";
 import { Image, Touchable } from "@components";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import styles from "./card.style";
 
 const screenWidth = Dimensions.get("window").width;
 const placeholderImage = require("@assets/images/live-screen/user-temp3.png");
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: true
+};
 
 const Card: () => React$Node = props => {
   const { card, imageIndex } = props;
@@ -23,7 +28,7 @@ const Card: () => React$Node = props => {
         } else {
           props.onPressItem && props.onPressItem("right");
         }
-        Vibration.vibrate([10]);
+        ReactNativeHapticFeedback.trigger("impactLight", options);
       }}
     >
       <Image

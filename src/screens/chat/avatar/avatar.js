@@ -12,7 +12,7 @@ const Avatar: () => React$Node = props => {
       style={styles.container}
       source={
         user.images.length > 0
-          ? { uri: user.images[0] }
+          ? { uri: user.images[0].path }
           : require("@assets/images/message-image.png")
       }
     />

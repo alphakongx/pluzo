@@ -12,14 +12,14 @@ export default StyleSheet.create({
     width: 10,
   },
   itemContainer: {
-    paddingRight: 10,
-    paddingBottom: 5,
+    padding: 5,
   },
   itemImage: {
     width: 50,
     height: 50,
     borderWidth: 2,
-    borderRadius: 25,
+    borderRadius: 50,
     borderColor: COLOR.LIVE_USER_BORDER,
+    backgroundColor: "#0000",
   },
 });

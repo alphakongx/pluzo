@@ -2,18 +2,22 @@ import React from "react";
 import { View, TextInput as RNTextInput } from "react-native";
 import { Image } from "../image";
 import styles from "./search-input.style";
-import { COLOR } from "@config";
 
 const SearchInput: () => React$Node = prop => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.searchContainer, prop.containerStyle]}>
       <View style={styles.iconContainer}>
-        <Image source={require("@assets/images/search.png")} style={styles.searchIcon} />
+        <Image source={require("@assets/images/search.png")} />
       </View>
       <RNTextInput
-        placeholder={"Search"}
-        placeholderTextColor={COLOR.TEXT_INPUT_BACKGROUND}
+        ref={ref => prop.onRef(ref)}
         style={styles.inputField}
+        returnKeyType={"search"}
+        autoFocus={prop.autoFocus ? true : false}
+        placeholder={"search"}
+        autoCapitalize={"none"}
+        clearButtonMode={"always"}
+        onChangeText={text => prop.onSearch(text)}
       />
     </View>
   );

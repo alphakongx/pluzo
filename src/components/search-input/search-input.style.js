@@ -3,10 +3,11 @@ import { FontHelper } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
-  container: {
+  searchContainer: {
+    flex: 1,
     flexDirection: "row",
-    height: 35,
-    borderRadius: 25,
+    backgroundColor: "white",
+    borderRadius: 20,
     borderWidth: 2,
     borderColor: COLOR.SEARCH_INPUT_BORDER,
   },
@@ -17,15 +18,11 @@ export default StyleSheet.create({
     paddingRight: 5,
     paddingTop: 1,
   },
-  searchIcon: {
-    width: 15,
-    height: 15,
-  },
   inputField: FontHelper.font({
     flex: 1,
     fontSize: 12,
     padding: 0,
     fontWeight: "600",
-    color: COLOR.SEARCH_INPUT_TEXT,
+    color: COLOR.SEARCH_INPUT_PLACEHOLDER,
   }),
 });

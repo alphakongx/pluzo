@@ -14,29 +14,22 @@ export default StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
   },
-  topBarContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
+
+  opacityFill: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: "#0B0516",
+    opacity: 0.3,
   },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#000000",
-    opacity: 0.6,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  userCountStyle: {
-    minWidth: 50,
-    height: 26,
-    borderRadius: 13,
-    paddingHorizontal: 10,
-  },
-  userTextStyle: {
-    fontWeight: "bold",
-    marginLeft: 5,
+  opacityBottom: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 200,
   },
 
   // Stream Users

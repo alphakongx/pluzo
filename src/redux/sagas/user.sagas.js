@@ -1,4 +1,4 @@
-import { call, put, takeEvery, select } from "redux-saga/effects";
+import { call, put, takeEvery, select, take } from "redux-saga/effects";
 import {
   UserCreators,
   UserTypes,
@@ -20,17 +20,21 @@ import {
   getProfile,
   checkUsername,
   reorderImages,
+  checkPhone,
+  deleteAccount,
 } from "@redux/api";
 import moment from "moment";
 import { registrationSelector, userSelector } from "../selectors";
 import { NavigationService, Notification } from "@helpers";
 import { SCREENS } from "@constants";
+import { eventChannel, END } from "redux-saga";
 
 export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_LOGIN, requestLogin);
   yield takeEvery(RegistrationTypes.REQUEST_CHECK_USERNAME, requestCheckUsername);
   yield takeEvery(UserTypes.REQUEST_REGISTRATION, requestRegistration);
   yield takeEvery(UserTypes.REQUEST_PROFILE, requestProfile);
+  yield takeEvery(UserTypes.REQUEST_CHECK_PHONE, requestCheckPhone);
   yield takeEvery(
     UserTypes.REQUEST_PHONE_VERIFICATION_SEND_CODE,
     requestPhoneVerificationSendCode,
@@ -56,6 +60,8 @@ export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_UPDATE_USER, requestUpdateUser);
   yield takeEvery(UserTypes.REQUEST_DELETE_IMAGE, requestDeleteImage);
   yield takeEvery(UserTypes.REQUEST_REORDER_IMAGES, requestReorderImages);
+
+  yield takeEvery(UserTypes.REQUEST_DELETE_ACCOUNT, requestDeleteAccount);
 }
 
 function* requestLogin(action) {
@@ -110,6 +116,24 @@ function* requestRegistration(action) {
   } catch (error) {
     console.log(error);
     yield put(UserCreators.registrationFailure());
+  }
+}
+
+function* requestCheckPhone(action) {
+  try {
+    const { phoneNumber, screenName } = action;
+    const params = new FormData();
+
+    params.append("phone", phoneNumber);
+
+    yield call(checkPhone, params);
+
+    if (screenName)
+      NavigationService.navigate(screenName, { phoneNumber });
+
+    yield put(UserCreators.checkPhoneSuccess());
+  } catch (error) {
+    yield put(UserCreators.checkPhoneFailure());
   }
 }
 
@@ -208,15 +232,30 @@ function* requestResetPassword(action) {
     params.append("pass_code", passwordResetToken);
     params.append("password", password);
 
-    yield call(resetPassword, params);
+    const response = yield call(resetPassword, params);
 
-    Notification.alert("Password Updated", "Password Updated Successfully", null, () => {
-      NavigationService.popToTop();
-    });
     yield put(UserCreators.resetPasswordSuccess());
+    const channel = yield call(notifyCallback);
+    while(true) {
+      const {success} = yield take(channel);
+      if (success) {
+        yield put(UserCreators.loginSuccess(response.data.data));
+        return;
+      }
+    }
   } catch (error) {
     yield put(UserCreators.resetPasswordFailure());
   }
+}
+
+function notifyCallback() {
+  return eventChannel(emitter => {
+    Notification.alert("Password Updated", "Password Updated Successfully", null, () => {
+      emitter({ success: true });
+      emitter(END);
+    });
+    return () => {}
+  })
 }
 
 function* requestPhoneLoginSendCode(action) {
@@ -291,5 +330,16 @@ function* requestReorderImages(action) {
     yield call(reorderImages, params, token);
   } catch (error) {
     console.log(error);
+  }
+}
+
+function* requestDeleteAccount(action) {
+  try {
+    const { token } = action;
+    yield call(deleteAccount, token);
+    yield put(UserCreators.deleteAccountSuccess());
+    yield put(UserCreators.logout());
+  } catch(error) {
+    yield put(UserCreators.deleteAccountFailure());
   }
 }

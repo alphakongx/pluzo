@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
+    justifyContent: "center",
     paddingHorizontal: 37,
   },
   titleText: {
