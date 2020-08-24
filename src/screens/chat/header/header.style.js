@@ -6,7 +6,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR.HEADER_BACKGROUND,
   },
   header: {
-    height: 60,
+    height: 70,
     flexDirection: "row",
   },
   backButtonContainer: {
@@ -25,13 +25,13 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   headerImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginHorizontal: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
   },
   headerTitle: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: "700",
     color: COLOR.TEXT_PRIMARY,
   },

@@ -4,10 +4,13 @@ import { Image, Text, Touchable } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import moment from "moment";
+import Images from "@assets/Images";
 import styles from "./header.style";
 
+const appBadges = require("@config/data/badges.json");
+
 const Header: () => React$Node = props => {
-  var { first_name, birthday, address } = props.item;
+  var { first_name, birthday, address, badges } = props.item;
 
   if (first_name === null || first_name === "") {
     first_name = "No Name";
@@ -42,6 +45,17 @@ const Header: () => React$Node = props => {
         <Text style={styles.topBarLocation}>
           {address === null ? "no address" : address}
         </Text>
+      </View>
+      <View style={styles.badgeContainer}>
+        {badges.map(badge => {
+          return (
+            <Image
+              key={`badge-${badge}`}
+              source={Images.live[appBadges[badge].icon]}
+              style={styles.badgeIcon}
+            />
+          );
+        })}
       </View>
     </View>
   );

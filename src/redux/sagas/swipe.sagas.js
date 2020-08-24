@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { SwipeCreators, SwipeTypes } from "../actions";
 import { getCards, sendLike, sendLikeAll, getMatchUsers } from "@redux/api";
+import FastImage from "react-native-fast-image";
 
 export function* watchSwipeRequests() {
   yield takeEvery(SwipeTypes.REQUEST_CARDS, requestCards);
@@ -16,10 +17,12 @@ function* requestCards(action) {
     const { token } = action;
 
     var response = yield call(getCards, token);
-    // response.data.data.swipe = response.data.data.swipe.filter((value) => value.image !== null);
+    let data = response.data.data.swipe.map(item => ({ uri: item.images[0].path }));
+    FastImage.preload(data);
 
     yield put(SwipeCreators.requestCardsSuccess(response.data.data));
   } catch (error) {
+    console.log(error);
     yield put(SwipeCreators.requestCardsFail());
   }
 }

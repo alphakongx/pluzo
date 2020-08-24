@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 function mapStateToProps(state) {
   return {
-    imageIndex: state.swipe.cardImageIndex,
+    visibleDetail: state.swipe.visibleDetail,
   };
 }
 

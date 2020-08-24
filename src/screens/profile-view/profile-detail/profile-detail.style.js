@@ -27,6 +27,7 @@ export default StyleSheet.create({
     color: COLOR.TEXT_PRIMARY,
   },
   topBarLocation: {
+    fontFamily: "OpenSans",
     fontSize: 10,
     color: COLOR.TEXT_SECONDARY_2,
     marginLeft: 5,
@@ -62,5 +63,18 @@ export default StyleSheet.create({
     fontWeight: "400",
     color: COLOR.TEXT_SECONDARY_3,
     marginLeft: 2,
+  },
+
+  badgeContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 9,
+  },
+  badgeIcon: {
+    width: 18,
+    height: 18,
+    resizeMode: "contain",
+    marginRight: 5,
+    marginBottom: 5,
   },
 });

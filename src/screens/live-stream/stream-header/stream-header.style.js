@@ -8,7 +8,29 @@ export default StyleSheet.create({
     alignItems: "center",
     paddingVertical: 10,
   },
-  backButton: {
+
+  titleContainer: {
+    flex: 1,
+    height: 35,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  inputContainer: {
+    flex: 1,
+    height: 35,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    justifyContent: "center",
+  },
+  inputTitle: FontHelper.font({
+    paddingVertical: 0,
+    color: "white",
+    fontWeight: "700",
+    fontSize: 14,
+  }),
+  emojiButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -18,22 +40,6 @@ export default StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 10,
   },
-
-  titleContainer: {
-    flex: 1,
-    height: 35,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-    marginRight: 15,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-    justifyContent: "center",
-  },
-  titleText: FontHelper.font({
-    paddingVertical: 0,
-    color: "white",
-    fontWeight: "700",
-    fontSize: 14,
-  }),
 
   userCountStyle: {
     minWidth: 50,

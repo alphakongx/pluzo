@@ -68,7 +68,7 @@ export function addFriendByUsername(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-    slient: true,
+    silent: true,
   }).then(response => response);
 }
 

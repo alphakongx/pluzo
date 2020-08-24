@@ -1,16 +1,17 @@
 import React from "react";
 import { View } from "react-native";
 import { Image, SolidButton, GradientButton, Screen, Text } from "@components";
+import { SCREENS } from "@constants";
 import styles from "./auth-selection.style.js";
 
 const AuthSelection: () => React$Node = props => {
   const { t } = props;
   const navigateToLogin = () => {
-    props.navigation.navigate("LOGIN", {});
+    props.navigation.navigate(SCREENS.LOGIN, {});
   };
 
   const navigateToSignup = () => {
-    props.navigation.navigate("SIGNUP_FIRST_NAME", {});
+    props.navigation.navigate(SCREENS.SIGNUP_FIRST_NAME, {});
   };
 
   return (

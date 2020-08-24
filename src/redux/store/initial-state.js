@@ -29,6 +29,21 @@ export default {
     phoneNumber: "",
     isCheckingUsername: false,
   },
+  live: {
+    sortBy: "friends",
+    filterCountry: {
+      name: "Worldwide",
+      iso2: "worldwide",
+      dialCode: "",
+      priority: 0,
+      areaCodes: null,
+    },
+    streamStatus: null,
+    isScrolling: false,
+    allStreams: [],
+    friendStreams: [],
+    currentStream: null,
+  },
   inbox: {
     channels: [],
     isLoadingChannels: false,
@@ -46,7 +61,7 @@ export default {
   swipe: {
     cards: [],
     likecount: 0,
-    cardImageIndex: 0,
+    visibleDetail: false,
     isLoadingCards: false,
     isLoadingMatch: false,
   },

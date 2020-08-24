@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -13,17 +15,15 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "center",
     paddingHorizontal: 37,
   },
   titleFieldContainer: {
     flex: 1,
-    justifyContent: "center",
+    paddingTop: (height / 100) * 18,
     alignItems: "center",
-    marginTop: -90,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
@@ -31,6 +31,6 @@ export default StyleSheet.create({
   },
 
   buttonContainer: {
-    marginTop: 40,
+    marginBottom: 20,
   },
 });

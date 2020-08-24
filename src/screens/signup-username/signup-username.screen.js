@@ -34,11 +34,7 @@ const SignupUsername: () => React$Node = props => {
           </View>
         </Touchable>
         <View style={styles.contentContainer}>
-          <Text
-            style={styles.titleText}
-            numberOfLines={2}
-            adjustsFontSizeToFit
-          >
+          <Text style={styles.titleText} numberOfLines={2} adjustsFontSizeToFit>
             Select your username and choose a password.
           </Text>
 
@@ -80,7 +76,7 @@ const SignupUsername: () => React$Node = props => {
                 }
               />
               <Text style={styles.passwordRequirement}>
-                Have atleast 1 capital letter
+                Have at least one capital letter
               </Text>
             </View>
             <View style={styles.instructionContainer}>
@@ -91,7 +87,7 @@ const SignupUsername: () => React$Node = props => {
                     : styles.instructionInvalidIcon
                 }
               />
-              <Text style={styles.passwordRequirement}>Have atleast 1 number</Text>
+              <Text style={styles.passwordRequirement}>Have at least one number</Text>
             </View>
           </View>
         </View>

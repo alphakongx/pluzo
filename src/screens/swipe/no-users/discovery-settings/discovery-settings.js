@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { View, Dimensions } from "react-native";
-import { Touchable, Image, Text } from "@components";
+import { Screen, Touchable, Image, Text } from "@components";
 import { Switch } from "react-native-switch";
-import LinearGradient from "react-native-linear-gradient";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import Images from "@assets/Images";
-import { GRADIENT } from "@config";
 
 import styles from "./discovery-settings.style";
 
@@ -27,12 +25,7 @@ class DiscoverySettings extends Component {
     const { distance, minAge, maxAge, aroundWorld } = this.state;
 
     return (
-      <LinearGradient
-        colors={GRADIENT.SCREEN_BACKGROUND}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.container}
-      >
+      <Screen hasGradient style={styles.container}>
         <View style={styles.headerContainer}>
           <Touchable
             style={styles.backButton}
@@ -141,7 +134,7 @@ class DiscoverySettings extends Component {
           Going gobal will allow you to see people from around the world after you've run
           out of profile nearby.
         </Text>
-      </LinearGradient>
+      </Screen>
     );
   }
 }

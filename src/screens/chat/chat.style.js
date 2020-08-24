@@ -11,4 +11,7 @@ export default StyleSheet.create({
     alignSelf: "center",
     marginTop: 200,
   },
+  systemMessage: {
+    marginBottom: 15,
+  },
 });

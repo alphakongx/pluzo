@@ -24,12 +24,12 @@ export default StyleSheet.create({
 
   myBadgeScroll: {
     backgroundColor: COLOR.SEARCH_INPUT_BORDER,
-    paddingVertical: 10,
     height: 58,
   },
   scrollContentCenter: {
     flexGrow: 1,
     justifyContent: "center",
+    alignItems: "center",
   },
   myBadgeContainer: {
     width: 52,

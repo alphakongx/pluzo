@@ -11,12 +11,16 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
     top: 0,
+    backgroundColor: "#0000",
   },
-  touchArea: {
+  gestureContainer: {
     flex: 1,
     marginTop: 15,
     marginBottom: 35,
     marginHorizontal: 15,
+  },
+  touchArea: {
+    flex: 1,
   },
   contentContainer: {
     flex: 1,
@@ -24,6 +28,13 @@ export default StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
     backgroundColor: COLOR.HEADER_BACKGROUND,
+  },
+  profileImage: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
   },
   detailContainer: {
     paddingHorizontal: 15,

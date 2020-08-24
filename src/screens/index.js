@@ -1,12 +1,12 @@
 import { createSwitchNavigator, createAppContainer } from "react-navigation";
 import { AuthStack } from "../navigation/auth-navigator";
-import { HomeStack } from "../navigation/home-navigator";
+import Home from "./home";
 import { SCREENS } from "@constants";
 
 const RootStack = createSwitchNavigator(
   {
     [SCREENS.AUTHSTACK]: AuthStack,
-    [SCREENS.HOMESTACK]: HomeStack,
+    [SCREENS.HOMESTACK]: Home,
   },
   {
     initialRouteName: SCREENS.AUTHSTACK,

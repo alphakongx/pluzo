@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { COLOR } from "@config";
 
 export default StyleSheet.create({
   header: {
@@ -7,5 +6,11 @@ export default StyleSheet.create({
     height: 60,
     paddingHorizontal: 10,
     alignItems: "center",
+  },
+  bottomMargin: {
+    marginBottom: 5,
+  },
+  bottomMarginSmall: {
+    marginBottom: 15,
   },
 });

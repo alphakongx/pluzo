@@ -2,15 +2,15 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    height: 45,
+    height: 35,
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "white",
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",

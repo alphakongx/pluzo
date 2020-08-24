@@ -1,8 +1,6 @@
-import { StyleSheet, Dimensions, Platform } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { COLOR } from "@config";
 import { FontHelper } from "@helpers";
-
-const screenWidth = Dimensions.get("window").width;
 
 export default StyleSheet.create({
   modalContainer: {
@@ -64,7 +62,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   typeButtonSelect: {
-    backgroundColor: "#617FFF"
+    backgroundColor: "#617FFF",
   },
   typeButtonText: {
     color: "#0B0516",

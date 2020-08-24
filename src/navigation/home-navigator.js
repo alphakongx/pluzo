@@ -5,6 +5,8 @@ import { TabBarIcon, TabBar } from "@components";
 import { SCREENS } from "@constants";
 
 import Live from "../screens/live";
+import LiveFilterSetting from "../screens/live/live-filter-setting";
+import CountrySelection from "../screens/country-selection";
 import LiveStream from "../screens/live-stream";
 import Swipe from "../screens/swipe";
 import Chat from "../screens/chat";
@@ -63,11 +65,22 @@ const HomeStack = createStackNavigator(
   {
     [SCREENS.MAIN]: TabStack,
     [SCREENS.LIVE_STREAM]: LiveStream,
+    [SCREENS.LIVE_FILTER_SETTING]: {
+      screen: LiveFilterSetting,
+      navigationOptions: {
+        gestureEnabled: false,
+        cardStyle: {
+          backgroundColor: "transparent",
+        },
+      },
+    },
+    [SCREENS.COUNTRY_SELECTION]: CountrySelection,
     [SCREENS.CHAT]: Chat,
     [SCREENS.SEARCH]: SearchScreen,
     [SCREENS.PROFILE_VIEW]: {
       screen: ProfileView,
       navigationOptions: {
+        gestureEnabled: false,
         cardStyle: {
           backgroundColor: "transparent",
         },

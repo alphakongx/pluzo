@@ -1,9 +1,10 @@
 import React from "react";
-import { FlatList, Image, View, ActivityIndicator } from "react-native";
+import { FlatList, View, ActivityIndicator } from "react-native";
 import EventBus from "eventing-bus";
 import moment from "moment";
 import { Text, Touchable } from "@components";
 import styles from "./messages.style";
+import FastImage from "react-native-fast-image";
 
 class Messages extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class Messages extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.isLoadingChannels === true && prevState.firstLoading === true) {
-      this.setState({ firstLoading: false });
+      this.onFinishedLoading();
     }
   }
 
@@ -35,8 +36,13 @@ class Messages extends React.Component {
     this.actionNewMessage();
   }
 
+  onFinishedLoading = () => {
+    this.setState({ firstLoading: false });
+  };
+
   render() {
     const { isLoadingChannels, channels } = this.props;
+    console.log(channels);
     const { firstLoading } = this.state;
     if (isLoadingChannels && firstLoading === true) {
       return (
@@ -70,7 +76,7 @@ class Messages extends React.Component {
             >
               <View style={styles.messageContainer}>
                 <View style={styles.imageContainer}>
-                  <Image
+                  <FastImage
                     source={
                       image === null
                         ? require("@assets/images/message-image.png")

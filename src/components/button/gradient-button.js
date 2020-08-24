@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { ActivityIndicator } from "react-native";
 import { Text } from "../text";
+import { Image } from "../image";
 import { Touchable } from "../touchable";
 import { BoxShadow } from "../shadow";
 import styles from "./gradient-button.style";
@@ -11,10 +12,11 @@ class GradientButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 60,
-      height: 45,
-      radius: 22.5,
-    }
+      width: 0,
+      height: 0,
+      radius: 0,
+      blur: 1,
+    };
   }
 
   render() {
@@ -26,45 +28,66 @@ class GradientButton extends Component {
       colors,
       containerStyle,
       textStyle,
-      shadowColor = "#1900FF"
+      icon,
+      iconStyle,
+      shadowColor = "#1900FF",
     } = this.props;
-    const {width, height, radius} = this.state;
+    const { width, height, radius, blur } = this.state;
 
     return (
       <Touchable disabled={loading || disabled} onPress={onPress}>
-        <BoxShadow setting={{
-          width: width,
-          height: height,
-          color: shadowColor,
-          opacity: 0.38,
-          _borderRadius: radius,
-          spread: 0,
-          blur: 20,
-          offsetX: 0,
-          offsetY: 0,
-        }}/>
+        {!disabled && (
+          <BoxShadow
+            setting={{
+              width: width,
+              height: height,
+              color: shadowColor,
+              opacity: 0.38,
+              _borderRadius: radius,
+              spread: 0,
+              blur: blur,
+              offsetX: 0,
+              offsetY: 0,
+            }}
+          />
+        )}
         <LinearGradient
-          colors={disabled ? GRADIENT.BUTTON_DISABLED : colors}
+          colors={colors}
           start={{ x: 1, y: 0 }}
           end={{ x: 0, y: 0 }}
-          style={[styles.container, containerStyle]}
-          onLayout={(e) => {
+          style={[
+            styles.container,
+            containerStyle,
+            disabled ? styles.buttonDisabled : {},
+          ]}
+          onLayout={e => {
             const { layout } = e.nativeEvent;
-            this.setState({width: layout.width, height: layout.height, radius: layout.height / 2})
+            this.setState({
+              width: layout.width,
+              height: layout.height,
+              radius: layout.height / 2,
+              blur: 20,
+            });
           }}
         >
           {loading ? (
             <ActivityIndicator size={"small"} color={"white"} />
           ) : (
-            <Text
-              style={[
-                styles.buttonText,
-                textStyle,
-                disabled ? styles.buttonTextDisabled : {},
-              ]}
-            >
-              {text}
-            </Text>
+            <Fragment>
+              {icon ? (
+                <Image source={icon} style={iconStyle} />
+              ) : (
+                <Text
+                  style={[
+                    styles.buttonText,
+                    textStyle,
+                    disabled ? styles.buttonTextDisabled : {},
+                  ]}
+                >
+                  {text}
+                </Text>
+              )}
+            </Fragment>
           )}
         </LinearGradient>
       </Touchable>

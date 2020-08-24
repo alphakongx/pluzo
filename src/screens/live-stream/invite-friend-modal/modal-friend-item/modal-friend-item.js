@@ -1,7 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { Image, Text, Touchable, GradientButton, SolidButton } from "@components";
-import { NavigationService } from "@helpers";
+import { Image, Text, Touchable, GradientButton } from "@components";
 import { GRADIENT } from "@config";
 import styles from "./modal-friend-item.style";
 
@@ -20,9 +19,7 @@ const ModalFriendItem: () => React$Node = props => {
           />
         </View>
         <View style={styles.itemContentContainer}>
-          <Text style={styles.subject}>
-            {"Friend Name"}
-          </Text>
+          <Text style={styles.subject}>{"Friend Name"}</Text>
           <Text style={styles.preview}>{"@username"}</Text>
         </View>
         <View style={styles.timeContainer}>

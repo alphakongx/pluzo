@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { COLOR } from "@config";
+import { FontHelper } from "@helpers";
 
 export default StyleSheet.create({
   flexFill: {
@@ -50,11 +51,20 @@ export default StyleSheet.create({
     paddingHorizontal: 30,
     width: "100%",
   },
+  usernameInput: FontHelper.font({
+    height: 35,
+    borderRadius: 18,
+    paddingHorizontal: 18,
+    backgroundColor: "white",
+    color: "black",
+    fontSize: 14,
+    fontWeight: "600",
+  }),
   buttonContainer: {
-    width: 70,
+    width: 60,
   },
   addButton: {
-    height: 35,
+    height: 25,
     marginBottom: 10,
   },
   addButtonText: {
@@ -86,5 +96,9 @@ export default StyleSheet.create({
     marginTop: 8,
     paddingLeft: 30,
     paddingRight: 15,
-  }
+  },
+  peopleContainer: {
+    flex: 1,
+    flexDirection: "row",
+  },
 });

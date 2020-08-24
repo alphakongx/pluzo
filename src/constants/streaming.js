@@ -1,5 +1,5 @@
 export const StreamStatus = {
-  STARTING: 'starting',
-  WAITING: 'waiting',
-  STARTED: 'started',
-}
+  STARTING: "starting",
+  WAITING: "waiting",
+  STARTED: "started",
+};

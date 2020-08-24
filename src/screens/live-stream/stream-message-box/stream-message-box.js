@@ -41,16 +41,22 @@ class StreamMessageBox extends Component {
     if (Platform.OS === "ios") {
       KeyboardManager.setEnable(false);
     }
-    Keyboard.addListener("keyboardWillShow", this.keyboardWillShow);
-    Keyboard.addListener("keyboardWillHide", this.keyboardWillHide);
+    this._subscribeKeyboardShow = Keyboard.addListener(
+      "keyboardWillShow",
+      this.keyboardWillShow,
+    );
+    this._subscribeKeyboardHide = Keyboard.addListener(
+      "keyboardWillHide",
+      this.keyboardWillHide,
+    );
   }
 
   componentWillUnMount() {
     if (Platform.OS === "ios") {
       KeyboardManager.setEnable(true);
     }
-    Keyboard.removeListener("keyboardWillShow", this.keyboardWillShow);
-    Keyboard.removeListener("keyboardWillHide", this.keyboardWillHide);
+    this._subscribeKeyboardShow();
+    this._subscribeKeyboardHide();
   }
 
   keyboardWillShow = e => {
@@ -71,39 +77,37 @@ class StreamMessageBox extends Component {
 
     return (
       <SafeAreaView style={styles.container}>
-        <StreamMessageInput 
+        <StreamMessageInput
           onGameControls={this.props.onGameControls}
-          onPlayerSetting={this.props.onPlayerSetting} />
+          onPlayerSetting={this.props.onPlayerSetting}
+        />
 
         <View style={styles.defaultButtonsContainer}>
-          {
-            streamStatus === StreamStatus.WAITING ? (
-              <View style={styles.defaultButton}>
-                <Text style={styles.defaultButtonText}>
-                  Hold on!. We're telling your friends to join
-                </Text>
-              </View>
-            ) : (
-              <ScrollView horizontal>
-                <Touchable style={styles.defaultButton}>
-                  <Text style={styles.defaultButtonText}>Hello!</Text>
-                </Touchable>
-                <Touchable style={styles.defaultButton}>
-                  <Image source={Images.live.emojiLaugh} />
-                </Touchable>
-                <Touchable style={styles.defaultButton}>
-                  <Text style={styles.defaultButtonText}>Invite me please</Text>
-                </Touchable>
-                <Touchable style={styles.defaultButton}>
-                  <Text style={styles.defaultButtonText}>LMAO</Text>
-                </Touchable>
-              </ScrollView>
-            )
-          }
+          {streamStatus === StreamStatus.WAITING ? (
+            <View style={styles.defaultButton}>
+              <Text style={styles.defaultButtonText}>
+                Hold on!. We're telling your friends to join
+              </Text>
+            </View>
+          ) : (
+            <ScrollView horizontal>
+              <Touchable style={styles.defaultButton}>
+                <Text style={styles.defaultButtonText}>Hello!</Text>
+              </Touchable>
+              <Touchable style={styles.defaultButton}>
+                <Image source={Images.live.emojiLaugh} />
+              </Touchable>
+              <Touchable style={styles.defaultButton}>
+                <Text style={styles.defaultButtonText}>Invite me please</Text>
+              </Touchable>
+              <Touchable style={styles.defaultButton}>
+                <Text style={styles.defaultButtonText}>LMAO</Text>
+              </Touchable>
+            </ScrollView>
+          )}
         </View>
 
-        {
-          streamStatus === StreamStatus.STARTED &&
+        {streamStatus === StreamStatus.STARTED && (
           <FlatList
             style={styles.messageList}
             data={messages}
@@ -126,8 +130,7 @@ class StreamMessageBox extends Component {
               );
             }}
           />
-        }
-        
+        )}
       </SafeAreaView>
     );
   }

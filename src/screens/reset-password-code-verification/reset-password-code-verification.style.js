@@ -1,4 +1,6 @@
 import { StyleSheet } from "react-native";
+import { FontHelper } from "@helpers";
+import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
@@ -13,9 +15,9 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 20,
     paddingHorizontal: 37,
     justifyContent: "center",
+    marginTop: -30,
   },
   titleText: {
     fontSize: 22,
@@ -39,13 +41,16 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-  codeInputStyle: {
+  codeInputStyle: FontHelper.font({
     backgroundColor: "white",
     width: 58,
-    height: 42,
-    color: "#9892A3",
+    height: 35,
+    color: COLOR.TEXT_INPUT,
     borderRadius: 25,
-  },
+    fontSize: 14,
+    fontWeight: "600",
+    paddingVertical: 0,
+  }),
   informationContainer: {
     alignItems: "center",
     marginTop: 25,
@@ -68,6 +73,6 @@ export default StyleSheet.create({
   footer: {
     marginTop: 40,
     paddingHorizontal: 37,
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
 });

@@ -5,17 +5,23 @@ export class Notification {
     Alert.alert(title, message, [{ text: "OK", onPress: onPress }]);
   }
 
-  static confirmAlert(title = "", message, onConfirm = () => {}) {
+  static confirmAlert(
+    title = "",
+    message = "",
+    positiveText = "OK",
+    onConfirm = () => {},
+    onCancel = () => {},
+  ) {
     Alert.alert(
       title,
       message,
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: onCancel,
           style: "cancel",
         },
-        { text: "OK", onPress: onConfirm },
+        { text: positiveText, onPress: onConfirm },
       ],
       { cancelable: false },
     );

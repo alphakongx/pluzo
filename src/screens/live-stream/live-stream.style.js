@@ -35,7 +35,6 @@ export default StyleSheet.create({
   // Stream Users
   streamUserContainer: {
     width: 70,
-    marginTop: -10,
     alignSelf: "flex-end",
     paddingHorizontal: 10,
   },

@@ -21,7 +21,10 @@ const SignupPhoneNumber: () => React$Node = props => {
   };
 
   const sendCode = () => {
-    props.requestCheckPhone(`+${phoneCode} ${phoneNumber}`, SCREENS.RESET_PASSWORD_CODE_VERIFICATION);
+    props.requestCheckPhone(
+      `+${phoneCode} ${phoneNumber}`,
+      SCREENS.RESET_PASSWORD_CODE_VERIFICATION,
+    );
   };
 
   return (
@@ -43,10 +46,12 @@ const SignupPhoneNumber: () => React$Node = props => {
             <View style={styles.phoneCodeContainer}>
               <Text style={styles.phoneLabel}>PHONE CODE</Text>
               <CountryCodePicker
-                country={{"iso2": "us", "dialCode": "1"}}
-                onChange={(country) => {
+                country={{ iso2: "us", dialCode: "1" }}
+                onChange={country => {
                   setPhoneCode(country.dialCode);
-              }}/>
+                }}
+                style={styles.codePicker}
+              />
             </View>
             <View style={styles.phoneSeparator} />
             <View style={styles.phoneNumberContainer}>

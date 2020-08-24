@@ -47,4 +47,10 @@ export const API_ENDPOINTS = {
   GET_MATCH: `${BASE_URL}/get-match`,
 
   SEARCH: `${BASE_URL}/search`,
+
+  // streaming
+  STREAM_START: `${BASE_URL}/stream-start`,
+  STREAM_STOP: `${BASE_URL}/stream-stop`,
+  STREAM_LIST: `${BASE_URL}/stream-list`,
+  STREAM_USER_LIST: `${BASE_URL}/stream-user-list-api`,
 };

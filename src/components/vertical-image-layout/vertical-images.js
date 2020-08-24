@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { View } from "react-native";
-import { Image } from "../image";
+import FastImage from "react-native-fast-image";
 
 import styles from "./vertical-image.style";
 
@@ -12,7 +12,7 @@ class VerticalImagesLayout extends Component {
     if (images.length === 1) {
       return (
         <View style={styles.container}>
-          <Image source={images[0]} style={styles.imageOne} />
+          <FastImage source={{ uri: images[0].path }} style={styles.imageOne} />
         </View>
       );
     }
@@ -21,7 +21,7 @@ class VerticalImagesLayout extends Component {
       return images.map((item, index) => {
         return (
           <View style={styles.container} key={index}>
-            <Image source={item} style={styles.imageTwo} />
+            <FastImage source={{ uri: item.path }} style={styles.imageTwo} />
           </View>
         );
       });
@@ -31,7 +31,13 @@ class VerticalImagesLayout extends Component {
       return (
         <View style={styles.container}>
           {images.map((item, index) => {
-            return <Image source={item} style={styles.imageFour} key={index} />;
+            return (
+              <FastImage
+                source={{ uri: item.path }}
+                style={styles.imageFour}
+                key={index}
+              />
+            );
           })}
         </View>
       );
@@ -41,9 +47,9 @@ class VerticalImagesLayout extends Component {
       <View style={styles.container}>
         {images.map((item, index) => {
           return index === 0 ? (
-            <Image source={item} style={styles.imageTwo} key={index} />
+            <FastImage source={{ uri: item.path }} style={styles.imageTwo} key={index} />
           ) : (
-            <Image source={item} style={styles.imageFour} key={index} />
+            <FastImage source={{ uri: item.path }} style={styles.imageFour} key={index} />
           );
         })}
       </View>

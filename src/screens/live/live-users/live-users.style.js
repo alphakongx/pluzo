@@ -4,6 +4,7 @@ import { COLOR } from "@config";
 export default StyleSheet.create({
   usersList: {
     marginTop: 0,
+    minHeight: 50,
   },
   usersListContentContainerStyle: {
     paddingHorizontal: 10,

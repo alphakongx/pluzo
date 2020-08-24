@@ -1,3 +1,12 @@
 import StreamUsers from "./stream-users";
+import { connect } from "react-redux";
 
-export default StreamUsers;
+function mapStateToProps(state) {
+  return {
+    currentStream: state.live.currentStream,
+  };
+}
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StreamUsers);

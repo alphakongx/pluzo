@@ -15,13 +15,14 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingHorizontal: 37,
+    marginTop: -30,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: 64,
   },
   inputFieldSeparator: {
     height: 20,
@@ -31,13 +32,15 @@ export default StyleSheet.create({
     marginTop: 25,
   },
   passwordRequirementTitle: {
-    fontSize: 14,
+    fontFamily: "OpenSans",
+    fontSize: 12,
     color: "rgba(255, 255, 255, 0.5)",
     textDecorationLine: "underline",
   },
   passwordRequirement: {
     marginTop: 3,
-    fontSize: 14,
+    fontFamily: "OpenSans",
+    fontSize: 12,
     color: "rgba(255, 255, 255, 0.5)",
   },
   instructionContainer: {

@@ -10,70 +10,71 @@ import styles from "./country-code-picker.style";
 const countries = require("./countries.json");
 
 const CountryCodePicker: () => React$Node = props => {
-  const [ showPicker, setShowPicker ] = useState(false);
-  const [ country, setCountry ] = useState(props.country);
-  var visibility = new Animated.Value(0);
+  const [showPicker, setShowPicker] = useState(false);
+  const [country, setCountry] = useState(props.country);
+  const [visibility] = useState(new Animated.Value(0));
 
   useEffect(() => {
     Animated.timing(visibility, {
       toValue: showPicker ? 1 : 0,
-      duration: 300,
+      duration: 150,
       useNativeDriver: true,
     }).start();
-  }, [showPicker]);
+  }, [showPicker, visibility]);
 
   useEffect(() => {
     props.onChange && props.onChange(country);
-  }, [country]);
+  }, [country, props]);
 
   return (
     <View style={styles.container}>
-      <Touchable {...props} 
+      <Touchable
         style={[styles.currentItem, props.style]}
         onPress={() => {
           setShowPicker(!showPicker);
-        }}>
-        <Image 
+        }}
+      >
+        <Image
           source={Images.flags[country === undefined ? "us" : country.iso2]}
           style={styles.flag}
         />
       </Touchable>
-      {
-        showPicker &&
-        <Animated.View 
-          style={[styles.contentContainer, {
-            opacity: visibility.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 1],
-            }),
-            transform: [
-              {
-                scale: visibility.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 1],
-                }),
-              },
-            ],
-          }]}>
+      {showPicker && (
+        <Animated.View
+          style={[
+            styles.contentContainer,
+            {
+              opacity: visibility.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+              }),
+              transform: [
+                {
+                  scale: visibility.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 1],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
           <View style={styles.spacer} />
           <ScrollView>
-          {
-            countries.map((country) => {
+            {countries.map(item => {
               return (
-                <Touchable key={country.name}
+                <Touchable
+                  key={item.name}
                   style={styles.itemContainer}
                   onPress={() => {
-                    setCountry(country);
+                    setCountry(item);
                     setShowPicker(false);
-                  }}>
-                  <Image 
-                    source={Images.flags[country.iso2]}
-                    style={styles.flag}
-                  />
+                  }}
+                >
+                  <Image source={Images.flags[item.iso2]} style={styles.flag} />
                 </Touchable>
-              )
-            })
-          }
+              );
+            })}
           </ScrollView>
           <LinearGradient
             colors={["rgba(171, 167, 213, 1)", "rgba(171, 167, 213, 0)"]}
@@ -82,7 +83,7 @@ const CountryCodePicker: () => React$Node = props => {
             style={styles.bottomFade}
           />
         </Animated.View>
-      }
+      )}
     </View>
   );
 };

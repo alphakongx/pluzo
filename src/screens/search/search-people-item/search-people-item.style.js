@@ -34,12 +34,13 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   addButton: {
-    height: 32,
-    width: 65,
+    height: 25,
+    width: 60,
   },
   addButtonText: {
     fontFamily: "OpenSans",
-    fontSize: 14,
+    fontWeight: "700",
+    fontSize: 12,
     color: "black",
   },
 });

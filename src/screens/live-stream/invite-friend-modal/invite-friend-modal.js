@@ -1,13 +1,25 @@
 import React, { Component } from "react";
-import { View, Platform, ScrollView, SafeAreaView, FlatList, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  Platform,
+  ScrollView,
+  SafeAreaView,
+  FlatList,
+  KeyboardAvoidingView,
+} from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
-import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
-import { Touchable, Image, Text, SearchInput, DiscoverPeopleItem } from "@components";
+import {
+  Screen,
+  Touchable,
+  Image,
+  Text,
+  SearchInput,
+  DiscoverPeopleItem,
+} from "@components";
 import ModalFriendItem from "./modal-friend-item";
 
-import { GRADIENT } from "@config";
 import Images from "@assets/Images";
 
 import styles from "./invite-friend-modal.style";
@@ -21,76 +33,63 @@ class InviteFriendsModal extends Component {
     if (Platform.OS === "ios") {
       KeyboardManager.setEnable(true);
     }
-  }
+  };
 
   onModalHide = () => {
     if (Platform.OS === "ios" && this.props.keyboardDisable) {
       KeyboardManager.setEnable(false);
     }
-  }
+  };
 
   renderFriends = () => {
     let friends = [1, 2, 3, 4, 5, 6];
     return friends.map((friend, index) => {
-      return (
-        <ModalFriendItem key={`invite-item-${index}`} />
-      )
-    })
-  }
+      return <ModalFriendItem key={`invite-item-${index}`} />;
+    });
+  };
 
   renderContent = () => {
     return (
       <View style={styles.container}>
-        <Touchable style={styles.backButton}
+        <Touchable
+          style={styles.backButton}
           onPress={() => {
             this.props.onDismiss && this.props.onDismiss();
-          }}>
+          }}
+        >
           <Image source={Images.app.icBack} style={styles.backImage} />
         </Touchable>
-        <LinearGradient
-          colors={GRADIENT.SCREEN_BACKGROUND}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-        >
+        <Screen hasGradient style={styles.container}>
           <SafeAreaView style={styles.contentContainer}>
-            <ScrollView style={styles.scrollView} 
-              showsVerticalScrollIndicator={false}>
+            <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
               <Text style={styles.titleText}>Invite Friends</Text>
 
               <SearchInput
                 onSearch={() => {}}
-                onRef={(ref) => {}}
+                onRef={ref => {}}
                 containerStyle={styles.searchContainer}
               />
 
-              <Text style={styles.subtitleText}>
-                Discover New People
-              </Text>
-              <FlatList 
+              <Text style={styles.subtitleText}>Discover New People</Text>
+              <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 style={styles.peopleList}
                 data={[1, 2, 3, 4]}
                 keyExtractor={(item, index) => `new-people-${item}`}
-                renderItem={({item: item, index}) => {
+                renderItem={({ item: item, index }) => {
                   return <DiscoverPeopleItem />;
                 }}
               />
 
-              <Text style={styles.subtitleText}>
-                Friends
-              </Text>
-              {
-                this.renderFriends()
-              }
-
+              <Text style={styles.subtitleText}>Friends</Text>
+              {this.renderFriends()}
             </ScrollView>
           </SafeAreaView>
-          
-        </LinearGradient>
+        </Screen>
       </View>
-    )
-  }
+    );
+  };
 
   render() {
     return (
@@ -113,17 +112,13 @@ class InviteFriendsModal extends Component {
         onModalWillHide={this.onModalHide}
         style={styles.modalContainer}
       >
-        {
-          Platform.OS === "android" ? (
-            <KeyboardAvoidingView 
-              behavior={"height"}
-              enabled>
-              { this.renderContent() }
-            </KeyboardAvoidingView>
-          ) : (
-            this.renderContent()
-          )
-        }
+        {Platform.OS === "android" ? (
+          <KeyboardAvoidingView behavior={"height"} enabled>
+            {this.renderContent()}
+          </KeyboardAvoidingView>
+        ) : (
+          this.renderContent()
+        )}
       </Modal>
     );
   }

@@ -16,13 +16,14 @@ export default StyleSheet.create({
     flexDirection: "column-reverse",
     paddingHorizontal: 37,
     justifyContent: "center",
+    marginTop: -30,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: 55,
   },
   phoneContainer: {
     flexDirection: "row",
@@ -33,13 +34,13 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 8,
     color: "rgba(255, 255, 255, 0.5)",
-    height: 20,
+    height: 15,
   },
   phoneCodeContainer: {
     width: 70,
   },
   phoneNumberContainer: {
-    paddingTop: 20,
+    paddingTop: 15,
     flex: 3,
   },
   phoneSeparator: {
