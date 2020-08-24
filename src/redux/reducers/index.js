@@ -7,10 +7,12 @@ import inboxReducer from "./inbox.reducer";
 import swipeReducer from "./swipe.reducer";
 import searchReducer from "./search.reducer";
 import chatReducer from "./chat.reducer";
+import liveReducer from "./live.reducer";
 
 const rootReducer = combineReducers({
   registration: regitrationReducer,
   user: userReducer,
+  live: liveReducer,
   inbox: inboxReducer,
   chat: chatReducer,
   swipe: swipeReducer,

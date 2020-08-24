@@ -32,6 +32,7 @@ function* requestChannels(action) {
       (channel1, channel2) =>
         channel1.messages[0].createdAt < channel2.messages[0].createdAt,
     );
+    console.log(channels);
     yield put(InboxCreators.loadChannelsDone(channels));
   } catch (error) {
     yield put(InboxCreators.loadChannelsDone([]));

@@ -1,4 +1,5 @@
 import ProfileSettings from "./profile-settings.screen";
+import { withSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 import { UserCreators } from "@redux/actions";
 
@@ -13,6 +14,10 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   updateUser: UserCreators.requestUpdateUser,
   deleteImage: UserCreators.requestDeleteImage,
+  requestProfile: UserCreators.requestProfile,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileSettings);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withSafeAreaInsets(ProfileSettings));

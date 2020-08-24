@@ -1,5 +1,6 @@
 import StreamPlayer from "./stream-player";
 import { connect } from "react-redux";
+import { LiveCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -8,6 +9,9 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  streamStop: LiveCreators.requestStreamStop,
+  streamUserList: LiveCreators.requestStreamUserList,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(StreamPlayer);

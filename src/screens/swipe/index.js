@@ -9,6 +9,7 @@ function mapStateToProps(state) {
     cards: state.swipe.cards,
     likecount: state.swipe.likecount,
     isLoadingCards: state.swipe.isLoadingCards,
+    visibleDetail: state.swipe.visibleDetail,
   };
 }
 
@@ -17,7 +18,7 @@ const mapDispatchToProps = {
   addLike: SwipeCreators.addLike,
   addDisLike: SwipeCreators.addDisLike,
   addSuperLike: SwipeCreators.addSuperLike,
-  udpateImageIndex: SwipeCreators.updateCardImageIndex,
+  setVisibleDetail: SwipeCreators.setVisibleDetail,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Swipe);

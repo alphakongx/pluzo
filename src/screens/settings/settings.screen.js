@@ -1,17 +1,12 @@
 import React, { Component } from "react";
 import { View, FlatList } from "react-native";
 import { SafeAreaView } from "react-navigation";
-import { 
-  Touchable,
-  Image,
-  Text,
-  DialogInput,
-  TouchableSettingItem
-} from "@components";
+import { Touchable, Image, Text, DialogInput, TouchableSettingItem } from "@components";
 import { SCREENS } from "@constants";
 import { Notification } from "@helpers";
 import Images from "@assets/Images";
 import Header from "./header";
+import LogoutModal from "./logout-modal/logout-modal";
 
 import styles from "./settings.style";
 
@@ -23,35 +18,40 @@ class Settings extends Component {
     super(props);
     this.state = {
       showDelete: false,
-    }
+      visibleLogout: false,
+    };
   }
 
   goBack = () => {
     this.props.navigation.goBack();
   };
 
-  logout = () => {
+  onLogout = () => {
     this.props.logout();
   };
 
-  onDeleteAccount = (inputValue) => {
-    this.setState({showDelete: false}, () => {
+  onDeleteAccount = inputValue => {
+    this.setState({ showDelete: false }, () => {
       setTimeout(() => {
         if (inputValue === "DELETE") {
           this.props.deleteAccount(this.props.token);
         } else {
-          Notification.alert("Whoops", "Sorry, please enter the text exactly as displayed to confirm.");
+          Notification.alert(
+            "Whoops",
+            "Sorry, please enter the text exactly as displayed to confirm.",
+          );
         }
       }, 200);
     });
-  }
+  };
 
   onItemPressed = itemId => {
     if (itemId === "5") {
       this.props.navigation.navigate(SCREENS.SWIPE_SETTINGS);
-    } else if (itemId === "16") {   // delete account
+    } else if (itemId === "16") {
+      // delete account
       if (!this.props.isDeletingAccount) {
-        this.setState({showDelete: true});
+        this.setState({ showDelete: true });
       }
     }
   };
@@ -80,15 +80,20 @@ class Settings extends Component {
                 case 1:
                   if (item.name.toLowerCase() === "logout") {
                     return (
-                      <Touchable style={styles.itemContainer1} onPress={this.logout}>
+                      <Touchable
+                        style={styles.itemContainer1}
+                        onPress={() => this.setState({ visibleLogout: true })}
+                      >
                         <Image source={Images.settings[item.iconUri]} />
                         <Text style={styles.logoutText}>{item.name}</Text>
                       </Touchable>
                     );
                   } else {
                     return (
-                      <Touchable style={styles.itemContainer1}
-                        onPress={() => this.onItemPressed(item.id)}>
+                      <Touchable
+                        style={styles.itemContainer1}
+                        onPress={() => this.onItemPressed(item.id)}
+                      >
                         <Image source={Images.settings[item.iconUri]} />
                         <Text style={styles.deleteText}>{item.name}</Text>
                       </Touchable>
@@ -102,16 +107,24 @@ class Settings extends Component {
             }}
           />
         </SafeAreaView>
-        <DialogInput isDialogVisible={this.state.showDelete}
+        <DialogInput
+          isDialogVisible={this.state.showDelete}
           title={"Delete your account?"}
-          message={"Please type \"DELETE\" to confirm"}
+          message={'Please type "DELETE" to confirm'}
           hintInput={"DELETE"}
           submitText={"Delete my account"}
-          textInputProps={{autoCapitalize: "characters"}}
-          submitInput={ (inputText) => this.onDeleteAccount(inputText)}
-          closeDialog={ () => {this.setState({showDelete: false})}}>
-
-        </DialogInput>
+          textInputProps={{ autoCapitalize: "characters" }}
+          submitInput={inputText => this.onDeleteAccount(inputText)}
+          placeholderTextColor={"#9892A3"}
+          closeDialog={() => {
+            this.setState({ showDelete: false });
+          }}
+        />
+        <LogoutModal
+          isVisible={this.state.visibleLogout}
+          onCancel={() => this.setState({ visibleLogout: false })}
+          onLogout={this.onLogout}
+        />
       </View>
     );
   }

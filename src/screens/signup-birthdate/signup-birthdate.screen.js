@@ -46,11 +46,12 @@ class SignupFirstName extends React.Component {
               <Text style={styles.titleText}>When were you born?</Text>
               <WheelDatePicker
                 date={birthDate === null ? new Date() : birthDate}
-                onDateChange={(date) => {
+                onDateChange={date => {
                   this.props.setBirthDate(date);
-                }} />
+                }}
+              />
             </View>
-  
+
             <View style={styles.buttonContainer}>
               <GradientButton
                 disabled={!this.props.birthDate}
@@ -61,8 +62,8 @@ class SignupFirstName extends React.Component {
           </View>
         </View>
       </Screen>
-    )
+    );
   }
-};
+}
 
 export default SignupFirstName;

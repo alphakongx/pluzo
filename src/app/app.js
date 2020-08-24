@@ -1,9 +1,11 @@
 import React from "react";
 import { StatusBar, Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import SplashScreen from "react-native-splash-screen";
 import KeyboardManager from "react-native-keyboard-manager";
 import Geolocation from "react-native-geolocation-service";
 import AsyncStorage from "@react-native-community/async-storage";
+import FastImage from "react-native-fast-image";
 import EventBus from "eventing-bus";
 import { connect } from "react-redux";
 import { AppContainer } from "../screens";
@@ -11,10 +13,9 @@ import Loading from "../screens/loading";
 import { WS } from "@components";
 import { NavigationService } from "@helpers";
 import { SCREENS } from "@constants";
-import { COLOR } from "../config/color";
+import { COLOR } from "@config";
 import { getLocationUpdates } from "@helpers";
-import { UserCreators, InboxCreators } from "../redux/actions";
-import SplashScreen from "react-native-splash-screen";
+import { UserCreators, InboxCreators, LiveCreators } from "../redux/actions";
 
 if (Platform.OS === "ios") {
   KeyboardManager.setKeyboardDistanceFromTextField(100);
@@ -34,6 +35,7 @@ class App extends React.Component {
     try {
       let userToken = await AsyncStorage.getItem("USER_TOKEN");
       if (userToken) {
+        this.firstLoading = true;
         this.props.requestProfile(userToken);
       }
     } catch (error) {
@@ -63,6 +65,7 @@ class App extends React.Component {
     if (user !== null && token !== "" && token !== null) {
       if (user.status === 1) {
         AsyncStorage.setItem("USER_TOKEN", token);
+        FastImage.preload([{ uri: user.images[0].path }]);
         NavigationService.navigate(SCREENS.HOMESTACK);
       } else {
         NavigationService.navigate(SCREENS.SIGNUP_CODE_VERIFICATION, {
@@ -79,16 +82,20 @@ class App extends React.Component {
     let data = JSON.parse(ev.data);
     console.log("Socket: >>", this.props.user.id, data);
     if (data.action === "Friends") {
-      this.props.updateFriends(data.data);
+      if (this.props.user.id === data.user) {
+        this.props.updateFriends(JSON.parse(data.data));
+      }
     } else if (data.action === "Chat") {
       EventBus.publish("NEW_MSG", data.data);
+    } else if (data.action === "Start_stream" || data.action === "Stop_stream") {
+      this.props.requestStreamList(this.props.token);
     } else {
-      // console.log("Socket: >>", this.props.user.id, data);
+      console.log("Socket: >>", this.props.user.id, data);
     }
   };
 
   render() {
-    if (this.props.loading) {
+    if (this.props.loading && this.firstLoading) {
       return (
         <SafeAreaProvider>
           <StatusBar barStyle='light-content' backgroundColor={COLOR.HEADER_BACKGROUND} />
@@ -97,6 +104,7 @@ class App extends React.Component {
       );
     }
 
+    this.firstLoading = false;
     return (
       <SafeAreaProvider>
         <StatusBar barStyle='light-content' backgroundColor={COLOR.HEADER_BACKGROUND} />
@@ -132,6 +140,7 @@ const mapDispatchToProps = {
   requestProfile: UserCreators.requestProfile,
   updateLocation: UserCreators.updateLocation,
   updateFriends: InboxCreators.requestFriendsSuccess,
+  requestStreamList: LiveCreators.requestStreamList,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

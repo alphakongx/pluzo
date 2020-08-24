@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { SafeAreaView, View } from "react-native";
-import { Image, Text, Touchable } from "@components";
-import LinearGradient from "react-native-linear-gradient";
-import { GRADIENT } from "@config";
+import { Screen, Image, Text, Touchable } from "@components";
 import NewFriends from "./new-friends";
 import Messages from "./messages";
 import AddFriendModal from "./add-friend-modal";
@@ -41,12 +39,7 @@ class Inbox extends Component {
   render() {
     const { visibleAddFriend, visiblePendingRequest } = this.state;
     return (
-      <LinearGradient
-        colors={GRADIENT.SCREEN_BACKGROUND}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.container}
-      >
+      <Screen hasGradient style={styles.container}>
         <SafeAreaView style={styles.safeAreaContainer}>
           <View style={styles.viewContainer}>
             <View style={styles.header}>
@@ -86,7 +79,7 @@ class Inbox extends Component {
           isVisible={visiblePendingRequest}
           dismissModal={() => this.setState({ visiblePendingRequest: false })}
         />
-      </LinearGradient>
+      </Screen>
     );
   }
 }

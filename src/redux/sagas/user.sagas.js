@@ -128,8 +128,7 @@ function* requestCheckPhone(action) {
 
     yield call(checkPhone, params);
 
-    if (screenName)
-      NavigationService.navigate(screenName, { phoneNumber });
+    if (screenName) NavigationService.navigate(screenName, { phoneNumber });
 
     yield put(UserCreators.checkPhoneSuccess());
   } catch (error) {
@@ -236,8 +235,8 @@ function* requestResetPassword(action) {
 
     yield put(UserCreators.resetPasswordSuccess());
     const channel = yield call(notifyCallback);
-    while(true) {
-      const {success} = yield take(channel);
+    while (true) {
+      const { success } = yield take(channel);
       if (success) {
         yield put(UserCreators.loginSuccess(response.data.data));
         return;
@@ -254,8 +253,8 @@ function notifyCallback() {
       emitter({ success: true });
       emitter(END);
     });
-    return () => {}
-  })
+    return () => {};
+  });
 }
 
 function* requestPhoneLoginSendCode(action) {
@@ -339,7 +338,7 @@ function* requestDeleteAccount(action) {
     yield call(deleteAccount, token);
     yield put(UserCreators.deleteAccountSuccess());
     yield put(UserCreators.logout());
-  } catch(error) {
+  } catch (error) {
     yield put(UserCreators.deleteAccountFailure());
   }
 }

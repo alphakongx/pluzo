@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import EventBus from "eventing-bus";
-import { Image, Text, Touchable, GradientButton, SolidButton } from "@components";
+import { Text, Touchable, GradientButton, SolidButton } from "@components";
 import { NavigationService } from "@helpers";
 import { SCREENS } from "@constants";
 import styles from "./search-people-item.style";
+import FastImage from "react-native-fast-image";
 
 const SearchPeopleItem: () => React$Node = props => {
   const [adding, setAdding] = useState(false);
   const [isFriend, setIsFriend] = useState(props.item.friend === 2);
-  const { image, images, avatar, first_name, username } = props.item;
-  const peoplePicture = images.length === 0 ? null : images[0].path;
+  const { images, first_name, username } = props.item;
+
+  const peoplePicture =
+    images.length === 0 ? null : images.sort((a, b) => a.sort > b.sort)[0].path;
+  console.log(images[0]);
 
   useEffect(() => {
     let addAction = EventBus.on("ADDFRIEND", (userName, success) => {
@@ -35,7 +39,7 @@ const SearchPeopleItem: () => React$Node = props => {
     >
       <View style={styles.messageContainer}>
         <View style={styles.imageContainer}>
-          <Image
+          <FastImage
             source={
               peoplePicture === null
                 ? require("@assets/images/message-image.png")

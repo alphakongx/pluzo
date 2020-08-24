@@ -1,6 +1,8 @@
 import React from "react";
-import { View, ScrollView, ActivityIndicator, TextInput, } from "react-native";
-import ImagePicker from "react-native-image-picker";
+import { View, ScrollView, ActivityIndicator, TextInput } from "react-native";
+import FastImage from "react-native-fast-image";
+import ImagePicker from "react-native-image-crop-picker";
+import ActionSheet from "react-native-actionsheet";
 import EventBus from "eventing-bus";
 import { UserTypes } from "@redux/actions";
 import { SCREENS } from "@constants";
@@ -35,6 +37,7 @@ class ProfileSettings extends React.Component {
       uploading: false,
       bioText: this.props.user.bio || "",
     };
+    this.ActionSheet = React.createRef();
   }
 
   componentDidMount() {
@@ -46,12 +49,15 @@ class ProfileSettings extends React.Component {
       UserTypes.UPDATE_USER_FAILURE,
       this.uploadingDone,
     );
-    console.log(this.props.user);
+    this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
+      this.props.requestProfile(this.props.token);
+    });
   }
 
   componentWillUnmount() {
     this.updateSuccessAction();
     this.updateFailureAction();
+    this._unsubscribe;
   }
 
   uploadingDone = () => {
@@ -63,64 +69,60 @@ class ProfileSettings extends React.Component {
   };
 
   onAddImage = () => {
-    this.onSelectImage("images");
+    this.ActionSheet.show();
   };
 
-  onSelectImage = type => {
+  onSelectImage = index => {
     const options = {
-      title: "Select Image",
-      storageOptions: {
-        skipBackup: true,
-        path: "images",
-      },
+      width: 600,
+      height: 800,
+      cropping: true,
+      compressImageQuality: 0.7,
     };
 
-    ImagePicker.showImagePicker(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
-      } else {
-        let photoUriSplit = response.uri.split("/");
+    if (index === 0) {
+      ImagePicker.openCamera(options).then(image => {
+        this.onUploadImage(image);
+      });
+    } else if (index === 1) {
+      ImagePicker.openPicker(options).then(image => {
+        this.onUploadImage(image);
+      });
+    }
+  };
 
-        const image = {
-          uri: response.uri,
-          name: photoUriSplit[photoUriSplit.length - 1],
-          type: response.type,
-        };
-        if (type === "avatar") {
-          this.setState({ avatarUploading: true }, () => {
-            const params = new FormData();
-            params.append("image", image);
-            this.props.updateUser(params, this.props.token);
-          });
-        } else {
-          this.setState({ uploading: true }, () => {
-            const params = new FormData();
-            params.append("images[]", image);
-            this.props.updateUser(params, this.props.token);
-          });
-        }
-      }
+  onUploadImage = data => {
+    let photoUriSplit = data.path.split("/");
+
+    const image = {
+      uri: data.path,
+      name: photoUriSplit[photoUriSplit.length - 1],
+      type: data.mime,
+    };
+    this.setState({ uploading: true }, () => {
+      const params = new FormData();
+      params.append("images[]", image);
+      this.props.updateUser(params, this.props.token);
     });
   };
 
   onDeleteImage = imageId => {
     if (this.props.user.images.length === 1) return;
-    Notification.confirmAlert("Delete", "Do you want to delete this image?", () => {
+    Notification.confirmAlert("Delete", "Do you want to delete this image?", "OK", () => {
       this.props.deleteImage(imageId, this.props.token);
     });
   };
 
   render() {
-    const { user, deletingImageId } = this.props;
+    const { user, deletingImageId, insets } = this.props;
     const { uploading, avatarUploading } = this.state;
 
     let reverseImages = [...user.images];
     reverseImages.sort((a, b) => a.sort < b.sort);
 
     return (
-      <Screen>
-        <ScrollView style={styles.container} bounces={false}>
+      <Screen style={[styles.container, { marginBottom: insets.bottom + 50 }]}>
+        <ScrollView>
           <Header navigation={this.props.navigation} />
           <UserProfile
             user={user}
@@ -128,9 +130,11 @@ class ProfileSettings extends React.Component {
             onAvatarClick={this.onProfileClick}
             onNameClick={this.onProfileClick}
           />
-          <View style={styles.chooseBadgeButton}>
+          <View style={styles.badgeButtonContainer}>
             <SolidButton
               text={"Choose Badges"}
+              textStyle={styles.chooseBadgeText}
+              containerStyle={styles.chooseBadgeButton}
               onPress={() => this.setState({ visibleChooseBadge: true })}
             />
           </View>
@@ -147,24 +151,24 @@ class ProfileSettings extends React.Component {
                 </View>
               </Touchable>
               {reverseImages.map((image, index) => {
-                  return (
-                    <Touchable
-                      key={index}
-                      style={styles.imageItem}
-                      onPress={() => {
-                        this.props.navigation.navigate(SCREENS.IMAGES_REORDER, {});
-                      }}
-                      onLongPress={() => this.onDeleteImage(image.id)}
-                    >
-                      <Image source={{ uri: image.path }} style={styles.profileImage} />
-                      {deletingImageId === image.id && (
-                        <View style={styles.imageLoadingContainer}>
-                          <ActivityIndicator size={"small"} color={"white"} />
-                        </View>
-                      )}
-                    </Touchable>
-                  );
-                })}
+                return (
+                  <Touchable
+                    key={index}
+                    style={styles.imageItem}
+                    onPress={() => {
+                      this.props.navigation.navigate(SCREENS.IMAGES_REORDER, {});
+                    }}
+                    onLongPress={() => this.onDeleteImage(image.id)}
+                  >
+                    <FastImage source={{ uri: image.path }} style={styles.profileImage} />
+                    {deletingImageId === image.id && (
+                      <View style={styles.imageLoadingContainer}>
+                        <ActivityIndicator size={"small"} color={"white"} />
+                      </View>
+                    )}
+                  </Touchable>
+                );
+              })}
             </ScrollView>
           </View>
 
@@ -179,7 +183,12 @@ class ProfileSettings extends React.Component {
                 placeholderTextColor={"#E8E6FF"}
                 selectionColor={"white"}
                 value={this.state.bioText}
-                onChangeText={text => this.setState({ bioText: text })}
+                onChangeText={text => {
+                  const lines = text.split("\n");
+                  if (lines.length <= 4) {
+                    this.setState({ bioText: text });
+                  }
+                }}
                 onEndEditing={() => {
                   const params = new FormData();
                   params.append("bio", this.state.bioText);
@@ -201,17 +210,19 @@ class ProfileSettings extends React.Component {
 
             <View style={styles.plusContainer}>
               <View>
-                <BoxShadow setting={{
-                  width: width - 40,
-                  height: ((width - 40) * 169) / 336,
-                  color: "#FF0000",
-                  opacity: 0.15,
-                  _borderRadius: 22,
-                  spread: 0,
-                  blur: 40,
-                  offsetX: 0,
-                  offsetY: 0,
-                }}/>
+                <BoxShadow
+                  setting={{
+                    width: width - 40,
+                    height: ((width - 40) * 169) / 336,
+                    color: "#FF0000",
+                    opacity: 0.15,
+                    _borderRadius: 22,
+                    spread: 0,
+                    blur: 40,
+                    offsetX: 0,
+                    offsetY: 0,
+                  }}
+                />
                 <Image source={Images.app.pluzoPlus} style={styles.premiumImage} />
               </View>
               <View style={styles.buttonContainer}>
@@ -234,6 +245,14 @@ class ProfileSettings extends React.Component {
         <ChooseBadgeModal
           isVisible={this.state.visibleChooseBadge}
           dismissModal={() => this.setState({ visibleChooseBadge: false })}
+        />
+
+        <ActionSheet
+          ref={o => (this.ActionSheet = o)}
+          title={"Select Image"}
+          options={["Take Photo...", "Choose from Library...", "Cancel"]}
+          cancelButtonIndex={2}
+          onPress={index => this.onSelectImage(index)}
         />
       </Screen>
     );

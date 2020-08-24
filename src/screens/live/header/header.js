@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { View } from "react-native";
+import LiveUsers from "../live-users";
 import LeftElement from "./left-element";
 import RightElement from "./right-element";
-import { Notification } from "@helpers";
+import { SCREENS } from "@constants";
+import { NavigationService } from "@helpers";
 
 import styles from "./header.style";
 
@@ -11,20 +13,23 @@ const Header: () => React$Node = props => {
 
   const onSearchPress = () => {
     setSearchActive(!isSearchActive);
-  }
+  };
 
   const onFilterPress = () => {
-    Notification.alert("coming soon");
-  }
+    NavigationService.navigate(SCREENS.LIVE_FILTER_SETTING, {});
+  };
 
   return (
-    <View style={styles.header}>
-      <LeftElement 
-        isSearchActive={isSearchActive} />
-      <RightElement
-        isSearchActive={isSearchActive}
-        onSearchPress={onSearchPress}
-        onFilterPress={onFilterPress} />
+    <View style={isSearchActive ? styles.bottomMargin : styles.bottomMarginSmall}>
+      <View style={styles.header}>
+        <LeftElement isSearchActive={isSearchActive} />
+        <RightElement
+          isSearchActive={isSearchActive}
+          onSearchPress={onSearchPress}
+          onFilterPress={onFilterPress}
+        />
+      </View>
+      {!isSearchActive && <LiveUsers />}
     </View>
   );
 };

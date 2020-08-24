@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { COLOR } from "@config";
 import { FontHelper } from "@helpers";
 
@@ -7,6 +7,8 @@ export default StyleSheet.create({
     backgroundColor: COLOR.MESSAGE_INPUT_TOOLBAR_BACKGROUND,
     borderTopWidth: 1,
     borderTopColor: "#FFFFFF10",
+    paddingTop: 10,
+    paddingBottom: Platform.OS === "ios" ? 15 : 5,
   },
   attachmentsButtonContainer: {
     marginLeft: 10,
@@ -17,18 +19,33 @@ export default StyleSheet.create({
     borderRadius: 17.5,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 3,
+    marginBottom: Platform.OS === "ios" ? 3 : 6.5,
+    marginLeft: 5,
   },
   inputField: FontHelper.font({
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: 14,
     color: COLOR.TEXT_INPUT,
     borderRadius: 25,
-    marginRight: 10,
-    paddingTop: 8,
-    paddingLeft: 15,
-    paddingRight: 40,
-    backgroundColor: "white",
+    ...Platform.select({
+      ios: {
+        marginLeft: 10,
+        marginRight: 10,
+        paddingLeft: 15,
+        paddingRight: 40,
+        paddingTop: 10,
+        backgroundColor: "white",
+        lineHeight: 16,
+      },
+      android: {
+        marginLeft: 10,
+        marginRight: 10,
+        paddingLeft: 15,
+        paddingRight: 40,
+        backgroundColor: "white",
+        lineHeight: 16,
+      },
+    }),
   }),
   sendButton: {
     width: 35,

@@ -17,7 +17,6 @@ export default StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: "rgba(255, 255, 255, 0.15)",
-    marginTop: 15,
     marginBottom: 20,
   },
   swiperWrapper: {

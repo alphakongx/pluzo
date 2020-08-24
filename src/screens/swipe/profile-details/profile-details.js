@@ -1,13 +1,15 @@
 import React from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-navigation";
-import { Image, Text, Touchable } from "@components";
+import { Screen, Image, Text, Touchable } from "@components";
 import LinearGradient from "react-native-linear-gradient";
+import Images from "@assets/Images";
 import moment from "moment";
 import { GRADIENT } from "@config";
 import { Distance } from "@helpers";
 
 import styles from "./profile-details.style";
+const appBadges = require("@config/data/badges.json");
 
 class ProfileDetails extends React.Component {
   constructor(props) {
@@ -15,7 +17,15 @@ class ProfileDetails extends React.Component {
   }
 
   render() {
-    var { first_name, birthday, address, bio, latitude, longitude } = this.props.item;
+    var {
+      first_name,
+      birthday,
+      address,
+      bio,
+      latitude,
+      longitude,
+      badges,
+    } = this.props.item;
     const { location } = this.props;
 
     if (first_name === null || first_name === "") {
@@ -37,12 +47,7 @@ class ProfileDetails extends React.Component {
     return (
       <View style={styles.container}>
         <SafeAreaView>
-          <LinearGradient
-            colors={GRADIENT.SCREEN_BACKGROUND}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.contentContainer}
-          >
+          <Screen hasGradient style={styles.contentContainer}>
             <Touchable style={styles.closeButton} onPress={this.props.hideDetail}>
               <Image source={require("@assets/images/swipe-screen/swipe-arrow-up.png")} />
             </Touchable>
@@ -73,6 +78,17 @@ class ProfileDetails extends React.Component {
                 {address === null ? "no address" : address}
               </Text>
             </View>
+            <View style={styles.badgeContainer}>
+              {badges.map(badge => {
+                return (
+                  <Image
+                    key={`badge-${badge}`}
+                    source={Images.live[appBadges[badge].icon]}
+                    style={styles.badgeIcon}
+                  />
+                );
+              })}
+            </View>
             <View style={styles.descriptionContainer}>
               <Text style={styles.descriptionText}>{bio}</Text>
             </View>
@@ -96,7 +112,7 @@ class ProfileDetails extends React.Component {
                 />
               </Touchable>
             </View>
-          </LinearGradient>
+          </Screen>
         </SafeAreaView>
       </View>
     );

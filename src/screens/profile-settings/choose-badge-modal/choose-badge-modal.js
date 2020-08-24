@@ -1,49 +1,63 @@
 import React, { Component } from "react";
 import { View, ScrollView } from "react-native";
-import { Image, Text, BackButton, Touchable, AutoDragSortableView } from "@components";
+import {
+  Screen,
+  Image,
+  Text,
+  BackButton,
+  Touchable,
+  AutoDragSortableView,
+} from "@components";
 import { BlurView } from "@react-native-community/blur";
-import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
 
-import { GRADIENT } from "@config";
 import Images from "@assets/Images";
 import styles from "./choose-badge-modal.style";
 
-const allBadgesList = [
-  { id: 1, icon: Images.live.tagPicture, selected: false },
-  { id: 2, icon: Images.live.tagMusic, selected: false },
-  { id: 3, icon: Images.live.tagBox, selected: false },
-  { id: 4, icon: Images.live.tagLove, selected: false },
-  { id: 5, icon: Images.live.tagSport, selected: false },
-  { id: 6, icon: Images.live.tagSea, selected: false },
-  { id: 7, icon: Images.live.tagTravel, selected: false },
-  { id: 8, icon: Images.live.tagPicture, selected: false },
-];
+const allBadgesList = require("@config/data/badges.json");
 
 class ChooseBadgeModal extends Component {
   constructor(props) {
     super(props);
 
-    let badges = [
-      { id: 1, icon: Images.live.tagPicture },
-      { id: 2, icon: Images.live.tagMusic },
-      { id: 3, icon: Images.live.tagBox },
-    ];
-    var arrBadges = [];
-    allBadgesList.forEach((value, index) => {
-      let sameBadges = badges.filter(badge => value.id === badge.id);
-      if (sameBadges.length !== 0) {
-        value.selected = true;
-      }
-      arrBadges.push(value);
-    });
-
     this.state = {
-      badges,
-      arrBadges,
+      badges: [],
+      arrBadges: [],
       dragIndex: -1,
     };
   }
+
+  onModalShow = () => {
+    let arrBadges = [];
+    let badges = this.props.user.badges.map(badge => ({
+      id: badge,
+      icon: allBadgesList[badge].icon,
+    }));
+    Object.values(allBadgesList).forEach((value, index) => {
+      let sameBadges = badges.filter(
+        badge => parseInt(value.id, 10) === parseInt(badge.id, 10),
+      );
+      if (sameBadges.length !== 0) {
+        value.selected = true;
+      } else {
+        value.selected = false;
+      }
+      arrBadges.push(value);
+    });
+    this.setState({ badges, arrBadges });
+  };
+
+  onModalHide = () => {
+    const params = new FormData();
+    const { badges } = this.state;
+    badges.forEach(badge => {
+      params.append("badges[]", badge.id);
+    });
+    if (badges.length === 0) {
+      params.append("remove_badges", 1);
+    }
+    this.props.updateUser(params, this.props.token);
+  };
 
   onSelectBadge = index => {
     const { arrBadges, badges } = this.state;
@@ -64,16 +78,19 @@ class ChooseBadgeModal extends Component {
 
   render() {
     const { badges, arrBadges } = this.state;
+
     return (
       <Modal
         {...this.props}
         customBackdrop={
-          <BlurView
-            style={styles.flexFill}
-            blurType='dark'
-            blurAmount={10}
-            reducedTransparencyFallbackColor='#0B0516'
-          />
+          <Touchable style={styles.flexFill} onPress={this.props.dismissModal}>
+            <BlurView
+              style={styles.flexFill}
+              blurType='dark'
+              blurAmount={10}
+              reducedTransparencyFallbackColor='#0B0516'
+            />
+          </Touchable>
         }
         animationIn={"zoomIn"}
         animationOut={"zoomOut"}
@@ -81,13 +98,12 @@ class ChooseBadgeModal extends Component {
         backdropOpacity={1}
         useNativeDriver={false}
         propagateSwipe={true}
+        onModalShow={this.onModalShow}
+        onModalWillHide={this.onModalHide}
+        swipeDirection={"down"}
+        onSwipeComplete={this.props.dismissModal}
       >
-        <LinearGradient
-          colors={GRADIENT.SCREEN_BACKGROUND}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.container}
-        >
+        <Screen hasGradient style={styles.container}>
           <View style={styles.headerContainer}>
             <Text style={styles.titleText}>Profile Badges</Text>
             <BackButton icon={Images.app.icBack} onPress={this.props.dismissModal} />
@@ -100,8 +116,9 @@ class ChooseBadgeModal extends Component {
               parentWidth={badges.length * 46}
               childrenWidth={36}
               childrenHeight={36}
-              marginChildrenLeft={10}
+              marginChildrenRight={10}
               maxScale={1}
+              contentContainerStyle={styles.scrollContentCenter}
               onDragStart={index => {
                 this.setState({ dragIndex: index });
               }}
@@ -120,7 +137,7 @@ class ChooseBadgeModal extends Component {
                       this.state.dragIndex === index ? styles.badgeActive : {},
                     ]}
                   >
-                    <Image source={item.icon} style={styles.badgeImage} />
+                    <Image source={Images.live[item.icon]} style={styles.badgeImage} />
                   </View>
                 );
               }}
@@ -150,7 +167,10 @@ class ChooseBadgeModal extends Component {
                             : styles.badgeWrapper
                         }
                       >
-                        <Image source={badge.icon} style={styles.badgeImage} />
+                        <Image
+                          source={Images.live[badge.icon]}
+                          style={styles.badgeImage}
+                        />
                       </View>
                     </Touchable>
                   </View>
@@ -158,7 +178,7 @@ class ChooseBadgeModal extends Component {
               })}
             </View>
           </ScrollView>
-        </LinearGradient>
+        </Screen>
       </Modal>
     );
   }

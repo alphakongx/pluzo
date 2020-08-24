@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, View, Text as RNText } from "react-native";
+import { Image, View } from "react-native";
 import {
   GradientButton,
   ProgressBar,
@@ -69,7 +69,7 @@ const ResetPassword: () => React$Node = props => {
                     : styles.instructionInvalidIcon
                 }
               />
-              <Text style={styles.passwordRequirement}>Have atleast 8 characters</Text>
+              <Text style={styles.passwordRequirement}>Have at least 8 characters</Text>
             </View>
             <View style={styles.instructionContainer}>
               <View
@@ -80,7 +80,7 @@ const ResetPassword: () => React$Node = props => {
                 }
               />
               <Text style={styles.passwordRequirement}>
-                Have atleast 1 capital letter
+                Have at least one capital letter
               </Text>
             </View>
             <View style={styles.instructionContainer}>
@@ -91,7 +91,7 @@ const ResetPassword: () => React$Node = props => {
                     : styles.instructionInvalidIcon
                 }
               />
-              <Text style={styles.passwordRequirement}>Have atleast 1 number</Text>
+              <Text style={styles.passwordRequirement}>Have at least one number</Text>
             </View>
           </View>
         </View>

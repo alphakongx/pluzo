@@ -6,9 +6,8 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { Image, BackButton, Text, Touchable, BorderButton } from "@components";
-import LinearGradient from "react-native-linear-gradient";
-import { GRADIENT, COLOR } from "@config";
+import { Screen, Image, BackButton, Text, Touchable, BorderButton } from "@components";
+import { COLOR } from "@config";
 import styles from "./search.style";
 import SearchPeopleItem from "./search-people-item";
 import SearchChatItem from "./search-chat-item";
@@ -62,12 +61,7 @@ class SearchScreen extends Component {
     const { currentFilter } = this.state;
     const { isSearching, friends, chat, people } = this.props;
     return (
-      <LinearGradient
-        colors={GRADIENT.SCREEN_BACKGROUND}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.container}
-      >
+      <Screen hasGradient style={styles.container}>
         <SafeAreaView style={styles.contentContainer}>
           <View style={styles.headerContainer}>
             <BackButton
@@ -194,7 +188,7 @@ class SearchScreen extends Component {
             </ScrollView>
           )}
         </SafeAreaView>
-      </LinearGradient>
+      </Screen>
     );
   }
 }

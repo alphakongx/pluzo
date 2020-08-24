@@ -38,11 +38,12 @@ export default StyleSheet.create({
   badgeImage: {
     width: 14,
     height: 14,
+    marginLeft: 5,
   },
   usernameText: {
     fontSize: 14,
     fontWeight: "700",
-    color: "white",
+    color: "#ABA7D5",
     marginTop: -2,
   },
   friendsContainer: {

@@ -24,3 +24,5 @@ export * from "./wheel-date-picker";
 export * from "./dialog-input";
 export * from "./discover-people-item";
 export * from "./shadow";
+export * from "./blur-view";
+export * from "./fade-scrollview";

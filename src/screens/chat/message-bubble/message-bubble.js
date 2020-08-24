@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { Image, Text } from "@components";
+import FastImage from "react-native-fast-image";
+import { Text } from "@components";
 import styles from "./message-bubble.style.js";
 
 const MessageBubble: () => React$Node = props => {
@@ -13,13 +14,13 @@ const MessageBubble: () => React$Node = props => {
   return (
     <View style={[styles.container, hasImage && hasText ? {} : styles.containerMargin]}>
       {hasImage ? (
-        <Image
+        <FastImage
           source={{ uri: currentMessage.image }}
           style={[
             styles.messageImage,
             hasText ? styles.imageTextRound : styles.imageFullRound,
           ]}
-          resizeMode={"cover"}
+          resizeMode={FastImage.resizeMode.cover}
         />
       ) : null}
       {currentMessage.text !== null && currentMessage.text !== "" && (

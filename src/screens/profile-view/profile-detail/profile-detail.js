@@ -5,10 +5,13 @@ import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import { Distance } from "@helpers";
 import moment from "moment";
+import Images from "@assets/Images";
 import styles from "./profile-detail.style";
 
+const appBadges = require("@config/data/badges.json");
+
 const ProfileDetail: () => React$Node = props => {
-  var { first_name, birthday, address, latitude, longitude } = props.user;
+  var { first_name, birthday, address, latitude, longitude, badges } = props.user;
   const { location } = props;
 
   if (first_name === null || first_name === "") {
@@ -58,6 +61,17 @@ const ProfileDetail: () => React$Node = props => {
         <Text style={styles.topBarLocation}>
           {address === null ? "no address" : address}
         </Text>
+      </View>
+      <View style={styles.badgeContainer}>
+        {badges.map(badge => {
+          return (
+            <Image
+              key={`badge-${badge}`}
+              source={Images.live[appBadges[badge].icon]}
+              style={styles.badgeIcon}
+            />
+          );
+        })}
       </View>
     </View>
   );

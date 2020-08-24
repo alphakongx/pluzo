@@ -9,33 +9,44 @@ import {
   Touchable,
 } from "@components";
 import styles from "./signup-image.style.js";
-import ImagePicker from "react-native-image-picker";
+import ImagePicker from "react-native-image-crop-picker";
+import ActionSheet from "react-native-actionsheet";
 
 const SignupImage: () => React$Node = props => {
+  let actionSheetRef = React.createRef();
+
   const onPressUpload = () => {
+    actionSheetRef.show();
+  };
+
+  const onSelectImage = index => {
     const options = {
-      title: "Select Avatar",
-      storageOptions: {
-        skipBackup: true,
-        path: "images",
-      },
+      width: 600,
+      height: 800,
+      cropping: true,
+      compressImageQuality: 0.7,
     };
 
-    ImagePicker.showImagePicker(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
-      } else {
-        let photoUriSplit = response.uri.split("/");
+    if (index === 0) {
+      ImagePicker.openCamera(options).then(image => {
+        onUploadImage(image);
+      });
+    } else if (index === 1) {
+      ImagePicker.openPicker(options).then(image => {
+        onUploadImage(image);
+      });
+    }
+  };
 
-        const image = {
-          uri: response.uri,
-          name: photoUriSplit[photoUriSplit.length - 1],
-          type: response.type,
-        };
-        props.setPicture(image);
-      }
-    });
+  const onUploadImage = data => {
+    let photoUriSplit = data.path.split("/");
+
+    const image = {
+      uri: data.path,
+      name: photoUriSplit[photoUriSplit.length - 1],
+      type: data.mime,
+    };
+    props.setPicture(image);
   };
 
   const goBack = () => {
@@ -80,6 +91,14 @@ const SignupImage: () => React$Node = props => {
             text={"Continue"}
           />
         </View>
+
+        <ActionSheet
+          ref={o => (actionSheetRef = o)}
+          title={"Select Image"}
+          options={["Take Photo...", "Choose from Library...", "Cancel"]}
+          cancelButtonIndex={2}
+          onPress={index => onSelectImage(index)}
+        />
       </View>
     </Screen>
   );

@@ -7,11 +7,18 @@ export const { width } = Dimensions.get("window");
 export default StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 50,
+  },
+
+  badgeButtonContainer: {
+    padding: 20,
   },
   chooseBadgeButton: {
-    margin: 20,
+    height: 35,
   },
+  chooseBadgeText: {
+    fontSize: 14,
+  },
+
   imageContainer: {
     marginHorizontal: 20,
   },
@@ -82,7 +89,6 @@ export default StyleSheet.create({
     fontFamily: "OpenSans",
     fontWeight: "400",
     fontSize: 14,
-    maxHeight: 100,
     color: COLOR.TEXT_SECONDARY_2,
   }),
   bigTextLength: {

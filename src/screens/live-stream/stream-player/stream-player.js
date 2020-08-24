@@ -8,8 +8,8 @@ import styles from "./stream-player.style";
 class StreamPlayer extends Component {
   constructor(props) {
     super(props);
-    const { navigation } = this.props;
-    const { channelName, isBroadcaster } = navigation.state.params;
+    const { streamParams } = this.props;
+    const { channelName, isBroadcaster } = streamParams;
     this.state = {
       appId: RTCENGINE.appId,
       channelName: channelName,
@@ -33,6 +33,14 @@ class StreamPlayer extends Component {
   async componentWillUnmount() {
     await this._engine.leaveChannel();
     this._engine.destroy();
+
+    let names = this.state.channelName.split("-");
+    if (names.length > 1) {
+      if (parseInt(this.props.user.id, 10) === parseInt(names[1], 10)) {
+        let params = { channel_id: this.props.streamParams.channelName };
+        this.props.streamStop(params, this.props.token);
+      }
+    }
   }
 
   requestCameraAndAudioPermission = async () => {
@@ -65,13 +73,15 @@ class StreamPlayer extends Component {
     } else {
       this._engine.setClientRole(Types.ClientRole.Audience);
     }
-    this._engine.setVideoEncoderConfiguration({
-      frameRate: Types.VideoFrameRate.Fps60,
-      minFrameRate: Types.VideoFrameRate.Fps30,
-      degradationPrefer: Types.DegradationPreference.MaintainQuality,
-    }).catch(e => {
-      console.log(e);
-    });
+    this._engine
+      .setVideoEncoderConfiguration({
+        frameRate: Types.VideoFrameRate.Fps60,
+        minFrameRate: Types.VideoFrameRate.Fps30,
+        degradationPrefer: Types.DegradationPreference.MaintainQuality,
+      })
+      .catch(e => {
+        console.log(e);
+      });
     await this._engine.enableVideo();
     this.addRtcListeners();
     this._engine.joinChannel(null, channelName, null, this.props.user.id);
@@ -80,10 +90,12 @@ class StreamPlayer extends Component {
   addRtcListeners = () => {
     this._engine.addListener("UserJoined", (uid, elapsed) => {
       console.log("UserJoined", uid, elapsed);
+      this.updateChannelInformation();
     });
 
     this._engine.addListener("UserOffline", (uid, reason) => {
       console.log("UserOffline", uid, reason);
+      this.updateChannelInformation();
       const { streamerIds } = this.state;
       this.setState({
         streamerIds: streamerIds.filter(id => id !== uid),
@@ -92,6 +104,7 @@ class StreamPlayer extends Component {
 
     this._engine.addListener("JoinChannelSuccess", (channel, uid, elapsed) => {
       console.log("JoinChannelSuccess", channel, uid, elapsed);
+      this.updateChannelInformation();
       this.setState({
         joinSucceed: true,
       });
@@ -107,6 +120,11 @@ class StreamPlayer extends Component {
         }
       }
     });
+  };
+
+  updateChannelInformation = () => {
+    const { channelName } = this.state;
+    this.props.streamUserList(channelName, this.props.token);
   };
 
   renderVideoView = uid => {

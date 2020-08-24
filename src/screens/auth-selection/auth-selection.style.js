@@ -23,7 +23,7 @@ export default StyleSheet.create({
     marginTop: 20,
   },
   termPolicyContainer: {
-    marginTop: 25,
+    marginTop: 40,
   },
   termPolicyText: {
     fontSize: 11,

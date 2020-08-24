@@ -15,7 +15,8 @@ export default StyleSheet.create({
   header: {
     flexDirection: "row",
     height: 70,
-    paddingHorizontal: 20,
+    paddingLeft: 10,
+    alignItems: "center",
   },
   searchFieldContainer: {
     flex: 1,
@@ -45,6 +46,7 @@ export default StyleSheet.create({
     width: 50,
     justifyContent: "center",
     alignItems: "center",
+    marginHorizontal: 8,
   },
   contentContainer: {
     flex: 1,

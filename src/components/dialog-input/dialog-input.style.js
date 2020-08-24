@@ -1,173 +1,96 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, Dimensions } from "react-native";
+import { FontHelper } from "@helpers";
+
+const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
-  container:{
-    flex:1,
-    width: '100%',
-    height: '100%',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...Platform.select({
-      android:{
-        backgroundColor: 'rgba(0,0,0,0.62)'
-      }
-    }),
-  },
-  modal_container:{
-    marginLeft: 30,
-    marginRight: 30,
-    ...Platform.select({
-      ios: {
-        backgroundColor:'#E3E6E7',
-        borderRadius: 10,
-        minWidth: 300,
-      },
-      android: {
-        backgroundColor:'#fff',
-        elevation: 24,
-        minWidth: 280,
-        borderRadius: 5,
-      },
-    }),
-  },
-  modal_body:{
-    ...Platform.select({
-      ios: {
-        padding: 10,
-      },
-      android: {
-        paddingTop: 24,
-        paddingBottom: 5,
-        paddingHorizontal: 24,
-      },
-    }),
-  },
-  title_modal:{
-    fontWeight: 'bold',
-    fontSize: 18,
-    ...Platform.select({
-      ios: {
-        marginTop: 10,
-        textAlign:'center',
-        marginBottom: 5,
-      },
-      android: {
-        textAlign:'left',
-      },
-    }),
-  },
-  message_modal:{
-    fontSize: 12,
-    ...Platform.select({
-      ios: {
-        textAlign:'center',
-        marginBottom: 10,
-      },
-      android: {
-        textAlign:'left',
-        marginTop: 20
-      },
-    }),
-  },
-  input_container:{
-    textAlign:'left',
-    fontSize: 16,
-    color: 'rgba(0,0,0,1)',
-    ...Platform.select({
-      ios: {
-        backgroundColor: 'white',
-        borderRadius: 5,
-        paddingTop: 5,
-	      borderWidth: 1,
-        borderColor: '#B0B0B0',
-        paddingBottom: 5,
-        paddingLeft: 10,
-        marginBottom: 0,
-        marginTop: 10,
-      },
-      android: {
-        marginTop: 8,
-        borderBottomWidth: 2,
-        borderColor: '#009688',
-      },
-    }),
-  },
-  btn_container:{
+  container: {
     flex: 1,
-    // flexDirection: 'row',
+    width: "100%",
+    height: "100%",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     ...Platform.select({
-      ios: {
-        justifyContent: 'center',
-        borderTopWidth: 1,
-        borderColor: '#B0B0B0',
-        maxHeight: 88,
-      },
-      android:{
-        alignSelf: 'flex-end',
-        maxHeight: 88,
-        paddingTop: 8,
-        paddingBottom: 8,
-      }
-    }),
-  },
-  divider_btn:{
-    ...Platform.select({
-      ios:{
-      	height: 1,
-        backgroundColor: '#B0B0B0',
-      },
-      android:{
-	      height: 0
+      android: {
+        backgroundColor: "rgba(0,0,0,0.62)",
       },
     }),
   },
-  touch_modal:{
+  modal_container: {
     ...Platform.select({
       ios: {
-        flex: 1,
-      },
-      android:{
-        paddingRight: 16,
-        minWidth: 64,
-        height: 36,
-      }
-    }),
-  },
-  btn_modal_left:{
-    ...Platform.select({
-      fontWeight: 'bold',
-      ios: {
-        fontSize:18,
-        color:'#408AE2',
-        textAlign:'center',
-        borderRightWidth: 5,
-        borderColor: '#B0B0B0',
-        padding: 10,
-	      height: 48,
-	      maxHeight: 48,
+        backgroundColor: "#E3E6E7",
+        borderRadius: 22,
+        minWidth: width - 30,
       },
       android: {
-        textAlign:'right',
-        color:'#009688',
-        padding: 8
+        backgroundColor: "#fff",
+        elevation: 24,
+        minWidth: width - 30,
+        borderRadius: 22,
       },
     }),
   },
-  btn_modal_right:{
-    ...Platform.select({
-      fontWeight: 'bold',
-      ios: {
-        fontSize:16,
-        color:'#FF0000',
-        textAlign:'center',
-        padding: 10,
-      },
-      android: {
-        textAlign:'right',
-        color:'#009688',
-        padding: 8
-      },
-    }),
+  modal_body: {
+    padding: 0,
+  },
+  title_modal: {
+    fontWeight: "bold",
+    fontSize: 22,
+    color: "white",
+    marginTop: 30,
+    textAlign: "center",
+  },
+  message_modal: {
+    fontFamily: "OpenSans",
+    fontSize: 16,
+    color: "#ABA7D5",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  input_container: FontHelper.font({
+    textAlign: "left",
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "rgba(0,0,0,1)",
+    height: 35,
+    borderRadius: 18,
+    backgroundColor: "white",
+    marginHorizontal: 28,
+    marginBottom: 35,
+  }),
+  btn_container: {
+    flex: 1,
+    justifyContent: "center",
+    borderTopWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.15)",
+    maxHeight: 100,
+  },
+  divider_btn: {
+    height: 1,
+    backgroundColor: "white",
+    opacity: 0.15,
+  },
+  touch_modal: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btn_modal_left: {
+    fontFamily: "OpenSans",
+    fontSize: 16,
+    color: "white",
+    paddingLeft: 8.5,
+  },
+  btn_modal_right: {
+    fontFamily: "OpenSans",
+    fontSize: 16,
+    color: "#DC2E2E",
+    paddingLeft: 8.5,
+  },
+  noneHeight: {
+    height: 0,
   },
 });

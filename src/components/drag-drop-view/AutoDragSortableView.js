@@ -459,11 +459,13 @@ export default class AutoDragSortableView extends Component {
       const left = this.touchCurItem.originLeft + dx;
       const top = this.touchCurItem.originTop + dy;
 
-      this.touchCurItem.ref.setNativeProps({
-        style: {
-          zIndex: touchZIndex,
-        },
-      });
+      if (this.touchCurItem) {
+        this.touchCurItem.ref.setNativeProps({
+          style: {
+            zIndex: touchZIndex,
+          },
+        });
+      }
 
       this.state.dataSource[this.touchCurItem.index].position.setValue({
         x: left,
@@ -755,6 +757,7 @@ export default class AutoDragSortableView extends Component {
         scrollEnabled={this.state.scrollEnabled}
         onScroll={this.onScrollListener}
         style={styles.container}
+        contentContainerStyle={this.props.contentContainerStyle}
       >
         {this.props.renderHeaderView ? this.props.renderHeaderView : null}
         <View
@@ -763,7 +766,7 @@ export default class AutoDragSortableView extends Component {
             styles.swipe,
             {
               width: this.props.parentWidth,
-              height: this.state.height,
+              height: this.state.height || 0,
             },
           ]}
           //onLayout={()=> {}}
@@ -885,6 +888,7 @@ AutoDragSortableView.defaultProps = {
   headerViewHeight: 0,
   bottomViewHeight: 0,
   horizontal: false,
+  contentContainerStyle: {},
 };
 
 const styles = StyleSheet.create({

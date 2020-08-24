@@ -6,6 +6,9 @@ import LinearGradient from "react-native-linear-gradient";
 import { InputToolbar as RNInputToolbar, Send, Composer } from "react-native-gifted-chat";
 
 class InputToolbar extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   renderActions = props => {
     return (
       <Touchable onPress={props.onAttachment} style={styles.attachmentsButtonContainer}>
@@ -28,6 +31,9 @@ class InputToolbar extends React.Component {
         placeholder={"Enter a message..."}
         placeholderTextColor={COLOR.TEXT_SECONDARY}
         textInputStyle={styles.inputField}
+        textInputProps={{
+          autoCorrect: false,
+        }}
       />
     );
   };

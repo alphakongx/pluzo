@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  TextInput as RNTextInput,
-} from "react-native";
+import { View, TextInput as RNTextInput } from "react-native";
 import { Touchable, Image } from "@components";
 import Images from "@assets/Images";
 
@@ -27,16 +24,18 @@ class StreamMessageInput extends Component {
             <Image source={Images.app.icSend} style={styles.sendIcon} />
           </Touchable>
         </View>
-        <Touchable onPress={() => {
-          this.props.onGameControls &&
-          this.props.onGameControls();
-        }}>
+        <Touchable
+          onPress={() => {
+            this.props.onGameControls && this.props.onGameControls();
+          }}
+        >
           <Image source={Images.live.icGame} style={styles.gameIcon} />
         </Touchable>
-        <Touchable onPress={() => {
-          this.props.onPlayerSetting &&
-          this.props.onPlayerSetting();
-        }}>
+        <Touchable
+          onPress={() => {
+            this.props.onPlayerSetting && this.props.onPlayerSetting();
+          }}
+        >
           <Image source={Images.app.icSetting} style={styles.settingIcon} />
         </Touchable>
       </View>

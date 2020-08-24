@@ -1,4 +1,8 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+import { FontHelper } from "@helpers";
+import { COLOR } from "@config";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -13,18 +17,18 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
     paddingHorizontal: 37,
+    paddingTop: (height / 100) * 18,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
   subTitleText: {
-    fontSize: 18,
-    color: "rgba(255, 255, 255, 0.5)",
+    fontSize: 16,
+    color: "#ABA7D5",
     fontWeight: "600",
     textAlign: "center",
     marginTop: 5,
@@ -38,22 +42,25 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-  codeInputStyle: {
+  codeInputStyle: FontHelper.font({
     backgroundColor: "white",
     width: 58,
-    height: 42,
-    color: "#9892A3",
+    height: 35,
+    color: COLOR.TEXT_INPUT,
     borderRadius: 25,
-  },
+    fontSize: 14,
+    fontWeight: "600",
+    paddingVertical: 0,
+  }),
   informationContainer: {
     alignItems: "center",
-    marginTop: 25,
+    marginTop: 35,
   },
   instructionText: {
     textAlign: "center",
     marginTop: 3,
     fontSize: 14,
-    color: "rgba(255, 255, 255, 0.6)",
+    color: "#ABA7D5",
   },
   instructionContainer: {
     flexDirection: "row",
@@ -65,8 +72,7 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   footer: {
-    marginTop: 40,
     paddingHorizontal: 37,
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
 });

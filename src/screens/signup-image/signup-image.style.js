@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -12,23 +14,25 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
+    paddingTop: (height / 100) * 18,
     paddingHorizontal: 37,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
   subTitleText: {
-    fontSize: 20,
-    color: "rgba(255, 255, 255, 0.5)",
-    fontWeight: "bold",
+    fontSize: 16,
+    color: "#ABA7D5",
+    fontWeight: "600",
     textAlign: "center",
-    marginBottom: 40,
+    marginBottom: 25,
   },
   imageUploadContainer: {
+    width: 180,
+    justifyContent: "center",
     alignSelf: "center",
   },
   imageContainer: {
@@ -45,8 +49,7 @@ export default StyleSheet.create({
     height: 25,
   },
   footer: {
-    marginTop: 40,
     paddingHorizontal: 37,
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
 });

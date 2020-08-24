@@ -1,0 +1,9 @@
+{
+  "1": { "id": 1, "icon": "tagPicture", "selected": false },
+  "2": { "id": 2, "icon": "tagMusic", "selected": false },
+  "3": { "id": 3, "icon": "tagBox", "selected": false },
+  "4": { "id": 4, "icon": "tagLove", "selected": false },
+  "5": { "id": 5, "icon": "tagSport", "selected": false },
+  "6": { "id": 6, "icon": "tagSea", "selected": false },
+  "7": { "id": 7, "icon": "tagTravel", "selected": false }
+}

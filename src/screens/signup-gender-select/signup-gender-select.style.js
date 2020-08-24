@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -14,15 +16,15 @@ export default StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
+    paddingTop: (height / 100) * 18,
     paddingHorizontal: 37,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: 70,
   },
   selectionContainer: {
     flexDirection: "row",
@@ -34,7 +36,7 @@ export default StyleSheet.create({
     width: 30,
   },
   footer: {
-    marginTop: 40,
+    marginBottom: 20,
     paddingHorizontal: 37,
   },
 });

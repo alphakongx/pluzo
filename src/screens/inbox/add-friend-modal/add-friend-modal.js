@@ -1,13 +1,19 @@
 import React, { Component } from "react";
-import { View, Keyboard, FlatList } from "react-native";
-import { Text, BackButton, Touchable, GradientButton, TextInput, DiscoverPeopleItem } from "@components";
+import { View, Keyboard, ScrollView } from "react-native";
+import {
+  Screen,
+  Text,
+  BackButton,
+  Touchable,
+  GradientButton,
+  TextInput,
+  DiscoverPeopleItem,
+} from "@components";
 import { BlurView } from "@react-native-community/blur";
-import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
 import EventBus from "eventing-bus";
 import { InboxTypes } from "@redux/actions";
 
-import { GRADIENT } from "@config";
 import { Notification } from "@helpers";
 import Images from "@assets/Images";
 import styles from "./add-friend-modal.style";
@@ -46,9 +52,7 @@ class AddFriendModal extends Component {
   };
 
   onBack = () => {
-    this.setState({ username: "", requestSuccess: "none" }, () => {
-      this.props.dismissModal();
-    });
+    this.props.dismissModal();
   };
 
   onAddFriend = () => {
@@ -71,12 +75,14 @@ class AddFriendModal extends Component {
       <Modal
         {...this.props}
         customBackdrop={
-          <BlurView
-            style={styles.flexFill}
-            blurType='dark'
-            blurAmount={10}
-            reducedTransparencyFallbackColor='#0B0516'
-          />
+          <Touchable style={styles.flexFill} onPress={this.onBack}>
+            <BlurView
+              style={styles.flexFill}
+              blurType='dark'
+              blurAmount={10}
+              reducedTransparencyFallbackColor='#0B0516'
+            />
+          </Touchable>
         }
         animationIn={"zoomIn"}
         animationOut={"zoomOut"}
@@ -84,13 +90,12 @@ class AddFriendModal extends Component {
         backdropOpacity={1}
         useNativeDriver={false}
         propagateSwipe={true}
+        scrollHorizontal={true}
+        swipeDirection='down'
+        onSwipeComplete={this.onBack}
+        onModalWillShow={() => this.setState({ username: "", requestSuccess: "none" })}
       >
-        <LinearGradient
-          colors={GRADIENT.SCREEN_BACKGROUND}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.container}
-        >
+        <Screen hasGradient style={styles.container}>
           <View style={styles.headerContainer}>
             <BackButton icon={Images.app.icBackLeft} onPress={this.onBack} />
             <Touchable onPress={this.props.pendingRequest}>
@@ -131,22 +136,17 @@ class AddFriendModal extends Component {
             {requestSuccess === "fail" && (
               <Text style={styles.failText}>User doesn't exist</Text>
             )}
-            
-            <Text style={styles.subtitleText}>
-              Discover New People
-            </Text>
-            <FlatList 
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.peopleList}
-              data={[1, 2, 3, 4]}
-              keyExtractor={(item, index) => `new-people-${item}`}
-              renderItem={({item: item, index}) => {
-                return <DiscoverPeopleItem />;
-              }}
-            />
+
+            <Text style={styles.subtitleText}>Discover New People</Text>
+            <ScrollView horizontal style={styles.peopleList}>
+              <View style={styles.peopleContainer} onStartShouldSetResponder={() => true}>
+                {[1, 2, 3, 4].map(item => {
+                  return <DiscoverPeopleItem key={`new-people-${item}`} />;
+                })}
+              </View>
+            </ScrollView>
           </View>
-        </LinearGradient>
+        </Screen>
       </Modal>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, ScrollView, SafeAreaView } from "react-native";
-import { Image, Touchable, Text, BorderButton } from "@components";
+import { View, ScrollView, SafeAreaView, Animated, Easing } from "react-native";
+import { Image, Touchable, Text, BorderButton, Screen } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import Images from "@assets/Images";
@@ -11,167 +11,107 @@ import StreamUserIcon from "../stream-user-icon/stream-user-icon";
 class StreamUsers extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      streamUsers: [
-        {
-          id: "1",
-          name: "William",
-          username: "@williammm",
-          avatar: require("@assets/images/live-screen/user-temp3.png"),
-        },
-        {
-          id: "2",
-          name: "ViolettaC",
-          username: "@xvioletta1",
-          avatar: require("@assets/images/live-screen/user-temp4.png"),
-        },
-        {
-          id: "3",
-          name: "HannahX",
-          username: "@hannah_x_",
-          avatar: require("@assets/images/live-screen/user-temp2.png"),
-        },
-        {
-          id: "4",
-          name: "Cody79",
-          username: "@codycool79",
-          avatar: require("@assets/images/live-screen/user-temp1.png"),
-        },
-        {
-          id: "5",
-          name: "Lara Cruse",
-          username: "@larac.97",
-          avatar: require("@assets/images/live-screen/user-temp4.png"),
-        },
-      ],
-      viewers: [
-        {
-          id: "1",
-          name: "William",
-          username: "@williammm",
-          avatar: require("@assets/images/live-screen/user-temp3.png"),
-        },
-        {
-          id: "2",
-          name: "ViolettaC",
-          username: "@xvioletta1",
-          avatar: require("@assets/images/live-screen/user-temp4.png"),
-        },
-        {
-          id: "3",
-          name: "HannahX",
-          username: "@hannah_x_",
-          avatar: require("@assets/images/live-screen/user-temp2.png"),
-        },
-        {
-          id: "4",
-          name: "Cody79",
-          username: "@codycool79",
-          avatar: require("@assets/images/live-screen/user-temp1.png"),
-        },
-        {
-          id: "5",
-          name: "Lara Cruse",
-          username: "@larac.97",
-          avatar: require("@assets/images/live-screen/user-temp2.png"),
-        },
-        {
-          id: "6",
-          name: "Cody79",
-          username: "@codycool79",
-          avatar: require("@assets/images/live-screen/user-temp3.png"),
-        },
-        {
-          id: "7",
-          name: "Lara Cruse",
-          username: "@larac.97",
-          avatar: require("@assets/images/live-screen/user-temp4.png"),
-        },
-        {
-          id: "8",
-          name: "Cody79",
-          username: "@codycool79",
-          avatar: require("@assets/images/live-screen/user-temp1.png"),
-        },
-        {
-          id: "9",
-          name: "Lara Cruse",
-          username: "@larac.97",
-          avatar: require("@assets/images/live-screen/user-temp2.png"),
-        },
-      ],
-    };
+    this.slideAnim = new Animated.Value(250);
   }
 
+  componentDidMount() {
+    Animated.timing(this.slideAnim, {
+      toValue: 0,
+      duration: 250,
+      easing: Easing.in(Easing.ease),
+      useNativeDriver: false,
+    }).start();
+  }
+
+  onBack = () => {
+    Animated.timing(this.slideAnim, {
+      toValue: 250,
+      duration: 250,
+      easing: Easing.in(Easing.ease),
+      useNativeDriver: false,
+    }).start(() => {
+      this.props.setShowUsers(false);
+      this.props.setIsScrolling(false);
+    });
+  };
+
   render() {
-    const { streamUsers, viewers } = this.state;
+    let broadcasters = [];
+    let audiences = [];
+    if (this.props.currentStream !== null) {
+      broadcasters = this.props.currentStream.broadcasters;
+      audiences = this.props.currentStream.audience;
+    }
+
     return (
-      <LinearGradient
-        colors={GRADIENT.SCREEN_BACKGROUND}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.container}
+      <Animated.View
+        style={[styles.container, { transform: [{ translateX: this.slideAnim }] }]}
       >
-        <SafeAreaView style={styles.safeAreaContainer}>
-          <View style={styles.header}>
-            <Touchable 
-              style={styles.headerButtonTouchable}
-              onPress={this.props.onReport}>
-              <Image source={require("@assets/images/report.png")} />
-            </Touchable>
-            <View style={styles.headerTitleContainer}>
-              <Text style={styles.headerTitle}>{"Live"}</Text>
-              <View style={styles.onlineIconContainer}>
-                <LinearGradient
-                  colors={GRADIENT.FRIEND_ONLINE_ICON}
-                  from={{ x: 0, y: 0 }}
-                  to={{ x: 1, y: 0 }}
-                  style={styles.onlineIcon}
-                />
+        <Screen hasGradient style={styles.safeAreaContainer}>
+          <SafeAreaView style={styles.flexFill}>
+            <View style={styles.header}>
+              <Touchable
+                style={styles.headerButtonTouchable}
+                onPress={this.props.onReport}
+              >
+                <Image source={require("@assets/images/report.png")} />
+              </Touchable>
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>{"Live"}</Text>
+                <View style={styles.onlineIconContainer}>
+                  <LinearGradient
+                    colors={GRADIENT.FRIEND_ONLINE_ICON}
+                    from={{ x: 0, y: 0 }}
+                    to={{ x: 1, y: 0 }}
+                    style={styles.onlineIcon}
+                  />
+                </View>
               </View>
             </View>
-          </View>
 
-          <BorderButton text={"Invite friends"}
-            onPress={this.props.onInviteFriends} />
+            <BorderButton text={"Invite friends"} onPress={this.props.onInviteFriends} />
 
-          <ScrollView style={styles.scrollView}>
-            {/** stream users */}
-            <View style={styles.flexRow}>
-              <View style={styles.streamerMark} />
-              <Text style={styles.streamerText}>{"5 Streamer"}</Text>
-            </View>
-            {streamUsers.map((user, index) => {
-              return (
-                <View key={"stream" + user.id} style={styles.userContainer}>
-                  <StreamUserIcon icon={user.avatar} />
-                  <View style={styles.nameTextContainer}>
-                    <Text style={styles.nameText}>{user.name}</Text>
-                    <Text style={styles.usernameText}>{user.username}</Text>
+            <ScrollView style={styles.scrollView} onMoveShouldSetResponder={() => true}>
+              {/** stream users */}
+              <View style={styles.flexRow}>
+                <View style={styles.streamerMark} />
+                <Text
+                  style={styles.streamerText}
+                >{`${broadcasters.length} Streamer`}</Text>
+              </View>
+              {broadcasters.map((user, index) => {
+                return (
+                  <View key={"stream" + user.id} style={styles.userContainer}>
+                    <StreamUserIcon user={user} />
+                    <View style={styles.nameTextContainer}>
+                      <Text style={styles.nameText}>{user.name}</Text>
+                      <Text style={styles.usernameText}>{user.username}</Text>
+                    </View>
                   </View>
-                </View>
-              );
-            })}
+                );
+              })}
 
-            {/** viewers */}
-            <View style={styles.flexRow}>
-              <Image source={Images.live.icEye} />
-              <Text style={styles.streamerText}>{"126 Viewer"}</Text>
-            </View>
-            {viewers.map((user, index) => {
-              return (
-                <View key={"viewer" + user.id} style={styles.userContainer}>
-                  <StreamUserIcon isStreamer={false} icon={user.avatar} />
-                  <View style={styles.nameTextContainer}>
-                    <Text style={styles.nameText}>{user.name}</Text>
-                    <Text style={styles.usernameText}>{user.username}</Text>
+              {/** viewers */}
+              <View style={styles.flexRow}>
+                <Image source={Images.live.icEye} />
+                <Text style={styles.streamerText}>{`${audiences.length} Viewer`}</Text>
+              </View>
+              {audiences.map((user, index) => {
+                return (
+                  <View key={"viewer" + user.id} style={styles.userContainer}>
+                    <StreamUserIcon isStreamer={false} user={user} />
+                    <View style={styles.nameTextContainer}>
+                      <Text style={styles.nameText}>{user.name}</Text>
+                      <Text style={styles.usernameText}>{user.username}</Text>
+                    </View>
                   </View>
-                </View>
-              );
-            })}
-          </ScrollView>
-        </SafeAreaView>
-      </LinearGradient>
+                );
+              })}
+            </ScrollView>
+          </SafeAreaView>
+        </Screen>
+        <Touchable style={styles.flexFill} onPress={this.onBack} />
+      </Animated.View>
     );
   }
 }

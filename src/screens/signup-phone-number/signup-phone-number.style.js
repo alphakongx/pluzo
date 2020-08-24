@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -11,17 +13,16 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   contentContainer: {
-    flex: 1,
     flexDirection: "column-reverse",
-    justifyContent: "center",
+    paddingTop: (height / 100) * 18,
     paddingHorizontal: 37,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: 25,
   },
   phoneContainer: {
     flexDirection: "row",
@@ -50,7 +51,7 @@ export default StyleSheet.create({
   },
   passwordRequirementTitle: {
     fontSize: 14,
-    color: "rgba(255, 255, 255, 0.5)",
+    color: "#ABA7D5",
     textDecorationLine: "underline",
   },
   instructionText: {
@@ -59,7 +60,7 @@ export default StyleSheet.create({
     marginTop: 3,
     fontSize: 14,
     fontWeight: "400",
-    color: "rgba(255, 255, 255, 0.5)",
+    color: "#ABA7D5",
   },
   instructionContainer: {
     flexDirection: "row",
@@ -74,8 +75,9 @@ export default StyleSheet.create({
     marginRight: 5,
   },
   footer: {
-    marginTop: 40,
+    flex: 1,
+    justifyContent: "flex-end",
     paddingHorizontal: 37,
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
 });

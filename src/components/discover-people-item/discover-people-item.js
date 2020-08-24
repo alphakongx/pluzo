@@ -11,14 +11,16 @@ import styles from "./discover-people-item.style";
 const DiscoverPeopleItem: () => React$Node = props => {
   return (
     <View style={styles.peopleContainer}>
-      <Image 
+      <Image
         source={require("@assets/images/live-screen/user-temp3.png")}
-        style={styles.peoplePicture} />
+        style={styles.peoplePicture}
+      />
       <LinearGradient
-          colors={GRADIENT.FADE_UP}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 0, y: 0 }}
-          style={styles.peopleNameContainer}>
+        colors={GRADIENT.FADE_UP}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 0, y: 0 }}
+        style={styles.peopleNameContainer}
+      >
         <Text style={styles.peopleName}>ViolettaC</Text>
         <View style={styles.onlineMark} />
       </LinearGradient>
@@ -29,13 +31,14 @@ const DiscoverPeopleItem: () => React$Node = props => {
           end={{ x: 0, y: 0 }}
           style={styles.peopleAdd}
         >
-          <Image 
+          <Image
             source={require("@assets/images/live-screen/plus-fav.png")}
-            style={styles.plusIcon} />
+            style={styles.plusIcon}
+          />
         </LinearGradient>
       </Touchable>
     </View>
-  )
+  );
 };
 
 export default DiscoverPeopleItem;

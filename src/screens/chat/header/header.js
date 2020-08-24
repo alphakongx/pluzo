@@ -37,7 +37,7 @@ const Header: () => React$Node = props => {
             <Text style={styles.headerTitle}>{name}</Text>
           </Touchable>
           <View style={styles.reportButtonContainer}>
-            <Touchable style={styles.reportButtonTouchable}>
+            <Touchable style={styles.reportButtonTouchable} onPress={props.onReport}>
               <Image source={require("@assets/images/report.png")} />
             </Touchable>
           </View>

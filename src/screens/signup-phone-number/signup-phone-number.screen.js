@@ -46,8 +46,8 @@ const SignupPhoneNumber: () => React$Node = props => {
             <View style={styles.phoneCodeContainer}>
               <Text style={styles.phoneLabel}>PHONE CODE</Text>
               <CountryCodePicker
-                country={{"iso2": "us", "dialCode": "1"}}
-                onChange={(country) => {
+                country={{ iso2: "us", dialCode: "1" }}
+                onChange={country => {
                   setPhoneCode(country.dialCode);
                 }}
               />

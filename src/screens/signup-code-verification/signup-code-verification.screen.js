@@ -3,7 +3,7 @@ import { View, Platform, Keyboard } from "react-native";
 import { BackButton, GradientButton, ProgressBar, Screen, Text } from "@components";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import RNOtpVerify from "react-native-otp-verify";
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from "@react-native-community/clipboard";
 import { Countdown } from "react-native-countdown-text";
 import moment from "moment";
 import EventBus from "eventing-bus";
@@ -30,7 +30,7 @@ class SignupCodeVerification extends Component {
     if (Platform.OS === "android") {
       RNOtpVerify.getOtp()
         .then(p => {
-          RNOtpVerify.addListener(this.otpHandler)
+          RNOtpVerify.addListener(this.otpHandler);
         })
         .catch(p => console.log(p));
     }
@@ -44,7 +44,7 @@ class SignupCodeVerification extends Component {
     }
   }
 
-  otpHandler = (message) => {
+  otpHandler = message => {
     const otp = /(\d{4})/.exec(message);
     console.log("SMS::", otp);
     if (otp !== null) {
@@ -52,7 +52,7 @@ class SignupCodeVerification extends Component {
       RNOtpVerify.removeListener();
       Keyboard.dismiss();
     }
-  }
+  };
 
   goBack = () => {
     this.props.navigation.goBack();

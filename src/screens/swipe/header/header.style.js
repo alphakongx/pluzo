@@ -36,4 +36,18 @@ export default StyleSheet.create({
     width: 20,
     height: 20,
   },
+
+  badgeContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingHorizontal: 20,
+    marginTop: 9,
+  },
+  badgeIcon: {
+    width: 18,
+    height: 18,
+    resizeMode: "contain",
+    marginRight: 5,
+    marginBottom: 5,
+  },
 });

@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const screenWidth = Dimensions.get("window").width;
+export const screenWidth = Dimensions.get("window").width;
+
 export default StyleSheet.create({
   flexFill: {
     flex: 1,
@@ -9,8 +10,8 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   imageBackground: {
-    width: screenWidth - 30,
-    height: ((screenWidth - 30) * 480) / 355,
+    width: screenWidth - 40,
+    height: ((screenWidth - 40) * 480) / 335,
     resizeMode: "contain",
     justifyContent: "space-between",
   },

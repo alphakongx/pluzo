@@ -102,12 +102,12 @@ export const getCurrentLocation = async callback => {
   }
 
   return Geolocation.getCurrentPosition(
-      (position) => {
-        callback(position);
-      },
-      (error) => {
-        console.log(error.code, error.message);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    position => {
+      callback(position);
+    },
+    error => {
+      console.log(error.code, error.message);
+    },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
   );
-}
+};

@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -14,14 +16,14 @@ export default StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: 37,
-    justifyContent: "center",
+    paddingTop: (height / 100) * 18,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: 45,
   },
   inputFieldSeparator: {
     height: 20,
@@ -31,14 +33,16 @@ export default StyleSheet.create({
     marginTop: 25,
   },
   passwordRequirementTitle: {
-    fontSize: 14,
-    color: "rgba(255, 255, 255, 0.5)",
+    fontFamily: "OpenSans",
+    fontSize: 12,
+    color: "#ABA7D5",
     textDecorationLine: "underline",
   },
   passwordRequirement: {
     marginTop: 3,
-    fontSize: 14,
-    color: "rgba(255, 255, 255, 0.5)",
+    fontFamily: "OpenSans",
+    fontSize: 12,
+    color: "#ABA7D5",
   },
   instructionContainer: {
     flexDirection: "row",
@@ -49,7 +53,7 @@ export default StyleSheet.create({
     height: 7,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#FFFFFF",
+    borderColor: "#ABA7D5",
     marginTop: 3,
     marginRight: 5,
   },

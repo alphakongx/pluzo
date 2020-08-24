@@ -63,7 +63,7 @@ class Column extends React.Component {
   renderItem(item) {
     return (
       <Item
-        key={item.key}
+        key={`${item.id}`}
         renderItem={this.props.renderItem}
         item={item}
         onLayout={event => {
@@ -170,7 +170,6 @@ export default class Masonry extends React.Component {
                 key={index}
                 listKey={index}
                 ref={ref => (this.state.columns[index] = ref)}
-                keyExtractor={this.props.keyExtractor}
                 renderItem={this.props.renderItem.bind(this)}
               />
             );

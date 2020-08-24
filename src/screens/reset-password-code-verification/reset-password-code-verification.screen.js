@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Keyboard, Platform } from "react-native";
-import { BackButton, GradientButton, Screen, Text, } from "@components";
+import { BackButton, GradientButton, Screen, Text } from "@components";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from "@react-native-community/clipboard";
 import styles from "./reset-password-code-verification.style.js";
 import { Countdown } from "react-native-countdown-text";
 import moment from "moment";
@@ -16,14 +16,14 @@ class ResetPasswordCodeVerification extends React.Component {
       countdownTime: moment().add(60, "seconds").unix(),
       canResend: true,
       phoneNumber: this.props.navigation.state.params.phoneNumber,
-    }
+    };
   }
 
   componentDidMount() {
     if (Platform.OS === "android") {
       RNOtpVerify.getOtp()
         .then(p => {
-          RNOtpVerify.addListener(this.otpHandler)
+          RNOtpVerify.addListener(this.otpHandler);
         })
         .catch(p => console.log(p));
     }
@@ -31,8 +31,11 @@ class ResetPasswordCodeVerification extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isSendingCode !== this.props.isSendingCode && this.props.isSendingCode === false) {
-      this.setState({canResend: false, countdownTime: moment().add(60, "seconds").unix()})
+    if (
+      prevProps.isSendingCode !== this.props.isSendingCode &&
+      this.props.isSendingCode === false
+    ) {
+      this.resetCountdown();
     }
   }
 
@@ -42,7 +45,14 @@ class ResetPasswordCodeVerification extends React.Component {
     }
   }
 
-  otpHandler = (message) => {
+  resetCountdown = () => {
+    this.setState({
+      canResend: false,
+      countdownTime: moment().add(60, "seconds").unix(),
+    });
+  };
+
+  otpHandler = message => {
     const otp = /(\d{4})/.exec(message);
     console.log("SMS::", otp);
     if (otp !== null) {
@@ -50,8 +60,8 @@ class ResetPasswordCodeVerification extends React.Component {
       RNOtpVerify.removeListener();
       Keyboard.dismiss();
     }
-  }
-  
+  };
+
   goBack = () => {
     this.props.navigation.goBack();
   };
@@ -77,22 +87,22 @@ class ResetPasswordCodeVerification extends React.Component {
             <Text style={styles.subTitleText}>
               We've sent you a verification code to ensure you are you.
             </Text>
-  
+
             <View style={styles.codeContainer}>
               <OTPInputView
                 codeInputFieldStyle={styles.codeInputStyle}
                 style={styles.codeContentContainer}
                 pinCount={4}
                 autoFocusOnLoad
-                onCodeFilled={c => this.setState({code: c})}
+                onCodeFilled={c => this.setState({ code: c })}
               />
             </View>
-  
+
             <View style={styles.informationContainer}>
               <View style={styles.instructionContainer}>
                 <Text style={styles.instructionText}>Didn't receive it?</Text>
               </View>
-  
+
               <View style={styles.resendButtonContainer}>
                 <GradientButton
                   disabled={!canResend}
@@ -101,20 +111,20 @@ class ResetPasswordCodeVerification extends React.Component {
                   text={"Resend"}
                 />
               </View>
-  
+
               {!canResend ? (
                 <View style={styles.instructionContainer}>
                   <Countdown
                     format={"ss"}
                     textStyle={styles.instructionText}
                     finishTime={countdownTime}
-                    onFinish={() => this.setState({canResend: true})}
+                    onFinish={() => this.setState({ canResend: true })}
                   />
                 </View>
               ) : null}
             </View>
           </View>
-  
+
           <View style={styles.footer}>
             <GradientButton
               loading={this.props.verificationInProgress}
@@ -126,6 +136,6 @@ class ResetPasswordCodeVerification extends React.Component {
       </Screen>
     );
   }
-};
+}
 
 export default ResetPasswordCodeVerification;

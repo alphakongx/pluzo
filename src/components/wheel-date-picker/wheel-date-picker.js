@@ -1,9 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  View,
-  Dimensions,
-} from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import { View, Dimensions } from "react-native";
 import moment from "moment";
 import { ScrollPicker } from "../wheel-scroll";
 import styles from "./wheel-date-picker.style";
@@ -15,11 +12,24 @@ export default class WheelDatePicker extends React.Component {
     super(props);
 
     const { date, minYear } = props;
-    
+
     this.state = {
       date,
-      monthRange: ["January", "Feburay", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-      yearRange: [] 
+      monthRange: [
+        "January",
+        "Feburay",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+      yearRange: [],
     };
 
     this.newValue = {};
@@ -30,18 +40,20 @@ export default class WheelDatePicker extends React.Component {
 
     const dayNum = mdate.daysInMonth();
     this.state.dayRange = this.genDateRange(dayNum);
-    
+
     let currentYear = moment(new Date()).year();
     for (let i = minYear; i <= currentYear; i += 1) {
       this.state.yearRange.push(i);
     }
   }
 
-  parseDate = (date) => {
+  parseDate = date => {
     const mdate = moment(date);
 
-    ['year', 'month', 'date', 'hour', 'minute'].forEach((s) => { this.newValue[s] = mdate.get(s); });
-  }
+    ["year", "month", "date", "hour", "minute"].forEach(s => {
+      this.newValue[s] = mdate.get(s);
+    });
+  };
 
   genDateRange(dayNum) {
     const days = [];
@@ -53,7 +65,7 @@ export default class WheelDatePicker extends React.Component {
     return days;
   }
 
-  onYearChange = (year) => {
+  onYearChange = year => {
     const oldYear = this.newValue.year;
 
     this.newValue.year = year;
@@ -63,7 +75,7 @@ export default class WheelDatePicker extends React.Component {
     }
   };
 
-  onMonthChange = (month) => {
+  onMonthChange = month => {
     const oldMonth = this.newValue.month;
 
     this.newValue.month = month;
@@ -73,7 +85,7 @@ export default class WheelDatePicker extends React.Component {
     }
   };
 
-  onDateChange = (date) => {
+  onDateChange = date => {
     this.newValue.date = date;
     this.checkDate(this.newValue.year, this.newValue.month);
     if (this.props.onDateChange) {
@@ -90,7 +102,7 @@ export default class WheelDatePicker extends React.Component {
     let dayNum = dayRange.length;
 
     if (oldMonth !== currentMonth || oldYear !== currentYear) {
-      dayNum = moment(`${currentYear}-${currentMonth + 1}`, 'YYYY-MM').daysInMonth();
+      dayNum = moment(`${currentYear}-${currentMonth + 1}`, "YYYY-MM").daysInMonth();
     }
 
     if (dayNum !== dayRange.length) {
@@ -120,15 +132,17 @@ export default class WheelDatePicker extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollPicker
-          ref={(ref) => { this.dateComponent = ref; }}
+          ref={ref => {
+            this.dateComponent = ref;
+          }}
           dataSource={dayRange}
           selectedIndex={dayRange.indexOf(this.newValue.date)}
           wrapperHeight={178}
-          wrapperWidth={width * 22 / 100}
+          wrapperWidth={(width * 22) / 100}
           wrapperBackground={"transparent"}
           itemHeight={46}
           highlightColor={"white"}
-          highlightWidth={width * 22 / 100}
+          highlightWidth={(width * 22) / 100}
           highlightBorderWidth={2}
           itemTextStyle={styles.dateText}
           activeItemTextStyle={styles.activeDateText}
@@ -137,15 +151,15 @@ export default class WheelDatePicker extends React.Component {
           }}
         />
         <View style={styles.spacerView} />
-        <ScrollPicker 
+        <ScrollPicker
           dataSource={monthRange}
           selectedIndex={this.newValue.month}
           wrapperHeight={180}
-          wrapperWidth={width * 27 / 100}
+          wrapperWidth={(width * 27) / 100}
           wrapperBackground={"transparent"}
           itemHeight={50}
           highlightColor={"white"}
-          highlightWidth={width * 27 / 100}
+          highlightWidth={(width * 27) / 100}
           highlightBorderWidth={2}
           itemTextStyle={styles.dateText}
           activeItemTextStyle={styles.activeDateText}
@@ -154,15 +168,15 @@ export default class WheelDatePicker extends React.Component {
           }}
         />
         <View style={styles.spacerView} />
-        <ScrollPicker 
+        <ScrollPicker
           dataSource={yearRange}
           selectedIndex={yearRange.indexOf(this.newValue.year)}
           wrapperHeight={180}
-          wrapperWidth={width * 22 / 100}
+          wrapperWidth={(width * 22) / 100}
           wrapperBackground={"transparent"}
           itemHeight={50}
           highlightColor={"white"}
-          highlightWidth={width * 22 / 100}
+          highlightWidth={(width * 22) / 100}
           itemTextStyle={styles.dateText}
           activeItemTextStyle={styles.activeDateText}
           onValueChange={(value, index) => {
@@ -170,7 +184,7 @@ export default class WheelDatePicker extends React.Component {
           }}
         />
       </View>
-    )
+    );
   }
 }
 

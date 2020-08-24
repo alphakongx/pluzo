@@ -1,6 +1,7 @@
 import React from "react";
 import { FlatList, View } from "react-native";
 import { Image, Text, Touchable } from "@components";
+import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
 
 import { GRADIENT } from "@config";
@@ -46,8 +47,12 @@ class NewFriends extends React.Component {
               }}
             >
               <View style={styles.friendItemContainer}>
-                <Image
-                  source={friend.images[0] === null ? placeHolder : { uri: friend.images[0].path }}
+                <FastImage
+                  source={
+                    friend.images[0] === null
+                      ? placeHolder
+                      : { uri: friend.images[0].path }
+                  }
                   style={styles.friendImage}
                 />
                 {friend.premium === 1 ? (

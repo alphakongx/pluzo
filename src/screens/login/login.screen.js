@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { BackButton, BorderButton, Screen, Text, Touchable } from "@components";
+import { SCREENS } from "@constants";
 import LoginForm from "./login.form";
 import styles from "./login.style.js";
 
@@ -10,7 +11,7 @@ const LoginScreen: () => React$Node = props => {
   };
 
   const navigateToPhoneLogin = () => {
-    props.navigation.navigate("LOGIN_PHONE_NUMBER");
+    props.navigation.navigate(SCREENS.LOGIN_PHONE_NUMBER);
   };
 
   const onLogin = values => {
@@ -30,11 +31,11 @@ const LoginScreen: () => React$Node = props => {
 
           <Touchable
             onPress={() => {
-              props.navigation.navigate("FORGOT_PASSWORD", {});
+              props.navigation.navigate(SCREENS.FORGOT_PASSWORD, {});
             }}
             style={styles.forgotPasswordContainer}
           >
-            <Text style={styles.forgotPasswordText}>Forgot Password</Text>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </Touchable>
         </View>
       </View>

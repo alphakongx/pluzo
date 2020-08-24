@@ -3,11 +3,15 @@ import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
-    width: 250,
-    paddingHorizontal: 10,
+    flex: 1,
+    flexDirection: "row-reverse",
+  },
+  flexFill: {
+    flex: 1,
   },
   safeAreaContainer: {
-    flex: 1,
+    width: 250,
+    paddingHorizontal: 10,
   },
 
   // header

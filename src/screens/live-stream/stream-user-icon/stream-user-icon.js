@@ -12,10 +12,10 @@ class StreamUserIcon extends Component {
   }
 
   render() {
-    const { isStreamer, icon } = this.props;
+    const { isStreamer, user } = this.props;
     return (
       <View style={[styles.container, this.props.style]}>
-        <Image source={icon} style={styles.image} />
+        <Image source={{ uri: user.images[0].path }} style={styles.image} />
         {isStreamer && (
           <View style={styles.micContainer}>
             <Image source={Images.app.icMic} style={styles.mic} />
@@ -28,12 +28,10 @@ class StreamUserIcon extends Component {
 
 StreamUserIcon.propTypes = {
   isStreamer: PropTypes.bool,
-  icon: PropTypes.any,
 };
 
 StreamUserIcon.defaultProps = {
   isStreamer: true,
-  icon: require("@assets/images/live-screen/user-temp3.png"),
 };
 
 export default StreamUserIcon;

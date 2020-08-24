@@ -26,6 +26,8 @@ export default StyleSheet.create({
 
   highlightView: {
     position: "absolute",
+    borderRadius: 35,
+    height: 35,
   },
 
   selectedItem: {
@@ -33,8 +35,17 @@ export default StyleSheet.create({
     alignItems: "center",
   },
 
+  scrollViewContainer: {
+    flex: 1,
+    width: "100%",
+    marginVertical: 20,
+  },
   scrollContainer: {
     width: "100%",
     flex: 1,
-  }
+  },
+
+  flexFill: {
+    flex: 1,
+  },
 });

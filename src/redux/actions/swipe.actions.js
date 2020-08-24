@@ -20,7 +20,7 @@ const { Types, Creators } = createActions({
   requestMatchSuccess: null,
   requestMatchFail: null,
 
-  updateCardImageIndex: ["index"],
+  setVisibleDetail: ["visibleDetail"],
 });
 
 export const SwipeTypes = Types;
