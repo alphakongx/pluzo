@@ -1,19 +1,20 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
     flexDirection: "row",
   },
   headerButtonTouchable: {
-    width: 40,
-    height: 40,
+    width: wp(40),
+    height: wp(40),
     alignItems: "center",
     justifyContent: "center",
   },
   cancelText: {
     color: "white",
-    fontSize: 14,
+    fontSize: wp(14),
     fontWeight: "600",
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(10),
   },
 });

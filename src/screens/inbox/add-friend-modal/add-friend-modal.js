@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Keyboard, ScrollView } from "react-native";
+import { View, Keyboard, ScrollView, Platform } from "react-native";
 import {
   Screen,
   Text,
@@ -9,10 +9,13 @@ import {
   TextInput,
   DiscoverPeopleItem,
 } from "@components";
+import KeyboardManager from "react-native-keyboard-manager";
 import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
 import EventBus from "eventing-bus";
 import { InboxTypes } from "@redux/actions";
+import { API } from "@helpers";
+import { API_ENDPOINTS } from "@config";
 
 import { Notification } from "@helpers";
 import Images from "@assets/Images";
@@ -24,6 +27,8 @@ class AddFriendModal extends Component {
     this.state = {
       username: "",
       requestSuccess: "none", // none, success, fail
+      newPeoples: [],
+      addingNewFriend: false,
     };
   }
 
@@ -43,32 +48,61 @@ class AddFriendModal extends Component {
     this.addFailureAction();
   }
 
+  onModalShow = () => {
+    API.request({
+      method: "post",
+      url: `${API_ENDPOINTS.STREAM_NEW_PEOPLE}`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + this.props.token,
+      },
+      data: null,
+    }).then(response => {
+      this.setState({ newPeoples: response.data.data });
+    });
+
+    if (Platform.OS === "ios") {
+      KeyboardManager.setEnable(true);
+      KeyboardManager.setShouldResignOnTouchOutside(true);
+    }
+  };
+
   onAddingSuccess = () => {
     this.setState({ requestSuccess: "success" });
+    this.setState({ addingNewFriend: false });
   };
 
   onAddingFailure = () => {
     this.setState({ requestSuccess: "fail" });
+    this.setState({ addingNewFriend: false });
   };
 
   onBack = () => {
     this.props.dismissModal();
   };
 
-  onAddFriend = () => {
+  onAddFriend = user => {
     const { username } = this.state;
     const { token } = this.props;
 
-    if (username === "") {
+    if (user === null && username === "") {
       Notification.alert("Please enter the username");
       return;
     }
     Keyboard.dismiss();
-    this.props.addFriend(username, token);
+    if (user !== null) {
+      this.setState({ addingNewFriend: true });
+    }
+    this.props.addFriend(user === null ? username : user.username, token);
+    if (user !== null) {
+      this.setState({
+        newPeoples: this.state.newPeoples.filter(item => item.id !== user.id),
+      });
+    }
   };
 
   render() {
-    const { username, requestSuccess } = this.state;
+    const { username, requestSuccess, addingNewFriend } = this.state;
     const { isAddingFriend } = this.props;
 
     return (
@@ -84,8 +118,9 @@ class AddFriendModal extends Component {
             />
           </Touchable>
         }
-        animationIn={"zoomIn"}
-        animationOut={"zoomOut"}
+        onModalShow={this.onModalShow}
+        animationIn={"fadeIn"}
+        animationOut={"fadeOut"}
         backdropTransitionOutTiming={0}
         backdropOpacity={1}
         useNativeDriver={false}
@@ -123,8 +158,8 @@ class AddFriendModal extends Component {
             </View>
             <View style={styles.buttonContainer}>
               <GradientButton
-                onPress={this.onAddFriend}
-                loading={isAddingFriend}
+                onPress={() => this.onAddFriend(null)}
+                loading={isAddingFriend && !addingNewFriend}
                 containerStyle={styles.addButton}
                 textStyle={styles.addButtonText}
                 text={"Add"}
@@ -138,10 +173,16 @@ class AddFriendModal extends Component {
             )}
 
             <Text style={styles.subtitleText}>Discover New People</Text>
-            <ScrollView horizontal style={styles.peopleList}>
+            <ScrollView horizontal contentContainerStyle={styles.peopleList}>
               <View style={styles.peopleContainer} onStartShouldSetResponder={() => true}>
-                {[1, 2, 3, 4].map(item => {
-                  return <DiscoverPeopleItem key={`new-people-${item}`} />;
+                {this.state.newPeoples.map(item => {
+                  return (
+                    <DiscoverPeopleItem
+                      user={item}
+                      key={`new-people-${item.phone}`}
+                      onAddPeople={() => this.onAddFriend(item)}
+                    />
+                  );
                 })}
               </View>
             </ScrollView>

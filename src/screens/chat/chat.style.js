@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -9,9 +10,9 @@ export default StyleSheet.create({
   },
   loadingIndicator: {
     alignSelf: "center",
-    marginTop: 200,
+    marginTop: wp(200),
   },
   systemMessage: {
-    marginBottom: 15,
+    marginBottom: wp(15),
   },
 });

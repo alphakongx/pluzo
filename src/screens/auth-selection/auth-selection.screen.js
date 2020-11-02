@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View } from "react-native";
-import { Image, SolidButton, GradientButton, Screen, Text } from "@components";
+import { Image, SolidButton, GradientButton, Screen, Text, Touchable } from "@components";
+import { getCurrentLocation } from "@helpers";
 import { SCREENS } from "@constants";
 import styles from "./auth-selection.style.js";
 
 const AuthSelection: () => React$Node = props => {
-  const { t } = props;
+  const { t, updateLocation } = props;
   const navigateToLogin = () => {
     props.navigation.navigate(SCREENS.LOGIN, {});
   };
@@ -13,6 +14,20 @@ const AuthSelection: () => React$Node = props => {
   const navigateToSignup = () => {
     props.navigation.navigate(SCREENS.SIGNUP_FIRST_NAME, {});
   };
+
+  const navigateToTerms = () => {
+    props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {});
+  };
+
+  const navigateToPrivacy = () => {
+    props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, { content: "privacy" });
+  };
+
+  useEffect(() => {
+    getCurrentLocation(position => {
+      updateLocation(position);
+    });
+  }, [updateLocation]);
 
   return (
     <Screen>
@@ -32,11 +47,15 @@ const AuthSelection: () => React$Node = props => {
 
           <View style={styles.termPolicyContainer}>
             <Text style={styles.termPolicyText}>{t("authSelection.termsPolicy")}</Text>
-            <Text style={styles.termPolicyText}>
-              <Text style={styles.underline}>{t("authSelection.terms")}</Text>{" "}
-              {t("authSelection.and")}{" "}
-              <Text style={styles.underline}>{t("authSelection.policy")}</Text>
-            </Text>
+            <View style={styles.termPolicyRowContainer}>
+              <Touchable style={styles.termPolicyButton} onPress={navigateToTerms}>
+                <Text style={styles.underline}>{t("authSelection.terms")}</Text>
+              </Touchable>
+              <Text style={styles.termPolicyText}> {t("authSelection.and")} </Text>
+              <Touchable onPress={navigateToPrivacy}>
+                <Text style={styles.underline}>{t("authSelection.policy")}</Text>
+              </Touchable>
+            </View>
           </View>
         </View>
       </View>

@@ -5,6 +5,10 @@ const { Types, Creators } = createActions({
   searchSuccess: ["results"],
   searchFailure: null,
 
+  requestNewPeople: null,
+  newPeopleSuccess: ["data"],
+  newPeopleFail: null,
+
   initializeSearch: null,
 });
 

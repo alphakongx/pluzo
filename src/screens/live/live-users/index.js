@@ -6,6 +6,7 @@ function mapStateToProps(state) {
     token: state.user.token,
     user: state.user.user,
     streamUsers: state.live.friendStreams,
+    streamStatus: state.live.streamStatus,
   };
 }
 

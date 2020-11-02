@@ -6,10 +6,10 @@ import styles from "./action-buttons-view.style";
 
 const ActionButtonsView: () => React$Node = props => {
   return (
-    <View style={styles.bottomActions}>
+    <View style={styles.bottomActions} pointerEvents={"box-none"}>
       <SafeAreaView>
-        <View style={styles.bottomContainer}>
-          <View style={[styles.buttonRow]}>
+        <View style={styles.bottomContainer} pointerEvents={"box-none"}>
+          <View style={[styles.buttonRow]} pointerEvents={"box-none"}>
             <Touchable onPress={() => props.onReload()}>
               <Image
                 style={styles.buttonSmall}
@@ -23,7 +23,10 @@ const ActionButtonsView: () => React$Node = props => {
               />
             </Touchable>
           </View>
-          <View style={[styles.buttonRow, styles.buttonRowMargin]}>
+          <View
+            style={[styles.buttonRow, styles.buttonRowMargin]}
+            pointerEvents={"box-none"}
+          >
             <Touchable onPress={() => props.onDisLike()}>
               <Image
                 source={require("@assets/images/swipe-screen/swipe-cross.png")}

@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { KeyboardAvoidingView, Platform, View } from "react-native";
 import { BackButton, BorderButton, Screen, Text, Touchable } from "@components";
 import { SCREENS } from "@constants";
 import LoginForm from "./login.form";
@@ -20,9 +20,12 @@ const LoginScreen: () => React$Node = props => {
 
   return (
     <Screen>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <BackButton onPress={goBack} />
-        <View style={styles.centeredContentContainer}>
+        <View style={styles.centeredContentContainer} pointerEvents={"box-none"}>
           <Text style={styles.titleText}>Login</Text>
           <LoginForm isLoggingIn={props.isLoggingIn} onSubmit={onLogin} />
           <Text style={styles.orText}>OR</Text>
@@ -38,7 +41,7 @@ const LoginScreen: () => React$Node = props => {
             <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </Touchable>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Screen>
   );
 };

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { Text } from "../text";
 import { Image } from "../image";
 import { Touchable } from "../touchable";
@@ -19,9 +19,8 @@ class GradientButton extends Component {
     };
   }
 
-  render() {
+  renderContent = () => {
     var {
-      onPress,
       text,
       disabled,
       loading,
@@ -35,7 +34,7 @@ class GradientButton extends Component {
     const { width, height, radius, blur } = this.state;
 
     return (
-      <Touchable disabled={loading || disabled} onPress={onPress}>
+      <View>
         {!disabled && (
           <BoxShadow
             setting={{
@@ -90,6 +89,20 @@ class GradientButton extends Component {
             </Fragment>
           )}
         </LinearGradient>
+      </View>
+    );
+  };
+
+  render() {
+    var { onPress, disabled, loading, noButton } = this.props;
+
+    if (noButton) {
+      return this.renderContent();
+    }
+
+    return (
+      <Touchable disabled={loading || disabled} onPress={onPress}>
+        {this.renderContent()}
       </Touchable>
     );
   }

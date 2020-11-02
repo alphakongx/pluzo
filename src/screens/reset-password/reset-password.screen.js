@@ -37,7 +37,7 @@ const ResetPassword: () => React$Node = props => {
             <Image source={require("@assets/images/chevron-left.png")} />
           </View>
         </Touchable>
-        <View style={styles.contentContainer}>
+        <View style={styles.contentContainer} pointerEvents={"box-none"}>
           <Text style={styles.titleText} numberOfLines={1} adjustsFontSizeToFit={true}>
             Set your new password.
           </Text>

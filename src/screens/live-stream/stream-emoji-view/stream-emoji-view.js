@@ -6,20 +6,33 @@ import Images from "@assets/Images";
 
 import styles from "./stream-emoji-view.style";
 
+const badges = require("@config/data/badges.json");
+
 const StreamEmojiView: () => React$Node = props => {
   const [expandCategory, setExpandCategory] = useState(false);
+
+  const data = [];
+  Object.values(badges).forEach(value => {
+    data.push(value);
+  });
+
+  const onChangeEmoji = item => {
+    props.onChangeEmoji && props.onChangeEmoji(item);
+  };
 
   return (
     <View>
       <Screen hasGradient style={styles.container}>
         <Text style={styles.trendingText}>Trending</Text>
         <View style={styles.iconsContainer}>
-          {[1, 2, 3, 4, 5, 6].map(item => {
+          {data.map(item => {
             return (
-              <Touchable key={`trending-${item}`} style={styles.emojiButton}>
-                <Image
-                  source={require("@assets/images/live-screen/ic-category-tmp.png")}
-                />
+              <Touchable
+                key={`trending-${item.id}`}
+                style={styles.emojiButton}
+                onPress={() => onChangeEmoji(item)}
+              >
+                <Image source={Images.live[item.icon]} />
               </Touchable>
             );
           })}
@@ -29,47 +42,14 @@ const StreamEmojiView: () => React$Node = props => {
         {expandCategory && (
           <ScrollView style={styles.allContainer}>
             <View style={styles.iconsContainer}>
-              {[
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                27,
-                28,
-                29,
-                30,
-              ].map(item => {
+              {data.map(item => {
                 return (
                   <Touchable
-                    key={`trending-${item}`}
+                    key={`all-${item.id}`}
                     style={styles.emojiButton}
-                    onPress={() => console.log("ok")}
+                    onPress={() => onChangeEmoji(item)}
                   >
-                    <Image
-                      source={require("@assets/images/live-screen/ic-category-tmp.png")}
-                    />
+                    <Image source={Images.live[item.icon]} />
                   </Touchable>
                 );
               })}

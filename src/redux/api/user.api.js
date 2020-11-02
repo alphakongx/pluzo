@@ -133,6 +133,18 @@ export function resetPassword(data, accessToken) {
   }).then(response => response);
 }
 
+export function changePassword(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.UPDATE_PASSWORD}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}
+
 export function updateUser(data, accessToken) {
   return API.request({
     method: "post",
@@ -177,5 +189,40 @@ export function deleteAccount(accessToken) {
       "Content-Type": "multipart/form-data",
       Authorization: "Bearer " + accessToken,
     },
+  }).then(response => response);
+}
+
+export function getLikedUsers(accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.GET_LIKED_USERS}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+  }).then(response => response);
+}
+
+export function updatePhoneSend(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.UPDATE_PHONE_SEND}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}
+
+export function updatePhoneConfirm(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.UPDATE_PHONE_CONFIRM}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
   }).then(response => response);
 }

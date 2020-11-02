@@ -197,6 +197,37 @@ const deleteAccountFailure = (state, action) => ({
   isDeletingAccount: false,
 });
 
+const updateNotification = (state, action) => ({
+  ...state,
+  notification: action.data,
+});
+
+const requestUpdatePhoneSendCode = (state, action) => ({
+  ...state,
+  isSendingPhoneUpdateCode: true,
+});
+const updatePhoneSendCodeSuccess = (state, action) => ({
+  ...state,
+  isSendingPhoneUpdateCode: false,
+});
+const updatePhoneSendCodeFail = (state, action) => ({
+  ...state,
+  isSendingPhoneUpdateCode: false,
+});
+
+const requestUpdatePhoneConfirmCode = (state, action) => ({
+  ...state,
+  isConfirmingPhoneUpdateCode: true,
+});
+const updatePhoneConfirmCodeSuccess = (state, action) => ({
+  ...state,
+  isConfirmingPhoneUpdateCode: false,
+});
+const updatePhoneConfirmCodeFail = (state, action) => ({
+  ...state,
+  isConfirmingPhoneUpdateCode: false,
+});
+
 export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
@@ -257,6 +288,16 @@ export const HANDLERS = {
   [UserTypes.REQUEST_DELETE_ACCOUNT]: requestDeleteAccount,
   [UserTypes.DELETE_ACCOUNT_SUCCESS]: deleteAccountSuccess,
   [UserTypes.DELETE_ACCOUNT_FAILURE]: deleteAccountFailure,
+
+  [UserTypes.REQUEST_UPDATE_PHONE_SEND_CODE]: requestUpdatePhoneSendCode,
+  [UserTypes.UPDATE_PHONE_SEND_CODE_SUCCESS]: updatePhoneSendCodeSuccess,
+  [UserTypes.UPDATE_PHONE_SEND_CODE_FAIL]: updatePhoneSendCodeFail,
+
+  [UserTypes.REQUEST_UPDATE_PHONE_CONFIRM_CODE]: requestUpdatePhoneConfirmCode,
+  [UserTypes.UPDATE_PHONE_CONFIRM_CODE_SUCCESS]: updatePhoneConfirmCodeSuccess,
+  [UserTypes.UPDATE_PHONE_CONFIRM_CODE_FAIL]: updatePhoneConfirmCodeFail,
+
+  [UserTypes.UPDATE_NOTIFICATION]: updateNotification,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

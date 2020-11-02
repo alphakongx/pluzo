@@ -1,36 +1,44 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
-    paddingBottom: 40,
+    paddingBottom: wp(40),
   },
   topActionRow: {
     flexDirection: "row",
     alignItems: "center",
   },
   topRowMargin: {
-    marginTop: 20,
+    marginTop: wp(20),
   },
   topRowMarginSmall: {
-    marginTop: 8,
+    marginTop: wp(8),
   },
   onlineStatus: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 5,
+    width: wp(8),
+    height: wp(8),
+    borderRadius: wp(4),
+    marginHorizontal: wp(5),
   },
   topBarName: {
-    fontSize: 22,
+    fontSize: wp(22),
     fontWeight: "600",
     color: COLOR.TEXT_PRIMARY,
   },
-  topBarLocation: {
+  topBarCity: {
+    fontSize: wp(11),
     fontFamily: "OpenSans",
-    fontSize: 10,
     color: COLOR.TEXT_SECONDARY_2,
-    marginLeft: 5,
+    marginLeft: wp(5),
+  },
+  topBarLocation: {
+    fontSize: wp(11),
+    fontFamily: "OpenSans",
+    fontWeight: "700",
+    color: COLOR.TEXT_SECONDARY_2,
+    marginLeft: wp(3),
   },
   flexSpace: {
     flex: 1,
@@ -40,41 +48,47 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   infoIcon: {
-    width: 15,
-    height: 15,
+    width: wp(15),
+    height: wp(15),
   },
   distanceContainer: {
-    height: 24,
+    height: wp(24),
     flexDirection: "row",
-    paddingHorizontal: 13,
-    borderRadius: 13,
+    paddingHorizontal: wp(13),
+    borderRadius: wp(13),
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 10,
+    marginLeft: wp(10),
   },
   distanceText: {
-    fontSize: 16,
+    fontSize: wp(16),
     fontWeight: "800",
     color: COLOR.TEXT_SECONDARY_3,
   },
   distanceUnit: {
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: wp(12),
     fontWeight: "400",
     color: COLOR.TEXT_SECONDARY_3,
-    marginLeft: 2,
+    marginLeft: wp(2),
   },
 
   badgeContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 9,
+    marginTop: wp(9),
   },
   badgeIcon: {
-    width: 18,
-    height: 18,
+    width: wp(18),
+    height: wp(18),
     resizeMode: "contain",
-    marginRight: 5,
-    marginBottom: 5,
+    marginRight: wp(5),
+    marginBottom: wp(5),
+  },
+  bioText: {
+    fontFamily: "OpenSans",
+    fontSize: wp(14),
+    fontWeight: "400",
+    color: "#ABA7D5",
   },
 });

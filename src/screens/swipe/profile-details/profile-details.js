@@ -5,11 +5,10 @@ import { Screen, Image, Text, Touchable } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import Images from "@assets/Images";
 import moment from "moment";
-import { GRADIENT } from "@config";
+import { GRADIENT, AppBadges } from "@config";
 import { Distance } from "@helpers";
 
 import styles from "./profile-details.style";
-const appBadges = require("@config/data/badges.json");
 
 class ProfileDetails extends React.Component {
   constructor(props) {
@@ -45,76 +44,72 @@ class ProfileDetails extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
-        <SafeAreaView>
-          <Screen hasGradient style={styles.contentContainer}>
-            <Touchable style={styles.closeButton} onPress={this.props.hideDetail}>
-              <Image source={require("@assets/images/swipe-screen/swipe-arrow-up.png")} />
-            </Touchable>
-            <View style={styles.row}>
-              <Text style={styles.largeText}>{first_name}</Text>
-              <LinearGradient
-                colors={GRADIENT.BUTTON}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.onlineStatus}
+      <SafeAreaView style={styles.container}>
+        <Screen hasGradient style={styles.contentContainer}>
+          <View style={styles.row}>
+            <Text style={styles.largeText}>{first_name}</Text>
+            <LinearGradient
+              colors={GRADIENT.BUTTON}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.onlineStatus}
+            />
+            <Text style={styles.largeText}>{birthday}</Text>
+            <View style={styles.flexSpace} />
+            <Image source={require("@assets/images/swipe-screen/info.png")} />
+            <LinearGradient
+              colors={GRADIENT.BUTTON}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.followerContainer}
+            >
+              <Text style={styles.followerCount}>{distance}</Text>
+              <Text style={styles.followerUnit}>MI</Text>
+            </LinearGradient>
+          </View>
+          <View style={[styles.row, styles.rowMarginTop]}>
+            <Image source={require("@assets/images/swipe-screen/location.png")} />
+            <Text style={styles.smallText}>
+              {address === null ? "no address" : address}
+            </Text>
+          </View>
+          <View style={styles.badgeContainer}>
+            {badges.map(badge => {
+              if (badge > AppBadges.length) return null;
+              return (
+                <Image
+                  key={`badge-${badge}`}
+                  source={Images.live[AppBadges[badge].icon]}
+                  style={styles.badgeIcon}
+                />
+              );
+            })}
+          </View>
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.descriptionText}>{bio}</Text>
+          </View>
+          <View style={[styles.buttonRow, styles.buttonRowMargin]}>
+            <Touchable onPress={() => this.props.onDisLike()}>
+              <Image
+                source={require("@assets/images/swipe-screen/swipe-cross.png")}
+                style={styles.buttonNormal}
               />
-              <Text style={styles.largeText}>{birthday}</Text>
-              <View style={styles.flexSpace} />
-              <Image source={require("@assets/images/swipe-screen/info.png")} />
-              <LinearGradient
-                colors={GRADIENT.BUTTON}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.followerContainer}
-              >
-                <Text style={styles.followerCount}>{distance}</Text>
-                <Text style={styles.followerUnit}>MI</Text>
-              </LinearGradient>
-            </View>
-            <View style={[styles.row, styles.rowMarginTop]}>
-              <Image source={require("@assets/images/swipe-screen/location.png")} />
-              <Text style={styles.smallText}>
-                {address === null ? "no address" : address}
-              </Text>
-            </View>
-            <View style={styles.badgeContainer}>
-              {badges.map(badge => {
-                return (
-                  <Image
-                    key={`badge-${badge}`}
-                    source={Images.live[appBadges[badge].icon]}
-                    style={styles.badgeIcon}
-                  />
-                );
-              })}
-            </View>
-            <View style={styles.descriptionContainer}>
-              <Text style={styles.descriptionText}>{bio}</Text>
-            </View>
-            <View style={[styles.buttonRow, styles.buttonRowMargin]}>
-              <Touchable onPress={() => this.props.onDisLike()}>
-                <Image
-                  source={require("@assets/images/swipe-screen/swipe-cross.png")}
-                  style={styles.buttonNormal}
-                />
-              </Touchable>
-              <Touchable onPress={() => this.props.onSuperLike()}>
-                <Image
-                  source={require("@assets/images/swipe-screen/swipe-star.png")}
-                  style={styles.buttonSmall}
-                />
-              </Touchable>
-              <Touchable onPress={() => this.props.onLike()}>
-                <Image
-                  source={require("@assets/images/swipe-screen/swipe-heart.png")}
-                  style={styles.buttonNormal}
-                />
-              </Touchable>
-            </View>
-          </Screen>
-        </SafeAreaView>
-      </View>
+            </Touchable>
+            <Touchable onPress={() => this.props.onSuperLike()}>
+              <Image
+                source={require("@assets/images/swipe-screen/swipe-star.png")}
+                style={styles.buttonSmall}
+              />
+            </Touchable>
+            <Touchable onPress={() => this.props.onLike()}>
+              <Image
+                source={require("@assets/images/swipe-screen/swipe-heart.png")}
+                style={styles.buttonNormal}
+              />
+            </Touchable>
+          </View>
+        </Screen>
+      </SafeAreaView>
     );
   }
 }

@@ -20,6 +20,11 @@ const setGender = (state, action) => ({
   gender: action.gender,
 });
 
+const setLikeGender = (state, action) => ({
+  ...state,
+  likeGender: action.likeGender,
+});
+
 const setUsername = (state, action) => ({
   ...state,
   username: action.username,
@@ -56,6 +61,7 @@ export const HANDLERS = {
   [Types.SET_FIRST_NAME]: setFirstName,
   [Types.SET_BIRTH_DATE]: setBirthDate,
   [Types.SET_GENDER]: setGender,
+  [Types.SET_LIKE_GENDER]: setLikeGender,
   [Types.SET_USERNAME]: setUsername,
   [Types.SET_PASSWORD]: setPassword,
   [Types.SET_PICTURE]: setPicture,

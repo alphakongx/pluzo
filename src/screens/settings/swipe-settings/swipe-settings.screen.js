@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { View, ScrollView, Dimensions } from "react-native";
-import { SafeAreaView } from "react-navigation";
-import { Image, Text } from "@components";
+import { View, Dimensions, ActivityIndicator, SafeAreaView } from "react-native";
+import { Screen, Image, Text, Touchable } from "@components";
 import { Switch } from "react-native-switch";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import Images from "@assets/Images";
 import Header from "../header";
+import GenderModal from "../../swipe/no-users/gender-modal";
+import { widthPercentageToDP as wp } from "@helpers";
 
 import styles from "./swipe-settings.style";
 
@@ -14,29 +15,104 @@ const screenWidth = Dimensions.get("window").width;
 class SwipeSettings extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      scrollEnabled: true,
-      distance: 20,
-      minAge: 18,
-      maxAge: 25,
-      aroundWorld: false,
-    };
+    const { settings } = this.props;
+    if (settings === null) {
+      this.state = {
+        distance: 20,
+        minAge: 13,
+        maxAge: 25,
+        aroundWorld: false,
+        gender: 0,
+        visibleGenderSetting: false,
+      };
+    } else {
+      this.state = {
+        distance: parseInt(settings.distance, 10),
+        minAge: settings.age_from,
+        maxAge: settings.age_to,
+        aroundWorld: settings.global === 1 ? true : false,
+        gender: parseInt(settings.gender, 10),
+        visibleGenderSetting: false,
+      };
+    }
   }
 
-  goBack = () => {
-    this.props.navigation.goBack();
+  componentDidMount() {
+    if (this.props.settings === null) {
+      this.props.loadSettings(this.props.token);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.settings === null && this.props.settings !== null) {
+      this.updateStates();
+    }
+  }
+
+  componentWillUnmount() {
+    const { settings } = this.props;
+    if (settings !== null) {
+      settings.distance = this.state.distance;
+      settings.age_from = this.state.minAge;
+      settings.age_to = this.state.maxAge;
+      settings.global = this.state.aroundWorld === true ? 1 : 0;
+      settings.gender = this.state.gender;
+
+      this.props.updateSettings(this.props.token, settings);
+    }
+  }
+
+  updateStates = () => {
+    const { settings } = this.props;
+    this.setState({
+      distance: parseInt(settings.distance, 10),
+      minAge: settings.age_from,
+      maxAge: settings.age_to,
+      aroundWorld: settings.global === 1 ? true : false,
+      gender: parseInt(settings.gender, 10),
+    });
   };
 
-  enableScroll = () => this.setState({ scrollEnabled: true });
-  disableScroll = () => this.setState({ scrollEnabled: false });
+  goBack = () => {
+    if (this.props.isModal === true) {
+      this.props.onBack();
+    } else {
+      this.props.navigation.goBack();
+    }
+  };
 
   render() {
-    const { distance, minAge, maxAge, aroundWorld } = this.state;
+    const { distance, minAge, maxAge, aroundWorld, gender } = this.state;
+
+    if (this.props.settings === null) {
+      return (
+        <Screen
+          hasGradient
+          style={this.props.isModal ? styles.modalContainer : styles.container}
+        >
+          <SafeAreaView style={this.props.isModal ? {} : styles.safeAreaContainer}>
+            <View style={this.props.isModal ? styles.modalContainer : styles.container}>
+              <Header title={"Discovery"} onBack={this.goBack} />
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator
+                  size={"large"}
+                  color={"white"}
+                  style={styles.loadingIndicator}
+                />
+              </View>
+            </View>
+          </SafeAreaView>
+        </Screen>
+      );
+    }
 
     return (
-      <View style={styles.container}>
-        <SafeAreaView style={styles.safeAreaContainer}>
-          <ScrollView scrollEnabled={this.state.scrollEnabled}>
+      <Screen
+        hasGradient
+        style={this.props.isModal ? styles.modalContainer : styles.container}
+      >
+        <SafeAreaView style={this.props.isModal ? {} : styles.safeAreaContainer}>
+          <View>
             <Header title={"Discovery"} onBack={this.goBack} />
 
             <View style={[styles.flexRow, styles.itemPadding]}>
@@ -56,8 +132,6 @@ class SwipeSettings extends Component {
               </View>
             </View>
             <MultiSlider
-              onValuesChangeStart={this.disableScroll}
-              onValuesChangeFinish={this.enableScroll}
               onValuesChange={value => {
                 this.setState({ distance: value[0] });
               }}
@@ -68,19 +142,26 @@ class SwipeSettings extends Component {
               trackStyle={styles.tracker}
               selectedStyle={styles.selectedTracker}
               unselectedStyle={styles.unselectedTracker}
-              sliderLength={screenWidth - 50}
+              sliderLength={
+                this.props.isModal ? screenWidth - wp(90) : screenWidth - wp(50)
+              }
               min={0}
-              max={100}
+              max={101}
               values={[distance]}
             />
 
-            <View style={[styles.flexRow, styles.itemPadding]}>
+            <Touchable
+              style={[styles.flexRow, styles.itemPadding]}
+              onPress={() => this.setState({ visibleGenderSetting: true })}
+            >
               <Text style={styles.titleText}>Show Me</Text>
               <View>
-                <Text style={styles.valueText}>Women</Text>
+                <Text style={styles.valueText}>
+                  {gender === 0 ? "Both" : gender === 1 ? "Male" : "Female"}
+                </Text>
               </View>
               <Image source={Images.app.icRight} style={styles.arrowRight} />
-            </View>
+            </Touchable>
             <View style={styles.separator} />
 
             <View style={[styles.flexRow, styles.itemPadding]}>
@@ -90,8 +171,6 @@ class SwipeSettings extends Component {
               </View>
             </View>
             <MultiSlider
-              onValuesChangeStart={this.disableScroll}
-              onValuesChangeFinish={this.enableScroll}
               onValuesChange={value => {
                 this.setState({ minAge: value[0], maxAge: value[1] });
               }}
@@ -102,8 +181,10 @@ class SwipeSettings extends Component {
               trackStyle={styles.tracker}
               selectedStyle={styles.selectedTracker}
               unselectedStyle={styles.unselectedTracker}
-              sliderLength={screenWidth - 50}
-              min={18}
+              sliderLength={
+                this.props.isModal ? screenWidth - wp(90) : screenWidth - wp(50)
+              }
+              min={13}
               max={75}
               values={[minAge, maxAge]}
             />
@@ -117,7 +198,7 @@ class SwipeSettings extends Component {
                 circleSize={20}
                 barHeight={24}
                 circleBorderWidth={0}
-                backgroundActive={"#02FFF3"}
+                backgroundActive={"#617FFF"}
                 backgroundInactive={"#ABA7D5"}
                 circleActiveColor={"white"}
                 circleInActiveColor={"white"}
@@ -132,9 +213,16 @@ class SwipeSettings extends Component {
               Going gobal will allow you to see people from around the world after you've
               run out of profile nearby.
             </Text>
-          </ScrollView>
+          </View>
         </SafeAreaView>
-      </View>
+
+        <GenderModal
+          isVisible={this.state.visibleGenderSetting}
+          gender={this.state.gender}
+          onChange={value => this.setState({ gender: value })}
+          onDismiss={() => this.setState({ visibleGenderSetting: false })}
+        />
+      </Screen>
     );
   }
 }

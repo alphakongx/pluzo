@@ -6,15 +6,15 @@ import styles from "./header.style";
 const Header: () => React$Node = props => {
   const { user } = props;
   return (
-    <View style={styles.headerContainer}>
-      <SafeAreaView>
-        <View style={styles.header}>
+    <View style={styles.headerContainer} pointerEvents={"box-none"}>
+      <SafeAreaView pointerEvents={"box-none"}>
+        <View style={styles.header} pointerEvents={"box-none"}>
           <View style={styles.backButtonContainer}>
             <Touchable style={styles.backButtonTouchable} onPress={props.onBack}>
               <Image source={require("@assets/images/chevron-left.png")} />
             </Touchable>
           </View>
-          <View style={styles.headerContentContainer}>
+          <View style={styles.headerContentContainer} pointerEvents={"box-none"}>
             <Text style={styles.headerTitle}>{user.name || user.username}</Text>
           </View>
           <View style={styles.reportButtonContainer}>

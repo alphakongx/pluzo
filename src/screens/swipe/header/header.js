@@ -2,15 +2,13 @@ import React from "react";
 import { View } from "react-native";
 import { Image, Text, Touchable } from "@components";
 import LinearGradient from "react-native-linear-gradient";
-import { GRADIENT } from "@config";
+import { GRADIENT, AppBadges } from "@config";
 import moment from "moment";
 import Images from "@assets/Images";
 import styles from "./header.style";
 
-const appBadges = require("@config/data/badges.json");
-
 const Header: () => React$Node = props => {
-  var { first_name, birthday, address, badges } = props.item;
+  var { first_name, birthday, address, state, city, badges, bio } = props.item;
 
   if (first_name === null || first_name === "") {
     first_name = "No Name";
@@ -18,7 +16,7 @@ const Header: () => React$Node = props => {
   birthday = moment.duration(moment().diff(moment.unix(birthday))).years();
 
   return (
-    <View>
+    <View pointerEvents={"box-none"}>
       <View style={[styles.topActionRow, styles.topRowMargin]}>
         <Text style={styles.topBarName}>{first_name}</Text>
         <LinearGradient
@@ -29,34 +27,28 @@ const Header: () => React$Node = props => {
         />
         <Text style={styles.topBarName}>{birthday}</Text>
         <View style={styles.flexSpace} />
-        <Touchable
-          onPress={() => {
-            props.onInfoClicked(true);
-          }}
-        >
-          <Image
-            source={require("@assets/images/swipe-screen/info.png")}
-            style={styles.infoIcon}
-          />
+        <Touchable onPress={props.onReport}>
+          <Image source={require("@assets/images/report.png")} />
         </Touchable>
       </View>
       <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
         <Image source={require("@assets/images/swipe-screen/location.png")} />
-        <Text style={styles.topBarLocation}>
-          {address === null ? "no address" : address}
-        </Text>
+        <Text style={styles.topBarCity}>{state === null ? city : state},</Text>
+        <Text style={styles.topBarLocation}>{address === null ? "" : address}</Text>
       </View>
       <View style={styles.badgeContainer}>
         {badges.map(badge => {
+          if (badge > AppBadges.length) return null;
           return (
             <Image
               key={`badge-${badge}`}
-              source={Images.live[appBadges[badge].icon]}
+              source={Images.live[AppBadges[badge].icon]}
               style={styles.badgeIcon}
             />
           );
         })}
       </View>
+      {props.showBio && <Text style={styles.bioText}>{bio}</Text>}
     </View>
   );
 };

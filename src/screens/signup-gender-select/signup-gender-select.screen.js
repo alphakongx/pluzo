@@ -52,11 +52,69 @@ const SignupGenderSelect: () => React$Node = props => {
               )}
             </View>
           </View>
+
+          <Text style={[styles.titleText, styles.titleTop]}>I'm looking to meet...</Text>
+
+          <View style={styles.selectionContainer}>
+            <View style={styles.buttonContainer}>
+              {props.likeGender === "male" || props.likeGender === "both" ? (
+                <GradientButton
+                  onPress={() => {
+                    if (props.likeGender === "both") {
+                      props.setLikeGender("female");
+                    } else {
+                      props.setLikeGender(null);
+                    }
+                  }}
+                  text={"Male"}
+                />
+              ) : (
+                <SolidButton
+                  onPress={() => {
+                    if (props.likeGender === "female") {
+                      props.setLikeGender("both");
+                    } else {
+                      props.setLikeGender("male");
+                    }
+                  }}
+                  text={"Male"}
+                />
+              )}
+            </View>
+
+            <View style={styles.buttonSeparator} />
+
+            <View style={styles.buttonContainer}>
+              {props.likeGender === "female" || props.likeGender === "both" ? (
+                <GradientButton
+                  onPress={() => {
+                    if (props.likeGender === "both") {
+                      props.setLikeGender("male");
+                    } else {
+                      props.setLikeGender(null);
+                    }
+                  }}
+                  text={"Female"}
+                />
+              ) : (
+                <SolidButton
+                  onPress={() => {
+                    if (props.likeGender === "male") {
+                      props.setLikeGender("both");
+                    } else {
+                      props.setLikeGender("female");
+                    }
+                  }}
+                  text={"Female"}
+                />
+              )}
+            </View>
+          </View>
         </View>
 
         <View style={styles.footer}>
           <GradientButton
-            disabled={!props.gender}
+            disabled={!props.gender || !props.likeGender}
             onPress={navigateNext}
             text={"Continue"}
           />

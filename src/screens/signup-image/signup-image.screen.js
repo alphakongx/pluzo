@@ -70,13 +70,16 @@ const SignupImage: () => React$Node = props => {
           <Text style={styles.subTitleText}>Upload a profile picture.</Text>
 
           <View style={styles.imageUploadContainer}>
-            {props.picture ? (
-              <Image style={styles.imageContainer} source={{ uri: props.picture.uri }} />
-            ) : (
-              <View style={styles.imageContainer}>
+            <Touchable style={styles.imageContainer} onPress={onPressUpload}>
+              {props.picture ? (
+                <Image
+                  source={{ uri: props.picture.uri }}
+                  style={styles.imageContainer}
+                />
+              ) : (
                 <Image source={require("@assets/images/image.png")} />
-              </View>
-            )}
+              )}
+            </Touchable>
 
             <View style={styles.imageSeparator} />
 

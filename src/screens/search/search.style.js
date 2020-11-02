@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { FontHelper } from "@helpers";
+import { FontHelper, widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -16,64 +16,65 @@ export default StyleSheet.create({
   searchContainer: {
     flex: 1,
     flexDirection: "row",
-    height: 40,
-    marginRight: 20,
+    height: wp(35),
+    marginRight: wp(20),
     backgroundColor: "white",
-    borderRadius: 20,
-    borderWidth: 2,
+    borderRadius: wp(20),
+    borderWidth: wp(2),
     borderColor: COLOR.SEARCH_INPUT_BORDER,
   },
   iconContainer: {
-    width: 30,
+    width: wp(30),
     justifyContent: "center",
     alignItems: "flex-end",
-    paddingRight: 5,
+    paddingRight: wp(5),
     paddingTop: 1,
   },
   inputField: FontHelper.font({
     flex: 1,
-    fontSize: 12,
+    fontSize: wp(12),
     padding: 0,
     fontWeight: "600",
     color: COLOR.SEARCH_INPUT_PLACEHOLDER,
   }),
 
   filterContainer: {
-    marginTop: 10,
-    marginBottom: 20,
-    marginHorizontal: 20,
+    marginTop: wp(10),
+    marginBottom: wp(20),
+    marginHorizontal: wp(20),
   },
   filterButtonContainer: {
-    height: 25,
-    paddingHorizontal: 10,
+    height: wp(25),
+    paddingHorizontal: wp(10),
     justifyContent: "center",
   },
   activeButton: {
-    borderRadius: 13,
+    borderRadius: wp(13),
     backgroundColor: "#312446",
   },
   separator: {
-    width: 10,
+    width: wp(10),
   },
   filterText: {
     fontWeight: "600",
-    fontSize: 12,
+    fontSize: wp(12),
     color: COLOR.TEXT_SECONDARY_4,
   },
 
   sectionContainer: {},
   sectionText: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: wp(16),
     color: "white",
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(10),
+    paddingTop: wp(5),
   },
   showAllContainer: {
-    margin: 20,
+    margin: wp(20),
   },
   showAllText: {
     fontFamily: "OpenSans",
-    fontSize: 13,
+    fontSize: wp(13),
     color: COLOR.TEXT_SECONDARY_4,
   },
 });

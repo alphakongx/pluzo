@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+import FastImage from "react-native-fast-image";
 import { View } from "react-native";
-import { Image } from "@components";
+import { Image, Touchable } from "@components";
 import Images from "@assets/Images";
 
 import styles from "./stream-user-icon.style";
@@ -12,26 +13,30 @@ class StreamUserIcon extends Component {
   }
 
   render() {
-    const { isStreamer, user } = this.props;
+    const { isBroadcaster, user } = this.props;
     return (
-      <View style={[styles.container, this.props.style]}>
-        <Image source={{ uri: user.images[0].path }} style={styles.image} />
-        {isStreamer && (
+      <Touchable
+        style={[styles.container, this.props.style]}
+        disabled={this.props.onImagePress ? false : true}
+        onPress={() => this.props.onImagePress && this.props.onImagePress()}
+      >
+        <FastImage source={{ uri: user.images[0].path }} style={styles.image} />
+        {isBroadcaster && (
           <View style={styles.micContainer}>
             <Image source={Images.app.icMic} style={styles.mic} />
           </View>
         )}
-      </View>
+      </Touchable>
     );
   }
 }
 
 StreamUserIcon.propTypes = {
-  isStreamer: PropTypes.bool,
+  isBroadcaster: PropTypes.bool,
 };
 
 StreamUserIcon.defaultProps = {
-  isStreamer: true,
+  isBroadcaster: true,
 };
 
 export default StreamUserIcon;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, KeyboardAvoidingView, Platform } from "react-native";
 import {
   BackButton,
   GradientButton,
@@ -10,10 +10,12 @@ import {
   CountryCodePicker,
 } from "@components";
 import { SCREENS } from "@constants";
+import { Validator } from "@helpers";
 import styles from "./forgot-password.style.js";
 
 const SignupPhoneNumber: () => React$Node = props => {
   const [phoneCode, setPhoneCode] = useState("");
+  const [countryCode, setCountryCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const goBack = () => {
@@ -29,10 +31,13 @@ const SignupPhoneNumber: () => React$Node = props => {
 
   return (
     <Screen>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <ProgressBar width={50} />
         <BackButton onPress={goBack} />
-        <View style={styles.contentContainer}>
+        <View style={styles.contentContainer} pointerEvents={"box-none"}>
           <View style={styles.informationContainer}>
             <View style={styles.instructionContainer}>
               <Text style={styles.instructionText}>
@@ -49,6 +54,7 @@ const SignupPhoneNumber: () => React$Node = props => {
                 country={{ iso2: "us", dialCode: "1" }}
                 onChange={country => {
                   setPhoneCode(country.dialCode);
+                  setCountryCode(country.iso2);
                 }}
                 style={styles.codePicker}
               />
@@ -59,6 +65,7 @@ const SignupPhoneNumber: () => React$Node = props => {
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
                 placeholder={"Your phone number"}
+                keyboardType={"phone-pad"}
               />
             </View>
           </View>
@@ -69,12 +76,12 @@ const SignupPhoneNumber: () => React$Node = props => {
         <View style={styles.footer}>
           <GradientButton
             loading={props.isCheckingPhone}
-            disabled={!phoneNumber || !phoneCode}
+            disabled={!Validator.isValidPhone(phoneNumber, countryCode)}
             onPress={sendCode}
             text={"Send code"}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Screen>
   );
 };

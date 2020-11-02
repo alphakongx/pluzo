@@ -1,18 +1,19 @@
 import React from "react";
 import { View, Animated, Easing, SafeAreaView } from "react-native";
 import FastImage from "react-native-fast-image";
-import { Text, GradientButton } from "@components";
+import { Text, GradientButton, Touchable } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
 
 import styles from "./no-users.style";
-import DiscoverySettings from "./discovery-settings/discovery-settings";
+import SwipeSettings from "../../settings/swipe-settings";
 
 class NoUsers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       visibleSetting: false,
+      visibleGenderSetting: false,
     };
     this.progress = new Animated.Value(0);
   }
@@ -80,12 +81,17 @@ class NoUsers extends React.Component {
         <Modal
           isVisible={this.state.visibleSetting}
           customBackdrop={
-            <BlurView
+            <Touchable
               style={styles.flexFill}
-              blurType='dark'
-              blurAmount={10}
-              reducedTransparencyFallbackColor='#0B0516'
-            />
+              onPress={() => this.setState({ visibleSetting: false })}
+            >
+              <BlurView
+                style={styles.flexFill}
+                blurType='dark'
+                blurAmount={10}
+                reducedTransparencyFallbackColor='#0B0516'
+              />
+            </Touchable>
           }
           animationIn={"zoomIn"}
           animationOut={"zoomOut"}
@@ -93,11 +99,14 @@ class NoUsers extends React.Component {
           backdropOpacity={1}
           useNativeDriver={false}
           propagateSwipe={true}
+          swipeDirection={"down"}
+          onSwipeComplete={() => this.setState({ visibleSetting: false })}
         >
-          <DiscoverySettings
+          <SwipeSettings
             onBack={() => {
               this.setState({ visibleSetting: false });
             }}
+            isModal={true}
           />
         </Modal>
       </View>

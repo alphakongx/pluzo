@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -11,59 +12,59 @@ export default StyleSheet.create({
   },
 
   headerContainer: {
-    height: 55,
+    height: wp(55),
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: wp(20),
   },
   backButton: {
-    width: 30,
-    height: 50,
+    width: wp(30),
+    height: wp(50),
     justifyContent: "center",
   },
   backButtonIcon: {
-    width: 12,
-    height: 18,
+    width: wp(12),
+    height: wp(18),
     resizeMode: "contain",
   },
 
   settingText: {
-    fontSize: 22,
+    fontSize: wp(22),
     fontWeight: "bold",
     color: "white",
-    marginHorizontal: 20,
-    marginBottom: 10,
+    marginHorizontal: wp(20),
+    marginBottom: wp(10),
   },
 
   itemContainer: {
-    paddingHorizontal: 20,
-    height: 50,
+    paddingHorizontal: wp(20),
+    height: wp(50),
     backgroundColor: COLOR.SETTING_ITEM_BACKGROUND,
   },
   separatorLine: {
-    height: 1,
+    height: wp(1),
     backgroundColor: "white",
     opacity: 0.15,
   },
   emptyItemContainer: {
-    height: 45,
+    height: wp(45),
     backgroundColor: "transparent",
   },
   itemContainer1: {
     flexDirection: "row",
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: wp(20),
+    paddingBottom: wp(20),
   },
   logoutText: {
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: wp(12),
     color: COLOR.TEXT_SECONDARY_4,
-    marginHorizontal: 10,
+    marginHorizontal: wp(10),
   },
   deleteText: {
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: wp(12),
     color: COLOR.SETTING_ITEM_DELETE_TEXT,
-    marginHorizontal: 10,
+    marginHorizontal: wp(10),
   },
 });

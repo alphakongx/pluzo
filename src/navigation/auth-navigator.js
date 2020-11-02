@@ -15,6 +15,7 @@ import SignupImage from "../screens/signup-image";
 import SignupPhoneNumber from "../screens/signup-phone-number";
 import SignupCodeVerification from "../screens/signup-code-verification";
 import SignupSuccess from "../screens/signup-success";
+import TermsOfService from "../screens/settings/terms-of-service";
 
 import navigationConfig from "./navigation-config";
 
@@ -35,6 +36,7 @@ const AuthStack = createStackNavigator(
     [SCREENS.SIGNUP_PHONE_NUMBER]: { screen: SignupPhoneNumber },
     [SCREENS.SIGNUP_CODE_VERIFICATION]: { screen: SignupCodeVerification },
     [SCREENS.SIGNUP_SUCCESS]: { screen: SignupSuccess },
+    [SCREENS.TERMS_OF_SERVICE]: { screen: TermsOfService },
   },
   {
     initialRouteName: SCREENS.AUTH_SELECTION,

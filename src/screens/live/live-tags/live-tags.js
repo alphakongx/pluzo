@@ -5,22 +5,19 @@ import Images from "@assets/Images";
 
 import styles from "./live-tags.style";
 
-const data = [
-  { type: "all", icon: null },
-  { type: "picture", icon: Images.live.tagPicture },
-  { type: "music", icon: Images.live.tagMusic },
-  { type: "box", icon: Images.live.tagBox },
-  { type: "love", icon: Images.live.tagLove },
-  { type: "sport", icon: Images.live.tagSport },
-  { type: "sea", icon: Images.live.tagSea },
-  { type: "travel", icon: Images.live.tagTravel },
-];
+const badges = require("@config/data/badges.json");
 
 const LiveTags: () => React$Node = props => {
-  const [currentTag, setCurrentTag] = useState("all");
+  const [currentTag, setCurrentTag] = useState(0);
+
+  const data = [{ id: 0, icon: null, selected: false }];
+  Object.values(badges).forEach(value => {
+    data.push(value);
+  });
 
   const onChangeTag = tag => {
-    setCurrentTag(tag.type);
+    setCurrentTag(tag.id);
+    props.onChangeCategory && props.onChangeCategory(tag.id);
   };
 
   return (
@@ -29,21 +26,21 @@ const LiveTags: () => React$Node = props => {
       style={styles.usersList}
       contentContainerStyle={styles.usersListContentContainerStyle}
       data={data}
-      keyExtractor={item => item.type}
+      keyExtractor={item => `live-category-${item.id}`}
       renderItem={({ item: tag, index }) => {
-        let isActive = currentTag === tag.type;
+        let isActive = currentTag === tag.id;
         return (
           <Touchable style={styles.itemContainer} onPress={() => onChangeTag(tag)}>
-            {tag.type === "all" && (
+            {tag.id === 0 && (
               <View style={[styles.itemTextContainer, isActive ? styles.activeItem : {}]}>
                 <Text style={styles.itemText}>{"ALL"}</Text>
               </View>
             )}
-            {tag.type !== "all" && (
+            {tag.id !== 0 && (
               <View
                 style={[styles.itemImageContainer, isActive ? styles.activeItem : {}]}
               >
-                <Image source={tag.icon} style={styles.itemImage} />
+                <Image source={Images.live[tag.icon]} style={styles.itemImage} />
               </View>
             )}
           </Touchable>

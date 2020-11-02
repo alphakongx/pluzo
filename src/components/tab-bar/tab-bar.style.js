@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -11,7 +12,7 @@ export default StyleSheet.create({
   tabContainer: {
     width: "100%",
     flexDirection: "row",
-    height: 50,
+    height: wp(50),
     alignItems: "center",
   },
   transparentTab: {
@@ -20,9 +21,9 @@ export default StyleSheet.create({
   normalTab: {
     backgroundColor: COLOR.HEADER_BACKGROUND,
     shadowOpacity: 0.05,
-    shadowRadius: 5,
+    shadowRadius: wp(5),
     borderTopWidth: 0,
-    elevation: 15,
+    elevation: wp(15),
   },
   tabButton: {
     flex: 1,

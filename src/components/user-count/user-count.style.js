@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -8,8 +9,8 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   userIcon: {
-    width: 12,
-    height: 35,
+    width: wp(12),
+    height: wp(35),
     resizeMode: "contain",
   },
   userCount: {

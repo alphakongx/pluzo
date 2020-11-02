@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   bottomActions: {
@@ -6,28 +7,29 @@ export default StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
+    // zIndex: 1000,
   },
   bottomContainer: {
-    marginBottom: 50,
+    marginBottom: wp(50),
   },
   buttonRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginHorizontal: 20,
+    marginHorizontal: wp(25),
   },
   buttonRowMargin: {
-    marginBottom: 30,
-    marginTop: 20,
+    marginBottom: wp(30),
+    marginTop: wp(20),
   },
   buttonSmall: {
-    width: 50,
-    height: 50,
-    marginHorizontal: 10,
+    width: wp(50),
+    height: wp(50),
+    marginHorizontal: wp(10),
+    resizeMode: "stretch",
   },
   buttonNormal: {
-    width: 70,
-    height: 70,
+    width: wp(70),
+    height: wp(70),
   },
 });

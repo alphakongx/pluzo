@@ -1,17 +1,18 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   peopleContainer: {
-    marginRight: 15,
+    marginRight: wp(15),
     alignItems: "center",
-    paddingBottom: 12,
-    borderRadius: 22,
+    paddingBottom: wp(12),
+    borderRadius: wp(22),
     overflow: "hidden",
   },
   peoplePicture: {
-    width: 120,
-    height: 160,
-    borderRadius: 22,
+    width: wp(120),
+    height: wp(160),
+    borderRadius: wp(22),
   },
   peopleNameContainer: {
     position: "absolute",
@@ -19,20 +20,20 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: "row",
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    paddingHorizontal: wp(10),
+    paddingVertical: wp(8),
   },
   peopleName: {
     color: "white",
-    fontSize: 12,
+    fontSize: wp(12),
     fontWeight: "600",
   },
   onlineMark: {
-    width: 5,
-    height: 5,
-    marginTop: 2,
-    marginLeft: 2,
-    borderRadius: 3,
+    width: wp(5),
+    height: wp(5),
+    marginTop: wp(2),
+    marginLeft: wp(2),
+    borderRadius: wp(3),
     backgroundColor: "#00FF77",
   },
   peopleAddContainer: {
@@ -40,15 +41,15 @@ export default StyleSheet.create({
     bottom: 0,
   },
   peopleAdd: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: wp(40),
+    height: wp(40),
+    borderRadius: wp(20),
     alignItems: "center",
     justifyContent: "center",
   },
   plusIcon: {
-    width: 16,
-    height: 16,
+    width: wp(16),
+    height: wp(16),
     resizeMode: "contain",
     tintColor: "#0B0516",
   },

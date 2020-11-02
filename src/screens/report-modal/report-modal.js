@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, TextInput, Platform, ScrollView, SafeAreaView } from "react-native";
+import { View, TextInput, Platform } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
 import Modal from "react-native-modal";
@@ -25,12 +25,14 @@ class ReportModal extends Component {
   onModalShow = () => {
     if (Platform.OS === "ios") {
       KeyboardManager.setEnable(true);
+      KeyboardManager.setShouldResignOnTouchOutside(true);
     }
   };
 
   onModalHide = () => {
     if (Platform.OS === "ios" && this.props.keyboardDisable) {
       KeyboardManager.setEnable(false);
+      KeyboardManager.setShouldResignOnTouchOutside(false);
     }
   };
 
@@ -70,12 +72,14 @@ class ReportModal extends Component {
       <Modal
         {...this.props}
         customBackdrop={
-          <BlurView
-            style={styles.flexFill}
-            blurType='dark'
-            blurAmount={10}
-            reducedTransparencyFallbackColor='#0B0516'
-          />
+          <Touchable style={styles.flexFill} onPress={this.props.onDismiss}>
+            <BlurView
+              style={styles.flexFill}
+              blurType='dark'
+              blurAmount={10}
+              reducedTransparencyFallbackColor='#0B0516'
+            />
+          </Touchable>
         }
         backdropTransitionOutTiming={0}
         backdropTransitionInTiming={0}
@@ -89,37 +93,37 @@ class ReportModal extends Component {
         onSwipeComplete={this.props.onDismiss}
         swipeThreshold={30}
       >
-        <View style={styles.container}>
-          <Touchable
-            style={styles.backButton}
-            onPress={() => {
-              this.props.onDismiss && this.props.onDismiss();
-            }}
-          >
-            <Image source={Images.app.icBack} style={styles.backImage} />
-          </Touchable>
-          <Screen hasGradient style={styles.container}>
-            <SafeAreaView style={styles.contentContainer}>
-              <ScrollView style={styles.scrollView}>
-                <Text style={styles.titleText}>Report</Text>
-                <Text style={styles.descriptionText}>
-                  Tell us why you want to report this livestream
-                </Text>
+        <View style={styles.container} pointerEvents={"box-none"}>
+          <View style={styles.subContainer} pointerEvents={"box-none"}>
+            <Touchable
+              style={styles.backButton}
+              onPress={() => {
+                this.props.onDismiss && this.props.onDismiss();
+              }}
+            >
+              <Image source={Images.app.icBack} style={styles.backImage} />
+            </Touchable>
+            <Screen hasGradient style={styles.contentContainer}>
+              <Text style={styles.titleText}>Report</Text>
+              <Text style={styles.descriptionText}>
+                {this.props.liveStream
+                  ? "Tell us why you want to report this livestream"
+                  : "Tell us why you want to report this user"}
+              </Text>
 
-                {this.renderTypeButtons()}
+              {this.renderTypeButtons()}
 
-                <TextInput
-                  multiline={true}
-                  placeholderTextColor={"#ABA7D5"}
-                  placeholder={"Here you can add additional information..."}
-                  style={styles.reportContentText}
-                />
-                <Touchable style={[styles.reportButton]} onPress={this.onReport}>
-                  <Text style={styles.reportButtonText}>Report</Text>
-                </Touchable>
-              </ScrollView>
-            </SafeAreaView>
-          </Screen>
+              <TextInput
+                multiline={true}
+                placeholderTextColor={"#ABA7D5"}
+                placeholder={"Here you can add additional information..."}
+                style={styles.reportContentText}
+              />
+              <Touchable style={[styles.reportButton]} onPress={this.onReport}>
+                <Text style={styles.reportButtonText}>Report</Text>
+              </Touchable>
+            </Screen>
+          </View>
         </View>
       </Modal>
     );

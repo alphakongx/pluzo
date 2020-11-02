@@ -61,6 +61,16 @@ const { Types, Creators } = createActions({
   deleteAccountSuccess: null,
   deleteAccountFailure: null,
 
+  requestUpdatePhoneSendCode: ["phone", "token"],
+  updatePhoneSendCodeSuccess: null,
+  updatePhoneSendCodeFail: null,
+
+  requestUpdatePhoneConfirmCode: ["code", "token"],
+  updatePhoneConfirmCodeSuccess: null,
+  updatePhoneConfirmCodeFail: null,
+
+  updateNotification: ["data"],
+
   logout: null,
 });
 

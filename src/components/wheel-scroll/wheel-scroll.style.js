@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -26,8 +27,8 @@ export default StyleSheet.create({
 
   highlightView: {
     position: "absolute",
-    borderRadius: 35,
-    height: 35,
+    borderRadius: wp(35),
+    height: wp(35),
   },
 
   selectedItem: {
@@ -38,7 +39,7 @@ export default StyleSheet.create({
   scrollViewContainer: {
     flex: 1,
     width: "100%",
-    marginVertical: 20,
+    marginVertical: wp(20),
   },
   scrollContainer: {
     width: "100%",

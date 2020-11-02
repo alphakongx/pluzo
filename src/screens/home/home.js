@@ -3,12 +3,13 @@ import { View, Animated, PanResponder } from "react-native";
 import { HomeStack } from "../../navigation/home-navigator";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import EventBus from "eventing-bus";
-import { BoxShadow } from "@components";
+import { BoxShadow, BannerAlert, GestureRecognizer } from "@components";
 import { StreamStatus } from "@constants";
-import { Notification } from "@helpers";
 import LiveStream from "../live-stream";
+import StreamStopModal from "./stream-stop-modal";
 
 import styles, { width, height } from "./home.style";
+import PushNotification from "./push-notification";
 const shadowOptions = {
   width: 130,
   height: 200,
@@ -23,12 +24,18 @@ const shadowOptions = {
 
 const Home = props => {
   const insets = useSafeAreaInsets();
-  const { setStreamStatus } = props;
+  const { setStreamStatus, updateMessages, initLiveUsers } = props;
+  const [visibleNotification, setVisibleNotification] = useState(false);
   const [visibleStream, setVisibleStream] = useState(false);
-  const [streamParams, setStreamParams] = useState(null);
+  const [streamParams, setStreamParams] = useState({
+    channelName: null,
+    isBroadcaster: false,
+    isJoin: false,
+  });
   const [minimized, setMinimized] = useState(false);
   const [position, setPosition] = useState(3);
   const [originalPos, setOriginalPos] = useState({ x: 0, y: 0 });
+  const [visibleStop, setVisibleStop] = useState(false);
 
   const maxDeltaY = height - (insets.bottom + insets.top + 100);
   const positionStyle = [
@@ -37,8 +44,14 @@ const Home = props => {
     { left: 10, bottom: insets.bottom + 60 },
     { right: 10, bottom: insets.bottom + 60 },
   ];
+  const windowPositions = [
+    { x: 10, y: insets.top + 60 },
+    { x: width - 140, y: insets.top + 60 },
+    { x: 10, y: height - (insets.bottom + 260) },
+    { x: width - 140, y: height - (insets.bottom + 260) },
+  ];
 
-  var _panXY = new Animated.ValueXY();
+  var _panXY = new Animated.ValueXY({ x: 0, y: 0 });
   var _scaleX = new Animated.Value(0);
   var _scaleY = new Animated.Value(0);
   var _opacity = new Animated.Value(1);
@@ -58,10 +71,10 @@ const Home = props => {
     let centerY = originalPos.y + 100 + dy;
     let centerX = originalPos.x + 65 + dx;
 
-    if (centerY < insets.top + 50 || centerY > height - insets.bottom - 50) {
+    if (centerY < insets.top + 20 || centerY > height - insets.bottom - 20) {
       return true;
     }
-    if (centerX < 65 || centerX > width - 65) {
+    if (centerX < 35 || centerX > width - 35) {
       return true;
     }
     return false;
@@ -72,7 +85,7 @@ const Home = props => {
       if (minimized) return true;
       if (props.isScrolling) return false;
       return (
-        props.streamStatus !== StreamStatus.STARTING &&
+        props.streamStatus !== StreamStatus.PREPARING &&
         e.nativeEvent.pageY < height / 2 - 50
       );
     },
@@ -129,23 +142,13 @@ const Home = props => {
           setMinimized(false);
         } else {
           if (isLeaveArea(gestureState)) {
-            Notification.confirmAlert(
-              "Stop broadcasting?",
-              "Are you sure you want to leave the room?",
-              "LEAVE",
-              () => {
-                setVisibleStream(false);
-              },
-              () => {
-                Animated.timing(_opacity, {
-                  toValue: 1,
-                  duration: 50,
-                  useNativeDriver: false,
-                }).start(() => {
-                  updateViewPosition(gestureState);
-                });
-              },
-            );
+            Animated.timing(_opacity, {
+              toValue: 0,
+              duration: 50,
+              useNativeDriver: false,
+            }).start(() => {
+              setVisibleStop(true);
+            });
           } else {
             updateViewPosition(gestureState);
           }
@@ -201,38 +204,71 @@ const Home = props => {
         newPosition = 0;
       }
     }
+    let newX = windowPositions[newPosition].x - windowPositions[position].x;
+    let newY = windowPositions[newPosition].y - windowPositions[position].y;
     Animated.timing(_panXY, {
-      toValue: { x: 0, y: 0 },
-      duration: 10,
+      toValue: { x: newX, y: newY },
+      duration: 250,
       useNativeDriver: false,
     }).start(() => {
       if (position !== newPosition) {
+        _panXY.setValue({ x: 0, y: 0 });
         setPosition(newPosition);
       }
     });
   };
 
+  const onLeaveRoom = () => {
+    setVisibleStream(false);
+    setStreamStatus(StreamStatus.NONE);
+  };
+
+  const onHideNotification = () => {
+    setVisibleNotification(false);
+    props.updateNotification(null);
+  };
+
   useEffect(() => {
+    setStreamStatus(StreamStatus.NONE);
     const newStreamAction = EventBus.on("NEW_STREAM_ACTION", params => {
+      initLiveUsers({ broadcasters: [], audience: [] });
       setStreamParams(params);
       setMinimized(false);
-      console.log(params);
       if (params.isJoin) {
-        setStreamStatus(StreamStatus.STARTED);
+        setStreamStatus(StreamStatus.JOINED);
+        updateMessages([]);
       } else {
-        setStreamStatus(StreamStatus.STARTING);
+        setStreamStatus(StreamStatus.PREPARING);
+        let systemMsg = {
+          id: "1",
+          message: "Hold on! We're telling your friends to join",
+          type: "system",
+        };
+        updateMessages([systemMsg]);
       }
       setVisibleStream(true);
     });
+    const endStreamAction = EventBus.on("APP_END_STREAM_ACTION", () => {
+      setVisibleStream(false);
+      setStreamStatus(StreamStatus.NONE);
+    });
     return () => {
       newStreamAction();
+      endStreamAction();
     };
-  }, [setStreamStatus]);
+  }, [initLiveUsers, setStreamStatus, updateMessages]);
 
+  useEffect(() => {
+    if (props.notification !== null) {
+      setVisibleNotification(true);
+    } else {
+      setVisibleNotification(false);
+    }
+  }, [props.notification]);
   return (
     <View style={styles.container}>
       <HomeStack navigation={props.navigation} />
-      {visibleStream && streamParams ? (
+      {visibleStream && streamParams.channelName !== null ? (
         <Animated.View
           style={[
             styles.absoluteView,
@@ -262,13 +298,62 @@ const Home = props => {
               streamParams={streamParams}
               minimized={minimized}
               onMinimized={minimizedView}
-              onLeaveRoom={() => {
-                setVisibleStream(false);
-              }}
+              onLeaveRoom={() => onLeaveRoom()}
             />
           </View>
         </Animated.View>
       ) : null}
+      {visibleNotification && (
+        <GestureRecognizer
+          style={styles.alertContainer}
+          enableMoveUp={true}
+          maxMoveUp={100}
+          onSwipeUp={state => onHideNotification()}
+        >
+          <BannerAlert
+            notification={props.notification}
+            hideNotification={onHideNotification}
+            onAcceptFriend={userId => {
+              props.acceptFriendRequest(userId, props.token);
+              setTimeout(() => {
+                props.loadPendingRequests(props.token);
+              }, 500);
+              onHideNotification();
+            }}
+            onRejectFriend={userId => {
+              props.rejectFriendRequest(userId, props.token);
+              setTimeout(() => {
+                props.loadPendingRequests(props.token);
+              }, 500);
+              onHideNotification();
+            }}
+            onAcceptLive={stream => {
+              onHideNotification();
+            }}
+            onRejectLive={() => {
+              onHideNotification();
+            }}
+          />
+        </GestureRecognizer>
+      )}
+
+      <StreamStopModal
+        isVisible={visibleStop}
+        onBack={() => {
+          Animated.timing(_opacity, {
+            toValue: 1,
+            duration: 50,
+            useNativeDriver: false,
+          }).start(() => {
+            setVisibleStop(false);
+          });
+        }}
+        onLeaveRoom={() => {
+          setVisibleStop(false);
+          onLeaveRoom();
+        }}
+      />
+      <PushNotification />
     </View>
   );
 };

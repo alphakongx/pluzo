@@ -8,6 +8,7 @@ import { Countdown } from "react-native-countdown-text";
 import moment from "moment";
 import EventBus from "eventing-bus";
 import { UserTypes } from "@redux/actions";
+import { NavigationService } from "@helpers";
 
 import styles from "./signup-code-verification.style.js";
 
@@ -55,7 +56,7 @@ class SignupCodeVerification extends Component {
   };
 
   goBack = () => {
-    this.props.navigation.goBack();
+    NavigationService.popToTop();
   };
 
   resendCode = () => {

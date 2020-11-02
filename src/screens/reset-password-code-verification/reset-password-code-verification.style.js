@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { FontHelper } from "@helpers";
+import { FontHelper, widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -8,30 +8,30 @@ export default StyleSheet.create({
     flex: 1,
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     flex: 1,
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
     justifyContent: "center",
-    marginTop: -30,
+    marginTop: -wp(30),
   },
   titleText: {
-    fontSize: 22,
+    fontSize: wp(22),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
   subTitleText: {
-    fontSize: 16,
+    fontSize: wp(16),
     color: "rgba(255, 255, 255, 0.5)",
     fontWeight: "600",
     textAlign: "center",
-    marginTop: 5,
-    marginBottom: 45,
+    marginTop: wp(5),
+    marginBottom: wp(45),
   },
   codeContainer: {
     flexDirection: "row",
@@ -43,22 +43,22 @@ export default StyleSheet.create({
   },
   codeInputStyle: FontHelper.font({
     backgroundColor: "white",
-    width: 58,
-    height: 35,
+    width: wp(58),
+    height: wp(35),
     color: COLOR.TEXT_INPUT,
-    borderRadius: 25,
-    fontSize: 14,
+    borderRadius: wp(25),
+    fontSize: wp(14),
     fontWeight: "600",
     paddingVertical: 0,
   }),
   informationContainer: {
     alignItems: "center",
-    marginTop: 25,
+    marginTop: wp(25),
   },
   instructionText: {
     textAlign: "center",
-    marginTop: 3,
-    fontSize: 14,
+    marginTop: wp(3),
+    fontSize: wp(14),
     color: "rgba(255, 255, 255, 0.6)",
   },
   instructionContainer: {
@@ -66,13 +66,13 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   resendButtonContainer: {
-    width: 200,
-    marginTop: 10,
-    marginBottom: 10,
+    width: wp(200),
+    marginTop: wp(10),
+    marginBottom: wp(10),
   },
   footer: {
-    marginTop: 40,
-    paddingHorizontal: 37,
-    paddingBottom: 40,
+    marginTop: wp(40),
+    paddingHorizontal: wp(37),
+    paddingBottom: wp(40),
   },
 });

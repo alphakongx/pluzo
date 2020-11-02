@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -8,54 +9,71 @@ export default StyleSheet.create({
   },
 
   defaultButtonsContainer: {
-    padding: 10,
+    padding: wp(10),
   },
   defaultButton: {
     backgroundColor: COLOR.LIVE_MSG_BACKGROUND,
-    height: 36,
-    borderRadius: 18,
-    paddingHorizontal: 15,
+    height: wp(36),
+    borderRadius: wp(18),
+    paddingHorizontal: wp(15),
     justifyContent: "center",
-    marginRight: 5,
+    marginRight: wp(5),
   },
   defaultButtonText: {
     fontFamily: "OpenSans",
     color: "white",
-    fontSize: 12,
+    fontSize: wp(12),
     fontWeight: "400",
   },
 
   messageList: {
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: wp(10),
   },
   messageItemContainer: {
     flexDirection: "row",
-    marginBottom: 10,
+    marginBottom: wp(10),
   },
-  messageAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  messageAvatarContainer: {
     position: "absolute",
   },
+  messageAvatar: {
+    width: wp(40),
+    height: wp(40),
+    borderRadius: wp(20),
+  },
   messageTextContainer: {
-    minHeight: 40,
-    marginLeft: 10,
-    paddingLeft: 35,
-    paddingRight: 20,
+    minHeight: wp(40),
+    marginLeft: wp(10),
+    paddingLeft: wp(35),
+    paddingRight: wp(20),
     justifyContent: "center",
     backgroundColor: COLOR.LIVE_MSG_BACKGROUND,
-    borderRadius: 20,
+    borderRadius: wp(20),
   },
   messageUser: {
     color: "white",
-    fontSize: 10,
+    fontSize: wp(10),
     fontWeight: "bold",
   },
   messageText: {
     color: "white",
-    fontSize: 12,
+    fontFamily: "OpenSans",
+    fontSize: wp(12),
+    fontWeight: "400",
+  },
+  messageSystemTextContainer: {
+    minHeight: wp(40),
+    paddingLeft: wp(16),
+    paddingRight: wp(20),
+    justifyContent: "center",
+    backgroundColor: COLOR.LIVE_MSG_BACKGROUND,
+    borderRadius: wp(20),
+  },
+  messageSystemText: {
+    color: "white",
+    fontFamily: "OpenSans",
+    fontSize: wp(12),
     fontWeight: "400",
   },
 });

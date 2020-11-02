@@ -46,8 +46,16 @@ class Settings extends Component {
   };
 
   onItemPressed = itemId => {
-    if (itemId === "5") {
+    if (itemId === "1") {
+      this.props.navigation.navigate(SCREENS.ACCOUNT_SETTINGS);
+    } else if (itemId === "2") {
+      this.props.navigation.navigate(SCREENS.SAFETY_PRIVACY);
+    } else if (itemId === "3") {
+      this.props.navigation.navigate(SCREENS.PUSH_SETTINGS);
+    } else if (itemId === "5") {
       this.props.navigation.navigate(SCREENS.SWIPE_SETTINGS);
+    } else if (itemId === "9") {
+      this.props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {});
     } else if (itemId === "16") {
       // delete account
       if (!this.props.isDeletingAccount) {

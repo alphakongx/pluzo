@@ -1,31 +1,27 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 1000,
-    backgroundColor: COLOR.HEADER_BACKGROUND,
+    flex: 1,
   },
   contentContainer: {
-    padding: 20,
-    overflow: "visible",
-    marginBottom: 50,
-  },
-  closeButton: {
-    position: "absolute",
-    top: -27,
-    left: 0,
+    flex: 1,
+    marginTop: wp(60),
+    marginBottom: wp(90),
+    marginHorizontal: wp(15),
+    borderRadius: wp(22),
+    paddingHorizontal: wp(15),
+    paddingTop: wp(40),
+    paddingBottom: wp(20),
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
   },
   rowMarginTop: {
-    marginTop: 5,
+    marginTop: wp(5),
   },
   buttonRow: {
     flexDirection: "row",
@@ -33,71 +29,72 @@ export default StyleSheet.create({
     justifyContent: "space-between",
   },
   buttonNormal: {
-    width: 70,
-    height: 70,
+    width: wp(70),
+    height: wp(70),
   },
   buttonSmall: {
-    width: 50,
-    height: 50,
+    width: wp(50),
+    height: wp(50),
   },
   largeText: {
-    fontSize: 26,
+    fontSize: wp(26),
     fontWeight: "600",
     color: COLOR.TEXT_PRIMARY,
   },
   smallText: {
-    fontSize: 10,
+    fontSize: wp(10),
     color: COLOR.TEXT_SECONDARY_2,
-    marginLeft: 5,
+    marginLeft: wp(5),
   },
   descriptionText: {
-    fontSize: 12,
+    fontSize: wp(12),
     color: COLOR.TEXT_SECONDARY_4,
   },
   onlineStatus: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 5,
+    width: wp(8),
+    height: wp(8),
+    borderRadius: wp(4),
+    marginHorizontal: wp(5),
   },
   flexSpace: {
     flex: 1,
   },
   followerContainer: {
-    height: 24,
+    height: wp(24),
     flexDirection: "row",
-    paddingHorizontal: 13,
-    borderRadius: 13,
+    paddingHorizontal: wp(13),
+    borderRadius: wp(13),
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 12,
+    marginLeft: wp(12),
   },
   followerCount: {
-    fontSize: 16,
+    fontSize: wp(16),
     fontWeight: "800",
     color: COLOR.TEXT_SECONDARY_3,
   },
   followerUnit: {
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: wp(12),
     fontWeight: "400",
     color: COLOR.TEXT_SECONDARY_3,
-    marginLeft: 2,
+    marginLeft: wp(2),
   },
   descriptionContainer: {
-    paddingVertical: 20,
+    flex: 1,
+    paddingVertical: wp(20),
   },
 
   badgeContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 9,
+    marginTop: wp(9),
   },
   badgeIcon: {
-    width: 18,
-    height: 18,
+    width: wp(18),
+    height: wp(18),
     resizeMode: "contain",
-    marginRight: 5,
-    marginBottom: 5,
+    marginRight: wp(5),
+    marginBottom: wp(5),
   },
 });

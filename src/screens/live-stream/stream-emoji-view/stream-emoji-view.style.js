@@ -1,52 +1,53 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
-    borderRadius: 22,
+    borderRadius: wp(22),
     overflow: "hidden",
-    marginBottom: 20,
+    marginBottom: wp(20),
   },
   allContainer: {
-    height: 160 + (width - 275) / 2,
-    marginBottom: 40,
+    height: wp(160) + (width - wp(275)) / 2,
+    marginBottom: wp(40),
   },
 
   trendingText: {
     color: "white",
-    fontSize: 14,
+    fontSize: wp(14),
     fontWeight: "600",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingHorizontal: wp(15),
+    paddingVertical: wp(10),
   },
   iconsContainer: {
-    paddingLeft: 15,
+    paddingLeft: wp(15),
     flexWrap: "wrap",
     flexDirection: "row",
   },
   emojiButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: (width - 275) / 6,
-    marginBottom: (width - 275) / 6,
+    width: wp(40),
+    height: wp(40),
+    borderRadius: wp(20),
+    marginRight: (width - wp(275)) / 6,
+    marginBottom: (width - wp(275)) / 6,
     backgroundColor: "#312446",
     justifyContent: "center",
     alignItems: "center",
   },
 
   spacerView: {
-    height: 10,
+    height: wp(10),
   },
 
   fadeContainer: {
     position: "absolute",
-    bottom: 20,
+    bottom: wp(20),
     width: "100%",
-    height: 90,
-    borderBottomLeftRadius: 22,
-    borderBottomRightRadius: 22,
+    height: wp(90),
+    borderBottomLeftRadius: wp(22),
+    borderBottomRightRadius: wp(22),
   },
 
   expandButtonContainer: {
@@ -57,8 +58,8 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   expandButton: {
-    width: 40,
-    height: 40,
+    width: wp(40),
+    height: wp(40),
   },
   expandIcon: {
     tintColor: "#0B0516",

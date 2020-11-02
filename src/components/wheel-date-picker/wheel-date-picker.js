@@ -1,11 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { View, Dimensions } from "react-native";
+import { View } from "react-native";
 import moment from "moment";
 import { ScrollPicker } from "../wheel-scroll";
+import { widthPercentageToDP as wp } from "@helpers";
 import styles from "./wheel-date-picker.style";
-
-const { width } = Dimensions.get("window");
 
 export default class WheelDatePicker extends React.Component {
   constructor(props) {
@@ -17,7 +16,7 @@ export default class WheelDatePicker extends React.Component {
       date,
       monthRange: [
         "January",
-        "Feburay",
+        "February",
         "March",
         "April",
         "May",
@@ -137,13 +136,13 @@ export default class WheelDatePicker extends React.Component {
           }}
           dataSource={dayRange}
           selectedIndex={dayRange.indexOf(this.newValue.date)}
-          wrapperHeight={178}
-          wrapperWidth={(width * 22) / 100}
+          wrapperHeight={wp(178)}
+          wrapperWidth={wp(80.08)}
           wrapperBackground={"transparent"}
-          itemHeight={46}
+          itemHeight={wp(46)}
           highlightColor={"white"}
-          highlightWidth={(width * 22) / 100}
-          highlightBorderWidth={2}
+          highlightWidth={wp(80.08)}
+          highlightBorderWidth={wp(2)}
           itemTextStyle={styles.dateText}
           activeItemTextStyle={styles.activeDateText}
           onValueChange={(value, index) => {
@@ -154,13 +153,13 @@ export default class WheelDatePicker extends React.Component {
         <ScrollPicker
           dataSource={monthRange}
           selectedIndex={this.newValue.month}
-          wrapperHeight={180}
-          wrapperWidth={(width * 27) / 100}
+          wrapperHeight={wp(180)}
+          wrapperWidth={wp(100.08)}
           wrapperBackground={"transparent"}
-          itemHeight={50}
+          itemHeight={wp(50)}
           highlightColor={"white"}
-          highlightWidth={(width * 27) / 100}
-          highlightBorderWidth={2}
+          highlightWidth={wp(100.08)}
+          highlightBorderWidth={wp(2)}
           itemTextStyle={styles.dateText}
           activeItemTextStyle={styles.activeDateText}
           onValueChange={(value, index) => {
@@ -171,12 +170,12 @@ export default class WheelDatePicker extends React.Component {
         <ScrollPicker
           dataSource={yearRange}
           selectedIndex={yearRange.indexOf(this.newValue.year)}
-          wrapperHeight={180}
-          wrapperWidth={(width * 22) / 100}
+          wrapperHeight={wp(180)}
+          wrapperWidth={wp(80.08)}
           wrapperBackground={"transparent"}
-          itemHeight={50}
+          itemHeight={wp(50)}
           highlightColor={"white"}
-          highlightWidth={(width * 22) / 100}
+          highlightWidth={wp(80.08)}
           itemTextStyle={styles.dateText}
           activeItemTextStyle={styles.activeDateText}
           onValueChange={(value, index) => {

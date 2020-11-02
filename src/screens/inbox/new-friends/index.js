@@ -7,6 +7,7 @@ function mapStateToProps(state) {
     isLoadingFriends: state.inbox.isLoadingFriends,
     friends: state.inbox.friends,
     token: state.user.token,
+    user: state.user.user,
   };
 }
 

@@ -1,8 +1,9 @@
 import React from "react";
 import { View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { Text } from "@components";
+import { Text, Touchable } from "@components";
 import styles from "./message-bubble.style.js";
+import PhotoView from "react-native-photo-view";
 
 const MessageBubble: () => React$Node = props => {
   const { currentMessage, user } = props;
@@ -14,14 +15,17 @@ const MessageBubble: () => React$Node = props => {
   return (
     <View style={[styles.container, hasImage && hasText ? {} : styles.containerMargin]}>
       {hasImage ? (
-        <FastImage
-          source={{ uri: currentMessage.image }}
-          style={[
-            styles.messageImage,
-            hasText ? styles.imageTextRound : styles.imageFullRound,
-          ]}
-          resizeMode={FastImage.resizeMode.cover}
-        />
+        <Touchable onPress={() => props.onFullImage(currentMessage.image)}>
+          <FastImage
+            source={{ uri: currentMessage.image }}
+            style={[
+              styles.messageImage,
+              hasText ? styles.imageTextRound : styles.imageFullRound,
+            ]}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+          <PhotoView source={{ uri: currentMessage.image }} style={styles.hiddenImage} />
+        </Touchable>
       ) : null}
       {currentMessage.text !== null && currentMessage.text !== "" && (
         <View

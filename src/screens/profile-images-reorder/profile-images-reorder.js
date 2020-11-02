@@ -196,7 +196,7 @@ class OrderImages extends React.Component {
                 end={{ x: 0, y: 1 }}
                 style={styles.plusFav}
               >
-                <Image source={require("@assets/images/live-screen/plus-fav.png")} />
+                <Image source={Images.app.icPlus} />
               </LinearGradient>
             </Touchable>
           </View>

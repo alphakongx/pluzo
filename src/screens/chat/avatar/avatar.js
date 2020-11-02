@@ -1,19 +1,20 @@
 import React from "react";
-import { Image } from "@components";
+import FastImage from "react-native-fast-image";
 import styles from "./avatar.style";
 
 const Avatar: () => React$Node = props => {
   const {
     currentMessage: { user },
   } = props;
-
   return (
-    <Image
-      style={styles.container}
+    <FastImage
+      style={styles.avatar}
       source={
         user.avatar === null || user.avatar === undefined
           ? require("@assets/images/message-image.png")
-          : { uri: user.avatar }
+          : typeof user.avatar === "string"
+          ? { uri: user.avatar }
+          : user.avatar
       }
     />
   );

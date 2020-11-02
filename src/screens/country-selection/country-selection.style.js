@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -7,43 +8,43 @@ export default StyleSheet.create({
 
   titleText: {
     color: "white",
-    fontSize: 22,
+    fontSize: wp(22),
     fontWeight: "bold",
-    paddingHorizontal: 20,
-    top: -10,
+    paddingHorizontal: wp(20),
+    top: -wp(10),
   },
 
   itemContainer: {
     flexDirection: "row",
-    height: 36,
-    paddingLeft: 10,
-    paddingRight: 20,
+    height: wp(36),
+    paddingLeft: wp(10),
+    paddingRight: wp(20),
     alignItems: "center",
     justifyContent: "space-between",
   },
   sortSelection: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(10),
   },
   sortNoSelection: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(10),
+    borderWidth: wp(2),
     borderColor: "#E8E6FF",
   },
   itemText: {
     flex: 1,
     color: "white",
     fontFamily: "OpenSans",
-    fontSize: 14,
+    fontSize: wp(14),
   },
   flagIcon: {
-    width: 15,
-    height: 15,
+    width: wp(15),
+    height: wp(15),
     resizeMode: "contain",
-    marginHorizontal: 8,
+    marginHorizontal: wp(8),
   },
 
   seperator: {

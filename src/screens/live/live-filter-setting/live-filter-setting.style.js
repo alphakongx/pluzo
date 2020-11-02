@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -7,7 +8,7 @@ export default StyleSheet.create({
 
   contentContainer: {
     flex: 1,
-    paddingTop: 10,
+    paddingTop: wp(10),
   },
 
   filterContainer: {
@@ -15,66 +16,66 @@ export default StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    width: 250,
+    width: wp(250),
   },
   titleText: {
     color: "white",
-    fontSize: 22,
+    fontSize: wp(22),
     fontWeight: "600",
-    paddingHorizontal: 10,
-    paddingVertical: 17,
+    paddingHorizontal: wp(10),
+    paddingVertical: wp(17),
   },
   subTitleText: {
     color: "white",
-    fontSize: 16,
+    fontSize: wp(16),
     fontWeight: "600",
-    paddingHorizontal: 10,
-    paddingVertical: 3,
+    paddingHorizontal: wp(10),
+    paddingVertical: wp(3),
   },
 
   itemContainer: {
     flexDirection: "row",
-    height: 36,
-    paddingLeft: 10,
-    paddingRight: 20,
+    height: wp(36),
+    paddingLeft: wp(10),
+    paddingRight: wp(20),
     alignItems: "center",
     justifyContent: "space-between",
   },
   sortSelection: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(10),
   },
   sortNoSelection: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(20),
+    borderWidth: wp(2),
     borderColor: "#E8E6FF",
   },
   itemText: {
     flex: 1,
     color: "white",
     fontFamily: "OpenSans",
-    fontSize: 14,
+    fontSize: wp(14),
   },
   countryName: {
     color: "#E8E6FF",
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: wp(12),
   },
   flagIcon: {
-    width: 15,
-    height: 15,
+    width: wp(15),
+    height: wp(15),
     resizeMode: "contain",
-    marginHorizontal: 8,
+    marginHorizontal: wp(8),
   },
 
   seperator: {
     height: 1,
     backgroundColor: "white",
     opacity: 0.15,
-    marginTop: 20,
-    marginBottom: 50,
+    marginTop: wp(20),
+    marginBottom: wp(50),
   },
 });

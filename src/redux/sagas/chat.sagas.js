@@ -33,6 +33,13 @@ function* requestCurrentChat(action) {
         let result = [];
         response.data.data.messages.forEach(message => {
           message.createdAt = moment.unix(message.createdAt).toDate();
+          if (message.user === 0) {
+            message.user = {
+              _id: 0,
+              name: "Pluzo Team",
+              avatar: require("@assets/images/app-icon.png"),
+            };
+          }
           result.push(message);
         });
 
@@ -51,9 +58,15 @@ function* requestCurrentChat(action) {
           image: message.image,
           createdAt: moment.unix(message.createdAt).toDate(),
           user: {
-            _id: 1,
-            name: message.user.name,
-            avatar: message.user.images[0].path,
+            _id: message.user === 0 ? 0 : message.user._id || message.user.id,
+            name:
+              message.user === 0
+                ? "Pluzo Team"
+                : message.user.name || message.user.username,
+            avatar:
+              message.user === 0
+                ? require("@assets/images/app-icon.png")
+                : message.user.images[0].path,
           },
         });
       });

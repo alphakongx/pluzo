@@ -24,6 +24,8 @@ const { Types, Creators } = createActions({
   requestFriends: ["token"],
   requestFriendsSuccess: ["friends"],
   requestFriendsFailure: null,
+
+  requestReadFlag: ["user_id", "token"],
 });
 
 export const InboxTypes = Types;

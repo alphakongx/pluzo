@@ -1,20 +1,21 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
-    width: 50,
-    height: 50,
+    width: wp(50),
+    height: wp(50),
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 25,
+    borderRadius: wp(30),
   },
   micContainer: {
-    width: 18,
-    height: 18,
+    width: wp(18),
+    height: wp(18),
     backgroundColor: "#0B0516",
-    borderRadius: 9,
+    borderRadius: wp(9),
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
@@ -22,8 +23,8 @@ export default StyleSheet.create({
     bottom: 0,
   },
   mic: {
-    width: 10,
-    height: 10,
+    width: wp(10),
+    height: wp(10),
     resizeMode: "contain",
   },
 });

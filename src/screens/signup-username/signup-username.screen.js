@@ -1,5 +1,6 @@
-import React from "react";
-import { Image, View } from "react-native";
+import React, { useState } from "react";
+import { Image, View, KeyboardAvoidingView, Platform } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import {
   GradientButton,
   ProgressBar,
@@ -17,6 +18,7 @@ function hasNumber(str) {
 }
 
 const SignupUsername: () => React$Node = props => {
+  const [titleMargin, setTitleMargin] = useState(45);
   const goBack = () => {
     props.navigation.goBack();
   };
@@ -26,15 +28,31 @@ const SignupUsername: () => React$Node = props => {
 
   return (
     <Screen>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <ProgressBar width={72} />
         <Touchable onPress={goBack}>
           <View style={styles.backButtonContainer}>
             <Image source={require("@assets/images/chevron-left.png")} />
           </View>
         </Touchable>
-        <View style={styles.contentContainer}>
-          <Text style={styles.titleText} numberOfLines={2} adjustsFontSizeToFit>
+        <View
+          style={styles.contentContainer}
+          onLayout={e => {
+            if (e.nativeEvent.layout.height < 185) {
+              setTitleMargin(10);
+            } else {
+              setTitleMargin(45);
+            }
+          }}
+        >
+          <Text
+            style={[styles.titleText, { marginBottom: wp(titleMargin) }]}
+            numberOfLines={2}
+            adjustsFontSizeToFit
+          >
             Select your username and choose a password.
           </Text>
 
@@ -106,7 +124,7 @@ const SignupUsername: () => React$Node = props => {
             text={"Continue"}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Screen>
   );
 };

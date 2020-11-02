@@ -1,14 +1,15 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   userContainer: {
     flexDirection: "row",
-    marginHorizontal: 20,
+    marginHorizontal: wp(20),
   },
   avatarImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: wp(90),
+    height: wp(90),
+    borderRadius: wp(45),
   },
   absoluteFill: {
     position: "absolute",
@@ -22,7 +23,7 @@ export default StyleSheet.create({
   textContainer: {
     justifyContent: "center",
     alignItems: "flex-start",
-    marginHorizontal: 10,
+    marginHorizontal: wp(10),
   },
   nameContainer: {
     flexDirection: "row",
@@ -30,35 +31,35 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   nameText: {
-    fontSize: 20,
+    fontSize: wp(20),
     fontWeight: "bold",
     color: "white",
-    marginRight: 5,
+    marginRight: wp(5),
   },
   badgeImage: {
-    width: 14,
-    height: 14,
-    marginLeft: 5,
+    width: wp(14),
+    height: wp(14),
+    marginLeft: wp(5),
   },
   usernameText: {
-    fontSize: 14,
+    fontSize: wp(14),
     fontWeight: "700",
     color: "#ABA7D5",
-    marginTop: -2,
+    marginTop: -wp(2),
   },
   friendsContainer: {
-    height: 26,
-    borderRadius: 13,
-    paddingHorizontal: 10,
-    marginTop: 8,
+    height: wp(26),
+    borderRadius: wp(13),
+    paddingHorizontal: wp(10),
+    marginTop: wp(8),
   },
   friendsIconImage: {
-    width: 12,
-    height: 12,
+    width: wp(12),
+    height: wp(12),
   },
   friendsCountText: {
-    fontSize: 10,
+    fontSize: wp(10),
     fontWeight: "bold",
-    marginLeft: 5,
+    marginLeft: wp(5),
   },
 });

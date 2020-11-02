@@ -90,6 +90,7 @@ class SearchScreen extends Component {
           <View style={styles.filterContainer}>
             <FlatList
               horizontal
+              keyboardShouldPersistTaps={"always"}
               data={FilterTypes}
               keyExtractor={(item, index) => `filter-type-${item.id}`}
               ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -113,7 +114,7 @@ class SearchScreen extends Component {
           {isSearching === true ? (
             <ActivityIndicator size={"large"} color={"white"} />
           ) : (
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps={"always"}>
               {(currentFilter === 1 || currentFilter === 2) && friends.length > 0 && (
                 <View style={styles.sectionContainer}>
                   <Text style={styles.sectionText}>Friends</Text>

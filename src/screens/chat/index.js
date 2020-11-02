@@ -1,6 +1,7 @@
 import Chat from "./chat.screen";
 import { connect } from "react-redux";
 import { ChatCreators } from "@redux/actions";
+import { withSafeAreaInsets } from "react-native-safe-area-context";
 
 function mapStateToProps(state, { navigation }) {
   return {
@@ -20,4 +21,4 @@ const mapDispatchToProps = {
   readMessage: ChatCreators.requestReadMsg,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default connect(mapStateToProps, mapDispatchToProps)(withSafeAreaInsets(Chat));
