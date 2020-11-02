@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 const { height } = Dimensions.get("window");
 
@@ -7,49 +8,49 @@ export default StyleSheet.create({
     flex: 1,
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     flex: 1,
     paddingTop: (height / 100) * 18,
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
   },
   titleText: {
-    fontSize: 20,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
   subTitleText: {
-    fontSize: 16,
+    fontSize: wp(16),
     color: "#ABA7D5",
     fontWeight: "600",
     textAlign: "center",
-    marginBottom: 25,
+    marginBottom: wp(25),
   },
   imageUploadContainer: {
-    width: 180,
+    width: wp(180),
     justifyContent: "center",
     alignSelf: "center",
   },
   imageContainer: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: wp(150),
+    height: wp(150),
+    borderRadius: wp(75),
     backgroundColor: "white",
     alignSelf: "center",
-    marginHorizontal: 25,
+    marginHorizontal: wp(25),
     justifyContent: "center",
     alignItems: "center",
   },
   imageSeparator: {
-    height: 25,
+    height: wp(25),
   },
   footer: {
-    paddingHorizontal: 37,
-    paddingBottom: 40,
+    paddingHorizontal: wp(37),
+    paddingBottom: wp(40),
   },
 });

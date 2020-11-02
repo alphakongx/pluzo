@@ -1,6 +1,6 @@
 import Swipe from "./swipe.screen";
 import { connect } from "react-redux";
-import { SwipeCreators } from "@redux/actions";
+import { SwipeCreators, UserCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -18,7 +18,9 @@ const mapDispatchToProps = {
   addLike: SwipeCreators.addLike,
   addDisLike: SwipeCreators.addDisLike,
   addSuperLike: SwipeCreators.addSuperLike,
-  setVisibleDetail: SwipeCreators.setVisibleDetail,
+  runBoost: SwipeCreators.requestRunBoost,
+  runRewinds: SwipeCreators.requestRunRewinds,
+  updateUser: UserCreators.requestUpdateUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Swipe);

@@ -26,6 +26,7 @@ class WhiteButton extends Component {
       containerStyle,
       textStyle,
       shadowColor = "#FFFFFF",
+      loadingColor = "white",
     } = this.props;
     const { width, height, radius, blur } = this.state;
 
@@ -57,7 +58,7 @@ class WhiteButton extends Component {
           }}
         >
           {loading ? (
-            <ActivityIndicator size={"small"} color={"white"} />
+            <ActivityIndicator size={"small"} color={loadingColor} />
           ) : (
             <Text style={[styles.buttonText, textStyle]}>{text}</Text>
           )}

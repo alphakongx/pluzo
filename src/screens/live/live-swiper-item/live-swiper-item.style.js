@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 const screenWidth = Dimensions.get("screen").width;
@@ -6,69 +7,69 @@ const screenWidth = Dimensions.get("screen").width;
 export default StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 15,
+    marginBottom: wp(15),
   },
   imageContainer: {
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
-    marginHorizontal: 10,
-    borderBottomLeftRadius: 22,
-    borderBottomRightRadius: 22,
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
+    marginHorizontal: wp(10),
+    borderBottomLeftRadius: wp(22),
+    borderBottomRightRadius: wp(22),
+    borderTopLeftRadius: wp(22),
+    borderTopRightRadius: wp(22),
     overflow: "hidden",
   },
   userImage: {
-    width: (screenWidth - 20) / 4,
-    height: (screenWidth - 20) / 4,
+    width: (screenWidth - wp(20)) / 4,
+    height: (screenWidth - wp(20)) / 4,
   },
 
   dataContainer: {
     position: "absolute",
-    left: 10,
-    right: 10,
+    left: wp(10),
+    right: wp(10),
     top: 0,
     bottom: 0,
-    borderRadius: 22,
-    padding: 15,
+    borderRadius: wp(22),
+    padding: wp(15),
     flexDirection: "column-reverse",
   },
 
   userName: {
-    fontSize: 16,
+    fontSize: wp(16),
     fontWeight: "600",
     color: COLOR.TEXT_PRIMARY,
-    paddingRight: 15,
+    paddingRight: wp(15),
   },
   tagContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
+    marginTop: wp(5),
   },
   membersContainer: {
-    height: 18,
+    height: wp(18),
     flexDirection: "row",
-    paddingHorizontal: 6,
-    borderRadius: 9,
+    paddingHorizontal: wp(6),
+    borderRadius: wp(9),
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 5,
+    marginRight: wp(5),
   },
   memberIcon: {
-    width: 12,
-    height: 12,
+    width: wp(12),
+    height: wp(12),
     resizeMode: "contain",
   },
   memberCount: {
-    fontSize: 12,
+    fontSize: wp(12),
     fontWeight: "bold",
     color: COLOR.TEXT_INPUT,
-    paddingLeft: 2,
+    paddingLeft: wp(2),
   },
   tagImage: {
-    width: 13,
-    height: 13,
-    marginRight: 5,
+    width: wp(13),
+    height: wp(13),
+    marginRight: wp(5),
   },
 });

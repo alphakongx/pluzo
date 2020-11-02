@@ -42,7 +42,7 @@ class Messages extends React.Component {
 
   render() {
     const { isLoadingChannels, channels } = this.props;
-    console.log(channels);
+    let chatChannels = channels.filter(channel => channel.partner_info !== null);
     const { firstLoading } = this.state;
     if (isLoadingChannels && firstLoading === true) {
       return (
@@ -55,7 +55,7 @@ class Messages extends React.Component {
     return (
       <FlatList
         style={styles.container}
-        data={channels}
+        data={chatChannels}
         keyExtractor={item => `room-${item.chat_id}`}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         renderItem={({ item: channel, index }) => {
@@ -63,14 +63,21 @@ class Messages extends React.Component {
             channel.messages[0].created_at || channel.messages[0].createdAt;
           let timeAgo = moment.unix(createdTime).fromNow(true);
           let partner = channel.partner_info;
-          let image = partner.images[0].path || null;
-          let name = partner.first_name === null ? "No Name" : partner.first_name;
+          let image = require("@assets/images/app-icon.png");
+          let name = "Pluzo Team";
+          if (typeof partner === "object") {
+            image = partner.images.length > 0 ? partner.images[0].path : null;
+            name = partner.first_name === null ? "No Name" : partner.first_name;
+          }
           let isRead = channel.messages[0].status === 1;
 
           return (
             <Touchable
               onPress={() => {
-                this.props.onPressItem(channel.chat_id, channel.partner_info);
+                this.props.onPressItem(
+                  channel.chat_id,
+                  partner === "Pluzo Team" ? 0 : partner,
+                );
               }}
               key={channel.chat_id}
             >
@@ -80,7 +87,9 @@ class Messages extends React.Component {
                     source={
                       image === null
                         ? require("@assets/images/message-image.png")
-                        : { uri: image }
+                        : typeof image === "string"
+                        ? { uri: image }
+                        : image
                     }
                     style={styles.image}
                   />

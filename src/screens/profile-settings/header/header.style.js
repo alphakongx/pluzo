@@ -1,19 +1,20 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
   headerContainer: {},
   header: {
-    height: 60,
+    height: wp(60),
     flexDirection: "row",
   },
   backButtonContainer: {
     justifyContent: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(10),
   },
   backButtonTouchable: {
-    width: 35,
-    height: 35,
+    width: wp(35),
+    height: wp(35),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -24,24 +25,29 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   headerImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginHorizontal: 10,
+    width: wp(40),
+    height: wp(40),
+    borderRadius: wp(20),
+    marginHorizontal: wp(10),
   },
   headerTitle: {
-    fontSize: 14,
+    fontSize: wp(14),
     fontWeight: "700",
     color: COLOR.TEXT_PRIMARY,
   },
   reportButtonContainer: {
     justifyContent: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(10),
   },
   reportButtonTouchable: {
-    width: 35,
-    height: 35,
+    width: wp(35),
+    height: wp(35),
     justifyContent: "center",
     alignItems: "center",
+  },
+  settingIcon: {
+    width: wp(18),
+    height: wp(18),
+    resizeMode: "stretch",
   },
 });

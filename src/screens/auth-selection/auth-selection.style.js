@@ -1,38 +1,45 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
     justifyContent: "space-between",
-    paddingVertical: 20,
+    paddingVertical: wp(20),
   },
   logoContainer: {
     alignItems: "center",
   },
   titleText: {
-    fontSize: 20,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "600",
     textAlign: "center",
-    top: -40,
+    top: -wp(40),
   },
   bottomContentContainer: {},
   buttonContainer: {
-    marginTop: 20,
+    marginTop: wp(20),
   },
   termPolicyContainer: {
-    marginTop: 40,
+    marginTop: wp(40),
+    alignItems: "center",
+  },
+  termPolicyRowContainer: {
+    flexDirection: "row",
+    marginTop: wp(2),
   },
   termPolicyText: {
-    fontSize: 11,
-    color: COLOR.TEXT_PRIMARY,
-    textAlign: "center",
+    fontFamily: "OpenSans",
+    fontSize: wp(11),
+    color: COLOR.TEXT_SECONDARY_4,
   },
   underline: {
-    fontSize: 11,
-    color: COLOR.TEXT_PRIMARY,
+    fontFamily: "OpenSans",
+    fontSize: wp(11),
+    color: COLOR.TEXT_SECONDARY_4,
     textAlign: "center",
     textDecorationLine: "underline",
   },

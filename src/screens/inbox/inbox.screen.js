@@ -7,6 +7,7 @@ import AddFriendModal from "./add-friend-modal";
 import PendingRequestModal from "./pending-request-modal";
 import { SCREENS } from "@constants";
 
+import PendingRequestCountView from "./pending-request-count-view";
 import styles from "./inbox.style.js";
 
 class Inbox extends Component {
@@ -20,6 +21,7 @@ class Inbox extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.visibleAddFriend === true || prevState.visiblePendingRequest === true) {
+      console.log("loading friends");
       this.props.loadFriends(this.props.token);
     }
   }
@@ -45,20 +47,35 @@ class Inbox extends Component {
             <View style={styles.header}>
               <Touchable onPress={this.onSearch} style={styles.searchFieldContainer}>
                 <View style={styles.searchIconContainer}>
-                  <Image source={require("@assets/images/search.png")} />
+                  <Image
+                    source={require("@assets/images/search.png")}
+                    style={styles.searchIcon}
+                  />
                 </View>
                 <Text style={styles.searchText}>{"Search"}</Text>
               </Touchable>
 
               <View style={styles.newChatIconContainer}>
                 <Touchable onPress={() => this.setState({ visibleAddFriend: true })}>
-                  <Image source={require("@assets/images/new-chat.png")} />
+                  <Image
+                    source={require("@assets/images/new-chat.png")}
+                    style={styles.plusIcon}
+                  />
+                  <PendingRequestCountView />
                 </Touchable>
               </View>
             </View>
             <View style={styles.contentContainer}>
-              <NewFriends navigation={this.props.navigation} />
-              <View style={styles.separator} />
+              <NewFriends
+                navigation={this.props.navigation}
+                onReadFlag={userId => this.props.readFlag(userId, this.props.token)}
+              />
+              <View
+                style={[
+                  styles.separator,
+                  this.props.user.premium === 0 ? {} : styles.marginTopZero,
+                ]}
+              />
               <Messages
                 navigation={this.props.navigation}
                 onPressItem={(chatId, chatUser) => {

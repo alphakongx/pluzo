@@ -33,8 +33,8 @@ const CardProgressBar: () => React$Node = props => {
               >
                 <LinearGradient
                   colors={["#617FFF", "#02FFF3"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 0 }}
                   style={styles.flexFill}
                 />
                 <View style={styles.separator} />

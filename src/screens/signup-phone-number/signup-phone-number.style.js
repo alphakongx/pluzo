@@ -1,28 +1,29 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
-const { height } = Dimensions.get("window");
+export const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     flex: 1,
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
+    flex: 1,
     flexDirection: "column-reverse",
-    paddingTop: (height / 100) * 18,
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
   },
   titleText: {
-    fontSize: 20,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 25,
+    marginBottom: wp(25),
   },
   phoneContainer: {
     flexDirection: "row",
@@ -30,35 +31,36 @@ export default StyleSheet.create({
   phoneLabel: {
     fontFamily: "OpenSans",
     textAlign: "center",
-    fontSize: 8,
+    fontSize: wp(8),
     fontWeight: "700",
     color: "rgba(255, 255, 255, 0.5)",
-    height: 20,
+    height: wp(20),
   },
   phoneCodeContainer: {
-    width: 70,
+    width: wp(70),
   },
   phoneNumberContainer: {
-    paddingTop: 20,
+    paddingTop: wp(20),
     flex: 3,
   },
   phoneSeparator: {
-    width: 15,
+    width: wp(15),
   },
   informationContainer: {
+    flex: 1,
     alignItems: "center",
-    marginTop: 25,
+    marginTop: wp(25),
   },
   passwordRequirementTitle: {
-    fontSize: 14,
+    fontSize: wp(14),
     color: "#ABA7D5",
     textDecorationLine: "underline",
   },
   instructionText: {
     fontFamily: "OpenSans",
     textAlign: "center",
-    marginTop: 3,
-    fontSize: 14,
+    marginTop: wp(3),
+    fontSize: wp(12),
     fontWeight: "400",
     color: "#ABA7D5",
   },
@@ -67,17 +69,15 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   instructionValidIcon: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+    width: wp(7),
+    height: wp(7),
+    borderRadius: wp(4),
     backgroundColor: "#00FF6F",
-    marginTop: 3,
-    marginRight: 5,
+    marginTop: wp(3),
+    marginRight: wp(5),
   },
   footer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingHorizontal: 37,
-    paddingBottom: 40,
+    paddingHorizontal: wp(37),
+    marginBottom: wp(40),
   },
 });

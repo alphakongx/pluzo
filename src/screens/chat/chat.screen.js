@@ -13,8 +13,11 @@ import MessageBubble from "./message-bubble";
 import Avatar from "./avatar";
 import InputToolbar from "./input-toolbar";
 import ReportModal from "../report-modal";
+import { widthPercentageToDP as wp } from "@helpers";
+import EmptyView from "./empty-view";
 
 import styles from "./chat.style";
+import ZoomImageModal from "./zoom-image-modal";
 
 class Chat extends React.Component {
   constructor(props) {
@@ -23,6 +26,8 @@ class Chat extends React.Component {
       chatId: null,
       msgText: "",
       visibleReport: false,
+      visibleZoomImage: false,
+      zoomImage: null,
     };
     this.ActionSheet = React.createRef();
   }
@@ -31,6 +36,7 @@ class Chat extends React.Component {
     if (Platform.OS === "ios") {
       KeyboardManager.setKeyboardDistanceFromTextField(0);
       KeyboardManager.setEnable(false);
+      KeyboardManager.setShouldResignOnTouchOutside(false);
     }
 
     this.chatIdAction = EventBus.on("NEW_CHAT_ID", chatId => {
@@ -40,11 +46,17 @@ class Chat extends React.Component {
     this.newMessageAction = EventBus.on("NEW_MSG", data => {
       const { messages, token, user } = this.props;
       let arrData = JSON.parse(data);
-      console.log("Chat>>>", arrData);
-      console.log(typeof arrData[0].chat_id, typeof this.state.chatId);
+
       // checking chat_id
       if (parseInt(arrData[0].chat_id, 10) !== parseInt(this.state.chatId, 10)) {
         return;
+      }
+      if (arrData[0].user === 0) {
+        arrData[0].user = {
+          _id: 0,
+          name: "Pluzo Team",
+          images: [{ path: require("@assets/images/app-icon.png") }],
+        };
       }
       if (parseInt(arrData[0].user._id, 10) === parseInt(user.id, 10)) {
         return;
@@ -58,7 +70,7 @@ class Chat extends React.Component {
         createdAt: moment.unix(arrData[0].created_at).toDate(),
         user: {
           _id: arrData[0].user._id,
-          name: arrData[0].user.name,
+          name: arrData[0].user.name || arrData[0].user.username,
           avatar: arrData[0].user.images[0].path,
         },
       });
@@ -69,13 +81,19 @@ class Chat extends React.Component {
     });
 
     const { token, chatUser, chatId } = this.props;
-    this.props.requestMessages(chatId, chatUser.id || chatUser._id, token);
+    if (chatUser === 0) {
+      this.props.requestMessages(chatId, chatUser, token);
+    } else {
+      this.props.requestMessages(chatId, chatUser.id || chatUser._id, token);
+    }
   }
 
   componentWillUnmount() {
     if (Platform.OS === "ios") {
-      KeyboardManager.setKeyboardDistanceFromTextField(65);
       KeyboardManager.setEnable(true);
+      KeyboardManager.setKeyboardDistanceFromTextField(100);
+      KeyboardManager.setEnableAutoToolbar(false);
+      KeyboardManager.setShouldResignOnTouchOutside(true);
     }
     this.chatIdAction();
     this.newMessageAction();
@@ -83,13 +101,12 @@ class Chat extends React.Component {
 
   onAddAttachment = () => {
     const { messages, chatUser } = this.props;
-    console.log(chatUser);
     let mymsgs = messages.filter(
       value =>
         !value.system &&
         parseInt(value.user._id, 10) === parseInt(this.props.user.id, 10),
     );
-    let opponentId = chatUser.id || chatUser._id;
+    let opponentId = chatUser === 0 ? chatUser : chatUser.id || chatUser._id;
     let otherMsgs = messages.filter(
       value => !value.system && parseInt(value.user._id, 10) === parseInt(opponentId, 10),
     );
@@ -149,7 +166,7 @@ class Chat extends React.Component {
           createdAt: new Date(),
           user: {
             _id: this.props.user.id,
-            name: this.props.user.name,
+            name: this.props.user.name || this.props.user.username,
             avatar: this.props.user.images[0].path,
           },
         },
@@ -161,7 +178,7 @@ class Chat extends React.Component {
       chatId: this.state.chatId,
       text: this.state.msgText,
       image: image,
-      sendTo: chatUser.id || chatUser._id,
+      sendTo: chatUser === 0 ? chatUser : chatUser.id || chatUser._id,
     };
     const { token } = this.props;
     this.props.sendMessage(params, token);
@@ -176,7 +193,7 @@ class Chat extends React.Component {
       chatId: this.state.chatId,
       text: messages[0].text,
       image: null,
-      sendTo: chatUser.id || chatUser._id,
+      sendTo: chatUser === 0 ? chatUser : chatUser.id || chatUser._id,
     };
     const { token } = this.props;
     this.props.sendMessage(params, token);
@@ -184,13 +201,13 @@ class Chat extends React.Component {
 
   render() {
     const { chatUser, loading, messages } = this.props;
-
     return (
       <Screen hasHeader style={styles.container}>
         <Header
           user={chatUser}
           onBack={() => this.props.navigation.goBack()}
           onProfileView={() => {
+            if (chatUser === 0) return;
             this.props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: chatUser });
           }}
           onReport={() => this.setState({ visibleReport: true })}
@@ -204,22 +221,29 @@ class Chat extends React.Component {
             />
           ) : (
             <GiftedChat
+              listViewProps={{ keyboardDismissMode: "on-drag" }}
               messages={messages}
               text={this.state.msgText}
-              isTyping={true}
               isKeyboardInternallyHandled={true}
-              minInputToolbarHeight={Platform.OS === "ios" ? 65 : 50}
+              bottomOffset={this.props.insets.bottom}
+              minComposerHeight={wp(20)}
+              minInputToolbarHeight={Platform.OS === "ios" ? wp(57) : wp(65)}
+              alwaysShowSend={true}
               renderBubble={bubbleProps => (
                 <MessageBubble
                   {...bubbleProps}
                   onLongPress={this._onOpenActionSheet}
                   onPress={this._openAttachment}
+                  onFullImage={image => {
+                    this.setState({ zoomImage: image, visibleZoomImage: true });
+                  }}
                 />
               )}
               renderAvatar={avatarProps => {
                 return <Avatar {...avatarProps} />;
               }}
               renderInputToolbar={props => {
+                this.onSendNew = props.onSend;
                 return <InputToolbar {...props} onAttachment={this.onAddAttachment} />;
               }}
               renderTime={props => {
@@ -232,7 +256,16 @@ class Chat extends React.Component {
                 _id: this.props.user.id,
               }}
               onSend={msgs => this.onSend(msgs)}
-              onInputTextChanged={msgText => this.setState({ msgText })}
+              onInputTextChanged={msgText => {
+                if (msgText.lastIndexOf("\n") !== -1) {
+                  this.onSendNew({ text: msgText.trim() }, true);
+                } else {
+                  this.setState({ msgText });
+                }
+              }}
+              renderChatEmpty={() => {
+                return <EmptyView user={chatUser} />;
+              }}
             />
           )}
         </View>
@@ -247,6 +280,11 @@ class Chat extends React.Component {
           isVisible={this.state.visibleReport}
           keyboardDisable={true}
           onDismiss={() => this.setState({ visibleReport: false })}
+        />
+        <ZoomImageModal
+          isVisible={this.state.visibleZoomImage}
+          zoomImage={this.state.zoomImage}
+          onSwipeComplete={() => this.setState({ visibleZoomImage: false })}
         />
       </Screen>
     );

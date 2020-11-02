@@ -5,9 +5,16 @@ import { Touchable } from "../touchable";
 import PropTypes from "prop-types";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+import { widthPercentageToDP as wp } from "@helpers";
 import styles from "./wheel-scroll.style";
 
 const deviceWidth = Dimensions.get("window").width;
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: true,
+};
+
 export default class ScrollPicker extends React.Component {
   constructor(props) {
     super(props);
@@ -15,6 +22,7 @@ export default class ScrollPicker extends React.Component {
     this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
     this.onScrollBeginDrag = this.onScrollBeginDrag.bind(this);
     this.onScrollEndDrag = this.onScrollEndDrag.bind(this);
+    this.onScroll = this.onScroll.bind(this);
     this.state = {
       selectedIndex: 1,
     };
@@ -69,7 +77,7 @@ export default class ScrollPicker extends React.Component {
           style={[
             styles.highlightView,
             {
-              top: (wrapperHeight - 35) / 2,
+              top: (wrapperHeight - wp(35)) / 2,
               width: highlightWidth,
               backgroundColor: highlightColor,
             },
@@ -87,6 +95,7 @@ export default class ScrollPicker extends React.Component {
             onMomentumScrollEnd={this.onMomentumScrollEnd}
             onScrollBeginDrag={this.onScrollBeginDrag}
             onScrollEndDrag={this.onScrollEndDrag}
+            onScroll={this.onScroll}
             style={styles.scrollContainer}
           >
             {header}
@@ -99,7 +108,7 @@ export default class ScrollPicker extends React.Component {
   }
 
   renderPlaceHolder() {
-    const height = (this.props.wrapperHeight - 40 - this.props.itemHeight) / 2;
+    const height = (this.props.wrapperHeight - wp(40) - this.props.itemHeight) / 2;
     const header = <View style={[{ height }, styles.flexFill]} />;
     const footer = <View style={[{ height }, styles.flexFill]} />;
     return { header, footer };
@@ -163,8 +172,19 @@ export default class ScrollPicker extends React.Component {
     }
   }
 
+  onScroll(e) {
+    const selectedIndex = Math.round(
+      e.nativeEvent.contentOffset.y / this.props.itemHeight,
+    );
+    if (this.currentIndex !== selectedIndex) {
+      this.currentIndex = selectedIndex;
+      ReactNativeHapticFeedback.trigger("impactLight", options);
+    }
+  }
+
   onScrollBeginDrag() {
     this.dragStarted = true;
+    this.currentIndex = this.state.selectedIndex;
     if (Platform.OS === "ios") {
       this.isScrollTo = false;
     }

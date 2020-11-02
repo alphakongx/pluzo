@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -11,57 +12,57 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   messageContainer: {
-    height: 100,
+    height: wp(100),
     flexDirection: "row",
   },
   imageContainer: {
     justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: wp(20),
   },
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: wp(50),
+    height: wp(50),
+    borderRadius: wp(25),
   },
   messageContentContainer: {
     flex: 1,
     justifyContent: "center",
   },
   subject: {
-    fontSize: 14,
+    fontSize: wp(14),
     fontWeight: "700",
     color: COLOR.TEXT_PRIMARY,
   },
   preview: {
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: wp(12),
     fontWeight: "400",
     color: COLOR.MESSAGE_PREVIEW,
-    marginTop: 2,
+    marginTop: wp(2),
   },
   previewNew: {
     fontWeight: "700",
   },
   timeContainer: {
     flexDirection: "row",
-    paddingLeft: 5,
-    paddingRight: 10,
+    paddingLeft: wp(5),
+    paddingRight: wp(10),
   },
   time: {
-    marginTop: 35,
-    fontSize: 10,
+    marginTop: wp(35),
+    fontSize: wp(10),
     color: COLOR.TEXT_SECONDARY,
   },
   unread: {
-    marginLeft: 5,
-    marginTop: 38,
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+    marginLeft: wp(5),
+    marginTop: wp(38),
+    width: wp(6),
+    height: wp(6),
+    borderRadius: wp(3),
     backgroundColor: COLOR.MESSAGE_UNREAD_ICON,
   },
   separator: {
-    height: 1,
+    height: wp(1),
     backgroundColor: "rgba(255, 255, 255, 0.15)",
   },
 });

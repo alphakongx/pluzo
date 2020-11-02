@@ -6,7 +6,9 @@ function mapStateToProps(state) {
   return {
     token: state.user.token,
     user: state.user.user,
+    streamStatus: state.live.streamStatus,
     allStreams: state.live.allStreams,
+    trendingStreams: state.live.trendingStreams,
   };
 }
 

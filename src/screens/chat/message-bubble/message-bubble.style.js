@@ -1,36 +1,38 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     maxWidth: SCREEN_WIDTH * 0.7,
+    marginLeft: wp(8),
   },
   containerMargin: {
-    marginBottom: 10,
+    marginBottom: wp(10),
   },
   textContainer: {
-    borderRadius: 22,
-    paddingTop: 10,
-    paddingBottom: 12,
+    borderRadius: wp(22),
+    paddingTop: wp(10),
+    paddingBottom: wp(12),
   },
   otherUserTextContainer: {
-    paddingLeft: 14,
-    paddingRight: 15,
-    borderBottomLeftRadius: 8,
+    paddingLeft: wp(14),
+    paddingRight: wp(15),
+    borderBottomLeftRadius: wp(8),
     backgroundColor: COLOR.MESSAGE_BUBBLE_BACKGROUND,
   },
   currentUserTextContainer: {
-    paddingLeft: 15,
-    paddingRight: 18,
-    borderBottomRightRadius: 8,
+    paddingLeft: wp(15),
+    paddingRight: wp(18),
+    borderBottomRightRadius: wp(8),
     backgroundColor: COLOR.MESSAGE_BUBBLE_BACKGROUND_USER,
   },
   text: {
     fontFamily: "OpenSans",
-    fontSize: 14,
+    fontSize: wp(14),
     fontWeight: "600",
-    lineHeight: 16,
+    lineHeight: wp(16),
   },
   otherUserText: {
     color: COLOR.MESSAGE_BUBBLE_TEXT,
@@ -39,17 +41,22 @@ export default StyleSheet.create({
     color: COLOR.MESSAGE_BUBBLE_TEXT_USER,
   },
   imageText: {
-    top: -18,
-    marginBottom: -8,
+    top: -wp(18),
+    marginBottom: -wp(8),
   },
   messageImage: {
     width: SCREEN_WIDTH * 0.7,
     height: SCREEN_WIDTH * 0.55,
     backgroundColor: COLOR.HEADER_BACKGROUND,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: wp(20),
+    borderTopRightRadius: wp(20),
+    resizeMode: "cover",
+  },
+  hiddenImage: {
+    width: 0,
+    height: 0,
   },
   imageFullRound: {
-    borderRadius: 20,
+    borderRadius: wp(20),
   },
 });

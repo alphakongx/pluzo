@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -6,10 +7,10 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   iconImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 10,
+    width: wp(30),
+    height: wp(30),
+    borderRadius: wp(15),
+    marginRight: wp(10),
   },
   itemTextContainer: {
     flex: 1,
@@ -18,18 +19,23 @@ export default StyleSheet.create({
   },
   itemText: {
     fontFamily: "OpenSans",
-    fontSize: 14,
+    fontSize: wp(14),
     color: "white",
   },
   fullWidth: {
     flex: 1,
   },
   verifyBadge: {
-    width: 17,
-    height: 17,
-    borderRadius: 8.5,
+    width: wp(17),
+    height: wp(17),
+    borderRadius: wp(8.5),
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 3,
+    marginLeft: wp(3),
+  },
+  verifyBadgeIcon: {
+    width: wp(11),
+    height: wp(9),
+    resizeMode: "contain",
   },
 });

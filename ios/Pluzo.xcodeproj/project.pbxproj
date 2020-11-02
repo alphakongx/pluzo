@@ -10,6 +10,7 @@
 		00E356F31AD99517003FC87E /* PluzoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PluzoTests.m */; };
 		0389704FEF134637B7C4092C /* MontserratAlternates-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75FD9ACBBAAC4CB3972D6E80 /* MontserratAlternates-Black.ttf */; };
 		0B1248B3D6CE4D47B053AF6E /* MontserratAlternates-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00612464446E4F62825D2A5A /* MontserratAlternates-LightItalic.ttf */; };
+		0E67BA6AE4C4FB8996D533F2 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4B97CFFEA0FEE57421D2F1 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		0F8C2706E9D044A98FEBC80C /* MontserratAlternates-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 497CE85A99A24960AE0BFC49 /* MontserratAlternates-Regular.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
@@ -34,6 +35,10 @@
 		8D7FD3BFD8FC4313A45B1FC2 /* MontserratAlternates-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E465B208FFA4EB0A3F42FB5 /* MontserratAlternates-Light.ttf */; };
 		8E8769D86346478382C2E145 /* MontserratAlternates-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2A9C60D22FA47F3815AA218 /* MontserratAlternates-ExtraLightItalic.ttf */; };
 		A7CCC2383DF3442186A223D4 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4660CD0B35B34FB7BD5CA392 /* OpenSans-Bold.ttf */; };
+		BE15870E252CF9B000FD8CBF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE15870D252CF9B000FD8CBF /* NotificationService.swift */; };
+		BE158712252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BE15870B252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BE5E40FD2526FBCE00EBA7F6 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5E40FC2526FBCE00EBA7F6 /* StoreKit.framework */; };
+		BEDA93E5253A0E8700ED2ACF /* app.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDA93E4253A0E8700ED2ACF /* app.swift */; };
 		C6668CEAB00348CC8490611D /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B345012FB0E41D58BE3D04C /* OpenSans-SemiBold.ttf */; };
 		CE5272B18AFA41ACA570E576 /* MontserratAlternates-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8A5BDC5FD7594B15B7F3E4F3 /* MontserratAlternates-BlackItalic.ttf */; };
 		D209C6097EE44C58928965B0 /* MontserratAlternates-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 54DAF70CA5AD453DBD17EF63 /* MontserratAlternates-Italic.ttf */; };
@@ -58,7 +63,28 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "Pluzo-tvOS";
 		};
+		BE158710252CF9B000FD8CBF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BE15870A252CF9B000FD8CBF;
+			remoteInfo = OneSignalNotificationServiceExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BE158716252CF9B000FD8CBF /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BE158712252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00612464446E4F62825D2A5A /* MontserratAlternates-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "MontserratAlternates-LightItalic.ttf"; path = "../assets/fonts/MontserratAlternates-LightItalic.ttf"; sourceTree = "<group>"; };
@@ -100,8 +126,20 @@
 		AAD29ED0164A60B9F5DCD193 /* libPods-Pluzo-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Pluzo-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCCB28E4662C9A19466554C8 /* libPods-Pluzo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Pluzo-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD5D190ED6854AABB9FDF5B4 /* MontserratAlternates-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "MontserratAlternates-BoldItalic.ttf"; path = "../assets/fonts/MontserratAlternates-BoldItalic.ttf"; sourceTree = "<group>"; };
+		BE15870B252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE15870D252CF9B000FD8CBF /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		BE15870F252CF9B000FD8CBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE47E25C253A031C00D838A6 /* Pluzo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pluzo-Bridging-Header.h"; sourceTree = "<group>"; };
+		BE47E25D253A031C00D838A6 /* Pluzo-tvOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pluzo-tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		BE5E40FC2526FBCE00EBA7F6 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		BE788726252CE48200493958 /* Pluzo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Pluzo.entitlements; path = Pluzo/Pluzo.entitlements; sourceTree = "<group>"; };
+		BEBEA1CA252CFBF4005C38A5 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
+		BEDA93E4253A0E8700ED2ACF /* app.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = app.swift; path = Pluzo/app.swift; sourceTree = "<group>"; };
+		CB4B97CFFEA0FEE57421D2F1 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED66CBA998340C1B355629D /* MontserratAlternates-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "MontserratAlternates-ThinItalic.ttf"; path = "../assets/fonts/MontserratAlternates-ThinItalic.ttf"; sourceTree = "<group>"; };
 		CF6EBBF297704E33A1BBE69B /* MontserratAlternates-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "MontserratAlternates-Bold.ttf"; path = "../assets/fonts/MontserratAlternates-Bold.ttf"; sourceTree = "<group>"; };
+		D53BC1C14C44ED02CF6393BD /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		DA47C386EBDEF83AC1464FE7 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		DF9771B3DB2EE0B10FA75F6E /* Pods-Pluzo-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pluzo-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Pluzo-tvOS/Pods-Pluzo-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		E0ED9B165F0AB8071F686FD7 /* Pods-Pluzo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pluzo.release.xcconfig"; path = "Target Support Files/Pods-Pluzo/Pods-Pluzo.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -125,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F507E9DE48DC4CA9DDB4BFA /* libPods-Pluzo.a in Frameworks */,
+				BE5E40FD2526FBCE00EBA7F6 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +180,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				710A539DFE0392697BEE6C52 /* libPods-Pluzo-tvOSTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE158708252CF9B000FD8CBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E67BA6AE4C4FB8996D533F2 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,6 +214,7 @@
 		13B07FAE1A68108700A75B9A /* Pluzo */ = {
 			isa = PBXGroup;
 			children = (
+				BE788726252CE48200493958 /* Pluzo.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -174,6 +222,9 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				BE47E25C253A031C00D838A6 /* Pluzo-Bridging-Header.h */,
+				BE47E25D253A031C00D838A6 /* Pluzo-tvOS-Bridging-Header.h */,
+				BEDA93E4253A0E8700ED2ACF /* app.swift */,
 			);
 			name = Pluzo;
 			sourceTree = "<group>";
@@ -181,12 +232,14 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE5E40FC2526FBCE00EBA7F6 /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				4DCE71464C513A80371761A6 /* libPods-Pluzo.a */,
 				8F468BE103837271EE15B1AC /* libPods-Pluzo-PluzoTests.a */,
 				BCCB28E4662C9A19466554C8 /* libPods-Pluzo-tvOS.a */,
 				AAD29ED0164A60B9F5DCD193 /* libPods-Pluzo-tvOSTests.a */,
+				CB4B97CFFEA0FEE57421D2F1 /* libPods-OneSignalNotificationServiceExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -232,6 +285,7 @@
 				13B07FAE1A68108700A75B9A /* Pluzo */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* PluzoTests */,
+				BE15870C252CF9B000FD8CBF /* OneSignalNotificationServiceExtension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				C9914FC7EE9DAF35A103EDAA /* Pods */,
@@ -249,8 +303,19 @@
 				00E356EE1AD99517003FC87E /* PluzoTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* Pluzo-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* Pluzo-tvOSTests.xctest */,
+				BE15870B252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		BE15870C252CF9B000FD8CBF /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				BEBEA1CA252CFBF4005C38A5 /* OneSignalNotificationServiceExtension.entitlements */,
+				BE15870D252CF9B000FD8CBF /* NotificationService.swift */,
+				BE15870F252CF9B000FD8CBF /* Info.plist */,
+			);
+			path = OneSignalNotificationServiceExtension;
 			sourceTree = "<group>";
 		};
 		C9914FC7EE9DAF35A103EDAA /* Pods */ = {
@@ -264,6 +329,8 @@
 				DF9771B3DB2EE0B10FA75F6E /* Pods-Pluzo-tvOS.release.xcconfig */,
 				3D7AB9C1D33C5F674BFC349A /* Pods-Pluzo-tvOSTests.debug.xcconfig */,
 				3AABB39281180412AEEE3B1D /* Pods-Pluzo-tvOSTests.release.xcconfig */,
+				D53BC1C14C44ED02CF6393BD /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				DA47C386EBDEF83AC1464FE7 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -304,10 +371,12 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				6D13385BF0BA36A005BF4330 /* [CP] Copy Pods Resources */,
 				B172E3A7A920256EB68DF295 /* [CP] Embed Pods Frameworks */,
+				BE158716252CF9B000FD8CBF /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				BE158711252CF9B000FD8CBF /* PBXTargetDependency */,
 			);
 			name = Pluzo;
 			productName = Pluzo;
@@ -353,12 +422,31 @@
 			productReference = 2D02E4901E0B4A5D006451C7 /* Pluzo-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		BE15870A252CF9B000FD8CBF /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE158713252CF9B000FD8CBF /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
+			buildPhases = (
+				DCE1D2A8A73B531AEE2E9423 /* [CP] Check Pods Manifest.lock */,
+				BE158707252CF9B000FD8CBF /* Sources */,
+				BE158708252CF9B000FD8CBF /* Frameworks */,
+				BE158709252CF9B000FD8CBF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSignalNotificationServiceExtension;
+			productName = OneSignalNotificationServiceExtension;
+			productReference = BE15870B252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1160;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -367,16 +455,22 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = ST99247FHV;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1200;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 1200;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E48F1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
+					};
+					BE15870A252CF9B000FD8CBF = {
+						CreatedOnToolsVersion = 11.6;
+						DevelopmentTeam = ST99247FHV;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -397,6 +491,7 @@
 				00E356ED1AD99517003FC87E /* PluzoTests */,
 				2D02E47A1E0B4A5D006451C7 /* Pluzo-tvOS */,
 				2D02E48F1E0B4A5D006451C7 /* Pluzo-tvOSTests */,
+				BE15870A252CF9B000FD8CBF /* OneSignalNotificationServiceExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -448,6 +543,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2D02E48E1E0B4A5D006451C7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE158709252CF9B000FD8CBF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -619,6 +721,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pluzo/Pods-Pluzo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DCE1D2A8A73B531AEE2E9423 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OneSignalNotificationServiceExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		DFE0FD6550A44E918609EBE0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -715,6 +839,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				BEDA93E5253A0E8700ED2ACF /* app.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -736,6 +861,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BE158707252CF9B000FD8CBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE15870E252CF9B000FD8CBF /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -748,6 +881,11 @@
 			isa = PBXTargetDependency;
 			target = 2D02E47A1E0B4A5D006451C7 /* Pluzo-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
+		};
+		BE158711252CF9B000FD8CBF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BE15870A252CF9B000FD8CBF /* OneSignalNotificationServiceExtension */;
+			targetProxy = BE158710252CF9B000FD8CBF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -768,6 +906,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 98157D3B8073AFC994082FC9 /* Pods-Pluzo-PluzoTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -791,6 +930,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0234F945BD030A13A9715957 /* Pods-Pluzo-PluzoTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = PluzoTests/Info.plist;
@@ -813,7 +953,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CODE_SIGN_ENTITLEMENTS = Pluzo/Pluzo.entitlements;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = ST99247FHV;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -823,6 +964,7 @@
 				INFOPLIST_FILE = Pluzo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -830,6 +972,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pluzo.app;
 				PRODUCT_NAME = Pluzo;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pluzo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -842,11 +985,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CODE_SIGN_ENTITLEMENTS = Pluzo/Pluzo.entitlements;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = ST99247FHV;
 				INFOPLIST_FILE = Pluzo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -854,6 +999,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.pluzo.app;
 				PRODUCT_NAME = Pluzo;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pluzo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -866,6 +1012,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -882,6 +1029,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Pluzo-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pluzo-tvOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
@@ -894,6 +1044,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -910,6 +1061,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Pluzo-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pluzo-tvOS-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
@@ -1082,6 +1235,67 @@
 			};
 			name = Release;
 		};
+		BE158714252CF9B000FD8CBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D53BC1C14C44ED02CF6393BD /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 36;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ST99247FHV;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pluzo.app.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BE158715252CF9B000FD8CBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA47C386EBDEF83AC1464FE7 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 36;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ST99247FHV;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pluzo.app.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1126,6 +1340,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BE158713252CF9B000FD8CBF /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE158714252CF9B000FD8CBF /* Debug */,
+				BE158715252CF9B000FD8CBF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

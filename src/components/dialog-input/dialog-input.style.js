@@ -1,4 +1,5 @@
 import { StyleSheet, Platform, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { FontHelper } from "@helpers";
 
 const { width } = Dimensions.get("window");
@@ -21,14 +22,14 @@ export default StyleSheet.create({
     ...Platform.select({
       ios: {
         backgroundColor: "#E3E6E7",
-        borderRadius: 22,
-        minWidth: width - 30,
+        borderRadius: wp(22),
+        minWidth: width - wp(30),
       },
       android: {
         backgroundColor: "#fff",
-        elevation: 24,
-        minWidth: width - 30,
-        borderRadius: 22,
+        elevation: wp(24),
+        minWidth: width - wp(30),
+        borderRadius: wp(22),
       },
     }),
   },
@@ -37,38 +38,38 @@ export default StyleSheet.create({
   },
   title_modal: {
     fontWeight: "bold",
-    fontSize: 22,
+    fontSize: wp(22),
     color: "white",
-    marginTop: 30,
+    marginTop: wp(30),
     textAlign: "center",
   },
   message_modal: {
     fontFamily: "OpenSans",
-    fontSize: 16,
+    fontSize: wp(16),
     color: "#ABA7D5",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: wp(20),
   },
   input_container: FontHelper.font({
     textAlign: "left",
-    fontSize: 14,
+    fontSize: wp(14),
     fontWeight: "bold",
     color: "rgba(0,0,0,1)",
-    height: 35,
-    borderRadius: 18,
+    height: wp(35),
+    borderRadius: wp(18),
     backgroundColor: "white",
-    marginHorizontal: 28,
-    marginBottom: 35,
+    marginHorizontal: wp(28),
+    marginBottom: wp(35),
   }),
   btn_container: {
     flex: 1,
     justifyContent: "center",
-    borderTopWidth: 1,
+    borderTopWidth: wp(1),
     borderColor: "rgba(255, 255, 255, 0.15)",
-    maxHeight: 100,
+    maxHeight: wp(100),
   },
   divider_btn: {
-    height: 1,
+    height: wp(1),
     backgroundColor: "white",
     opacity: 0.15,
   },
@@ -80,15 +81,15 @@ export default StyleSheet.create({
   },
   btn_modal_left: {
     fontFamily: "OpenSans",
-    fontSize: 16,
+    fontSize: wp(16),
     color: "white",
-    paddingLeft: 8.5,
+    paddingLeft: wp(8.5),
   },
   btn_modal_right: {
     fontFamily: "OpenSans",
-    fontSize: 16,
+    fontSize: wp(16),
     color: "#DC2E2E",
-    paddingLeft: 8.5,
+    paddingLeft: wp(8.5),
   },
   noneHeight: {
     height: 0,

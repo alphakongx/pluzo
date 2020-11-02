@@ -1,13 +1,24 @@
 import React from "react";
-import { View, Dimensions, PanResponder, Animated } from "react-native";
-import { SafeAreaView } from "react-navigation";
+import {
+  View,
+  Dimensions,
+  PanResponder,
+  Animated,
+  SafeAreaView,
+  ActivityIndicator,
+} from "react-native";
 import { TransitionPresets } from "react-navigation-stack";
 import { BlurView } from "@react-native-community/blur";
 import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import { GRADIENT } from "@config";
-import { CardProgressBar, Touchable, BoxShadow } from "@components";
+import { CardProgressBar, Touchable, BoxShadow, IconButton } from "@components";
+import Images from "@assets/Images";
+import { initialWindowMetrics } from "react-native-safe-area-context";
 
+import { API, widthPercentageToDP as wp } from "@helpers";
+import { API_ENDPOINTS } from "@config";
 import Header from "./header";
 import ProfileDetail from "./profile-detail";
 import ReportModal from "../report-modal";
@@ -15,6 +26,11 @@ import ReportModal from "../report-modal";
 import styles from "./profile-view.style";
 
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: true,
+};
 
 class ProfileView extends React.Component {
   static navigationOptions = {
@@ -28,6 +44,10 @@ class ProfileView extends React.Component {
       imageWidth: 1,
       imageHeight: 1,
       visibleReport: false,
+      friend: 0,
+      loading: false,
+      updating: false,
+      rejecting: false,
     };
 
     this._panResponder = null;
@@ -36,9 +56,19 @@ class ProfileView extends React.Component {
     this.headerOpacity = new Animated.Value(1);
     this.initPanGesture();
 
-    const { user } = this.props.navigation.state.params;
+    const { user } = this.props.navigation
+      ? this.props.navigation.state.params
+      : this.props;
     FastImage.preload(user.images.map(image => ({ uri: image.path })));
   }
+
+  componentDidMount() {
+    this.onCheckingFriend();
+  }
+
+  existBio = user => {
+    return user.bio !== undefined && user.bio !== null && user.bio !== "";
+  };
 
   initPanGesture() {
     this._panResponder = PanResponder.create({
@@ -94,7 +124,7 @@ class ProfileView extends React.Component {
           useNativeDriver: false,
         }),
       ]).start(() => {
-        this.props.navigation.goBack();
+        this.onBack();
       });
     } else {
       Animated.parallel([
@@ -117,22 +147,121 @@ class ProfileView extends React.Component {
     }
   }
 
+  onBack = () => {
+    if (this.props.navigation) {
+      this.props.navigation.goBack();
+    } else {
+      this.props.goBack && this.props.goBack();
+    }
+  };
+
   onImagePressed = e => {
     let index = this.state.imageIndex;
-    const { user } = this.props.navigation.state.params;
+    const { user } = this.props.navigation
+      ? this.props.navigation.state.params
+      : this.props;
     let images = user.images || [];
     if (e.nativeEvent.pageX < screenWidth / 2) {
       index -= 1;
-      if (index < 0) index = images.length - 1;
+      if (index < 0) index = this.existBio(user) ? images.length : images.length - 1;
     } else {
       index += 1;
-      if (index >= images.length) index = 0;
+      if (this.existBio(user)) {
+        if (index >= images.length + 1) index = 0;
+      } else {
+        if (index >= images.length) index = 0;
+      }
     }
     this.setState({ imageIndex: index });
+    ReactNativeHapticFeedback.trigger("impactLight", options);
+  };
+
+  onCheckingFriend = () => {
+    const { user } = this.props.navigation
+      ? this.props.navigation.state.params
+      : this.props;
+    let userId = user.id || user._id;
+    if (userId === this.props.owner.id) {
+      this.setState({ friend: 0 });
+      return;
+    }
+    let data = new FormData();
+    data.append("user_target_id", userId);
+    this.setState({ loading: true });
+    API.request({
+      method: "post",
+      url: `${API_ENDPOINTS.IS_FRIENDS}`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + this.props.token,
+      },
+      data,
+    })
+      .then(response => {
+        let res = response.data.data;
+        this.setState({ friend: res.friend, loading: false });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ loading: false });
+      });
+  };
+
+  onUpdateFriend = type => {
+    if (this.state.updating || this.state.rejecting) return;
+    const { user } = this.props.navigation
+      ? this.props.navigation.state.params
+      : this.props;
+    let userId = user.id || user._id;
+
+    let data = new FormData();
+
+    data.append("username", user.username || user.name);
+    data.append("user_target_id", userId);
+
+    let url = "";
+    if (type === "add") {
+      url = `${API_ENDPOINTS.ADD_FRIEND_USERNAME}`;
+    } else if (type === "remove") {
+      url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
+    } else if (type === "accept") {
+      url = `${API_ENDPOINTS.ACCEPT_FRIEND_REQUEST}`;
+    } else {
+      url = `${API_ENDPOINTS.REJECT_FRIEND_REQUEST}`;
+    }
+    if (type === "reject") {
+      this.setState({ rejecting: true });
+    } else {
+      this.setState({ updating: true });
+    }
+
+    API.request({
+      method: "post",
+      url: url,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + this.props.token,
+      },
+      data,
+    })
+      .then(response => {
+        let res = response.data.data;
+        this.setState({
+          friend: res.friend_info.friend,
+          updating: false,
+          rejecting: false,
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ updating: false, rejecting: false });
+      });
   };
 
   render() {
-    const { user } = this.props.navigation.state.params;
+    const { user } = this.props.navigation
+      ? this.props.navigation.state.params
+      : this.props;
     const { imageIndex, imageWidth, imageHeight, visibleReport } = this.state;
     let images = user.images || [];
     let [translateY] = [this.pan.y];
@@ -148,6 +277,11 @@ class ProfileView extends React.Component {
       offsetX: 0,
       offsetY: 6,
     };
+    let boxHeight =
+      screenHeight -
+      75 -
+      initialWindowMetrics.insets.top -
+      initialWindowMetrics.insets.bottom;
 
     return (
       <View style={styles.container}>
@@ -155,21 +289,32 @@ class ProfileView extends React.Component {
           ref={ref => (this.backdropRef = ref)}
           style={[styles.flexFill, { opacity: this.backdropOpacity }]}
         >
-          <BlurView style={styles.container} blurType='dark' blurAmount={10} />
+          <Touchable
+            style={styles.container}
+            onPress={() => {
+              this.onBack();
+            }}
+          >
+            <BlurView style={styles.container} blurType='dark' blurAmount={10} />
+          </Touchable>
         </Animated.View>
-        <Animated.View style={{ opacity: this.headerOpacity }}>
+        <Animated.View style={{ opacity: this.headerOpacity }} pointerEvents={"box-none"}>
           <Header
             user={user}
             onBack={() => {
-              this.props.navigation.goBack();
+              this.onBack();
             }}
             onReport={() => this.setState({ visibleReport: true })}
           />
         </Animated.View>
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} pointerEvents={"box-none"}>
           <Animated.View
-            style={[styles.gestureContainer, { transform: [{ translateY }] }]}
+            style={[
+              styles.gestureContainer,
+              { transform: [{ translateY }], height: boxHeight },
+            ]}
             {...this._panResponder.panHandlers}
+            pointerEvents={"box-none"}
           >
             <BoxShadow setting={shadowOption} />
             <Touchable style={styles.touchArea} onPress={e => this.onImagePressed(e)}>
@@ -177,37 +322,117 @@ class ProfileView extends React.Component {
                 style={styles.contentContainer}
                 onLayout={e => {
                   const { layout } = e.nativeEvent;
-                  this.setState({ imageWidth: layout.width, imageHeight: layout.height });
+                  this.setState({
+                    imageWidth: layout.width,
+                    imageHeight: layout.height,
+                  });
                 }}
               >
-                <FastImage
-                  source={{ uri: images[imageIndex].path }}
-                  style={styles.profileImage}
-                />
+                {this.existBio(user) && imageIndex === images.length ? (
+                  <View style={styles.profileImage}>
+                    <FastImage
+                      source={{ uri: images[0].path }}
+                      style={styles.profileImage}
+                    />
+                    <View style={styles.overlayView} />
+                  </View>
+                ) : (
+                  <FastImage
+                    source={{ uri: images[imageIndex].path }}
+                    style={styles.profileImage}
+                  />
+                )}
 
-                <LinearGradient
-                  colors={GRADIENT.FADE_UP}
-                  start={{ x: 1, y: 1 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.detailContainer}
-                >
+                <View style={styles.detailContainer}>
+                  <LinearGradient
+                    colors={GRADIENT.FADE_UP}
+                    start={{ x: 1, y: 1 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.detailOverlay}
+                  />
                   <CardProgressBar
-                    count={images.length}
+                    count={this.existBio(user) ? images.length + 1 : images.length}
                     activeIndex={imageIndex}
                     onPress={index => {
                       this.setState({ imageIndex: index });
                     }}
                   />
-                  <ProfileDetail user={user} />
-                </LinearGradient>
+                  <ProfileDetail user={user} imageIndex={imageIndex} />
+                </View>
               </View>
             </Touchable>
+
+            <View style={styles.controlContainer} pointerEvents={"box-none"}>
+              {this.state.loading && (
+                <View style={styles.iconButtonContainer}>
+                  <ActivityIndicator color={"white"} size={"large"} />
+                </View>
+              )}
+              {this.state.friend === 1 && (
+                <View style={styles.iconButtonContainer}>
+                  <IconButton
+                    backColor={"#00FF77"}
+                    icon={Images.app.icPlus}
+                    iconWidth={wp(18)}
+                    iconHeight={wp(18)}
+                    iconTint={"#0B0516"}
+                    loading={this.state.updating}
+                    onPress={() => this.onUpdateFriend("add")}
+                  />
+                </View>
+              )}
+              {this.state.friend === 2 && (
+                <View style={styles.iconButtonContainer}>
+                  <IconButton
+                    backColor={"#00FF77"}
+                    icon={Images.app.icCheck}
+                    iconWidth={wp(27)}
+                    iconHeight={wp(21)}
+                    loading={this.state.updating}
+                    onPress={() => this.onUpdateFriend("accept")}
+                  />
+                </View>
+              )}
+              {this.state.friend === 2 && (
+                <View style={styles.iconButtonContainer}>
+                  <IconButton
+                    backColor={"#ABA7D5"}
+                    icon={Images.app.icCross}
+                    iconWidth={wp(22)}
+                    iconHeight={wp(22)}
+                    loading={this.state.rejecting}
+                    onPress={() => this.onUpdateFriend("reject")}
+                  />
+                </View>
+              )}
+              {this.state.friend === 3 && (
+                <View style={styles.iconButtonContainer}>
+                  <IconButton
+                    backColor={"#E8E6FF"}
+                    icon={Images.app.icClock}
+                    iconWidth={wp(27)}
+                    iconHeight={wp(27)}
+                  />
+                </View>
+              )}
+              {this.state.friend === 4 && (
+                <View style={styles.iconButtonContainer}>
+                  <IconButton
+                    backColor={"#FF0036"}
+                    icon={Images.app.icCross}
+                    iconWidth={wp(18)}
+                    iconHeight={wp(18)}
+                    loading={this.state.updating}
+                    onPress={() => this.onUpdateFriend("remove")}
+                  />
+                </View>
+              )}
+            </View>
           </Animated.View>
         </SafeAreaView>
 
         <ReportModal
           isVisible={visibleReport}
-          keyboardDisable={true}
           onDismiss={() => this.setState({ visibleReport: false })}
         />
       </View>

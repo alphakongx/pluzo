@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 function mapStateToProps(state) {
   return {
     location: state.user.location,
+    owner: state.user.user,
   };
 }
 

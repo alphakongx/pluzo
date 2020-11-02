@@ -24,7 +24,7 @@ class Header extends React.Component {
             </View>
             <View style={styles.reportButtonContainer}>
               <Touchable style={styles.reportButtonTouchable} onPress={this.onSettings}>
-                <Image source={Images.app.icSetting} />
+                <Image source={Images.app.icSetting} style={styles.settingIcon} />
               </Touchable>
             </View>
           </View>

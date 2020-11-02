@@ -12,9 +12,7 @@ const SearchPeopleItem: () => React$Node = props => {
   const [isFriend, setIsFriend] = useState(props.item.friend === 2);
   const { images, first_name, username } = props.item;
 
-  const peoplePicture =
-    images.length === 0 ? null : images.sort((a, b) => a.sort > b.sort)[0].path;
-  console.log(images[0]);
+  const peoplePicture = images.length === 0 ? null : images[0].path;
 
   useEffect(() => {
     let addAction = EventBus.on("ADDFRIEND", (userName, success) => {
@@ -34,6 +32,9 @@ const SearchPeopleItem: () => React$Node = props => {
   return (
     <Touchable
       onPress={() => {
+        if (props.onDismiss) {
+          props.onDismiss();
+        }
         NavigationService.navigate(SCREENS.PROFILE_VIEW, { user: props.item });
       }}
     >
@@ -61,6 +62,9 @@ const SearchPeopleItem: () => React$Node = props => {
               textStyle={styles.addButtonText}
               text={"Chat"}
               onPress={() => {
+                if (props.onChat) {
+                  props.onChat();
+                }
                 NavigationService.navigate(SCREENS.CHAT, { chatUser: props.item });
               }}
             />

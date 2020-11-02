@@ -83,7 +83,7 @@ class LoginPhoneCodeVerification extends React.Component {
       <Screen>
         <View style={styles.container}>
           <BackButton onPress={this.goBack} />
-          <View style={styles.contentContainer}>
+          <View style={styles.contentContainer} pointerEvents={"box-none"}>
             <Text style={styles.titleText}>Phone Verification</Text>
             <Text style={styles.subTitleText}>
               We've sent you a verification code to ensure you are you.

@@ -12,7 +12,7 @@ const TabBarIcon: () => React$Node = props => {
       icon: require("@assets/images/tab-live.png"),
     },
     swipe: {
-      style: styles.centerSide,
+      style: [styles.centerSide, styles.inactiveContainer],
       icon: require("@assets/images/tab-swipe.png"),
     },
     chat: {

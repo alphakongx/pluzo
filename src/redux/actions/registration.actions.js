@@ -4,6 +4,7 @@ const { Types, Creators } = createActions({
   setFirstName: ["firstName"],
   setBirthDate: ["birthDate"],
   setGender: ["gender"],
+  setLikeGender: ["likeGender"],
   setUsername: ["username"],
   setPassword: ["password"],
   setPicture: ["picture"],

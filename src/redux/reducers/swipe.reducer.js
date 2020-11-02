@@ -62,9 +62,35 @@ const requestMatchFail = (state, action) => ({
   isLoadingMatch: false,
 });
 
-const setVisibleDetail = (state, action) => ({
+const requestGetSettings = (state, action) => ({
   ...state,
-  visibleDetail: action.visibleDetail,
+});
+const requestGetSettingsSuccess = (state, action) => ({
+  ...state,
+  settings: action.settings,
+});
+const requestGetSettingsFail = (state, action) => ({
+  ...state,
+  settings: null,
+});
+
+const requestSetSettings = (state, action) => ({
+  ...state,
+});
+const requestSetSettingsSuccess = (state, action) => ({
+  ...state,
+  settings: action.settings,
+});
+const requestSetSettingsFail = (state, action) => ({
+  ...state,
+  settings: null,
+});
+
+const requestRunBoost = (state, action) => ({
+  ...state,
+});
+const requestRunRewinds = (state, action) => ({
+  ...state,
 });
 
 export const HANDLERS = {
@@ -87,7 +113,16 @@ export const HANDLERS = {
   [SwipeTypes.REQUEST_MATCH_SUCCESS]: requestMatchSuccess,
   [SwipeTypes.REQUEST_MATCH_FAIL]: requestMatchFail,
 
-  [SwipeTypes.SET_VISIBLE_DETAIL]: setVisibleDetail,
+  [SwipeTypes.REQUEST_GET_SETTINGS]: requestGetSettings,
+  [SwipeTypes.REQUEST_GET_SETTINGS_SUCCESS]: requestGetSettingsSuccess,
+  [SwipeTypes.REQUEST_GET_SETTINGS_FAIL]: requestGetSettingsFail,
+
+  [SwipeTypes.REQUEST_SET_SETTINGS]: requestSetSettings,
+  [SwipeTypes.REQUEST_SET_SETTINGS_SUCCESS]: requestSetSettingsSuccess,
+  [SwipeTypes.REQUEST_SET_SETTINGS_FAIL]: requestSetSettingsFail,
+
+  [SwipeTypes.REQUEST_RUN_BOOST]: requestRunBoost,
+  [SwipeTypes.REQUEST_RUN_REWINDS]: requestRunRewinds,
 
   [UserTypes.LOGOUT]: logout,
 };

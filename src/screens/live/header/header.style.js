@@ -1,16 +1,17 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   header: {
     flexDirection: "row",
-    height: 60,
-    paddingHorizontal: 10,
+    height: wp(60),
+    paddingHorizontal: wp(10),
     alignItems: "center",
   },
   bottomMargin: {
-    marginBottom: 5,
+    marginBottom: wp(5),
   },
   bottomMarginSmall: {
-    marginBottom: 15,
+    marginBottom: wp(2),
   },
 });

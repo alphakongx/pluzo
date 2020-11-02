@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export const { width } = Dimensions.get("window");
 
@@ -9,13 +10,14 @@ export default StyleSheet.create({
   },
 
   emojiContainer: {
-    flex: 1,
-    marginHorizontal: 10,
-    marginTop: 10,
+    position: "absolute",
+    left: wp(10),
+    right: wp(10),
+    top: wp(60),
   },
 
   liveButtonContainer: {
-    marginBottom: 40,
-    paddingHorizontal: 37,
+    marginBottom: wp(40),
+    paddingHorizontal: wp(37),
   },
 });

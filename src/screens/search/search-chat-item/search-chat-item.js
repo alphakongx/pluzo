@@ -8,14 +8,14 @@ import styles from "./search-chat-item.style";
 import FastImage from "react-native-fast-image";
 
 const SearchChatItem: () => React$Node = props => {
-  const { chat_id, created_at, first_name, text, image, status } = props.item;
+  const { chat_id, created_at, first_name, text, image, status, username } = props.item;
   const searchKeyword = props.searchKeyword || "";
   let timeAgo = moment.unix(created_at).fromNow(true);
   let styledText = text.replace(
     new RegExp(searchKeyword, "ig"),
     `<previewBold>${searchKeyword}</previewBold>`,
   );
-
+  
   return (
     <Touchable
       onPress={() => {
@@ -38,7 +38,7 @@ const SearchChatItem: () => React$Node = props => {
         </View>
         <View style={styles.messageContentContainer}>
           <Text style={styles.subject}>
-            {first_name === null ? "No Name" : first_name}
+            {first_name === null ? username === null ? "Pluzo Team" : "No Name" : first_name}
           </Text>
           <StyledText style={styles.preview} textStyles={styles}>
             {styledText}

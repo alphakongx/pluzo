@@ -81,6 +81,10 @@ const requestFriendsFailure = (state, action) => ({
   isLoadingFriends: false,
 });
 
+const requestReadFlag = (state, action) => ({
+  ...state,
+});
+
 export const HANDLERS = {
   [InboxTypes.REQUEST_CHANNELS]: requestChannels,
   [InboxTypes.LOAD_CHANNELS_DONE]: loadChannelsDone,
@@ -105,6 +109,8 @@ export const HANDLERS = {
   [InboxTypes.REQUEST_FRIENDS]: requestFriends,
   [InboxTypes.REQUEST_FRIENDS_SUCCESS]: requestFriendsSuccess,
   [InboxTypes.REQUEST_FRIENDS_FAILURE]: requestFriendsFailure,
+
+  [InboxTypes.REQUEST_READ_FLAG]: requestReadFlag,
 
   [UserTypes.LOGOUT]: logout,
 };

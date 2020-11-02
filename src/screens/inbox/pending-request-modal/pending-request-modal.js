@@ -4,6 +4,7 @@ import { Screen, Text, BackButton, Touchable, Image } from "@components";
 import FastImage from "react-native-fast-image";
 import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
+import EventBus from "eventing-bus";
 
 import Images from "@assets/Images";
 import styles from "./pending-request-modal.style";
@@ -13,10 +14,17 @@ class PendingRequestModal extends Component {
     super(props);
   }
 
-  onDismissModal = () => {};
+  onDismissModal = () => {
+    if (this.updateAction !== null) {
+      this.updateAction();
+    }
+  };
 
   onLoadRequests = () => {
     this.props.loadRequests(this.props.token);
+    this.updateAction = EventBus.on("Friend_add", () => {
+      this.props.loadRequests(this.props.token);
+    });
   };
 
   onAcceptRequest = userId => {

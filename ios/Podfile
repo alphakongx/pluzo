@@ -8,7 +8,7 @@ target 'Pluzo' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
-
+  
   target 'PluzoTests' do
     inherit! :complete
     # Pods for testing
@@ -33,4 +33,8 @@ target 'Pluzo-tvOS' do
     inherit! :search_paths
     # Pods for testing
   end
+end
+
+target 'OneSignalNotificationServiceExtension' do
+  pod 'OneSignal', '>= 2.9.3', '< 3.0'
 end

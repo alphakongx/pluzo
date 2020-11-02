@@ -1,22 +1,23 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
     flexDirection: "row",
-    height: 10,
+    height: wp(10),
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     alignItems: "center",
-    paddingHorizontal: 4,
+    paddingHorizontal: wp(4),
   },
   gradientFill: {
-    height: 2,
+    height: wp(2),
   },
   remainingFill: {
     flex: 1,
     backgroundColor: "white",
-    height: 2,
+    height: wp(2),
   },
   separator: {
-    width: 4,
+    width: wp(4),
   },
 });

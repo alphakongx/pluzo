@@ -1,21 +1,22 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 20,
+    paddingBottom: wp(20),
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     flex: 1,
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
   },
   titleFieldContainer: {
     flex: 1,
@@ -23,14 +24,14 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   titleText: {
-    fontSize: 20,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: wp(10),
   },
 
   buttonContainer: {
-    marginBottom: 20,
+    marginBottom: wp(20),
   },
 });

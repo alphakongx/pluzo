@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions, Platform } from "react-native";
-import { FontHelper } from "@helpers";
+import { FontHelper, widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export const { width } = Dimensions.get("window");
@@ -10,34 +10,57 @@ export default StyleSheet.create({
   },
 
   badgeButtonContainer: {
-    padding: 20,
+    padding: wp(20),
   },
   chooseBadgeButton: {
-    height: 35,
+    height: wp(35),
   },
   chooseBadgeText: {
-    fontSize: 14,
+    fontSize: wp(14),
   },
 
   imageContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: wp(20),
+  },
+  sectionContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   sectionText: {
-    fontSize: 16,
+    fontSize: wp(16),
     fontWeight: "bold",
     color: "white",
   },
   imageScrollView: {
-    marginVertical: 10,
+    paddingVertical: wp(10),
   },
   imageItem: {
     position: "relative",
   },
+  profileImageContainer: {
+    paddingTop: wp(10),
+  },
   profileImage: {
-    width: (width - 80) / 3,
+    width: (width - wp(80)) / 3,
     aspectRatio: 2 / 3,
-    borderRadius: 22,
-    marginLeft: 10,
+    borderRadius: wp(22),
+    marginLeft: wp(10),
+  },
+  imageDeleteContainer: {
+    position: "absolute",
+    top: wp(5),
+    right: wp(5),
+    backgroundColor: "white",
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(10),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  deleteButton: {
+    backgroundColor: "red",
+    width: wp(10),
+    height: wp(3),
   },
   imageLoadingContainer: {
     position: "absolute",
@@ -49,52 +72,45 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   addImageButton: {
-    width: (width - 80) / 3,
-    height: (width - 80) / 2,
-    borderWidth: 2,
+    width: (width - wp(80)) / 3,
+    height: (width - wp(80)) / 2,
+    borderWidth: wp(2),
     borderColor: "white",
-    borderRadius: 22,
+    borderRadius: wp(22),
     backgroundColor: COLOR.HEADER_BACKGROUND,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: wp(10),
   },
 
   settingsContainer: {
-    marginTop: 20,
+    marginTop: wp(20),
     backgroundColor: COLOR.HEADER_BACKGROUND,
   },
   settingsText: {
-    marginHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 10,
-    fontSize: 16,
+    marginHorizontal: wp(20),
+    marginTop: wp(20),
+    marginBottom: wp(10),
+    fontSize: wp(16),
     fontWeight: "bold",
     color: "white",
   },
-  separatorLine: {
-    height: 1,
-    backgroundColor: "#FFFFFF",
-    opacity: 0.15,
-  },
-  settingsItem: {
-    marginHorizontal: 20,
-    marginVertical: 10,
-  },
+
   bioContainer: {
     backgroundColor: "#211533",
-    paddingHorizontal: 20,
-    paddingVertical: Platform.OS === "ios" ? 15 : 5,
+    paddingHorizontal: wp(20),
+    paddingVertical: Platform.OS === "ios" ? wp(15) : wp(5),
   },
   bigTextInput: FontHelper.font({
     fontFamily: "OpenSans",
     fontWeight: "400",
-    fontSize: 14,
+    fontSize: wp(14),
     color: COLOR.TEXT_SECONDARY_2,
   }),
   bigTextLength: {
     fontFamily: "OpenSans",
     fontWeight: "400",
-    fontSize: 14,
+    fontSize: wp(14),
     color: COLOR.TEXT_SECONDARY_4,
     textAlign: "right",
   },
@@ -102,15 +118,27 @@ export default StyleSheet.create({
   plusContainer: {
     position: "relative",
     alignItems: "center",
-    padding: 20,
+    padding: wp(20),
+    marginTop: wp(30),
   },
   premiumImage: {
-    width: width - 40,
-    height: ((width - 40) * 169) / 336,
+    width: width - wp(40),
+    height: ((width - wp(40)) * 169) / 336,
     resizeMode: "stretch",
   },
   buttonContainer: {
-    width: width - 100,
-    marginTop: -25,
+    width: width - wp(100),
+    marginTop: -wp(25),
+  },
+
+  amountsContainer: {
+    marginTop: wp(60),
+    marginBottom: -wp(30),
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-end",
+  },
+  amountSpacer: {
+    width: wp(40),
   },
 });

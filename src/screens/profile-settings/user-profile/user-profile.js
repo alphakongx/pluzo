@@ -3,9 +3,8 @@ import { View, ActivityIndicator } from "react-native";
 import FastImage from "react-native-fast-image";
 import { Image, Text, UserCount, Touchable } from "@components";
 import Images from "@assets/Images";
+import { AppBadges } from "@config";
 import styles from "./user-profile.style";
-
-const appBadges = require("@config/data/badges.json");
 
 class UserProfile extends React.Component {
   constructor(props) {
@@ -19,7 +18,8 @@ class UserProfile extends React.Component {
     var name = "no name";
     if (user !== null) {
       if (user.images.length > 0) {
-        userImage = { uri: user.images[0].path };
+        let sortedImages = user.images.sort((a, b) => a.sort > b.sort);
+        userImage = { uri: sortedImages[0].path };
       }
       if (user.first_name !== null) {
         name = user.first_name;
@@ -42,22 +42,25 @@ class UserProfile extends React.Component {
               <Text style={styles.nameText}>{name}</Text>
             </Touchable>
             {user.badges.map(badge => {
+              if (badge > AppBadges.length) return null;
               return (
                 <Image
                   key={`profile-badge-${badge}`}
-                  source={Images.live[appBadges[badge].icon]}
+                  source={Images.live[AppBadges[badge].icon]}
                   style={styles.badgeImage}
                 />
               );
             })}
           </View>
           <Text style={styles.usernameText}>{user !== null ? user.username : ""}</Text>
-          <UserCount
-            count={parseInt(user.friends, 10)}
-            style={styles.friendsContainer}
-            iconStyle={styles.friendsIconImage}
-            textStyle={styles.friendsCountText}
-          />
+          <Touchable onPress={() => this.props.onFriends()}>
+            <UserCount
+              count={parseInt(user.friends, 10)}
+              style={styles.friendsContainer}
+              iconStyle={styles.friendsIconImage}
+              textStyle={styles.friendsCountText}
+            />
+          </Touchable>
         </View>
       </View>
     );

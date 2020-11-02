@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { View, TextInput as RNTextInput } from "react-native";
 import { Touchable, Image, UserCount, BackDownButton } from "@components";
 import { StreamStatus } from "@constants";
+import Images from "@assets/Images";
 
 import styles from "./stream-header.style";
+
+const badges = require("@config/data/badges.json");
 
 const StreamHeader: () => React$Node = props => {
   const [emojiOpacity, setEmojiOpacity] = useState(0.6);
@@ -14,7 +17,7 @@ const StreamHeader: () => React$Node = props => {
     <View style={styles.container}>
       <BackDownButton onPress={props.onBack} />
 
-      {streamStatus === StreamStatus.STARTING ? (
+      {streamStatus === StreamStatus.PREPARING ? (
         <View style={styles.titleContainer}>
           <View style={styles.inputContainer}>
             <RNTextInput
@@ -23,6 +26,8 @@ const StreamHeader: () => React$Node = props => {
               multiline={false}
               placeholder={"Set a title"}
               placeholderTextColor={"white"}
+              textContentType={"name"}
+              autoCorrect={false}
               onChangeText={text => {
                 setTitle(text);
                 props.onChangeTitle && props.onChangeTitle(text);
@@ -40,7 +45,7 @@ const StreamHeader: () => React$Node = props => {
             }}
             style={[styles.emojiButton, { opacity: emojiOpacity }]}
           >
-            <Image source={require("@assets/images/live-screen/ic-category-tmp.png")} />
+            <Image source={Images.live[badges[props.selectedEmoji].icon]} />
           </Touchable>
         </View>
       ) : (
@@ -52,7 +57,7 @@ const StreamHeader: () => React$Node = props => {
           <UserCount
             style={styles.userCountStyle}
             textStyle={styles.userTextStyle}
-            count={1}
+            count={props.broadcasters.length + props.audiences.length}
           />
         </Touchable>
       )}

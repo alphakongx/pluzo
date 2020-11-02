@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 const { width } = Dimensions.get("window");
@@ -17,51 +18,57 @@ export default StyleSheet.create({
   },
 
   backButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: wp(30),
+    height: wp(30),
+    borderRadius: wp(15),
     backgroundColor: COLOR.HEADER_BACKGROUND,
-    top: 15,
+    top: wp(15),
     zIndex: 9999,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
   },
   backImage: {
-    width: 17,
-    height: 12,
+    width: wp(17),
+    height: wp(12),
     resizeMode: "contain",
     tintColor: "#ABA7D5",
   },
 
   buttonContainer: {
     flexDirection: "row",
-    paddingVertical: 30,
+    paddingVertical: wp(30),
   },
   button: {
     width: width / 5,
   },
   buttonCircle: {
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: wp(10),
     aspectRatio: 1,
     backgroundColor: "#312446",
-    borderRadius: 100,
+    borderRadius: wp(100),
     justifyContent: "center",
     alignItems: "center",
   },
+  buttonCircleRed: {
+    backgroundColor: "#FF0036",
+  },
+  buttonCircleGreen: {
+    backgroundColor: "#00FF77",
+  },
   buttonText: {
     fontFamily: "OpenSans",
-    fontSize: 10,
+    fontSize: wp(10),
     color: "white",
     textAlign: "center",
-    marginTop: 10,
+    marginTop: wp(10),
   },
   markCircle: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: wp(12),
+    height: wp(12),
+    borderRadius: wp(6),
     position: "absolute",
-    right: 12,
+    right: wp(12),
   },
 });

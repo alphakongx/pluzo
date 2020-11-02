@@ -18,61 +18,81 @@ const options = {
 const Card: () => React$Node = props => {
   const [imageIndex, setImageIndex] = useState(0);
   const { card } = props;
+  let isBio = card.bio !== undefined && card.bio !== null && card.bio !== "";
 
   FastImage.preload(card.images.map(item => ({ uri: item.path })));
 
-  const changeShowDetail = () => {
-    props.changeShowDetail && props.changeShowDetail();
-  };
-
   return (
-    <View style={styles.container}>
-      <Touchable
-        style={styles.card}
-        activeOpacity={1}
-        onPress={e => {
-          let newIndex = 0;
-          if (e.nativeEvent.locationX < screenWidth / 2) {
-            // left
-            newIndex = imageIndex === 0 ? card.images.length - 1 : imageIndex - 1;
+    <Touchable
+      style={styles.container}
+      activeOpacity={1}
+      onPress={e => {
+        let newIndex = 0;
+        if (e.nativeEvent.locationX < screenWidth / 2) {
+          // left
+          newIndex =
+            imageIndex === 0
+              ? isBio
+                ? card.images.length
+                : card.images.length - 1
+              : imageIndex - 1;
+        } else {
+          // right
+          if (isBio) {
+            newIndex = imageIndex === card.images.length ? 0 : imageIndex + 1;
           } else {
-            // right
             newIndex = imageIndex === card.images.length - 1 ? 0 : imageIndex + 1;
           }
-          setImageIndex(newIndex);
-          ReactNativeHapticFeedback.trigger("impactLight", options);
-        }}
-      >
+        }
+        setImageIndex(newIndex);
+        ReactNativeHapticFeedback.trigger("impactLight", options);
+      }}
+    >
+      <View style={styles.card}>
         {card && card.images.length > 0 ? (
-          <FastImage
-            resizeMode={FastImage.resizeMode.cover}
-            source={{ uri: card.images[imageIndex].path }}
-            style={styles.cardImage}
-          />
+          imageIndex > card.images.length - 1 ? (
+            <View style={styles.cardImage}>
+              <FastImage
+                resizeMode={FastImage.resizeMode.cover}
+                source={{ uri: card.images[0].path }}
+                style={styles.cardImage}
+              />
+              <View style={styles.overlayView} />
+            </View>
+          ) : (
+            <FastImage
+              resizeMode={FastImage.resizeMode.cover}
+              source={{ uri: card.images[imageIndex].path }}
+              style={styles.cardImage}
+            />
+          )
         ) : (
           <View style={styles.cardImage} />
         )}
-      </Touchable>
-      <LinearGradient
-        colors={GRADIENT.FADE_UP}
-        start={{ x: 0, y: 1 }}
-        end={{ x: 0, y: 0 }}
-        style={styles.topActions}
-      >
-        <SafeAreaView>
+      </View>
+      <View style={styles.topActions}>
+        <LinearGradient
+          colors={GRADIENT.FADE_UP}
+          start={{ x: 0, y: 1 }}
+          end={{ x: 0, y: 0 }}
+          style={styles.gradientOpacityBack}
+        />
+        <SafeAreaView pointerEvents={"box-none"}>
           <CardProgressBar
-            count={card.images.length}
+            count={isBio ? card.images.length + 1 : card.images.length}
             activeIndex={imageIndex}
             onPress={index => {
               setImageIndex(index);
             }}
           />
-          {!props.visibleDetail && (
-            <Header item={card} onInfoClicked={changeShowDetail} />
-          )}
+          <Header
+            item={card}
+            showBio={card && imageIndex > card.images.length - 1}
+            onReport={props.onReport}
+          />
         </SafeAreaView>
-      </LinearGradient>
-    </View>
+      </View>
+    </Touchable>
   );
 };
 

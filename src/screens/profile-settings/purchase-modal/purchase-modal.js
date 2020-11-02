@@ -2,15 +2,28 @@ import React from "react";
 import { View, ImageBackground } from "react-native";
 import { GradientButton, Text, BackButton, BoxShadow, Touchable } from "@components";
 import Modal from "react-native-modal";
+import RNIap from "react-native-iap";
 import { BlurView } from "@react-native-community/blur";
 import { GRADIENT } from "@config";
 import Images from "@assets/Images";
+import { widthPercentageToDP as wp, ItemSkus } from "@helpers";
 import styles, { screenWidth } from "./purchase-modal.style";
 
 class PurchaseModal extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      products: [],
+    };
   }
+
+  onPurchase = async sku => {
+    try {
+      await RNIap.requestSubscription(sku);
+    } catch (err) {
+      console.log(err.code, err.message);
+    }
+  };
 
   render() {
     return (
@@ -36,11 +49,11 @@ class PurchaseModal extends React.Component {
           <View>
             <BoxShadow
               setting={{
-                width: screenWidth - 40,
-                height: ((screenWidth - 40) * 480) / 335,
+                width: screenWidth - wp(40),
+                height: ((screenWidth - wp(40)) * 480) / 335,
                 color: "#FF0000",
                 opacity: 0.15,
-                _borderRadius: 15,
+                _borderRadius: wp(15),
                 spread: 0,
                 blur: 30,
                 offsetX: 0,
@@ -54,7 +67,7 @@ class PurchaseModal extends React.Component {
             >
               <BackButton onPress={this.props.onSwipeComplete} />
 
-              <Text style={styles.priceText}>For $4.99/month</Text>
+              <Text style={styles.priceText}>For $9.99/month</Text>
             </ImageBackground>
           </View>
           <View style={styles.buttonContainer}>
@@ -62,7 +75,7 @@ class PurchaseModal extends React.Component {
               text={"Purchase"}
               colors={GRADIENT.PURCHASE_BUTTON}
               shadowColor={"#FF6F00"}
-              onPress={this.props.onSwipeComplete}
+              onPress={() => this.onPurchase(ItemSkus[0])}
             />
           </View>
         </View>

@@ -22,6 +22,8 @@ import {
   reorderImages,
   checkPhone,
   deleteAccount,
+  updatePhoneSend,
+  updatePhoneConfirm,
 } from "@redux/api";
 import moment from "moment";
 import { registrationSelector, userSelector } from "../selectors";
@@ -62,6 +64,9 @@ export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_REORDER_IMAGES, requestReorderImages);
 
   yield takeEvery(UserTypes.REQUEST_DELETE_ACCOUNT, requestDeleteAccount);
+
+  yield takeEvery(UserTypes.REQUEST_UPDATE_PHONE_SEND_CODE, requestUpdatePhoneSendCode);
+  yield takeEvery(UserTypes.REQUEST_UPDATE_PHONE_CONFIRM_CODE, requestUpdatePhoneConfirmCode);
 }
 
 function* requestLogin(action) {
@@ -105,6 +110,7 @@ function* requestRegistration(action) {
     params.append("password", registrationData.password);
     params.append("phone", registrationData.phoneNumber);
     params.append("image", registrationData.picture);
+    params.append("swipe_gender", registrationData.likeGender);
     if (userData.location !== null) {
       params.append("latitude", userData.location.coords.latitude);
       params.append("longitude", userData.location.coords.longitude);
@@ -175,8 +181,8 @@ function* requestPhoneVerificationConfirmCode(action) {
     params.append("code", code);
 
     const response = yield call(phoneVerificationConfirmCode, params);
-    if (isSignUp)
-      NavigationService.navigate(SCREENS.SIGNUP_SUCCESS, { user: response.data.data });
+    if (isSignUp) yield put(UserCreators.loginSuccess(response.data.data));
+    // NavigationService.navigate(SCREENS.SIGNUP_SUCCESS, { user: response.data.data });
 
     yield put(UserCreators.phoneVerificationConfirmCodeSuccess());
   } catch (error) {
@@ -340,5 +346,38 @@ function* requestDeleteAccount(action) {
     yield put(UserCreators.logout());
   } catch (error) {
     yield put(UserCreators.deleteAccountFailure());
+  }
+}
+
+function* requestUpdatePhoneSendCode(action) {
+  try {
+    const { phone, token } = action;
+
+    const params = new FormData();
+    params.append("phone", phone);
+
+    const res = yield call(updatePhoneSend, params, token);
+    
+    yield put(UserCreators.updatePhoneSendCodeSuccess());
+  } catch (error) {
+    console.log(error);
+    yield put(UserCreators.updatePhoneSendCodeFail());
+  }
+}
+
+function* requestUpdatePhoneConfirmCode(action) {
+  try {
+    const { code, token } = action;
+
+    const params = new FormData();
+    params.append("code", code);
+    
+    const res = yield call(updatePhoneConfirm, params, token);
+    
+    yield put(UserCreators.updatePhoneConfirmCodeSuccess());
+    yield put(UserCreators.loadProfileSuccess(res.data.data));
+  } catch (error) {
+    console.log(error);
+    yield put(UserCreators.updatePhoneConfirmCodeFail());
   }
 }

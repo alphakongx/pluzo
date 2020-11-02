@@ -8,6 +8,7 @@ import {
   rejectFriend,
   addFriendByUsername,
   getPendingRequests,
+  readFlag,
 } from "@redux/api";
 
 export function* watchInboxRequests() {
@@ -18,6 +19,7 @@ export function* watchInboxRequests() {
   yield takeEvery(InboxTypes.REQUEST_REJECT_FRIEND, requestRejectFriend);
   yield takeEvery(InboxTypes.REQUEST_PENDING_FRIENDS, requestPendingFriends);
   yield takeEvery(InboxTypes.REQUEST_FRIENDS, requestFriends);
+  yield takeEvery(InboxTypes.REQUEST_READ_FLAG, requestReadFlag);
 }
 
 function* requestChannels(action) {
@@ -28,11 +30,14 @@ function* requestChannels(action) {
     const response = yield call(getChatList, params, token);
 
     let channels = response.data.data;
+    channels = channels.filter(
+      channel => channel.messages && channel.messages.length > 0,
+    );
     channels = channels.sort(
       (channel1, channel2) =>
         channel1.messages[0].createdAt < channel2.messages[0].createdAt,
     );
-    console.log(channels);
+
     yield put(InboxCreators.loadChannelsDone(channels));
   } catch (error) {
     yield put(InboxCreators.loadChannelsDone([]));
@@ -45,7 +50,7 @@ function* requestAddFriend(action) {
   try {
     const params = new FormData();
     params.append("username", username);
-    console.log("ADD FRIEND:", username);
+
     yield call(addFriendByUsername, params, token);
 
     EventBus.publish("ADDFRIEND", username, true);
@@ -102,5 +107,18 @@ function* requestFriends(action) {
     yield put(InboxCreators.requestFriendsSuccess(response.data.data));
   } catch (error) {
     yield put(InboxCreators.requestFriendsFailure());
+  }
+}
+
+function* requestReadFlag(action) {
+  try {
+    const { user_id, token } = action;
+
+    const requestParams = new FormData();
+    requestParams.append("user_id", user_id);
+
+    yield call(readFlag, requestParams, token);
+  } catch (error) {
+    console.log("send message >>", error);
   }
 }

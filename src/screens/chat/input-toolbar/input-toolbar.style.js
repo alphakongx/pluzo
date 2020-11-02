@@ -1,61 +1,87 @@
 import { StyleSheet, Platform } from "react-native";
+import { widthPercentageToDP as wp, FontHelper } from "@helpers";
 import { COLOR } from "@config";
-import { FontHelper } from "@helpers";
 
 export default StyleSheet.create({
   container: {
     backgroundColor: COLOR.MESSAGE_INPUT_TOOLBAR_BACKGROUND,
-    borderTopWidth: 1,
+    borderTopWidth: wp(1),
     borderTopColor: "#FFFFFF10",
-    paddingTop: 10,
-    paddingBottom: Platform.OS === "ios" ? 15 : 5,
+    paddingBottom: wp(12),
   },
-  attachmentsButtonContainer: {
-    marginLeft: 10,
+  composerContainer: {
+    flexDirection: "row",
+    flex: 1,
+    marginLeft: wp(20),
+    marginRight: wp(10),
   },
-  attachmentIcon: {
-    width: 35,
-    height: 35,
-    borderRadius: 17.5,
-    justifyContent: "center",
+  composerShadow: {
+    marginLeft: 0,
+    marginTop: wp(10),
+  },
+  inputContainer: {
+    flexDirection: "row",
+    flex: 1,
+    marginTop: wp(10),
+    backgroundColor: "white",
+    borderRadius: wp(25),
     alignItems: "center",
-    marginBottom: Platform.OS === "ios" ? 3 : 6.5,
-    marginLeft: 5,
   },
   inputField: FontHelper.font({
     fontFamily: "OpenSans",
-    fontSize: 14,
+    fontSize: wp(14),
     color: COLOR.TEXT_INPUT,
-    borderRadius: 25,
+    marginLeft: wp(14),
+    marginRight: wp(14),
+    paddingRight: wp(35),
     ...Platform.select({
       ios: {
-        marginLeft: 10,
-        marginRight: 10,
-        paddingLeft: 15,
-        paddingRight: 40,
-        paddingTop: 10,
-        backgroundColor: "white",
-        lineHeight: 16,
+        marginTop: wp(7.5),
+        marginBottom: wp(7.5),
+        lineHeight: wp(14),
       },
       android: {
-        marginLeft: 10,
-        marginRight: 10,
-        paddingLeft: 15,
-        paddingRight: 40,
-        backgroundColor: "white",
-        lineHeight: 16,
+        lineHeight: wp(14),
       },
     }),
   }),
-  sendButton: {
-    width: 35,
+  sendButtonContainer: {
+    width: wp(25),
+    height: wp(25),
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    right: 10,
-    bottom: 0,
+    right: wp(18),
+    top: Platform.OS === "ios" ? wp(15) : wp(15),
+  },
+  sendButton: {
+    width: wp(25),
+    height: wp(25),
+    justifyContent: "center",
+    alignItems: "center",
   },
   sendButtonIcon: {
-    tintColor: COLOR.TEXT_SECONDARY,
+    width: wp(16),
+    height: wp(10),
+    tintColor: "white",
+  },
+  cameraButton: {
+    height: wp(30),
+    justifyContent: "center",
+    position: "absolute",
+    right: wp(23),
+    ...Platform.select({
+      ios: {
+        top: wp(12),
+      },
+      android: {
+        top: wp(16),
+      },
+    }),
+  },
+  cameraButtonIcon: {
+    width: wp(20),
+    height: wp(16),
+    resizeMode: "stretch",
   },
 });

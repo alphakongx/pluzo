@@ -20,7 +20,16 @@ const { Types, Creators } = createActions({
   requestMatchSuccess: null,
   requestMatchFail: null,
 
-  setVisibleDetail: ["visibleDetail"],
+  requestGetSettings: ["token"],
+  requestGetSettingsSuccess: ["settings"],
+  requestGetSettingsFail: null,
+
+  requestSetSettings: ["token", "params"],
+  requestSetSettingsSuccess: ["settings"],
+  requestSetSettingsFail: null,
+
+  requestRunBoost: ["token", "boostType"],
+  requestRunRewinds: ["token"],
 });
 
 export const SwipeTypes = Types;

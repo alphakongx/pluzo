@@ -1,5 +1,12 @@
 import React, { PureComponent } from "react";
-import { Modal, Platform, TouchableOpacity, View, Image } from "react-native";
+import {
+  Modal,
+  Platform,
+  TouchableOpacity,
+  View,
+  Image,
+  KeyboardAvoidingView,
+} from "react-native";
 import { BlurView } from "../blur-view";
 import { Screen } from "../screen";
 import { Text } from "../text";
@@ -80,7 +87,7 @@ class DialogInput extends PureComponent {
         visible={this.props.isDialogVisible}
         onRequestClose={this.handleOnRequestClose}
       >
-        <View style={[styles.container, { ...modalStyleProps }]}>
+        <KeyboardAvoidingView style={[styles.container, { ...modalStyleProps }]}>
           <TouchableOpacity
             style={styles.container}
             activeOpacity={1}
@@ -171,7 +178,7 @@ class DialogInput extends PureComponent {
               </Screen>
             </View>
           </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }

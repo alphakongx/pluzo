@@ -1,50 +1,64 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginHorizontal: 10,
+    marginHorizontal: wp(10),
     alignItems: "center",
+  },
+  flexFill: {
+    flex: 1,
   },
   inputContainer: {
     flex: 1,
-    flexDirection: "row",
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 2,
+    height: wp(36),
+    borderRadius: wp(18),
+    borderWidth: wp(2),
     borderColor: "white",
   },
   inputField: {
     flex: 1,
-    fontSize: 12,
+    fontSize: wp(12),
     fontWeight: "600",
     color: COLOR.TEXT_PRIMARY,
-    marginHorizontal: 10,
+    marginLeft: wp(10),
+    marginRight: wp(30),
     padding: 0,
   },
   sendButton: {
-    width: 25,
-    height: 25,
-    alignSelf: "center",
-    marginHorizontal: 5,
+    width: wp(25),
+    height: wp(25),
+    position: "absolute",
+    top: wp(2.5),
+    right: wp(5),
     alignItems: "center",
     justifyContent: "center",
   },
   sendIcon: {
-    width: 15,
-    height: 15,
+    width: wp(15),
+    height: wp(15),
     resizeMode: "contain",
   },
   gameIcon: {
-    marginHorizontal: 10,
-    width: 40,
-    height: 20,
+    marginHorizontal: wp(10),
+    width: wp(40),
+    height: wp(20),
     resizeMode: "contain",
   },
   settingIcon: {
-    width: 20,
-    height: 20,
+    width: wp(20),
+    height: wp(20),
+    resizeMode: "contain",
+  },
+
+  handButton: {
+    paddingLeft: wp(10),
+  },
+  handIcon: {
+    width: wp(20),
+    height: wp(20),
     resizeMode: "contain",
   },
 });

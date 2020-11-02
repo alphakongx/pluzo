@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   flexFill: {
@@ -6,20 +7,20 @@ export default StyleSheet.create({
   },
 
   container: {
-    borderRadius: 22,
+    borderRadius: wp(22),
   },
 
   questionText: {
     color: "white",
-    fontSize: 22,
+    fontSize: wp(22),
     fontWeight: "bold",
     textAlign: "center",
-    paddingTop: 30,
-    paddingBottom: 42,
+    paddingTop: wp(30),
+    paddingBottom: wp(42),
   },
 
   separator: {
-    height: 1,
+    height: wp(1),
     backgroundColor: "white",
     opacity: 0.15,
   },
@@ -27,22 +28,22 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 15,
+    paddingVertical: wp(15),
   },
   logoutText: {
     color: "#ABA7D5",
     fontFamily: "OpenSans",
-    fontSize: 16,
-    paddingLeft: 10,
+    fontSize: wp(16),
+    paddingLeft: wp(10),
   },
   buttonIcon: {
-    width: 15,
-    height: 18,
+    width: wp(15),
+    height: wp(18),
     resizeMode: "contain",
   },
   cancelText: {
     color: "white",
     fontFamily: "OpenSans",
-    fontSize: 16,
+    fontSize: wp(16),
   },
 });

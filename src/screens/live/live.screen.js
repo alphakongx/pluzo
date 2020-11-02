@@ -1,184 +1,282 @@
 import React, { Component } from "react";
-import { View, SafeAreaView } from "react-native";
+import { View, SafeAreaView, ScrollView } from "react-native";
 import {} from "react-navigation";
 import {
   Screen,
-  Masonry,
   VerticalImagesLayout,
   Text,
   Image,
   Touchable,
   BoxShadow,
 } from "@components";
+import RNMasonryScroll from "react-native-masonry-scrollview";
+import * as Animatable from "react-native-animatable";
 import LinearGradient from "react-native-linear-gradient";
-// import Swiper from "react-native-swiper";
+import Swiper from "react-native-swiper";
 import EventBus from "eventing-bus";
-import { GRADIENT } from "@config";
+import { widthPercentageToDP as wp } from "@helpers";
+import { GRADIENT, AppBadges } from "@config";
+import { StreamStatus } from "@constants";
 
 import { LiveTypes } from "@redux/actions";
 import Images from "@assets/Images";
 import Header from "./header/header.js";
 import LiveTags from "./live-tags/live-tags.js";
-// import LiveSwiperItem from "./live-swiper-item/index.js";
+import LiveSwiperItem from "./live-swiper-item/index.js";
 
 import styles from "./live.style.js";
 
-const appBadges = require("@config/data/badges.json");
+const { createAnimatableComponent } = Animatable;
+const AnimatableView = createAnimatableComponent(View);
 
 class Live extends Component {
   constructor() {
     super();
-    this.masonryRef = React.createRef();
+    this.state = {
+      category: 0,
+      livePosition: {},
+    };
   }
 
   componentDidMount() {
-    this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
-      this.props.requestStreamList(this.props.token);
-    });
+    this.props.requestStreamList(this.props.token);
+
     this.updateActionSubscription = EventBus.on(
       LiveTypes.STREAM_LIST_SUCCESS,
       this.updateStreamList,
     );
+    this.updateActionStreams = EventBus.on("Start_update", () => {
+      this.props.requestStreamList(this.props.token);
+    });
   }
 
   componentWillUnmount() {
-    this._unsubscribe;
+    clearInterval(this.updateInterval);
     this.updateActionSubscription();
+    this.updateActionStreams();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.category !== this.state.category) {
+      this.updateStreamList();
+    }
   }
 
   updateStreamList = () => {
-    console.log("Updated stream >>>", this.props.allStreams);
-    this.masonryRef.clearAll();
-    this.masonryRef.addItems(this.props.allStreams);
+    setTimeout(() => {
+      if (this.updateInterval === undefined) {
+        this.updateInterval = setInterval(() => {
+          this.props.requestStreamList(this.props.token);
+        }, 5000);
+      }
+    }, 500);
   };
 
   onNewStream = () => {
     const { user } = this.props;
-    let channelName = `channel-${user.id}`;
-    let params = {
-      channelName,
-      isBroadcaster: true,
-      isJoin: false,
-    };
-    EventBus.publish("NEW_STREAM_ACTION", params);
+    if (this.props.streamStatus !== StreamStatus.NONE) {
+      EventBus.publish("APP_END_STREAM_ACTION");
+      setTimeout(() => {
+        let channelName = `${new Date().getTime()}-${user.id}`;
+        let params = {
+          channelName,
+          isBroadcaster: true,
+          isJoin: false,
+        };
+        EventBus.publish("NEW_STREAM_ACTION", params);
+      }, 200);
+    } else {
+      let channelName = `${new Date().getTime()}-${user.id}`;
+      let params = {
+        channelName,
+        isBroadcaster: true,
+        isJoin: false,
+      };
+      EventBus.publish("NEW_STREAM_ACTION", params);
+    }
   };
 
-  renderLiveItem = item => {
+  onJoinStream = channelName => {
+    let names = channelName.split("-");
+    if (names.length > 1 && parseInt(names[1], 10) === this.props.user.id) {
+      return;
+    }
+    if (this.props.streamStatus !== StreamStatus.NONE) {
+      EventBus.publish("APP_END_STREAM_ACTION");
+      setTimeout(() => {
+        let params = {
+          channelName,
+          isBroadcaster: false,
+          isJoin: true,
+        };
+        EventBus.publish("NEW_STREAM_ACTION", params);
+      }, 500);
+    } else {
+      let params = {
+        channelName,
+        isBroadcaster: false,
+        isJoin: true,
+      };
+      EventBus.publish("NEW_STREAM_ACTION", params);
+    }
+  };
+
+  renderStaticViews = () => {
+    const { category } = this.state;
+    let streams = this.props.trendingStreams;
+    if (category !== 0) {
+      streams = this.props.trendingStreams.filter(
+        stream => parseInt(stream.category, 10) === this.state.category,
+      );
+    }
     return (
-      <Touchable
-        style={styles.itemContainer}
+      <View>
+        <Header navigation={this.props.navigation} />
+        <View style={styles.separator} />
+        <LiveTags onChangeCategory={value => this.setState({ category: value })} />
+
+        {streams.length > 0 && (
+          <Swiper
+            style={styles.swiperContainer}
+            containerStyle={styles.swiperWrapper}
+            showsButtons={false}
+            loop={false}
+            dot={<View style={styles.swiperDot} />}
+            activeDot={
+              <LinearGradient
+                colors={["#617FFF", "#02FFF3"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.swiperActiveDot}
+              />
+            }
+            paginationStyle={styles.swiperPagenation}
+          >
+            {streams.map((stream, index) => {
+              return (
+                <LiveSwiperItem
+                  key={`trending-live-${index}`}
+                  item={stream}
+                  onJoinStream={channelName => this.onJoinStream(channelName)}
+                />
+              );
+            })}
+          </Swiper>
+        )}
+      </View>
+    );
+  };
+
+  renderLiveItem = (item, index) => {
+    return (
+      <AnimatableView
+        animation={"fadeInUp"}
+        delay={100 * index}
         key={"session" + item.id}
-        onPress={() => {
-          let channelName = item.channel;
-          let params = {
-            channelName,
-            isBroadcaster: false,
-            isJoin: true,
-          };
-          EventBus.publish("NEW_STREAM_ACTION", params);
+        onLayout={e => {
+          console.log(e.nativeEvent.layout);
         }}
       >
-        <VerticalImagesLayout images={item.user.images} />
-        <View style={styles.itemDataContainer}>
-          <Text style={styles.userName} numberOfLines={1}>
-            {item.name}
-          </Text>
-          <View style={styles.tagContainer}>
-            <LinearGradient
-              colors={GRADIENT.BUTTON}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.membersContainer}
-            >
-              <Image
-                source={require("@assets/images/live-screen/live-user.png")}
-                style={styles.memberIcon}
-              />
-              <Text style={styles.memberCount}>{parseInt(item.count, 10) + 1}</Text>
-            </LinearGradient>
-            <View style={styles.tagImages}>
-              {item.user.badges.map(badge => {
-                return (
-                  <Image
-                    key={`badge-${badge}`}
-                    source={Images.live[appBadges[badge].icon]}
-                    style={styles.tagImage}
-                  />
-                );
-              })}
+        <Touchable
+          style={styles.itemContainer}
+          onPress={() => {
+            this.onJoinStream(item.channel);
+          }}
+        >
+          <VerticalImagesLayout images={item.info.streamers_images} />
+          <View style={styles.itemDataContainer}>
+            <Text style={styles.userName} numberOfLines={1}>
+              {item.name}
+            </Text>
+            <View style={styles.tagContainer}>
+              <LinearGradient
+                colors={GRADIENT.BUTTON}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.membersContainer}
+              >
+                <Image
+                  source={require("@assets/images/live-screen/live-user.png")}
+                  style={styles.memberIcon}
+                />
+                <Text style={styles.memberCount}>{parseInt(item.count, 10)}</Text>
+              </LinearGradient>
+              <View style={styles.tagImages}>
+                <Image
+                  source={Images.live[AppBadges[item.category].icon]}
+                  style={styles.tagImage}
+                />
+              </View>
             </View>
           </View>
-        </View>
+        </Touchable>
+      </AnimatableView>
+    );
+  };
+
+  renderNewButton = () => {
+    return (
+      <Touchable
+        style={styles.favContainer}
+        disabled={this.props.streamStatus === StreamStatus.STARTED}
+        onPress={this.onNewStream}
+      >
+        <BoxShadow
+          setting={{
+            width: wp(60),
+            height: wp(60),
+            color: this.props.streamStatus === StreamStatus.STARTED ? "#000" : "#1900FF",
+            opacity: 0.38,
+            _borderRadius: wp(30),
+            spread: 0,
+            blur: 10,
+            offsetX: 0,
+            offsetY: 0,
+          }}
+        />
+        {this.props.streamStatus === StreamStatus.STARTED ? (
+          <View style={[styles.plusFav, styles.favGray]}>
+            <Image source={Images.app.icPlus} />
+          </View>
+        ) : (
+          <LinearGradient
+            colors={GRADIENT.BUTTON}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.plusFav}
+          >
+            <Image source={Images.app.icPlus} />
+          </LinearGradient>
+        )}
       </Touchable>
     );
   };
 
   render() {
+    const { category } = this.state;
+    let streams = this.props.allStreams;
+    if (category !== 0) {
+      streams = this.props.allStreams.filter(
+        stream => parseInt(stream.category, 10) === this.state.category,
+      );
+    }
     return (
       <Screen hasGradient style={styles.container}>
         <SafeAreaView style={styles.safeAreaContainer}>
-          <View style={styles.contentContainer}>
-            <Masonry
-              sorted
+          <View style={styles.container}>
+            <ScrollView
+              style={styles.contentContainer}
+              bounces={false}
               keyboardShouldPersistTaps={"always"}
-              ref={ref => (this.masonryRef = ref)}
-              header={
-                <View>
-                  <Header />
-                  <View style={styles.separator} />
-                  <LiveTags />
-
-                  {/* <Swiper
-                    style={styles.swiperContainer}
-                    containerStyle={styles.swiperWrapper}
-                    showsButtons={false}
-                    loop={false}
-                    dot={<View style={styles.swiperDot} />}
-                    activeDot={
-                      <LinearGradient
-                        colors={["#617FFF", "#02FFF3"]}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={styles.swiperActiveDot}
-                      />
-                    }
-                    paginationStyle={styles.swiperPagenation}
-                  >
-                    <LiveSwiperItem key={"1"} />
-                    <LiveSwiperItem key={"2"} />
-                    <LiveSwiperItem key={"3"} />
-                    <LiveSwiperItem key={"4"} />
-                    <LiveSwiperItem key={"5"} />
-                  </Swiper> */}
-                </View>
-              }
-              renderItem={item => this.renderLiveItem(item)}
-              containerStyle={styles.masonryContainer}
-            />
-
-            <Touchable style={styles.favContainer} onPress={this.onNewStream}>
-              <BoxShadow
-                setting={{
-                  width: 60,
-                  height: 60,
-                  color: "#1900FF",
-                  opacity: 0.38,
-                  _borderRadius: 30,
-                  spread: 0,
-                  blur: 10,
-                  offsetX: 0,
-                  offsetY: 0,
-                }}
-              />
-              <LinearGradient
-                colors={GRADIENT.BUTTON}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.plusFav}
-              >
-                <Image source={require("@assets/images/live-screen/plus-fav.png")} />
-              </LinearGradient>
-            </Touchable>
+            >
+              {this.renderStaticViews()}
+              <RNMasonryScroll style={styles.masonryContainer} bounces={false}>
+                {streams.map((item, index) => {
+                  return this.renderLiveItem(item, index);
+                })}
+              </RNMasonryScroll>
+            </ScrollView>
+            {this.renderNewButton()}
           </View>
         </SafeAreaView>
       </Screen>

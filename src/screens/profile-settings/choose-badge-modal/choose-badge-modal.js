@@ -10,6 +10,7 @@ import {
 } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
+import { widthPercentageToDP as wp } from "@helpers";
 
 import Images from "@assets/Images";
 import styles from "./choose-badge-modal.style";
@@ -50,6 +51,7 @@ class ChooseBadgeModal extends Component {
   onModalHide = () => {
     const params = new FormData();
     const { badges } = this.state;
+    
     badges.forEach(badge => {
       params.append("badges[]", badge.id);
     });
@@ -112,11 +114,11 @@ class ChooseBadgeModal extends Component {
           <View style={styles.myBadgeScroll}>
             <AutoDragSortableView
               horizontal={true}
-              dataSource={badges}
-              parentWidth={badges.length * 46}
-              childrenWidth={36}
-              childrenHeight={36}
-              marginChildrenRight={10}
+              dataSource={badges.length === 0 ? [1] : badges}
+              parentWidth={badges.length === 0 ? wp(46) : badges.length * wp(46)}
+              childrenWidth={wp(36)}
+              childrenHeight={wp(36)}
+              marginChildrenRight={wp(10)}
               maxScale={1}
               contentContainerStyle={styles.scrollContentCenter}
               onDragStart={index => {
@@ -128,7 +130,7 @@ class ChooseBadgeModal extends Component {
               onDataChange={data => {
                 this.setState({ badges: data });
               }}
-              keyExtractor={(item, index) => item.id}
+              keyExtractor={(item, index) => typeof item !== "number" ? item.id : 0}
               renderItem={(item, index) => {
                 return (
                   <View
@@ -137,7 +139,8 @@ class ChooseBadgeModal extends Component {
                       this.state.dragIndex === index ? styles.badgeActive : {},
                     ]}
                   >
-                    <Image source={Images.live[item.icon]} style={styles.badgeImage} />
+                    {typeof item !== "number" &&
+                    <Image source={Images.live[item.icon]} style={styles.badgeImage} />}
                   </View>
                 );
               }}

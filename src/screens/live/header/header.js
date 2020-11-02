@@ -29,7 +29,7 @@ const Header: () => React$Node = props => {
           onFilterPress={onFilterPress}
         />
       </View>
-      {!isSearchActive && <LiveUsers />}
+      {!isSearchActive && <LiveUsers navigation={props.navigation} />}
     </View>
   );
 };

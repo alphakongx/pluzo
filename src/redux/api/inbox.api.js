@@ -82,3 +82,16 @@ export function getPendingRequests(accessToken) {
     },
   }).then(response => response);
 }
+
+export function readFlag(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.READ_FLAG}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    silent: true,
+  }).then(response => response);
+}

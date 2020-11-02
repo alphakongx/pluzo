@@ -17,8 +17,29 @@ import SearchScreen from "../screens/search";
 import ProfileView from "../screens/profile-view";
 import Settings from "../screens/settings";
 import SwipeSettings from "../screens/settings/swipe-settings";
+import AccountSettings from "../screens/settings/account-settings";
+import SafetyPrivacy from "../screens/settings/safety-privacy";
+import TermsOfService from "../screens/settings/terms-of-service";
+import UpdatePhoneVerification from "../screens/settings/account-settings/update-phone-verification";
+import LikeUsersScreen from "../screens/like-users";
 
 import navigationConfig from "./navigation-config";
+import PushNotificationSettings from "../screens/settings/push-notification-settings";
+
+const InboxStack = createStackNavigator(
+  {
+    [SCREENS.INBOX]: Inbox,
+    [SCREENS.LIKE_USERS]: LikeUsersScreen,
+  },
+  {
+    initialRouteName: SCREENS.INBOX,
+    headerMode: "none",
+    mode: "card",
+    defaultNavigationOptions: {
+      ...navigationConfig,
+    },
+  },
+);
 
 const TabStack = createBottomTabNavigator(
   {
@@ -35,7 +56,7 @@ const TabStack = createBottomTabNavigator(
       },
     },
     INBOX_TAB: {
-      screen: Inbox,
+      screen: InboxStack,
       navigationOptions: {
         tabBarIcon: props => <TabBarIcon {...props} name='Chat' />,
       },
@@ -97,6 +118,11 @@ const HomeStack = createStackNavigator(
         gestureEnabled: false,
       },
     },
+    [SCREENS.ACCOUNT_SETTINGS]: AccountSettings,
+    [SCREENS.PUSH_SETTINGS]: PushNotificationSettings,
+    [SCREENS.SAFETY_PRIVACY]: SafetyPrivacy,
+    [SCREENS.TERMS_OF_SERVICE]: TermsOfService,
+    [SCREENS.UPDATE_PHONE_VERIFICATION]: UpdatePhoneVerification,
   },
   {
     initialRouteName: SCREENS.MAIN,

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
@@ -9,8 +10,16 @@ export default StyleSheet.create({
     backgroundColor: COLOR.HEADER_BACKGROUND,
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: wp(150),
+    height: wp(150),
     resizeMode: "contain",
+  },
+
+  webContainer: {
+    width: 250,
+    height: "100%",
+  },
+  webView: {
+    backgroundColor: "transparent",
   },
 });

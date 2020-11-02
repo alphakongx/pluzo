@@ -1,48 +1,29 @@
 import React from "react";
 import { View } from "react-native";
-import { Image, Text } from "@components";
+import { Image, Text, Touchable, HorizontalImagesLayout } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import Images from "@assets/Images";
-import { GRADIENT } from "@config";
+import { GRADIENT, AppBadges } from "@config";
 
 import styles from "./live-swiper-item.style";
 
 const LiveSwiperItem: () => React$Node = props => {
+  const { item } = props;
+  let combinedNames = "";
+  item.info.names.forEach(value => {
+    combinedNames += `, ${value}`;
+  });
+  combinedNames = combinedNames.substring(2);
+
   return (
-    <View style={styles.container}>
+    <Touchable
+      style={styles.container}
+      onPress={() => {
+        props.onJoinStream(item.channel);
+      }}
+    >
       <View style={styles.imageContainer}>
-        <Image
-          source={require("@assets/images/live-screen/user-temp1.png")}
-          style={styles.userImage}
-        />
-        <Image
-          source={require("@assets/images/live-screen/user-temp2.png")}
-          style={styles.userImage}
-        />
-        <Image
-          source={require("@assets/images/live-screen/user-temp1.png")}
-          style={styles.userImage}
-        />
-        <Image
-          source={require("@assets/images/live-screen/user-temp2.png")}
-          style={styles.userImage}
-        />
-        <Image
-          source={require("@assets/images/live-screen/user-temp2.png")}
-          style={styles.userImage}
-        />
-        <Image
-          source={require("@assets/images/live-screen/user-temp1.png")}
-          style={styles.userImage}
-        />
-        <Image
-          source={require("@assets/images/live-screen/user-temp2.png")}
-          style={styles.userImage}
-        />
-        <Image
-          source={require("@assets/images/live-screen/user-temp1.png")}
-          style={styles.userImage}
-        />
+        <HorizontalImagesLayout images={item.info.streamers_images} />
       </View>
       <LinearGradient
         colors={GRADIENT.FADE_UP}
@@ -61,17 +42,18 @@ const LiveSwiperItem: () => React$Node = props => {
               source={require("@assets/images/live-screen/live-user.png")}
               style={styles.memberIcon}
             />
-            <Text style={styles.memberCount}>11</Text>
+            <Text style={styles.memberCount}>{parseInt(item.count, 10)}</Text>
           </LinearGradient>
-          <Image source={Images.live.tagLove} style={styles.tagImage} />
-          <Image source={Images.live.tagSea} style={styles.tagImage} />
-          <Image source={Images.live.tagTravel} style={styles.tagImage} />
+          <Image
+            source={Images.live[AppBadges[item.category].icon]}
+            style={styles.tagImage}
+          />
         </View>
         <Text style={styles.userName} numberOfLines={1}>
-          Lara, Daniel, XZeroX, Cody, Fredriction
+          {combinedNames}
         </Text>
       </LinearGradient>
-    </View>
+    </Touchable>
   );
 };
 

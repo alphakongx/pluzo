@@ -1,46 +1,47 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
   messageContainer: {
-    height: 65,
+    height: wp(65),
     flexDirection: "row",
   },
   imageContainer: {
     justifyContent: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(10),
   },
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: wp(50),
+    height: wp(50),
+    borderRadius: wp(25),
   },
   messageContentContainer: {
     flex: 1,
     justifyContent: "center",
   },
   subject: {
-    fontSize: 14,
+    fontSize: wp(14),
     fontWeight: "700",
     color: COLOR.TEXT_PRIMARY,
   },
   preview: {
-    fontSize: 12,
+    fontSize: wp(12),
     fontWeight: "700",
     color: COLOR.MESSAGE_PREVIEW,
   },
   timeContainer: {
-    marginHorizontal: 10,
+    marginHorizontal: wp(10),
     justifyContent: "center",
   },
   addButton: {
-    height: 25,
-    width: 60,
+    height: wp(25),
+    width: wp(60),
   },
   addButtonText: {
     fontFamily: "OpenSans",
     fontWeight: "700",
-    fontSize: 12,
+    fontSize: wp(12),
     color: "black",
   },
 });

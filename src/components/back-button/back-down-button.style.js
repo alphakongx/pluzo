@@ -1,14 +1,15 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: wp(40),
+    height: wp(40),
+    borderRadius: wp(20),
     backgroundColor: "#000000",
     opacity: 0.6,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: wp(10),
   },
 });

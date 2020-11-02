@@ -27,7 +27,7 @@ class TouchableSettingItem extends Component {
                 end={{ x: 0, y: 1 }}
                 style={styles.verifyBadge}
               >
-                <Image source={Images.app.icCheck} />
+                <Image source={Images.app.icCheck} style={styles.verifyBadgeIcon} />
               </LinearGradient>
             </View>
           )}

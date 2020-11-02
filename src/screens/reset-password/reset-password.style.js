@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -6,41 +7,41 @@ export default StyleSheet.create({
     flex: 1,
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     flex: 1,
     justifyContent: "center",
-    paddingHorizontal: 37,
-    marginTop: -30,
+    paddingHorizontal: wp(37),
+    marginTop: -wp(30),
   },
   titleText: {
-    fontSize: 20,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 64,
+    marginBottom: wp(64),
   },
   inputFieldSeparator: {
-    height: 20,
+    height: wp(20),
   },
   informationContainer: {
     alignItems: "center",
-    marginTop: 25,
+    marginTop: wp(25),
   },
   passwordRequirementTitle: {
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: wp(12),
     color: "rgba(255, 255, 255, 0.5)",
     textDecorationLine: "underline",
   },
   passwordRequirement: {
-    marginTop: 3,
+    marginTop: wp(3),
     fontFamily: "OpenSans",
-    fontSize: 12,
+    fontSize: wp(12),
     color: "rgba(255, 255, 255, 0.5)",
   },
   instructionContainer: {
@@ -48,16 +49,16 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   instructionValidIcon: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+    width: wp(7),
+    height: wp(7),
+    borderRadius: wp(4),
     backgroundColor: "#00FF6F",
-    marginTop: 3,
-    marginRight: 5,
+    marginTop: wp(3),
+    marginRight: wp(5),
   },
   footer: {
-    marginTop: 40,
-    paddingHorizontal: 37,
-    paddingBottom: 20,
+    marginTop: wp(40),
+    paddingHorizontal: wp(37),
+    paddingBottom: wp(20),
   },
 });

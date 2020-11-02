@@ -32,4 +32,10 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.43)",
   },
+
+  alertContainer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+  },
 });

@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 const screenWidth = Dimensions.get("window").width;
@@ -12,7 +13,7 @@ export default StyleSheet.create({
   },
   animationContainer: {
     flex: 1,
-    marginBottom: 90,
+    marginBottom: wp(90),
     justifyContent: "center",
   },
   container: {
@@ -48,8 +49,8 @@ export default StyleSheet.create({
     position: "absolute",
   },
   userImage: {
-    width: (screenWidth * 30) / 100,
-    height: (screenWidth * 30) / 100,
+    width: (screenWidth * wp(30)) / 100,
+    height: (screenWidth * wp(30)) / 100,
     borderRadius: screenWidth / 2,
     position: "absolute",
   },
@@ -61,23 +62,23 @@ export default StyleSheet.create({
     bottom: 0,
   },
   descriptionText: {
-    marginTop: 30,
-    marginBottom: 20,
-    paddingHorizontal: 20,
+    marginTop: wp(30),
+    marginBottom: wp(20),
+    paddingHorizontal: wp(20),
     fontWeight: "600",
-    fontSize: 14,
+    fontSize: wp(14),
     textAlign: "center",
     color: COLOR.TEXT_SECONDARY_4,
   },
   buttonContainer: {
-    paddingHorizontal: 50,
-    paddingBottom: 70,
+    paddingHorizontal: wp(50),
+    paddingBottom: wp(70),
   },
 
   flexFill: {
     flex: 1,
   },
   modalContainer: {
-    borderRadius: 22,
+    borderRadius: wp(22),
   },
 });
