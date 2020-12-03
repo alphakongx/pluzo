@@ -24,7 +24,7 @@ class Text extends Component {
     });
 
     return (
-      <NativeText {...rest} style={styles.text}>
+      <NativeText {...rest} style={styles.text} allowFontScaling={false}>
         {children}
       </NativeText>
     );

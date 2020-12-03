@@ -44,6 +44,7 @@ class NoUsers extends React.Component {
         outputRange: [1, 0.04],
       }),
     };
+    const { user } = this.props;
 
     return (
       <View style={styles.rootContainer}>
@@ -52,9 +53,9 @@ class NoUsers extends React.Component {
             <Animated.View style={[styles.containerC, rippleStyle]} />
             <Animated.View style={[styles.containerB, rippleStyle]} />
             <Animated.View style={[styles.containerA, rippleStyle]} />
-            {this.props.user !== null && this.props.user.image !== null && (
+            {user !== null && user.images !== null && user.images.length > 0 && (
               <FastImage
-                source={{ uri: this.props.user.image }}
+                source={{ uri: this.props.user.images[0].path }}
                 style={styles.userImage}
               />
             )}

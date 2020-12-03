@@ -10,9 +10,9 @@ import FastImage from "react-native-fast-image";
 const SearchPeopleItem: () => React$Node = props => {
   const [adding, setAdding] = useState(false);
   const [isFriend, setIsFriend] = useState(props.item.friend === 2);
-  const { images, first_name, username } = props.item;
+  const { id, images, first_name, username } = props.item;
 
-  const peoplePicture = images.length === 0 ? null : images[0].path;
+  const peoplePicture = id === 0 ? null : images.length === 0 ? null : images[0].path;
 
   useEffect(() => {
     let addAction = EventBus.on("ADDFRIEND", (userName, success) => {
@@ -32,16 +32,19 @@ const SearchPeopleItem: () => React$Node = props => {
   return (
     <Touchable
       onPress={() => {
-        if (props.onDismiss) {
-          props.onDismiss();
+        if (id !== 0) {
+          if (props.onDismiss) {
+            props.onDismiss();
+          }
+          NavigationService.navigate(SCREENS.PROFILE_VIEW, { user: props.item });
         }
-        NavigationService.navigate(SCREENS.PROFILE_VIEW, { user: props.item });
       }}
     >
       <View style={styles.messageContainer}>
         <View style={styles.imageContainer}>
           <FastImage
             source={
+              id === 0 ? require("@assets/images/app-icon.png") :
               peoplePicture === null
                 ? require("@assets/images/message-image.png")
                 : { uri: peoplePicture }
@@ -51,7 +54,7 @@ const SearchPeopleItem: () => React$Node = props => {
         </View>
         <View style={styles.messageContentContainer}>
           <Text style={styles.subject}>
-            {first_name === null ? "no name" : first_name}
+            {id === 0 ? "Pluzo Team" : first_name === null ? "no name" : first_name}
           </Text>
           <Text style={styles.preview}>{username}</Text>
         </View>
@@ -65,7 +68,7 @@ const SearchPeopleItem: () => React$Node = props => {
                 if (props.onChat) {
                   props.onChat();
                 }
-                NavigationService.navigate(SCREENS.CHAT, { chatUser: props.item });
+                NavigationService.navigate(SCREENS.CHAT, { chatUser: id === 0 ? 0 : props.item });
               }}
             />
           ) : isFriend === true ? (

@@ -36,12 +36,13 @@ const DiscoverPeopleItem: () => React$Node = props => {
       <Touchable
         style={styles.peopleAddContainer}
         onPress={() => props.onAddPeople && props.onAddPeople()}
+        disabled={props.disabled}
       >
         <LinearGradient
           colors={GRADIENT.BUTTON}
           start={{ x: 1, y: 0 }}
           end={{ x: 0, y: 0 }}
-          style={styles.peopleAdd}
+          style={[styles.peopleAdd, props.disabled ? {opacity: 0.5} : {opacity: 1}]}
         >
           <Image source={Images.app.icPlus} style={styles.plusIcon} />
         </LinearGradient>

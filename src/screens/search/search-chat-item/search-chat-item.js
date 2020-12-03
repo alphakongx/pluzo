@@ -21,7 +21,7 @@ const SearchChatItem: () => React$Node = props => {
       onPress={() => {
         NavigationService.navigate(SCREENS.CHAT, {
           chatId: chat_id,
-          chatUser: props.item,
+          chatUser: props.item.id ? props.item : 0,
         });
       }}
     >
@@ -29,8 +29,8 @@ const SearchChatItem: () => React$Node = props => {
         <View style={styles.imageContainer}>
           <FastImage
             source={
-              image === null
-                ? require("@assets/images/message-image.png")
+              (image === null || image === undefined)
+                ? require("@assets/images/app-icon.png")
                 : { uri: image }
             }
             style={styles.image}
@@ -38,9 +38,9 @@ const SearchChatItem: () => React$Node = props => {
         </View>
         <View style={styles.messageContentContainer}>
           <Text style={styles.subject}>
-            {first_name === null ? username === null ? "Pluzo Team" : "No Name" : first_name}
+            {(first_name === null || first_name === undefined) ? username : first_name}
           </Text>
-          <StyledText style={styles.preview} textStyles={styles}>
+          <StyledText style={styles.preview} textStyles={styles} numberOfLines={1}>
             {styledText}
           </StyledText>
         </View>

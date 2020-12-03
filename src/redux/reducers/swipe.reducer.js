@@ -93,6 +93,11 @@ const requestRunRewinds = (state, action) => ({
   ...state,
 });
 
+const updateTutorialMode = (state, action) => ({
+  ...state,
+  showSwipeTutorial: action.show,
+});
+
 export const HANDLERS = {
   [SwipeTypes.REQUEST_CARDS]: requestCards,
   [SwipeTypes.REQUEST_CARDS_SUCCESS]: requestCardsSuccess,
@@ -123,6 +128,8 @@ export const HANDLERS = {
 
   [SwipeTypes.REQUEST_RUN_BOOST]: requestRunBoost,
   [SwipeTypes.REQUEST_RUN_REWINDS]: requestRunRewinds,
+
+  [SwipeTypes.UPDATE_TUTORIAL_MODE]: updateTutorialMode,
 
   [UserTypes.LOGOUT]: logout,
 };

@@ -11,8 +11,13 @@ const Images = {
     icSend: require("@assets/images/ic-message-send.png"),
     icSetting: require("@assets/images/settings.png"),
     icCheck: require("@assets/images/ic-check.png"),
-    pluzoPlus: require("@assets/images/pluzo-plus.png"),
-    purchaseBg: require("@assets/images/purchase-bg.png"),
+    boostBubbles: require("@assets/images/boost-bubbles.png"),
+    pluzoplusMask: require("@assets/images/pluzoplus-mask.png"),
+    pluzoplusMask1: require("@assets/images/pluzoplus-mask1.png"),
+    pluzoplusMask2: require("@assets/images/pluzoplus-mask2.png"),
+    pluzoplusPlus: require("@assets/images/pluzoplus-plus.png"),
+    pluzoplusLogo: require("@assets/images/pluzoplus-logo.png"),
+    pluzoplusTick: require("@assets/images/pluzoplus-tick.png"),
     icCross: require("@assets/images/ic-cross.png"),
     icFilter: require("@assets/images/ic-filter.png"),
     icReverse: require("@assets/images/ic-reverse.png"),
@@ -23,6 +28,7 @@ const Images = {
     icRocket: require("@assets/images/ic-rocket.png"),
     icStar: require("@assets/images/ic-star.png"),
     icRewind: require("@assets/images/ic-rewind.png"),
+    icNotify: require("@assets/images/ic-notify.png"),
   },
   live: {
     tagPicture: require("@assets/images/live-screen/tag-picture.png"),
@@ -42,10 +48,13 @@ const Images = {
   },
   swipe: {
     boostLogo: require("@assets/images/swipe-screen/boost-logo.png"),
+    boostLogoCenter: require("@assets/images/swipe-screen/boost-logo-center.png"),
     boostTextLogo: require("@assets/images/swipe-screen/boost-text-logo.png"),
     pluzoPlusMark: require("@assets/images/swipe-screen/pluzo-plus-box.png"),
     superLikeLogo: require("@assets/images/swipe-screen/super-like-logo.png"),
+    superLikeLogoCenter: require("@assets/images/swipe-screen/super-like-logo-center.png"),
     rewindLogo: require("@assets/images/swipe-screen/rewinds-logo.png"),
+    rewindLogoCenter: require("@assets/images/swipe-screen/rewinds-logo-center.png"),
   },
   settings: {
     icAccount: require("@assets/images/settings/ic-account.png"),
@@ -58,6 +67,9 @@ const Images = {
     icRestore: require("@assets/images/settings/ic-restore.png"),
     icLogout: require("@assets/images/settings/ic-logout.png"),
     icTrash: require("@assets/images/settings/ic-trash.png"),
+  },
+  tutorial: {
+    icPointer: require("@assets/images/tutorial/ic-tutorial-hand.png"),
   },
   flags: {
     ad: require("@assets/images/flags/ad.png"),

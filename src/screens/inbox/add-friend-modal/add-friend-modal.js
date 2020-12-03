@@ -19,6 +19,7 @@ import { API_ENDPOINTS } from "@config";
 
 import { Notification } from "@helpers";
 import Images from "@assets/Images";
+import PendingRequestCountView from "../pending-request-count-view";
 import styles from "./add-friend-modal.style";
 
 class AddFriendModal extends Component {
@@ -136,6 +137,9 @@ class AddFriendModal extends Component {
             <Touchable onPress={this.props.pendingRequest}>
               <View style={styles.requestContainer}>
                 <Text style={styles.requestText}>Pending Requests</Text>
+                <PendingRequestCountView 
+                  style={styles.pendingCount}
+                  textStyle={styles.pendingCountText} />
               </View>
             </Touchable>
           </View>
@@ -181,6 +185,7 @@ class AddFriendModal extends Component {
                       user={item}
                       key={`new-people-${item.phone}`}
                       onAddPeople={() => this.onAddFriend(item)}
+                      disabled={addingNewFriend}
                     />
                   );
                 })}

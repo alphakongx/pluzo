@@ -41,7 +41,8 @@ export default StyleSheet.create({
         lineHeight: wp(14),
       },
       android: {
-        lineHeight: wp(14),
+        marginBottom: wp(0),
+        lineHeight: wp(18),
       },
     }),
   }),
@@ -52,7 +53,7 @@ export default StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     right: wp(18),
-    top: Platform.OS === "ios" ? wp(15) : wp(15),
+    top: Platform.OS === "ios" ? wp(15) : wp(17),
   },
   sendButton: {
     width: wp(25),
@@ -75,7 +76,7 @@ export default StyleSheet.create({
         top: wp(12),
       },
       android: {
-        top: wp(16),
+        top: wp(14),
       },
     }),
   },

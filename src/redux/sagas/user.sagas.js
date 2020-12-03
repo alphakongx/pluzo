@@ -30,6 +30,7 @@ import { registrationSelector, userSelector } from "../selectors";
 import { NavigationService, Notification } from "@helpers";
 import { SCREENS } from "@constants";
 import { eventChannel, END } from "redux-saga";
+import { Platform } from "react-native";
 
 export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_LOGIN, requestLogin);
@@ -109,7 +110,15 @@ function* requestRegistration(action) {
     params.append("username", registrationData.username);
     params.append("password", registrationData.password);
     params.append("phone", registrationData.phoneNumber);
-    params.append("image", registrationData.picture);
+    if (registrationData.picture1 !== null) {
+      params.append("images[]", registrationData.picture1);
+    }
+    if (registrationData.picture2 !== null) {
+      params.append("images[]", registrationData.picture2);
+    }
+    if (registrationData.picture3 !== null) {
+      params.append("images[]", registrationData.picture3);
+    }
     params.append("swipe_gender", registrationData.likeGender);
     if (userData.location !== null) {
       params.append("latitude", userData.location.coords.latitude);
@@ -162,6 +171,7 @@ function* requestPhoneVerificationSendCode(action) {
     const params = new FormData();
 
     params.append("phone", phoneNumber === "" ? regPhoneNumber : phoneNumber);
+    params.append("android", Platform.OS === "android" ? 1 : 0);
 
     yield call(phoneVerificationSendCode, params);
 
@@ -196,6 +206,7 @@ function* requestForgotPasswordSendCode(action) {
     const params = new FormData();
 
     params.append("phone", phoneNumber);
+    params.append("android", Platform.OS === "android" ? 1 : 0);
 
     yield call(forgotPasswordSendCode, params);
 
@@ -269,6 +280,7 @@ function* requestPhoneLoginSendCode(action) {
     const params = new FormData();
 
     params.append("phone", phoneNumber);
+    params.append("android", Platform.OS === "android" ? 1 : 0);
 
     yield call(phoneLoginSendCode, params);
 
@@ -355,6 +367,7 @@ function* requestUpdatePhoneSendCode(action) {
 
     const params = new FormData();
     params.append("phone", phone);
+    params.append("android", Platform.OS === "android" ? 1 : 0);
 
     const res = yield call(updatePhoneSend, params, token);
     

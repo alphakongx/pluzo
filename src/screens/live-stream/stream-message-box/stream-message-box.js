@@ -2,14 +2,22 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { View, ScrollView, FlatList, Platform, KeyboardAvoidingView } from "react-native";
 import { Touchable, Image, Text, KeyboardListener } from "@components";
-import FastImage from "react-native-fast-image";
 import KeyboardManager from "react-native-keyboard-manager";
-import { StreamStatus } from "@constants";
-import Images from "@assets/Images";
-import StreamMessageInput from "./stream-message-input";
-
-import styles from "./stream-message-box.style.js";
+import LinearGradient from "react-native-linear-gradient";
+import * as Animatable from "react-native-animatable";
+import FastImage from "react-native-fast-image";
 import EventBus from "eventing-bus";
+import moment from "moment";
+
+import { StreamStatus } from "@constants";
+import { GRADIENT } from "@config";
+import Images from "@assets/Images";
+
+import StreamMessageInput from "./stream-message-input";
+import styles from "./stream-message-box.style.js";
+
+const { createAnimatableComponent } = Animatable;
+const AnimatableView = createAnimatableComponent(View);
 
 class StreamMessageBox extends Component {
   constructor(props) {
@@ -24,21 +32,18 @@ class StreamMessageBox extends Component {
       KeyboardManager.setEnable(false);
       KeyboardManager.setShouldResignOnTouchOutside(false);
     }
-
+    
     this.newMessageAction = EventBus.on("Stream_new_message", jsonData => {
       if (jsonData === undefined) return;
       const { channelName } = this.props.streamParams;
       let data = JSON.parse(jsonData);
       if (channelName === data.stream && this.props.user.id !== data.user._id) {
         let newMessage = {
-          id: new Date().getUTCMilliseconds(),
+          id: `${moment().unix()}.${moment().millisecond()}`,
           user: data.user,
           message: data.message,
         };
-        if (Platform.OS === "ios") {
-          console.log(this.props.messages);
-        }
-        this.props.updateMessages([newMessage, ...this.props.messages]);
+        this.props.updateMessages([newMessage].concat(this.props.messages));
       }
     });
   }
@@ -67,11 +72,11 @@ class StreamMessageBox extends Component {
 
   onSendMessage = msg => {
     let newMessage = {
-      id: new Date().getUTCMilliseconds(),
+      id: `${moment().unix()}.${moment().millisecond()}`,
       user: this.props.user,
       message: msg,
     };
-    this.props.updateMessages([newMessage, ...this.props.messages]);
+    this.props.updateMessages([newMessage].concat(this.props.messages));
 
     const { channelName } = this.props.streamParams;
     this.props.requestChatAdd(channelName, msg, this.props.token);
@@ -85,15 +90,19 @@ class StreamMessageBox extends Component {
   renderMessageItem = message => {
     if (message.type === "system") {
       return (
-        <View style={styles.messageItemContainer}>
+        <AnimatableView style={styles.messageItemContainer}
+          animation={"fadeIn"}
+          delay={200}>
           <View style={styles.messageSystemTextContainer}>
             <Text style={styles.messageSystemText}>{message.message}</Text>
           </View>
-        </View>
+        </AnimatableView>
       );
     } else {
       return (
-        <View style={styles.messageItemContainer}>
+        <AnimatableView style={styles.messageItemContainer}
+          animation={"fadeIn"}
+          delay={200}>
           <View style={styles.messageTextContainer}>
             <Text style={styles.messageUser}>{message.user.first_name}</Text>
             {message.message === "(laugh)" && <Image source={Images.live.emojiLaugh} />}
@@ -110,16 +119,21 @@ class StreamMessageBox extends Component {
               style={styles.messageAvatar}
             />
           </Touchable>
-        </View>
+        </AnimatableView>
       );
     }
   };
 
   render() {
-    const { streamStatus } = this.props;
-
+    const { streamStatus, bottomPadding } = this.props;
     return (
-      <KeyboardAvoidingView style={styles.container}>
+      <KeyboardAvoidingView style={[styles.container, {paddingBottom: bottomPadding}]}>
+        <LinearGradient
+          colors={GRADIENT.FADE_UP}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={[styles.opacityBottom]}
+        />
         <StreamMessageInput
           isKeyboardShown={this.state.keyboardShow}
           isBroadcaster={this.props.isBroadcaster}
@@ -127,6 +141,7 @@ class StreamMessageBox extends Component {
           onPlayerSetting={this.props.onPlayerSetting}
           onAskToJoin={this.props.onAskToJoin}
           onSend={msg => this.onSendMessage(msg)}
+          isAskedJoin={this.props.isAskedToJoin}
         />
 
         {streamStatus === StreamStatus.STARTED ||
@@ -168,7 +183,7 @@ class StreamMessageBox extends Component {
             style={styles.messageList}
             data={this.props.messages}
             inverted
-            keyExtractor={item => `chat-msg-${item.id}`}
+            keyExtractor={(item, index) => `chat-msg-${index}`}
             renderItem={({ item: message, index }) => {
               return this.renderMessageItem(message);
             }}

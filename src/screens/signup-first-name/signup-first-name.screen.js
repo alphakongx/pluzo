@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, KeyboardAvoidingView, Platform, View } from "react-native";
 import {
   GradientButton,
@@ -8,10 +8,12 @@ import {
   TextInput,
   Touchable,
 } from "@components";
+import { getCurrentLocation } from "@helpers";
 import { widthPercentageToDP as wp } from "@helpers";
 import styles, { height } from "./signup-first-name.style.js";
 
 const SignupFirstName: () => React$Node = props => {
+  const { updateLocation } = props;
   const [marginTop, setMarginTop] = useState((height / 100) * 18);
   const goBack = () => {
     props.navigation.goBack();
@@ -19,6 +21,12 @@ const SignupFirstName: () => React$Node = props => {
   const navigateNext = () => {
     props.navigation.navigate("SIGNUP_BIRTH_DATE", {});
   };
+
+  useEffect(() => {
+    getCurrentLocation(position => {
+      updateLocation(position);
+    });
+  }, [updateLocation]);
 
   return (
     <Screen>

@@ -13,7 +13,6 @@ class ZoomImageModal extends React.Component {
   }
 
   render() {
-    console.log(this.props.zoomImage);
     return (
       <Modal
         {...this.props}

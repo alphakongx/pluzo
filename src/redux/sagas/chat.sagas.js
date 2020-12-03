@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { ChatCreators, ChatTypes } from "../actions";
-import { getCurrentChat, getChatUser, sendMsg, readMsg } from "@redux/api";
+import { getCurrentChat, getChatUser, sendMsg, readMsg, closeChat, openedChat } from "@redux/api";
 import moment from "moment";
 import EventBus from "eventing-bus";
 
@@ -9,6 +9,8 @@ export function* watchChatRequests() {
 
   yield takeEvery(ChatTypes.REQUEST_SEND_MSG, requestSendMsg);
   yield takeEvery(ChatTypes.REQUEST_READ_MSG, requestReadMsg);
+  yield takeEvery(ChatTypes.REQUEST_OPEN_CHAT, requestOpenChat);
+  yield takeEvery(ChatTypes.REQUEST_CLOSE_CHAT, requestCloseChat);
 }
 
 function* requestCurrentChat(action) {
@@ -29,7 +31,7 @@ function* requestCurrentChat(action) {
         params = new FormData();
         params.append("chat_id", chat_id);
         response = yield call(getCurrentChat, params, token);
-
+        
         let result = [];
         response.data.data.messages.forEach(message => {
           message.createdAt = moment.unix(message.createdAt).toDate();
@@ -43,37 +45,36 @@ function* requestCurrentChat(action) {
           result.push(message);
         });
 
-        yield put(ChatCreators.getCurrentChatSuccess(response.data.data.messages));
+        if (typeof response.data.data.partner_info === "object") {
+          EventBus.publish("Last_seen", `{"user": ${chatUserId}, "chat_id": ${chat_id}, "time": ${response.data.data.partner_info.last_activity}}`);
+        }
+        yield put(ChatCreators.getCurrentChatSuccess(result));
       }
     } else {
       const params = new FormData();
       params.append("chat_id", chatId);
       const response = yield call(getCurrentChat, params, token);
-
+      
       let result = [];
       response.data.data.messages.forEach(message => {
-        result.push({
-          _id: message._id,
-          text: message.text,
-          image: message.image,
-          createdAt: moment.unix(message.createdAt).toDate(),
-          user: {
-            _id: message.user === 0 ? 0 : message.user._id || message.user.id,
-            name:
-              message.user === 0
-                ? "Pluzo Team"
-                : message.user.name || message.user.username,
-            avatar:
-              message.user === 0
-                ? require("@assets/images/app-icon.png")
-                : message.user.images[0].path,
-          },
-        });
+        message.createdAt = moment.unix(message.createdAt).toDate();
+        if (message.user === 0) {
+          message.user = {
+            _id: 0,
+            name: "Pluzo Team",
+            avatar: require("@assets/images/app-icon.png"),
+          };
+        }
+        result.push(message);
       });
 
+      if (typeof response.data.data.partner_info === "object") {
+        EventBus.publish("Last_seen", `{"user": ${chatUserId}, "chat_id": ${chatId}, "time": ${response.data.data.partner_info.last_activity}}`);
+      }
       yield put(ChatCreators.getCurrentChatSuccess(result));
     }
   } catch (error) {
+    console.log(error);
     yield put(ChatCreators.getCurrentChatFailure());
   }
 }
@@ -115,6 +116,32 @@ function* requestReadMsg(action) {
     });
     yield call(readMsg, requestParams, token);
   } catch (error) {
-    console.log("send message >>", error);
+    console.log("read message >>", error);
+  }
+}
+
+function* requestOpenChat(action) {
+  try {
+    const { chat_id, token } = action;
+
+    const requestParams = new FormData();
+    requestParams.append("chat_id", chat_id);
+    
+    yield call(openedChat, requestParams, token);
+  } catch (error) {
+    console.log("close chat >>", error);
+  }
+}
+
+function* requestCloseChat(action) {
+  try {
+    const { chat_id, token } = action;
+
+    const requestParams = new FormData();
+    requestParams.append("chat_id", chat_id);
+    
+    yield call(closeChat, requestParams, token);
+  } catch (error) {
+    console.log("close chat >>", error);
   }
 }

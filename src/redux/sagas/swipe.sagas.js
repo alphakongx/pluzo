@@ -31,7 +31,7 @@ function* requestCards(action) {
     const { token } = action;
 
     var response = yield call(getCards, token);
-    let data = response.data.data.swipe.map(item => ({ uri: item.images[0].path }));
+    let data = response.data.data.swipe.map(item => ({ uri: (item.images && item.images.length > 0) ? item.images[0].path : "" }));
     FastImage.preload(data);
 
     yield put(SwipeCreators.requestCardsSuccess(response.data.data));

@@ -54,6 +54,8 @@ class Settings extends Component {
       this.props.navigation.navigate(SCREENS.PUSH_SETTINGS);
     } else if (itemId === "5") {
       this.props.navigation.navigate(SCREENS.SWIPE_SETTINGS);
+    } else if (itemId === "7") {
+      this.props.navigation.navigate(SCREENS.HELP);
     } else if (itemId === "9") {
       this.props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {});
     } else if (itemId === "16") {

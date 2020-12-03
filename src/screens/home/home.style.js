@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export const { width, height } = Dimensions.get("window");
 
@@ -37,5 +38,24 @@ export default StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
+  },
+
+  tutorialContainer: {
+    position: "absolute",
+    width: 130,
+  },
+  tutorialView: {
+    flex: 1,
+    height: 30,
+    borderRadius: wp(25),
+    marginBottom: wp(10),
+    justifyContent: "center",
+  },
+  tutorialText: {
+    color: "#0B0516",
+    fontSize: wp(10),
+    fontFamily: "OpenSans",
+    fontWeight: "600",
+    textAlign: "center",
   },
 });

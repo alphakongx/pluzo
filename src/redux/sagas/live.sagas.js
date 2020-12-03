@@ -244,7 +244,7 @@ function* requestStreamList(action) {
 
     yield put(LiveCreators.streamListSuccess(response.data.data));
   } catch (error) {
-    console.log("stream list >>>", JSON.stringify(error.data));
+    console.log("stream list >>>", error);
   }
 }
 

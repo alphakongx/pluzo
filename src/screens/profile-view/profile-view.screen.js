@@ -22,6 +22,7 @@ import { API_ENDPOINTS } from "@config";
 import Header from "./header";
 import ProfileDetail from "./profile-detail";
 import ReportModal from "../report-modal";
+import ConfirmDeleteModal from "./confirm-delete-modal";
 
 import styles from "./profile-view.style";
 
@@ -48,6 +49,7 @@ class ProfileView extends React.Component {
       loading: false,
       updating: false,
       rejecting: false,
+      visibleConfirmDelete: false,
     };
 
     this._panResponder = null;
@@ -223,6 +225,9 @@ class ProfileView extends React.Component {
     if (type === "add") {
       url = `${API_ENDPOINTS.ADD_FRIEND_USERNAME}`;
     } else if (type === "remove") {
+      this.setState({visibleConfirmDelete: true});
+      return;
+    } else if (type === "delete") {
       url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
     } else if (type === "accept") {
       url = `${API_ENDPOINTS.ACCEPT_FRIEND_REQUEST}`;
@@ -262,7 +267,7 @@ class ProfileView extends React.Component {
     const { user } = this.props.navigation
       ? this.props.navigation.state.params
       : this.props;
-    const { imageIndex, imageWidth, imageHeight, visibleReport } = this.state;
+    const { imageIndex, imageWidth, imageHeight, visibleReport, visibleConfirmDelete } = this.state;
     let images = user.images || [];
     let [translateY] = [this.pan.y];
 
@@ -433,7 +438,17 @@ class ProfileView extends React.Component {
 
         <ReportModal
           isVisible={visibleReport}
+          userId={(user.id || user._id)}
           onDismiss={() => this.setState({ visibleReport: false })}
+        />
+        
+        <ConfirmDeleteModal
+          isVisible={visibleConfirmDelete}
+          onBack={() => this.setState({visibleConfirmDelete: false})}
+          onConfirm={(userId, userName) => {
+            this.setState({visibleConfirmDelete: false});
+            this.onUpdateFriend("delete");
+          }}
         />
       </View>
     );

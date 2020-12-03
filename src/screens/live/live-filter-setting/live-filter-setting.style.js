@@ -30,7 +30,7 @@ export default StyleSheet.create({
     fontSize: wp(16),
     fontWeight: "600",
     paddingHorizontal: wp(10),
-    paddingVertical: wp(3),
+    paddingVertical: wp(4),
   },
 
   itemContainer: {
@@ -76,6 +76,6 @@ export default StyleSheet.create({
     backgroundColor: "white",
     opacity: 0.15,
     marginTop: wp(20),
-    marginBottom: wp(50),
+    marginBottom: wp(40),
   },
 });

@@ -31,9 +31,17 @@ export default StyleSheet.create({
     left: -wp(15),
     top: -wp(15),
   },
+  logoContainer: {
+    marginTop: wp(29),
+    marginBottom: wp(7),
+  },
   mainLogo: {
-    marginTop: wp(20),
+    marginTop: wp(12),
     alignSelf: "center",
+  },
+  mainLogoCenter: {
+    alignSelf: "center",
+    position: "absolute",
   },
 
   titleText: {
@@ -67,7 +75,10 @@ export default StyleSheet.create({
     bottom: -wp(2),
     left: wp(17),
     width: width - wp(124),
-    resizeMode: "contain",
+  },
+  plusImage: {
+    width: "100%",
+    height: "100%",
   },
   orText: {
     fontFamily: "OpenSans",

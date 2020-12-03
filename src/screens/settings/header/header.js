@@ -21,7 +21,7 @@ const Header: () => React$Node = props => {
         </Touchable>
       </View>
 
-      <Text style={styles.settingText}>{title}</Text>
+      {title !== "" && <Text style={styles.settingText}>{title}</Text>}
     </View>
   );
 };

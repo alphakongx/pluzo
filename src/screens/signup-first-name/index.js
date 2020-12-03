@@ -1,6 +1,6 @@
 import SignupFirstName from "./signup-first-name.screen";
 import { connect } from "react-redux";
-import { RegistrationCreators } from "@redux/actions";
+import { RegistrationCreators, UserCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -10,6 +10,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   setFirstName: RegistrationCreators.setFirstName,
+  updateLocation: UserCreators.updateLocation,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignupFirstName);

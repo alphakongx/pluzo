@@ -24,6 +24,7 @@ const TextInput: () => React$Node = props => {
       <RNTextInput
         {...props}
         autoCorrect={false}
+        allowFontScaling={false}
         underlineColorAndroid='transparent'
         style={[styles.inputField]}
         onLayout={e => {

@@ -18,6 +18,7 @@ const SearchInput: () => React$Node = prop => {
         autoCapitalize={"none"}
         clearButtonMode={"always"}
         onChangeText={text => prop.onSearch(text)}
+        allowFontScaling={false}
       />
     </View>
   );

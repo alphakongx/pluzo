@@ -21,6 +21,7 @@ const mapDispatchToProps = {
   runBoost: SwipeCreators.requestRunBoost,
   runRewinds: SwipeCreators.requestRunRewinds,
   updateUser: UserCreators.requestUpdateUser,
+  updateTutorialMode: SwipeCreators.updateTutorialMode,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Swipe);

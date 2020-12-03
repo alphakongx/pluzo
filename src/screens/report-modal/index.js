@@ -1,3 +1,12 @@
 import ReportModal from "./report-modal";
+import { connect } from "react-redux";
 
-export default ReportModal;
+function mapStateToProps(state) {
+  return {
+    token: state.user.token,
+  };
+}
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReportModal);

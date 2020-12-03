@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { widthPercentageToDP as wp } from "@helpers";
 
 const { width } = Dimensions.get("window");
@@ -64,5 +64,40 @@ export default StyleSheet.create({
     fontSize: wp(10),
     fontWeight: "600",
     marginLeft: wp(2.5),
+  },
+
+  blurContainer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
+  blurView: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: "white",
+    opacity: 0.9,
+  },
+  blurWhiteView: {
+    position: "absolute",
+    left: Platform.OS === "ios" ? wp(15) : wp(14),
+    right: wp(35),
+    bottom: wp(30),
+    height: Platform.OS === "ios" ? wp(12) : wp(13),
+    borderRadius: wp(8),
+    backgroundColor: "white",
+  },
+  blurGreenView: {
+    position: "absolute",
+    left: wp(15),
+    right: wp(65),
+    bottom: wp(18),
+    height: Platform.OS === "ios" ? wp(6) : wp(8),
+    borderRadius: wp(4),
+    backgroundColor: "#00FF77",
   },
 });

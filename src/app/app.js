@@ -1,11 +1,12 @@
 import React from "react";
-import { StatusBar, Platform } from "react-native";
+import { StatusBar, Platform, AppState } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import KeyboardManager from "react-native-keyboard-manager";
 import AsyncStorage from "@react-native-community/async-storage";
 import FastImage from "react-native-fast-image";
 import EventBus from "eventing-bus";
+import OneSignal from "react-native-onesignal";
 import { connect } from "react-redux";
 import { AppContainer } from "../screens";
 import Loading from "../screens/loading";
@@ -13,7 +14,8 @@ import { WS } from "@components";
 import { NavigationService, IapManager } from "@helpers";
 import { SCREENS } from "@constants";
 import { COLOR } from "@config";
-import { UserCreators, InboxCreators, LiveCreators } from "../redux/actions";
+import { UserCreators, InboxCreators, LiveCreators } from "@redux/actions";
+import { userOnline } from "@redux/api";
 
 if (Platform.OS === "ios") {
   KeyboardManager.setEnable(true);
@@ -27,6 +29,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       firstLoading: true,
+      appState: AppState.currentState,
     };
   }
 
@@ -40,11 +43,16 @@ class App extends React.Component {
       } else {
         setTimeout(() => {
           this.setState({ firstLoading: false });
-        }, 3000);
+        }, 2500);
       }
     } catch (error) {
       console.log("Something went wrong", error);
     }
+    AppState.addEventListener("change", this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener("change", this._handleAppStateChange);
   }
 
   componentDidUpdate(prevProps) {
@@ -52,10 +60,22 @@ class App extends React.Component {
       if (this.state.firstLoading) {
         setTimeout(() => {
           this.setState({ firstLoading: false });
-        }, 2500);
+        }, 1500);
       }
     }
   }
+
+  _handleAppStateChange = nextAppState => {
+    if (this.state.appState.match(/inactive|background|unknown/) && nextAppState === "active") {
+      OneSignal.getPermissionSubscriptionState((status) => {
+        this.props.updatePushStatus(status.notificationsEnabled);
+      });
+      this.props.token && userOnline(null, this.props.token, "online");
+    } else if (this.state.appState.match(/active/) && nextAppState === "background") {
+      this.props.token && userOnline(null, this.props.token, "offline");
+    }
+    this.setState({ appState: nextAppState });
+  };
 
   isLogin = () => {
     const { user, token } = this.props;
@@ -74,6 +94,12 @@ class App extends React.Component {
         AsyncStorage.setItem("USER_TOKEN", token);
         FastImage.preload([{ uri: user.images[0].path }]);
         NavigationService.navigate(SCREENS.HOMESTACK);
+        userOnline(null, token, "online");
+        if (user.first_login === 1) {
+          console.log("first");
+        } else {
+          console.log("not first");
+        }
       } else {
         NavigationService.navigate(SCREENS.SIGNUP_CODE_VERIFICATION, {
           phoneNumber: user.phone,
@@ -97,7 +123,6 @@ class App extends React.Component {
       EventBus.publish("User_update", objData);
     } else if (data.action === "Friends") {
       //Friend_overlap
-      console.log(data.data);
       if (this.props.user.id === data.user) {
         this.props.updateFriends(JSON.parse(data.data));
       }
@@ -105,11 +130,12 @@ class App extends React.Component {
       if (data.user === this.props.user.id) {
         EventBus.publish("NEW_MSG", data.data);
         let objData = JSON.parse(data.data);
-        if (objData[0].type === "message") {
+        if (objData[0].type === "message" && parseInt(this.props.chatUserId, 10) !== objData[0].user._id) {
           this.props.updateNotification({
             type: "chat",
-            message: objData[0].text,
+            message: objData[0].image !== null ? `${objData[0].user.first_name} sent an image` : objData[0].text,
             user: objData[0].user,
+            chatId: objData[0].chat_id,
           });
         }
       }
@@ -139,6 +165,26 @@ class App extends React.Component {
         });
         EventBus.publish(data.action);
         this.props.loadPendingRequests(this.props.token);
+      }
+    } else if (data.action === "Friend_remove") {
+      let userData = JSON.parse(data.data);
+      if (userData.host._id === this.props.user.id || 
+        userData.user_target_id._id === this.props.user.id) {
+        EventBus.publish("Need_Update_Friends");
+        console.log(this.props.chatUserId, userData.host._id,userData.user_target_id._id);
+        if (parseInt(this.props.chatUserId, 10) === parseInt(userData.host._id, 10) || 
+          parseInt(this.props.chatUserId, 10) === parseInt(userData.user_target_id._id, 10)) {
+          EventBus.publish("Need_Close_Chat");
+        }
+      }
+    } else if (data.action === "Friend_overlap") {
+      let userData = JSON.parse(data.data);
+      if (userData.host._id === this.props.user.id || userData.user_target_id._id === this.props.user.id) {
+        EventBus.publish("Need_Update_Friends");
+        this.props.updateNotification({
+          type: "friend-match",
+          user: userData.host._id === this.props.user.id ? userData.user_target_id : userData.host,
+        });
       }
     } else {
       EventBus.publish(data.action, data.data);
@@ -184,10 +230,12 @@ function mapStateToProps(state) {
     token: state.user.token,
     user: state.user.user,
     loading: state.user.isLoadingProfile,
+    chatUserId: state.chat.chatUserId,
   };
 }
 
 const mapDispatchToProps = {
+  updatePushStatus: UserCreators.updatePushStatus,
   requestProfile: UserCreators.requestProfile,
   requestStreamList: LiveCreators.requestStreamList,
   updateNotification: UserCreators.updateNotification,

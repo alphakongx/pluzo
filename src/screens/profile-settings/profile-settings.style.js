@@ -31,6 +31,11 @@ export default StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
+  bioDoneButton: {
+    marginHorizontal: wp(20),
+    marginTop: wp(20),
+    marginBottom: wp(10),
+  },
   imageScrollView: {
     paddingVertical: wp(10),
   },
@@ -121,10 +126,49 @@ export default StyleSheet.create({
     padding: wp(20),
     marginTop: wp(30),
   },
-  premiumImage: {
+  premiumView: {
     width: width - wp(40),
     height: ((width - wp(40)) * 169) / 336,
-    resizeMode: "stretch",
+    backgroundColor: "#110029",
+    borderRadius: wp(22),
+    borderWidth: wp(2),
+    borderColor: "rgba(255, 255, 255, 0.15)",
+    overflow: "hidden",
+    alignItems: "center",
+  },
+  premiumMask1: {
+    position: "absolute",
+    left: -wp(162),
+    right: -wp(140),
+    top: -wp(156),
+    bottom: -wp(144),
+  },
+  premiumMask2: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: wp(200),
+  },
+  premiumLogo: {
+    width: wp(151),
+    height: wp(50),
+    marginTop: wp(27.4),
+  },
+  premiumText: {
+    color: "white",
+    fontSize: wp(14),
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: wp(15),
+  },
+  premiumPlusView: {
+    position: "absolute",
+    // left: wp(23.4),
+    bottom: wp(30),
+  },
+  premiumPlusImage: {
+    
   },
   buttonContainer: {
     width: width - wp(100),

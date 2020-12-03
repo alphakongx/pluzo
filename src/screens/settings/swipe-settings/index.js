@@ -5,6 +5,7 @@ import { SwipeCreators } from "@redux/actions";
 function mapStateToProps(state) {
   return {
     token: state.user.token,
+    user: state.user.user,
     settings: state.swipe.settings,
   };
 }

@@ -72,7 +72,6 @@ const StreamEmojiView: () => React$Node = props => {
           containerStyle={styles.expandButton}
           icon={expandCategory ? Images.app.icBackUp : Images.app.icBack}
           iconStyle={styles.expandIcon}
-          text={"test"}
         />
       </View>
     </View>

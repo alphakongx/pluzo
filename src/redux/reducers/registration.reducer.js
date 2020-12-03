@@ -35,9 +35,17 @@ const setPassword = (state, action) => ({
   password: action.password,
 });
 
-const setPicture = (state, action) => ({
+const setPicture1 = (state, action) => ({
   ...state,
-  picture: action.picture,
+  picture1: action.picture,
+});
+const setPicture2 = (state, action) => ({
+  ...state,
+  picture2: action.picture,
+});
+const setPicture3 = (state, action) => ({
+  ...state,
+  picture3: action.picture,
 });
 
 const setPhoneNumber = (state, action) => ({
@@ -64,7 +72,9 @@ export const HANDLERS = {
   [Types.SET_LIKE_GENDER]: setLikeGender,
   [Types.SET_USERNAME]: setUsername,
   [Types.SET_PASSWORD]: setPassword,
-  [Types.SET_PICTURE]: setPicture,
+  [Types.SET_PICTURE1]: setPicture1,
+  [Types.SET_PICTURE2]: setPicture2,
+  [Types.SET_PICTURE3]: setPicture3,
   [Types.SET_PHONE_NUMBER]: setPhoneNumber,
   [Types.RESET_REGISTRATION]: resetRegisration,
   [Types.REQUEST_CHECK_USERNAME]: requestCheckUsername,

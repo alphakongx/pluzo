@@ -78,7 +78,7 @@ class InviteFriendsModal extends Component {
 
   renderFriends = () => {
     const { friends } = this.props;
-    let filteredFriends = [...friends];
+    let filteredFriends = friends.filter((value) => value.id !== 0);
     if (this.state.searchKeyword !== "") {
       filteredFriends = friends.filter(value =>
         value.first_name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()),

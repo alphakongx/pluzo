@@ -4,7 +4,8 @@ import { COLOR } from "@config";
 
 export default StyleSheet.create({
   usersList: {
-    marginTop: 0,
+    marginTop: -wp(5),
+    marginLeft: -wp(5),
     minHeight: wp(50),
   },
   usersListContentContainerStyle: {

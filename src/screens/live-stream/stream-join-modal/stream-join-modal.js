@@ -42,6 +42,7 @@ const StreamJoinModal: () => React$Node = props => {
       style={styles.modalContainer}
       animationIn={"fadeIn"}
       animationOut={"fadeOut"}
+      onBackdropPress={props.onBack}
     >
       <View
         onLayout={e => {
@@ -51,7 +52,7 @@ const StreamJoinModal: () => React$Node = props => {
       >
         <BoxShadow setting={backShadowOpt} />
         <Screen hasGradient style={styles.modalContainer}>
-          <BackButton onPress={() => props.onBack()} />
+          {/* <BackButton onPress={() => props.onBack()} /> */}
           <Text style={styles.titleText}>
             {props.askedUser ? props.askedUser.first_name : ""}
           </Text>

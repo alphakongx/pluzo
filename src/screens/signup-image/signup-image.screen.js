@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View } from "react-native";
+import { Image, NativeModules, View } from "react-native";
 import {
   GradientButton,
   ProgressBar,
@@ -11,11 +11,27 @@ import {
 import styles from "./signup-image.style.js";
 import ImagePicker from "react-native-image-crop-picker";
 import ActionSheet from "react-native-actionsheet";
+import { Notification } from "@helpers";
+import Images from "@assets/Images";
 
 const SignupImage: () => React$Node = props => {
   let actionSheetRef = React.createRef();
+  let currentImageIndex = 1;
 
-  const onPressUpload = () => {
+  const onPressUpload = (index) => {
+    if (index === 0) {
+      if (props.picture1) {
+        if (props.picture2) {
+          currentImageIndex = 3;
+        } else {
+          currentImageIndex = 2;
+        }
+      } else {
+        currentImageIndex = 1;
+      }
+    } else {
+      currentImageIndex = index;
+    }
     actionSheetRef.show();
   };
 
@@ -40,13 +56,25 @@ const SignupImage: () => React$Node = props => {
 
   const onUploadImage = data => {
     let photoUriSplit = data.path.split("/");
-
-    const image = {
-      uri: data.path,
-      name: photoUriSplit[photoUriSplit.length - 1],
-      type: data.mime,
-    };
-    props.setPicture(image);
+    NativeModules.ImageDetector.check(data.path, (value) => {
+      if (value === "SFW") {
+        const image = {
+          uri: data.path,
+          name: photoUriSplit[photoUriSplit.length - 1],
+          type: data.mime,
+        };
+        if (currentImageIndex === 1) {
+          props.setPicture1(image);
+        } else if (currentImageIndex === 2) {
+          props.setPicture2(image);
+        } else {
+          props.setPicture3(image);
+        }
+      } else {
+        Notification.alert("The photo can't use in the app")
+      }
+    });
+    
   };
 
   const goBack = () => {
@@ -70,26 +98,60 @@ const SignupImage: () => React$Node = props => {
           <Text style={styles.subTitleText}>Upload a profile picture.</Text>
 
           <View style={styles.imageUploadContainer}>
-            <Touchable style={styles.imageContainer} onPress={onPressUpload}>
-              {props.picture ? (
-                <Image
-                  source={{ uri: props.picture.uri }}
-                  style={styles.imageContainer}
-                />
-              ) : (
-                <Image source={require("@assets/images/image.png")} />
-              )}
-            </Touchable>
+            <View style={styles.imagesContainer}>
+              <Touchable
+                style={[styles.imageContainer, props.picture1 ? {} : styles.imageSelected]}
+                onPress={() => onPressUpload(1)}>
+                {props.picture1 ? (
+                  <Image
+                    source={{ uri: props.picture1.uri }}
+                    style={styles.imageContainer}
+                  />
+                ) : (
+                  <Image source={Images.app.icPlus} style={styles.plusIcon} />
+                )}
+              </Touchable>
+
+              <Touchable
+                style={[styles.imageContainer, props.picture2 ? {} : props.picture1 ? styles.imageSelected : styles.imageNone]}
+                disabled={props.picture1 ? false : true}
+                onPress={() => onPressUpload(2)}>
+                {props.picture2 ? (
+                  <Image
+                    source={{ uri: props.picture2.uri }}
+                    style={styles.imageContainer}
+                  />
+                ) : (
+                  <Image source={Images.app.icPlus} style={props.picture1 ? styles.plusIcon : styles.plusWhite} />
+                )}
+              </Touchable>
+
+              <Touchable
+                style={[styles.imageContainer, props.picture3 ? {} : props.picture2 ? styles.imageSelected : styles.imageNone]}
+                disabled={props.picture2 ? false : true}
+                onPress={() => onPressUpload(3)}>
+                {props.picture3 ? (
+                  <Image
+                    source={{ uri: props.picture3.uri }}
+                    style={styles.imageContainer}
+                  />
+                ) : (
+                  <Image source={Images.app.icPlus} style={props.picture2 ? styles.plusIcon : styles.plusWhite} />
+                )}
+              </Touchable>
+            </View>
 
             <View style={styles.imageSeparator} />
 
-            <SolidButton text={"Upload"} onPress={onPressUpload} />
+            <View style={styles.imageUploadButton}>
+              <SolidButton text={"Upload"} onPress={() => onPressUpload(0)} />
+            </View>
           </View>
         </View>
 
         <View style={styles.footer}>
           <GradientButton
-            disabled={!props.picture}
+            disabled={!props.picture1}
             onPress={navigateNext}
             text={"Continue"}
           />

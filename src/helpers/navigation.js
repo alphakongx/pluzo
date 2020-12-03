@@ -7,13 +7,14 @@ function setTopLevelNavigator(navigatorRef) {
 }
 
 function navigate(routeName, params) {
-  if (_navigator === null || !routeName) return;
+  if (_navigator === null || !routeName) return false;
   _navigator.dispatch(
     NavigationActions.navigate({
       routeName,
       params,
     }),
   );
+  return true;
 }
 
 function popToTop(routeName, params) {

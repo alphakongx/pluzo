@@ -119,6 +119,6 @@ function* requestReadFlag(action) {
 
     yield call(readFlag, requestParams, token);
   } catch (error) {
-    console.log("send message >>", error);
+    console.log("read flag >>", error.response.data);
   }
 }

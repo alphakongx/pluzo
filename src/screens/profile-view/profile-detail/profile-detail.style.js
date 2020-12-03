@@ -28,13 +28,13 @@ export default StyleSheet.create({
     color: COLOR.TEXT_PRIMARY,
   },
   topBarCity: {
-    fontSize: wp(11),
+    fontSize: wp(12),
     fontFamily: "OpenSans",
     color: COLOR.TEXT_SECONDARY_2,
     marginLeft: wp(5),
   },
   topBarLocation: {
-    fontSize: wp(11),
+    fontSize: wp(12),
     fontFamily: "OpenSans",
     fontWeight: "700",
     color: COLOR.TEXT_SECONDARY_2,

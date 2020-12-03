@@ -1,6 +1,6 @@
 import React from "react";
-import { View } from "react-native";
-import { Text } from "@components";
+import { View, Platform } from "react-native";
+import { Text, BlurView } from "@components";
 import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT, AppBadges } from "@config";
@@ -10,18 +10,35 @@ import Images from "@assets/Images";
 import styles from "./liked-user-item.style";
 
 const LikedUserItem: () => React$Node = props => {
-  const { user } = props.user;
+  let likedUser = props.likedUser.user;
+
+  const renderBlur = () => {
+    if (props.user.premium === 1) {
+      return null;
+    }
+    return (
+      <View style={styles.blurContainer}>
+        {Platform.OS === "android" ? (
+          <View style={styles.blurView}/>
+        ) : (
+          <BlurView blurType={"light"}/>
+        )}
+        <View style={styles.blurWhiteView} />
+        <View style={styles.blurGreenView} />
+      </View>
+    )
+  }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.zIndex ? {zIndex: 9999} : {zIndex: 0}]}>
       <FastImage
-        source={{ uri: user.images[0].path }}
+        source={{ uri: likedUser.images[0].path }}
         style={styles.userImage}
         resizeMode={FastImage.resizeMode.cover}
       />
 
       <View style={styles.badgesContainer}>
-        {user.badges.map(badge => {
+        {likedUser.badges.map(badge => {
           if (badge > AppBadges.length) return null;
           return (
             <FastImage
@@ -40,14 +57,15 @@ const LikedUserItem: () => React$Node = props => {
           end={{ x: 0, y: 1 }}
           style={styles.gradientBack}
         />
-        <Text style={styles.nameText}>{user.first_name}</Text>
-        {Format.isRecently(user.last_activity) && (
+        <Text style={styles.nameText}>{likedUser.first_name}</Text>
+        {Format.isRecently(likedUser.last_activity) && (
           <View style={styles.recentlyContainer}>
             <View style={styles.recentlyMark} />
             <Text style={styles.recentlyText}>Recently Active</Text>
           </View>
         )}
       </View>
+      {renderBlur()}
     </View>
   );
 };

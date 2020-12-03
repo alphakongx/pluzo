@@ -4,6 +4,7 @@ import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
 import Modal from "react-native-modal";
 import { Screen, Touchable, Image, Text } from "@components";
+import { report } from "@redux/api";
 
 import Images from "@assets/Images";
 import styles from "./report-modal.style";
@@ -19,6 +20,7 @@ class ReportModal extends Component {
         { id: 4, select: false, text: "Propaganda" },
         { id: 5, select: false, text: "Other" },
       ],
+      msgText: "",
     };
   }
 
@@ -27,6 +29,16 @@ class ReportModal extends Component {
       KeyboardManager.setEnable(true);
       KeyboardManager.setShouldResignOnTouchOutside(true);
     }
+    this.setState({
+      typeButtons: [
+        { id: 1, select: false, text: "Harassment" },
+        { id: 2, select: false, text: "Nudity" },
+        { id: 3, select: false, text: "I don't like it" },
+        { id: 4, select: false, text: "Propaganda" },
+        { id: 5, select: false, text: "Other" },
+      ],
+      msgText: ""
+    });
   };
 
   onModalHide = () => {
@@ -37,6 +49,20 @@ class ReportModal extends Component {
   };
 
   onReport = () => {
+    let selectedButtons = this.state.typeButtons.filter((button) => button.select === true);
+    if (selectedButtons.length > 0 && this.state.msgText !== "") {
+      let params = new FormData();
+      params.append("reason", selectedButtons[0].id);
+      params.append("msg", this.state.msgText);
+      let type = "user";
+      if (this.props.liveStream) {
+        type = "stream";
+        params.append("channel_id", this.props.channelId);
+      } else {
+        params.append("user_id", this.props.userId);
+      }
+      report(params, this.props.token, type);
+    }
     this.props.onDismiss && this.props.onDismiss();
   };
 
@@ -114,10 +140,13 @@ class ReportModal extends Component {
               {this.renderTypeButtons()}
 
               <TextInput
+                value={this.state.msgText}
                 multiline={true}
+                allowFontScaling={false}
                 placeholderTextColor={"#ABA7D5"}
                 placeholder={"Here you can add additional information..."}
                 style={styles.reportContentText}
+                onChangeText={(text) => this.setState({msgText: text})}
               />
               <Touchable style={[styles.reportButton]} onPress={this.onReport}>
                 <Text style={styles.reportButtonText}>Report</Text>

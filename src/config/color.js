@@ -44,7 +44,7 @@ export const COLOR = {
 export const GRADIENT = {
   BUTTON: ["#617FFF", "#02FFF3"],
   BUTTON_DISABLED: ["rgba(70, 70, 70, 100)", "rgba(120, 120, 120, 100)"],
-  PURCHASE_BUTTON: ["#E0E552", "#FF7131"],
+  PURCHASE_BUTTON: ["#FF7131", "#E0E552"],
   FRIEND_ONLINE_ICON: ["#617FFF", "#02FFF3"],
   SCREEN_BACKGROUND: ["#0B0516", "#1A023E"],
   FADE: ["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0)"],

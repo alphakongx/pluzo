@@ -59,6 +59,7 @@ const StreamAskModal: () => React$Node = props => {
       style={styles.modalContainer}
       animationIn={"fadeIn"}
       animationOut={"fadeOut"}
+      onBackdropPress={props.onBack}
     >
       <View
         onLayout={e => {
@@ -68,7 +69,7 @@ const StreamAskModal: () => React$Node = props => {
       >
         <BoxShadow setting={backShadowOpt} />
         <Screen hasGradient style={styles.modalContainer}>
-          <BackButton onPress={() => props.onBack()} />
+          {/* <BackButton onPress={() => props.onBack()} /> */}
           <Text style={styles.titleText}>{title}</Text>
           <Text style={styles.messageText} numberOfLines={2}>
             {message}

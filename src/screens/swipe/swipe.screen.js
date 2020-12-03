@@ -1,9 +1,10 @@
 import React from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-navigation";
-import { Screen, Image } from "@components";
+import { Screen, Image, Text } from "@components";
 import Swiper from "react-native-deck-swiper";
 import EventBus from "eventing-bus";
+import AsyncStorage from "@react-native-community/async-storage";
 import { getCurrentLocation } from "@helpers";
 import { SwipeTypes } from "@redux/actions";
 import Images from "@assets/Images";
@@ -41,6 +42,10 @@ class Swipe extends React.Component {
       visibleReport: false,
       labelType: LABEL_TYPES.NONE,
       matchedUser: null,
+      reportId: null,
+      tutorialPointer: false,
+      tutorialSwipe: false,
+      isSwiping: false,
     };
 
     this.swiper = React.createRef();
@@ -65,11 +70,35 @@ class Swipe extends React.Component {
     this.matchesAction = EventBus.on("New_Matches", user => {
       this.setState({ matchedUser: user });
     });
+    
+    // checking tutorial mode
+    AsyncStorage.getItem("TUTORIAL_POINTER", (error, result) => {
+      if (result === null || result === "0") {
+        this.setState({tutorialPointer: true}); 
+      }
+      AsyncStorage.getItem("TUTORIAL_SWIPE", (error, result) => {
+        if (result === null || result === "0") {
+          this.setState({tutorialSwipe: true});
+        }
+      });
+    });
   }
 
   componentWillUnmount() {
     this.reloadAction();
     this.matchesAction();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isSwiping !== this.state.isSwiping || 
+      prevState.tutorialSwipe !== this.state.tutorialSwipe ||
+      prevState.tutorialPointer !== this.state.tutorialPointer) {
+      if (this.state.tutorialSwipe && !this.state.isSwiping && !this.state.tutorialPointer) {
+        this.props.updateTutorialMode(true);
+      } else {
+        this.props.updateTutorialMode(false);
+      }
+    }
   }
 
   onLikeClicked = () => {
@@ -139,6 +168,12 @@ class Swipe extends React.Component {
 
   onSwipedWithDirection = (index, type) => {
     const { token, cards } = this.props;
+
+    if (this.state.tutorialSwipe && (type === "left" || type === "right")) {
+      AsyncStorage.setItem("TUTORIAL_SWIPE", "1");
+      this.setState({tutorialSwipe: false});
+    }
+
     if (type === "left") {
       // dislike
       this.props.addDisLike(token, cards[index].id);
@@ -149,6 +184,11 @@ class Swipe extends React.Component {
       // super like
       // this.swiper.swipeBack();
       this.props.addSuperLike(token, cards[index].id);
+      this.setState({ labelType: LABEL_TYPES.TOP }, () => {
+        setTimeout(() => {
+          this.setState({ labelType: LABEL_TYPES.NONE });
+        }, 350);
+      });
     }
   };
 
@@ -174,7 +214,7 @@ class Swipe extends React.Component {
     } else if (isSwipingLeft) {
       this.setState({ labelType: LABEL_TYPES.LEFT });
     } else if (isSwipingTop) {
-      this.setState({ labelType: LABEL_TYPES.TOP });
+      this.setState({ labelType: LABEL_TYPES.NONE });
     } else if (isSwipingBottom) {
       this.setState({ labelType: LABEL_TYPES.NONE });
     } else {
@@ -184,7 +224,7 @@ class Swipe extends React.Component {
 
   render() {
     const { isLoadingCards, cards, visibleDetail } = this.props;
-    const { labelType } = this.state;
+    const { labelType, tutorialPointer } = this.state;
 
     if (isLoadingCards || cards === null || cards.length === 0) {
       return (
@@ -234,7 +274,12 @@ class Swipe extends React.Component {
                   onDisLike={this.onDisLikeClicked}
                   onSuperLike={this.onSuperLikeClicked}
                   location={this.state.location}
-                  onReport={() => this.setState({ visibleReport: true })}
+                  onReport={(userId) => this.setState({ reportId: userId, visibleReport: true })}
+                  onClickedCard={tutorialPointer ? () => {
+                    AsyncStorage.setItem("TUTORIAL_POINTER", "1");
+                    this.setState({tutorialPointer: false});
+                  } : null}
+                  index={index}
                 />
               );
             }}
@@ -247,8 +292,11 @@ class Swipe extends React.Component {
             animateCardOpacity
             swipeBackCard
             showSecondCard={true}
+            dragStart={() => {
+              this.setState({isSwiping: true});
+            }}
             dragEnd={() => {
-              this.setState({ labelType: LABEL_TYPES.NONE });
+              this.setState({ labelType: LABEL_TYPES.NONE, isSwiping: false });
             }}
           />
 
@@ -275,6 +323,18 @@ class Swipe extends React.Component {
             </View>
           )}
 
+          {tutorialPointer && <View style={styles.tutorialContainer} pointerEvents={"none"}>
+            <View style={styles.tutorialPointerLeft}>
+              <Image source={Images.tutorial.icPointer} />
+              <Text style={styles.tutorialText}>Previous Photo</Text>
+            </View>
+            <View style={styles.tutorialSeperator}/>
+            <View style={styles.tutorialPointerRight}>
+              <Image source={Images.tutorial.icPointer} />
+              <Text style={styles.tutorialText}>Next Photo</Text>
+            </View>
+          </View>}
+
           <SwipePurchaseModal
             isVisible={this.state.visibleBoost}
             uptoLogo
@@ -289,6 +349,7 @@ class Swipe extends React.Component {
             purchaseType={"superlike"}
             colors={["#0C0518", "#080A47", "#0032BB"]}
             mainLogo={Images.swipe.superLikeLogo}
+            mainLogoCenter={Images.swipe.superLikeLogoCenter}
             text={"Super Like"}
             confirmText={"Get Super Likes"}
             selectColors={["#01C0FF", "#0044FF"]}
@@ -302,6 +363,7 @@ class Swipe extends React.Component {
             purchaseType={"rewinds"}
             colors={["#0C0518", "#320847", "#A10046"]}
             mainLogo={Images.swipe.rewindLogo}
+            mainLogoCenter={Images.swipe.rewindLogoCenter}
             text={"Rewind"}
             confirmText={"Get Rewinds"}
             selectColors={["#FFA837", "#FF6600"]}
@@ -312,6 +374,7 @@ class Swipe extends React.Component {
 
           <ReportModal
             isVisible={this.state.visibleReport}
+            userId={this.state.reportId}
             onDismiss={() => this.setState({ visibleReport: false })}
           />
         </SafeAreaView>

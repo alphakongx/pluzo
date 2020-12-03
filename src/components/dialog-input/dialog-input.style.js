@@ -2,7 +2,7 @@ import { StyleSheet, Platform, Dimensions } from "react-native";
 import { widthPercentageToDP as wp } from "@helpers";
 import { FontHelper } from "@helpers";
 
-const { width } = Dimensions.get("window");
+export const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {

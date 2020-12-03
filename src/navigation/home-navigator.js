@@ -20,6 +20,8 @@ import SwipeSettings from "../screens/settings/swipe-settings";
 import AccountSettings from "../screens/settings/account-settings";
 import SafetyPrivacy from "../screens/settings/safety-privacy";
 import TermsOfService from "../screens/settings/terms-of-service";
+import HelpScreen from "../screens/settings/help";
+import HelpContentScreen from "../screens/settings/help/help-content";
 import UpdatePhoneVerification from "../screens/settings/account-settings/update-phone-verification";
 import LikeUsersScreen from "../screens/like-users";
 
@@ -123,6 +125,8 @@ const HomeStack = createStackNavigator(
     [SCREENS.SAFETY_PRIVACY]: SafetyPrivacy,
     [SCREENS.TERMS_OF_SERVICE]: TermsOfService,
     [SCREENS.UPDATE_PHONE_VERIFICATION]: UpdatePhoneVerification,
+    [SCREENS.HELP]: HelpScreen,
+    [SCREENS.HELP_CONTENT]: HelpContentScreen,
   },
   {
     initialRouteName: SCREENS.MAIN,
