@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Dimensions, ActivityIndicator, SafeAreaView } from "react-native";
 import { Screen, Image, Text, Touchable } from "@components";
+import moment from "moment";
 import { Switch } from "react-native-switch";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import Images from "@assets/Images";
@@ -15,7 +16,7 @@ const screenWidth = Dimensions.get("window").width;
 class SwipeSettings extends Component {
   constructor(props) {
     super(props);
-    const { settings } = this.props;
+    const { settings, user } = this.props;
     if (settings === null) {
       this.state = {
         distance: 20,
@@ -26,10 +27,20 @@ class SwipeSettings extends Component {
         visibleGenderSetting: false,
       };
     } else {
+      let birthday = moment.duration(moment().diff(moment.unix(user.birthday))).years();
+
+      let age_from = settings.age_from;
+      let age_to = settings.age_to;
+      if (birthday > 17) {
+        age_from = age_from > 17 ? age_from : 18;
+        age_to = age_to > 17 ? age_to : 19;
+      } else {
+        age_to = age_to > 17 ? 17 : age_to;
+      }
       this.state = {
         distance: parseInt(settings.distance, 10),
-        minAge: settings.age_from,
-        maxAge: settings.age_to,
+        minAge: age_from,
+        maxAge: age_to,
         aroundWorld: settings.global === 1 ? true : false,
         gender: parseInt(settings.gender, 10),
         visibleGenderSetting: false,
@@ -63,11 +74,22 @@ class SwipeSettings extends Component {
   }
 
   updateStates = () => {
-    const { settings } = this.props;
+    const { settings, user } = this.props;
+    let birthday = moment.duration(moment().diff(moment.unix(user.birthday))).years();
+
+    let age_from = settings.age_from;
+    let age_to = settings.age_to;
+    if (birthday > 17) {
+      age_from = age_from > 17 ? age_from : 18;
+      age_to = age_to > 17 ? age_to : 19;
+    } else {
+      age_to = age_to > 17 ? 17 : age_to;
+    }
+
     this.setState({
       distance: parseInt(settings.distance, 10),
-      minAge: settings.age_from,
-      maxAge: settings.age_to,
+      minAge: age_from,
+      maxAge: age_to,
       aroundWorld: settings.global === 1 ? true : false,
       gender: parseInt(settings.gender, 10),
     });
@@ -83,6 +105,8 @@ class SwipeSettings extends Component {
 
   render() {
     const { distance, minAge, maxAge, aroundWorld, gender } = this.state;
+    const { state, city, address } = this.props.user;
+    let birthday = moment.duration(moment().diff(moment.unix(this.props.user.birthday))).years();
 
     if (this.props.settings === null) {
       return (
@@ -119,7 +143,10 @@ class SwipeSettings extends Component {
               <Text style={styles.titleText}>Location</Text>
               <View>
                 <Text style={styles.valueText}>My Current Location</Text>
-                <Text style={styles.subValueText}>LOS ANGELES, CALIFORNIA</Text>
+                <Text style={styles.subValueText}>
+                {(state !== null || city !== null) ? state === null ? city : state : ""},&nbsp;
+                {address === null ? "no address" : address}
+                </Text>
               </View>
               <Image source={Images.app.icRight} style={styles.arrowRight} />
             </View>
@@ -184,7 +211,7 @@ class SwipeSettings extends Component {
               sliderLength={
                 this.props.isModal ? screenWidth - wp(90) : screenWidth - wp(50)
               }
-              min={13}
+              min={birthday > 17 ? 18 : 13}
               max={75}
               values={[minAge, maxAge]}
             />

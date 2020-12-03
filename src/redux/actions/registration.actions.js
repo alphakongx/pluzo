@@ -7,7 +7,9 @@ const { Types, Creators } = createActions({
   setLikeGender: ["likeGender"],
   setUsername: ["username"],
   setPassword: ["password"],
-  setPicture: ["picture"],
+  setPicture1: ["picture"],
+  setPicture2: ["picture"],
+  setPicture3: ["picture"],
   setPhoneNumber: ["phoneNumber"],
   resetRegistration: null,
 

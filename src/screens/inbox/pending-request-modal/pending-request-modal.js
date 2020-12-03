@@ -21,7 +21,7 @@ class PendingRequestModal extends Component {
   };
 
   onLoadRequests = () => {
-    this.props.loadRequests(this.props.token);
+    // this.props.loadRequests(this.props.token);
     this.updateAction = EventBus.on("Friend_add", () => {
       this.props.loadRequests(this.props.token);
     });

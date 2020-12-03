@@ -28,6 +28,7 @@ const StreamHeader: () => React$Node = props => {
               placeholderTextColor={"white"}
               textContentType={"name"}
               autoCorrect={false}
+              allowFontScaling={false}
               onChangeText={text => {
                 setTitle(text);
                 props.onChangeTitle && props.onChangeTitle(text);

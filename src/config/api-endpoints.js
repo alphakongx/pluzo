@@ -10,6 +10,8 @@ export const API_ENDPOINTS = {
   CHECK_USERNAME: `${BASE_URL}/check-username`,
   REORDER_IMAGES: `${BASE_URL}/sort-image`,
   PROFILE: `${BASE_URL}/profile`,
+  USER_ONLINE: `${BASE_URL}/user-online`,
+  USER_OFFLINE: `${BASE_URL}/user-offline`,
 
   CHECK_PHONE: `${BASE_URL}/check-number`,
 
@@ -38,6 +40,9 @@ export const API_ENDPOINTS = {
   GET_CURRENT_CHAT: `${BASE_URL}/get-current-chat`,
   GET_CHAT_USER: `${BASE_URL}/get-chat-user`,
   READ_FLAG: `${BASE_URL}/read-flag`,
+  OPEN_CHAT: `${BASE_URL}/open-chat`,
+  CLOSE_CHAT: `${BASE_URL}/close-chat`,
+  CHECK_USER_STATUS: `${BASE_URL}/check-user-status`,
 
   GET_LIKED_USERS: `${BASE_URL}/get-liked-users`,
   GET_FRIENDS: `${BASE_URL}/get-friends`,
@@ -85,6 +90,10 @@ export const API_ENDPOINTS = {
 
   STREAM_LIST: `${BASE_URL}/stream-list`,
   STREAM_USER_LIST: `${BASE_URL}/stream-user-list-api`,
+
+  // report
+  STREAM_REPORT: `${BASE_URL}/stream-report`,
+  USER_REPORT: `${BASE_URL}/user-report`,
 
   // payment
   ITEM_PAY: `${BASE_URL}/pay`,

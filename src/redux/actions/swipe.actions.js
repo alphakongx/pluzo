@@ -30,6 +30,8 @@ const { Types, Creators } = createActions({
 
   requestRunBoost: ["token", "boostType"],
   requestRunRewinds: ["token"],
+
+  updateTutorialMode: ["show"],
 });
 
 export const SwipeTypes = Types;

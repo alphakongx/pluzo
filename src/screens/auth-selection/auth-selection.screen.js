@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { View } from "react-native";
 import { Image, SolidButton, GradientButton, Screen, Text, Touchable } from "@components";
-import { getCurrentLocation } from "@helpers";
 import { SCREENS } from "@constants";
 import styles from "./auth-selection.style.js";
 
 const AuthSelection: () => React$Node = props => {
-  const { t, updateLocation } = props;
+  const { t } = props;
   const navigateToLogin = () => {
     props.navigation.navigate(SCREENS.LOGIN, {});
   };
@@ -22,12 +21,6 @@ const AuthSelection: () => React$Node = props => {
   const navigateToPrivacy = () => {
     props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, { content: "privacy" });
   };
-
-  useEffect(() => {
-    getCurrentLocation(position => {
-      updateLocation(position);
-    });
-  }, [updateLocation]);
 
   return (
     <Screen>

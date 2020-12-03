@@ -127,7 +127,7 @@ class StreamPlayer extends Component {
           this._engine.setClientRole(ClientRole.Audience);
           this.props.setAskedToJoin(false);
           this.props.onChangeRole(false);
-          this._engine.disableVideo();
+          // this._engine.disableVideo();
         }
       },
     );
@@ -188,7 +188,6 @@ class StreamPlayer extends Component {
         this.updateChannelInformation();
       } else {
         filteredUsers = audiences.filter(audience => audience._id === data.user._id);
-        console.log("filtered users", filteredUsers);
         if (filteredUsers.length > 0) {
           this.updateChannelInformation();
         }
@@ -338,7 +337,6 @@ class StreamPlayer extends Component {
     });
 
     this._engine.addListener("RemoteVideoStateChanged", (uid, state, reason, elapsed) => {
-      console.log("RemoteVideoStateChanged", Platform.OS, reason);
       if (state === VideoRemoteState.Decoding) {
         this.addStreamer(uid);
       } else if (state === VideoRemoteState.Stopped) {
@@ -461,7 +459,7 @@ class StreamPlayer extends Component {
         >
           {this.renderVideoView(streamUsers[i])}
           {i + 1 < userCount && this.renderVideoView(streamUsers[i + 1])}
-        </View>,
+        </View>
       );
     }
     return videoViews;

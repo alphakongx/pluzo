@@ -9,6 +9,7 @@ export class Notification {
     title = "",
     message = "",
     positiveText = "OK",
+    cancelText = "Cancel",
     onConfirm = () => {},
     onCancel = () => {},
   ) {
@@ -17,7 +18,7 @@ export class Notification {
       message,
       [
         {
-          text: "Cancel",
+          text: cancelText,
           onPress: onCancel,
           style: "cancel",
         },

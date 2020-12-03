@@ -16,8 +16,8 @@ const PendingRequestCountView: () => React$Node = props => {
     return null;
   } else {
     return (
-      <View style={styles.pendingCountBadge}>
-        <Text style={styles.pendingCountText}>{props.pendingFriends.length}</Text>
+      <View style={props.style ? props.style : styles.pendingCountBadge}>
+        <Text style={[styles.pendingCountText, props.textStyle]}>{props.pendingFriends.length}</Text>
       </View>
     );
   }

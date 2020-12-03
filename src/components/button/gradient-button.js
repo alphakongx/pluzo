@@ -30,12 +30,13 @@ class GradientButton extends Component {
       icon,
       iconStyle,
       shadowColor = "#1900FF",
+      noShadow,
     } = this.props;
     const { width, height, radius, blur } = this.state;
 
     return (
       <View>
-        {!disabled && (
+        {!disabled && !noShadow && (
           <BoxShadow
             setting={{
               width: width,
@@ -73,9 +74,8 @@ class GradientButton extends Component {
             <ActivityIndicator size={"small"} color={"white"} />
           ) : (
             <Fragment>
-              {icon ? (
-                <Image source={icon} style={iconStyle} />
-              ) : (
+              {icon && <Image source={icon} style={iconStyle} />}
+              {text && text !== "" &&
                 <Text
                   style={[
                     styles.buttonText,
@@ -84,8 +84,7 @@ class GradientButton extends Component {
                   ]}
                 >
                   {text}
-                </Text>
-              )}
+                </Text>}
             </Fragment>
           )}
         </LinearGradient>

@@ -61,11 +61,12 @@ class StreamUsers extends Component {
 
   componentWillUnmount() {
     this.props.setIsScrolling(false);
+    this.props.updateStream(this.props.stream, this.props.token);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.stream === null && this.props.stream !== null) {
-      this.updateStates();
+      this.onUpdateStates();
     }
   }
 
@@ -194,6 +195,7 @@ class StreamUsers extends Component {
                 onChangeText={text => this.onChangeTitle(text)}
                 onEndEditing={() => this.onChangeTitleUpdate()}
                 autoCorrect={false}
+                allowFontScaling={false}
               />
             )}
 

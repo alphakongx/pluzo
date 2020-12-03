@@ -43,7 +43,7 @@ export default StyleSheet.create({
   // Messages
   messageBox: {
     position: "absolute",
-    bottom: wp(10),
+    bottom: 0,
     left: 0,
     right: 0,
     height: "50%",

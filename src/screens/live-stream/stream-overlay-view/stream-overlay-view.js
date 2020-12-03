@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, FlatList, TouchableOpacity, Keyboard } from "react-native";
+import { SafeAreaView, View, FlatList, TouchableOpacity, Keyboard, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurView } from "@react-native-community/blur";
 import { GRADIENT } from "@config";
@@ -26,7 +26,7 @@ const StreamOverlayView = props => {
   const [showPlayerSetting, setShowPlayerSetting] = useState(false);
   const [visibleReport, setVisibleReport] = useState(false);
   const [visibleInviteFriends, setVisibleInviteFriends] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(insets.bottom + 10);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [messageBoxHeight, setMessageBoxHeight] = useState("50%");
   const [visibleAskModal, setVisibleAskModal] = useState(false);
   const userId = props.user.id;
@@ -38,13 +38,13 @@ const StreamOverlayView = props => {
 
   const onKeyboardShow = e => {
     if (visibleInviteFriends) return;
-    setKeyboardHeight(e.endCoordinates.height + 5);
+    setKeyboardHeight(e.endCoordinates.height);
     setMessageBoxHeight(300);
   };
 
   const onKeyboardHide = e => {
     if (visibleInviteFriends) return;
-    setKeyboardHeight(insets.bottom + 10);
+    setKeyboardHeight(0);
     setMessageBoxHeight("50%");
   };
 
@@ -66,12 +66,13 @@ const StreamOverlayView = props => {
       {props.streamStatus === StreamStatus.PREPARING && (
         <View style={styles.opacityFill} />
       )}
+      {props.streamStatus === StreamStatus.PREPARING && (
       <LinearGradient
         colors={GRADIENT.FADE_UP}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={[styles.opacityBottom]}
-      />
+      />)}
 
       {props.streamStatus === StreamStatus.PREPARING ? (
         <StreamStart
@@ -110,7 +111,8 @@ const StreamOverlayView = props => {
           <View
             style={[
               styles.messageBox,
-              { bottom: keyboardHeight, height: messageBoxHeight },
+              Platform.OS === "ios" ? 
+              { bottom: keyboardHeight, height: messageBoxHeight } : {},
             ]}
           >
             <StreamMessageBox
@@ -122,6 +124,7 @@ const StreamOverlayView = props => {
               onPlayerSetting={() => setShowPlayerSetting(true)}
               onAskToJoin={() => setVisibleAskModal(true)}
               onShowProfile={props.onShowProfile}
+              bottomPadding={keyboardHeight > 0 ? 5 : insets.bottom + 5}
             />
           </View>
 
@@ -180,6 +183,7 @@ const StreamOverlayView = props => {
           <ReportModal
             isVisible={visibleReport}
             liveStream
+            channelId={props.streamParams.channelName}
             keyboardDisable={true}
             onDismiss={() => setVisibleReport(false)}
           />

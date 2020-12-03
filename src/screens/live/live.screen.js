@@ -3,8 +3,6 @@ import { View, SafeAreaView, ScrollView } from "react-native";
 import {} from "react-navigation";
 import {
   Screen,
-  VerticalImagesLayout,
-  Text,
   Image,
   Touchable,
   BoxShadow,
@@ -15,7 +13,7 @@ import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-swiper";
 import EventBus from "eventing-bus";
 import { widthPercentageToDP as wp } from "@helpers";
-import { GRADIENT, AppBadges } from "@config";
+import { GRADIENT } from "@config";
 import { StreamStatus } from "@constants";
 
 import { LiveTypes } from "@redux/actions";
@@ -23,6 +21,7 @@ import Images from "@assets/Images";
 import Header from "./header/header.js";
 import LiveTags from "./live-tags/live-tags.js";
 import LiveSwiperItem from "./live-swiper-item/index.js";
+import LiveItem from "./live-item";
 
 import styles from "./live.style.js";
 
@@ -173,9 +172,6 @@ class Live extends Component {
         animation={"fadeInUp"}
         delay={100 * index}
         key={"session" + item.id}
-        onLayout={e => {
-          console.log(e.nativeEvent.layout);
-        }}
       >
         <Touchable
           style={styles.itemContainer}
@@ -183,32 +179,7 @@ class Live extends Component {
             this.onJoinStream(item.channel);
           }}
         >
-          <VerticalImagesLayout images={item.info.streamers_images} />
-          <View style={styles.itemDataContainer}>
-            <Text style={styles.userName} numberOfLines={1}>
-              {item.name}
-            </Text>
-            <View style={styles.tagContainer}>
-              <LinearGradient
-                colors={GRADIENT.BUTTON}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.membersContainer}
-              >
-                <Image
-                  source={require("@assets/images/live-screen/live-user.png")}
-                  style={styles.memberIcon}
-                />
-                <Text style={styles.memberCount}>{parseInt(item.count, 10)}</Text>
-              </LinearGradient>
-              <View style={styles.tagImages}>
-                <Image
-                  source={Images.live[AppBadges[item.category].icon]}
-                  style={styles.tagImage}
-                />
-              </View>
-            </View>
-          </View>
+          <LiveItem item={item}/>
         </Touchable>
       </AnimatableView>
     );

@@ -1,8 +1,9 @@
 import React from "react";
 import { View } from "react-native";
-import { Image, Text } from "@components";
+import { Image, Text, Touchable } from "@components";
 import FastImage from "react-native-fast-image";
 import Images from "@assets/Images";
+import { SCREENS } from "@constants";
 import styles from "./empty-view.style";
 
 const EmptyView: () => React$Node = props => {
@@ -19,7 +20,10 @@ const EmptyView: () => React$Node = props => {
   }
 
   return (
-    <View style={styles.container}>
+    <Touchable style={styles.container}
+      onPress={() => {
+        props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: props.user });
+      }}>
       <FastImage
         style={styles.userImage}
         source={typeof picture === "string" ? { uri: picture } : picture}
@@ -28,7 +32,7 @@ const EmptyView: () => React$Node = props => {
         <Text style={styles.contentText}>Say Hi!</Text>
         <Image source={require("@assets/images/heart1.png")} style={styles.heartIcon} />
       </View>
-    </View>
+    </Touchable>
   );
 };
 

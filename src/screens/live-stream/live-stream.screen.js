@@ -25,6 +25,12 @@ class LiveStream extends Component {
     this.props.setAskedToJoin(false);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isBroadcaster !== this.state.isBroadcaster) {
+      this.props.onChangedRole(this.state.isBroadcaster);
+    }
+  }
+
   onShowProfile = user => {
     this.setState({ selectedUser: user, visibleProfile: true });
   };
@@ -42,7 +48,6 @@ class LiveStream extends Component {
           onEndedStream={() => this.setState({ visibleEnd: true })}
           onChangeRole={broadcaster => this.setState({ isBroadcaster: broadcaster })}
           onChangeStreamers={count => {
-            console.log("Count >>>", count);
             this.setState({ streamerCount: count });
           }}
           onShowProfile={user => this.onShowProfile(user)}

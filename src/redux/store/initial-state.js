@@ -21,6 +21,7 @@ export default {
     isDeletingAccount: false,
     isSendingPhoneUpdateCode: false,
     isConfirmingPhoneUpdateCode: false,
+    pushEnabled: true,
   },
   registration: {
     firstName: "",
@@ -29,7 +30,9 @@ export default {
     likeGender: "",
     username: "",
     password: "",
-    picture: null,
+    picture1: null,
+    picture2: null,
+    picture3: null,
     phoneNumber: "",
     isCheckingUsername: false,
   },
@@ -66,7 +69,7 @@ export default {
     isAddingFriend: false,
   },
   chat: {
-    chatId: null,
+    chatUserId: null,
     messages: [],
     isLoadingMessages: false,
   },
@@ -77,6 +80,7 @@ export default {
     isLoadingCards: false,
     isLoadingMatch: false,
     settings: null,
+    showSwipeTutorial: false,
   },
   search: {
     friends: [],

@@ -20,12 +20,28 @@ export default StyleSheet.create({
     height: wp(26),
     paddingHorizontal: wp(10),
     borderRadius: wp(13),
-    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
   },
   requestText: {
     fontWeight: "600",
     color: "white",
     fontSize: wp(12),
+  },
+  pendingCount: {
+    marginLeft: wp(7),
+    minWidth: wp(19),
+    maxWidth: wp(25),
+    height: wp(15),
+    borderRadius: wp(7.5),
+    paddingHorizontal: wp(5),
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#00FF77",
+  },
+  pendingCountText: {
+    fontSize: wp(10),
+    fontWeight: "600",
   },
 
   contentContainer: {

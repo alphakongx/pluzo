@@ -36,7 +36,7 @@ const FriendsModal: () => React$Node = props => {
     >
       <Screen hasGradient style={styles.container}>
         <View style={styles.header}>
-          <BackButton onPress={props.onSwipeComplete} />
+          {/* <BackButton onPress={props.onSwipeComplete} /> */}
           <Text style={styles.titleText}>{`${
             props.friends === null ? "0" : props.friends.length
           } friends`}</Text>

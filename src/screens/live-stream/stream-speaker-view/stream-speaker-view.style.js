@@ -7,8 +7,8 @@ export default StyleSheet.create({
   container: {},
   volumeContainer: {
     position: "absolute",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    left: wp(11),
+    backgroundColor: "rgba(192, 192, 192, 0.8)",
+    left: wp(10),
     right: wp(10),
     top: wp(5),
     bottom: wp(5),

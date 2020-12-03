@@ -60,7 +60,7 @@ const MatchesView: () => React$Node = props => {
           style={styles.heartImage}
           resizeMode={FastImage.resizeMode.contain}
         />
-        <Text style={styles.matchText}>It's a Match!</Text>
+        <Text style={styles.matchText}>New Friend!</Text>
       </Touchable>
     </Animatable.View>
   );

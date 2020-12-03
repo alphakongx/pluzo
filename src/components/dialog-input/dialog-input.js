@@ -12,8 +12,9 @@ import { Screen } from "../screen";
 import { Text } from "../text";
 import { TextInput } from "../text-input";
 import { BoxShadow } from "../shadow";
+import { KeyboardListener } from "../keyboard-listener";
 import Images from "@assets/Images";
-import styles from "./dialog-input.style";
+import styles, { height as screenHeight } from "./dialog-input.style";
 
 class DialogInput extends PureComponent {
   constructor(props) {
@@ -23,6 +24,7 @@ class DialogInput extends PureComponent {
       openning: true,
       width: 0,
       height: 0,
+      keyboardSpacing: 0,
     };
   }
 
@@ -41,7 +43,7 @@ class DialogInput extends PureComponent {
 
   handleOnCloseDialog = () => {
     this.props.closeDialog();
-    this.setState({ inputModal: "", openning: true });
+    this.setState({ inputModal: "", openning: true, keyboardSpacing: 0 });
   };
 
   handleSubmit = () => {
@@ -79,7 +81,9 @@ class DialogInput extends PureComponent {
       offsetX: 0,
       offsetY: 6,
     };
-
+    const { keyboardSpacing, height } = this.state;
+    let realSpacing = (screenHeight - height) / 2;
+    
     return (
       <Modal
         animationType={animationType}
@@ -101,6 +105,7 @@ class DialogInput extends PureComponent {
                   height: e.nativeEvent.layout.height,
                 });
               }}
+              style={(realSpacing - keyboardSpacing) < 10 ? {marginBottom: keyboardSpacing - realSpacing + 30} : {}}
             >
               <BoxShadow setting={shadowOption} />
               <Screen
@@ -150,6 +155,7 @@ class DialogInput extends PureComponent {
                         textProps && textProps.maxLength > 0 ? textProps.maxLength : null
                       }
                       autoFocus={false}
+                      allowFontScaling={false}
                       onKeyPress={this.handleOnKeyPress}
                       underlineColorAndroid='transparent'
                       placeholder={hintInput}
@@ -178,6 +184,16 @@ class DialogInput extends PureComponent {
               </Screen>
             </View>
           </TouchableOpacity>
+          <KeyboardListener
+            onWillShow={(e) => this.setState({ keyboardSpacing: e.endCoordinates.height })}
+            onWillHide={(e) => {
+              this.setState({ keyboardSpacing: 0 });
+            }}
+            onDidShow={(e) => this.setState({ keyboardSpacing: e.endCoordinates.height })}
+            onDidHide={(e) => {
+              this.setState({ keyboardSpacing: 0 });
+            }}
+          />
         </KeyboardAvoidingView>
       </Modal>
     );

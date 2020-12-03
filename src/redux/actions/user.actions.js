@@ -70,6 +70,7 @@ const { Types, Creators } = createActions({
   updatePhoneConfirmCodeFail: null,
 
   updateNotification: ["data"],
+  updatePushStatus: ["status"],
 
   logout: null,
 });

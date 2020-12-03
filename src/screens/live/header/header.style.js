@@ -4,7 +4,7 @@ import { widthPercentageToDP as wp } from "@helpers";
 export default StyleSheet.create({
   header: {
     flexDirection: "row",
-    height: wp(60),
+    height: wp(55),
     paddingHorizontal: wp(10),
     alignItems: "center",
   },
@@ -12,6 +12,6 @@ export default StyleSheet.create({
     marginBottom: wp(5),
   },
   bottomMarginSmall: {
-    marginBottom: wp(2),
+    marginBottom: wp(12),
   },
 });

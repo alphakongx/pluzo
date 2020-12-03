@@ -15,6 +15,7 @@ const TextInputField = props => {
       name={input.name}
       {...rest}
       error={showError ? error : ""}
+      allowFontScaling={false}
     />
   );
 };

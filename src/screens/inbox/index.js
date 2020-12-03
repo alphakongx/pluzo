@@ -12,7 +12,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   loadFriends: InboxCreators.requestFriends,
-  readFlag: InboxCreators.requestReadFlag,
+  requestChannels: InboxCreators.requestChannels,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Inbox);

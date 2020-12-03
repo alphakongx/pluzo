@@ -19,7 +19,9 @@ export default StyleSheet.create({
     color: "white",
     fontSize: wp(16),
     fontWeight: "bold",
-    left: -wp(10),
+    marginLeft: wp(21),
+    marginTop: wp(20),
+    marginBottom: wp(15),
   },
 
   friendList: {

@@ -30,3 +30,4 @@ export * from "./banner-alert";
 export * from "./modal-header";
 export * from "./keyboard-listener";
 export * from "./gesture-recognizer";
+export * from "./animated-dots";

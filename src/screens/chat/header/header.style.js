@@ -3,6 +3,9 @@ import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
+  flexFill: {
+    flex: 1,
+  },
   headerContainer: {
     backgroundColor: COLOR.HEADER_BACKGROUND,
   },
@@ -31,11 +34,31 @@ export default StyleSheet.create({
     borderRadius: wp(25),
     marginRight: wp(10),
   },
+  headerNameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    overflow: "hidden",
+  },
   headerTitle: {
     fontFamily: "OpenSans",
     fontSize: wp(18),
     fontWeight: "700",
     color: COLOR.TEXT_PRIMARY,
+    marginRight: wp(5),
+  },
+  badgeImage: {
+    width: wp(14),
+    height: wp(14),
+    marginRight: wp(3),
+  },
+  lastSeenText: {
+    fontFamily: "OpenSans",
+    fontSize: wp(10),
+    fontWeight: "600",
+    color: "#ABA7D5",
+  },
+  activeUser: {
+    color: "#00FF77",
   },
   reportButtonContainer: {
     justifyContent: "center",

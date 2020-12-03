@@ -48,3 +48,27 @@ export function readMsg(data, accessToken) {
     data,
   }).then(response => response);
 }
+
+export function openedChat(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.OPEN_CHAT}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}
+
+export function closeChat(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.CLOSE_CHAT}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+  }).then(response => response);
+}

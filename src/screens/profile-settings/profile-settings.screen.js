@@ -1,5 +1,7 @@
 import React from "react";
-import { View, ScrollView, ActivityIndicator, TextInput, Animated } from "react-native";
+import { View, ScrollView, ActivityIndicator, TextInput, Animated, Keyboard, NativeModules, Platform } from "react-native";
+import KeyboardManager from "react-native-keyboard-manager";
+import * as Animatable from "react-native-animatable";
 import FastImage from "react-native-fast-image";
 import ImagePicker from "react-native-image-crop-picker";
 import ActionSheet from "react-native-actionsheet";
@@ -30,6 +32,17 @@ import FriendsModal from "./friends-modal";
 import SwipePurchaseModal from "../swipe/swipe-purchase-modal";
 import styles, { width } from "./profile-settings.style";
 
+const { createAnimatableComponent } = Animatable;
+const AnimatableView = createAnimatableComponent(View);
+const plusAnimation = {
+  from: {
+    ["translateY"]: -20,
+  },
+  to: {
+    ["translateY"]: 0,
+  },
+};
+
 class ProfileSettings extends React.Component {
   constructor(props) {
     super(props);
@@ -43,6 +56,7 @@ class ProfileSettings extends React.Component {
       uploading: false,
       bioText: this.props.user.bio || "",
       editingImage: false,
+      editingBio: false,
     };
     this.ActionSheet = React.createRef();
     this.rotateValue = new Animated.Value(0);
@@ -59,6 +73,12 @@ class ProfileSettings extends React.Component {
     );
     this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
       this.props.requestProfile(this.props.token);
+      if (Platform.OS === "ios") {
+        KeyboardManager.setEnable(true);
+        KeyboardManager.setKeyboardDistanceFromTextField(100);
+        KeyboardManager.setEnableAutoToolbar(false);
+        KeyboardManager.setShouldResignOnTouchOutside(true);
+      }
     });
   }
 
@@ -103,6 +123,10 @@ class ProfileSettings extends React.Component {
   };
 
   onAddImage = () => {
+    if (this.props.user.images.length > 8) {
+      Notification.alert("You already uploaded 9 photos");
+      return;
+    }
     this.setState({ editingImage: false });
     this.ActionSheet.show();
   };
@@ -128,16 +152,23 @@ class ProfileSettings extends React.Component {
 
   onUploadImage = data => {
     let photoUriSplit = data.path.split("/");
-
-    const image = {
-      uri: data.path,
-      name: photoUriSplit[photoUriSplit.length - 1],
-      type: data.mime,
-    };
-    this.setState({ uploading: true }, () => {
-      const params = new FormData();
-      params.append("images[]", image);
-      this.props.updateUser(params, this.props.token);
+    console.log(data.path);
+    NativeModules.ImageDetector.check(data.path, (value) => {
+      console.log(value);
+      if (value === "SFW") {
+        const image = {
+          uri: data.path,
+          name: photoUriSplit[photoUriSplit.length - 1],
+          type: data.mime,
+        };
+        this.setState({ uploading: true }, () => {
+          const params = new FormData();
+          params.append("images[]", image);
+          this.props.updateUser(params, this.props.token);
+        });
+      } else {
+        Notification.alert("The photo can't use in the app");
+      }
     });
   };
 
@@ -154,7 +185,7 @@ class ProfileSettings extends React.Component {
       this.setState({ editingImage: false });
       return;
     }
-    Notification.confirmAlert("Delete", "Do you want to delete this image?", "OK", () => {
+    Notification.confirmAlert("Delete", "Do you want to delete this image?", "OK", "Cancel", () => {
       this.props.deleteImage(imageId, this.props.token);
     });
   };
@@ -169,7 +200,7 @@ class ProfileSettings extends React.Component {
   onEditingImageDone = () => {
     this.setState({ editingImage: false });
     if (this.state.uploading || this.nextImageOrder === undefined) return;
-console.log(this.nextImageOrder);
+
     let reverseImages = [...this.props.user.images];
     reverseImages = reverseImages.sort((a, b) => a.sort > b.sort);
 
@@ -252,7 +283,7 @@ console.log(this.nextImageOrder);
 
   render() {
     const { user, insets } = this.props;
-    const { avatarUploading, editingImage } = this.state;
+    const { avatarUploading, editingImage, editingBio } = this.state;
 
     let reverseImages = [...user.images];
     reverseImages = reverseImages.sort((a, b) => a.sort > b.sort);
@@ -299,11 +330,20 @@ console.log(this.nextImageOrder);
           </View>
 
           <View style={styles.settingsContainer}>
-            <Text style={styles.settingsText}>About Me</Text>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.settingsText}>About Me</Text>
+              {editingBio && (
+                <Touchable onPress={() => Keyboard.dismiss()}
+                  style={styles.bioDoneButton}>
+                  <Text style={styles.sectionText}>Done</Text>
+                </Touchable>
+              )}
+            </View>
             <View style={styles.bioContainer}>
               <TextInput
                 style={styles.bigTextInput}
                 multiline
+                allowFontScaling={false}
                 maxLength={200}
                 placeholder={"Bio"}
                 placeholderTextColor={"#E8E6FF"}
@@ -311,7 +351,7 @@ console.log(this.nextImageOrder);
                 value={this.state.bioText}
                 onChangeText={text => {
                   const lines = text.split("\n");
-                  if (lines.length <= 4) {
+                  if (lines.length <= 6) {
                     this.setState({ bioText: text });
                   }
                 }}
@@ -319,6 +359,10 @@ console.log(this.nextImageOrder);
                   const params = new FormData();
                   params.append("bio", this.state.bioText);
                   this.props.updateUser(params, this.props.token);
+                  this.setState({editingBio: false});
+                }}
+                onFocus={(e) => {
+                  this.setState({editingBio: true});
                 }}
               />
             </View>
@@ -338,14 +382,38 @@ console.log(this.nextImageOrder);
                     offsetY: 0,
                   }}
                 />
-                <Image source={Images.app.pluzoPlus} style={styles.premiumImage} />
+                <View style={styles.premiumView}>
+                  <FastImage 
+                    source={Images.app.pluzoplusMask1}
+                    style={styles.premiumMask1}
+                    resizeMode={FastImage.resizeMode.cover} />
+                  <FastImage 
+                    source={Images.app.pluzoplusMask2}
+                    style={styles.premiumMask2}
+                    resizeMode={FastImage.resizeMode.cover} />
+                  <FastImage 
+                    source={Images.app.pluzoplusLogo}
+                    style={styles.premiumLogo} />
+                  <Text style={styles.premiumText}>
+                    {"Exclusive features to enhance\nyour experience."}
+                  </Text>
+                  <AnimatableView
+                    style={styles.premiumPlusView}
+                    animation={plusAnimation}
+                    iterationCount={"infinite"}
+                    direction="alternate"
+                    duration={4000}>
+                    <Image source={Images.app.pluzoplusPlus} style={styles.premiumPlusImage} />
+                  </AnimatableView>
+                </View>
               </View>
               <View style={styles.buttonContainer}>
                 <GradientButton
-                  text={"Get Pluzo Plus"}
+                  text={this.props.user.premium === 1 ? "My Pluzo Plus" : "Get Pluzo Plus"}
                   colors={GRADIENT.PURCHASE_BUTTON}
                   shadowColor={"#FF6F00"}
                   onPress={() => this.setState({ visiblePurchase: true })}
+                  noButton={this.props.user.premium === 1}
                 />
               </View>
             </View>
@@ -413,6 +481,7 @@ console.log(this.nextImageOrder);
           isVisible={this.state.visibleSuperlike}
           colors={["#0C0518", "#080A47", "#0032BB"]}
           mainLogo={Images.swipe.superLikeLogo}
+          mainLogoCenter={Images.swipe.superLikeLogoCenter}
           text={"Super Like"}
           confirmText={"Get Super Likes"}
           selectColors={["#01C0FF", "#0044FF"]}
@@ -425,6 +494,7 @@ console.log(this.nextImageOrder);
           isVisible={this.state.visibleRewind}
           colors={["#0C0518", "#320847", "#A10046"]}
           mainLogo={Images.swipe.rewindLogo}
+          mainLogoCenter={Images.swipe.rewindLogoCenter}
           text={"Rewind"}
           confirmText={"Get Rewinds"}
           selectColors={["#FFA837", "#FF6600"]}

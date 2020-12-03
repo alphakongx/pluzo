@@ -228,6 +228,11 @@ const updatePhoneConfirmCodeFail = (state, action) => ({
   isConfirmingPhoneUpdateCode: false,
 });
 
+const updatePushStatus = (state, action) => ({
+  ...state,
+  pushEnabled: action.status,
+});
+
 export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
@@ -298,6 +303,7 @@ export const HANDLERS = {
   [UserTypes.UPDATE_PHONE_CONFIRM_CODE_FAIL]: updatePhoneConfirmCodeFail,
 
   [UserTypes.UPDATE_NOTIFICATION]: updateNotification,
+  [UserTypes.UPDATE_PUSH_STATUS]: updatePushStatus,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

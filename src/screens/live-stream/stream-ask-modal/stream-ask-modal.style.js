@@ -11,6 +11,7 @@ export default StyleSheet.create({
     fontSize: wp(22),
     fontWeight: "bold",
     textAlign: "center",
+    marginTop: wp(55),
   },
   messageText: {
     color: "#ABA7D5",

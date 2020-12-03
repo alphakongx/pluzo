@@ -58,6 +58,7 @@ class InputToolbar extends React.Component {
             textInputStyle={styles.inputField}
             textInputProps={{
               autoCorrect: true,
+              allowFontScaling: false,
               returnKeyType: "send",
             }}
           />
@@ -83,6 +84,7 @@ class InputToolbar extends React.Component {
         <Send {...props} containerStyle={styles.sendButtonContainer}>
           <GradientButton
             noButton
+            noShadow
             containerStyle={styles.sendButton}
             icon={Images.app.icBackUp}
             iconStyle={styles.sendButtonIcon}

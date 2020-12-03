@@ -7,6 +7,7 @@ function mapStateToProps(state) {
     token: state.user.token,
     user: state.user.user,
     messages: state.live.messages,
+    isAskedToJoin: state.live.isAskedToJoin,
   };
 }
 

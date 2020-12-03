@@ -8,6 +8,14 @@ export default StyleSheet.create({
     flexDirection: "column-reverse",
   },
 
+  opacityBottom: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: wp(100),
+  },
+
   defaultButtonsContainer: {
     padding: wp(10),
   },
@@ -63,7 +71,7 @@ export default StyleSheet.create({
     fontWeight: "400",
   },
   messageSystemTextContainer: {
-    minHeight: wp(40),
+    paddingVertical: 10,
     paddingLeft: wp(16),
     paddingRight: wp(20),
     justifyContent: "center",

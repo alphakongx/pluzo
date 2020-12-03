@@ -11,6 +11,7 @@ import {
 } from "@components";
 import Modal from "react-native-modal";
 import RNIap from "react-native-iap";
+import * as Animatable from "react-native-animatable";
 import LinearGradient from "react-native-linear-gradient";
 import { ItemSkus } from "@helpers";
 import PriceBoxView from "../price-box-view";
@@ -18,6 +19,9 @@ import Images from "@assets/Images";
 import PurchaseModal from "../../profile-settings/purchase-modal";
 
 import styles from "./swipe-purchase-modal.style";
+
+const { createAnimatableComponent } = Animatable;
+const AnimatableView = createAnimatableComponent(View);
 
 const SwipePurchaseModal: () => React$Node = props => {
   const [boost, setBoost] = useState(1);
@@ -89,17 +93,50 @@ const SwipePurchaseModal: () => React$Node = props => {
         >
           <View style={styles.boxContentContainer}>
             {props.uptoLogo && (
+              <AnimatableView
+                animation={{
+                  from: {
+                    ["translateY"]: -5,
+                  },
+                  to: {
+                    ["translateY"]: 5,
+                  },
+                }}
+                iterationCount={"infinite"}
+                direction="alternate"
+                duration={3000}>
+                <Image
+                  source={Images.swipe.boostTextLogo}
+                  style={styles.uptoLogo}
+                  pointerEvents={"none"}
+                />
+              </AnimatableView>
+            )}
+            <View style={styles.logoContainer}>
+              <AnimatableView
+                animation={{
+                  from: {
+                    ["translateY"]: -5,
+                  },
+                  to: {
+                    ["translateY"]: 5,
+                  },
+                }}
+                iterationCount={"infinite"}
+                direction="alternate"
+                duration={2000}>
+                <Image
+                  source={props.mainLogo}
+                  style={styles.mainLogo}
+                  pointerEvents={"none"}
+                />
+              </AnimatableView>
               <Image
-                source={Images.swipe.boostTextLogo}
-                style={styles.uptoLogo}
+                source={props.mainLogoCenter}
+                style={styles.mainLogoCenter}
                 pointerEvents={"none"}
               />
-            )}
-            <Image
-              source={props.mainLogo}
-              style={styles.mainLogo}
-              pointerEvents={"none"}
-            />
+            </View>
             <Text style={styles.titleText} pointerEvents={"none"}>
               Out of {props.text}s!
             </Text>
@@ -156,11 +193,26 @@ const SwipePurchaseModal: () => React$Node = props => {
                 text={"Get Pluzo Plus"}
                 onPress={() => setVisiblePurchase(true)}
               />
-              <Image
-                source={Images.swipe.pluzoPlusMark}
+              <AnimatableView
+                animation={{
+                  from: {
+                    ["translateY"]: -2.5,
+                  },
+                  to: {
+                    ["translateY"]: 2.5,
+                  },
+                }}
+                iterationCount={"infinite"}
+                direction="alternate"
+                duration={1500}
                 style={styles.plusMark}
-                pointerEvents={"none"}
-              />
+                pointerEvents={"box-none"}>
+                <Image
+                  source={Images.swipe.pluzoPlusMark}
+                  pointerEvents={"none"}
+                  style={styles.plusImage}
+                />
+              </AnimatableView>
             </View>
           </View>
         </LinearGradient>
@@ -178,6 +230,7 @@ SwipePurchaseModal.defaultProps = {
   selectColors: ["#D491FF", "#8F00E9"],
   uptoLogo: false,
   mainLogo: Images.swipe.boostLogo,
+  mainLogoCenter: Images.swipe.boostLogoCenter,
   text: "Boost",
   confirmText: "Boost me",
 };

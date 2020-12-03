@@ -53,11 +53,6 @@ const LiveFilterSetting: () => React$Node = props => {
         <SafeAreaView style={styles.container}>
           <Text style={styles.titleText}>Live-Filter</Text>
 
-          <Text style={styles.subTitleText}>Sort by</Text>
-          {renderSortTypes()}
-
-          <View style={styles.seperator} />
-
           <Text style={styles.subTitleText}>Location</Text>
           <Touchable
             style={styles.itemContainer}
@@ -73,6 +68,12 @@ const LiveFilterSetting: () => React$Node = props => {
             />
             <Image source={Images.app.icRight} />
           </Touchable>
+          
+          <View style={styles.seperator} />
+
+          <Text style={styles.subTitleText}>Filter by</Text>
+          {renderSortTypes()}
+          
         </SafeAreaView>
       </Screen>
     </View>

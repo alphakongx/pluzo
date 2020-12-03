@@ -4,14 +4,14 @@ import { Image, Text, Touchable } from "@components";
 import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
 import { BlurView } from "@react-native-community/blur";
+import EventBus from "eventing-bus";
 
-import PurchaseModal from "../../profile-settings/purchase-modal";
 import { GRADIENT } from "@config";
 import { NavigationService } from "@helpers";
 import { SCREENS } from "@constants";
 import styles from "./new-friends.style";
 
-const placeHolder = require("@assets/images/live-screen/user-temp3.png");
+const placeHolder = require("@assets/images/app-icon.png");
 
 class NewFriends extends React.Component {
   constructor(props) {
@@ -24,6 +24,11 @@ class NewFriends extends React.Component {
   componentDidMount() {
     this.requestFriends();
     this.props.navigation.addListener("willFocus", this.requestFriends);
+    this.actionFriendRemove = EventBus.on("Need_Update_Friends", this.requestFriends);
+  }
+
+  componentWillUnmount() {
+    this.actionFriendRemove();
   }
 
   requestFriends = () => {
@@ -31,12 +36,17 @@ class NewFriends extends React.Component {
   };
 
   onFriendClick = friend => {
-    NavigationService.navigate(SCREENS.CHAT, { chatUser: friend });
+    if (friend.id === 0) {
+      NavigationService.navigate(SCREENS.CHAT, { chatUser: 0 });
+    } else {
+      NavigationService.navigate(SCREENS.CHAT, { chatUser: friend });
+    }
   };
 
   render() {
     const { user, friends } = this.props;
     let sortedFriends = friends.sort((a, b) => b.flag - a.flag);
+    
     let allFriends = [user, ...sortedFriends];
     return (
       <View style={styles.container}>
@@ -52,11 +62,7 @@ class NewFriends extends React.Component {
               return (
                 <Touchable
                   onPress={() => {
-                    if (user.premium === 1) {
-                      this.props.navigation.navigate(SCREENS.LIKE_USERS);
-                    } else {
-                      this.setState({visiblePurchase: true});
-                    }
+                    this.props.navigation.navigate(SCREENS.LIKE_USERS);
                   }}
                 >
                   <View style={styles.friendItemContainer}>
@@ -91,15 +97,13 @@ class NewFriends extends React.Component {
               return (
                 <Touchable
                   onPress={() => {
-                    if (friend.flag === 1 || friend.flag === 3) {
-                      this.props.onReadFlag(friend.id);
-                    }
                     this.onFriendClick(friend);
                   }}
                 >
                   <View style={styles.friendItemContainer}>
                     <FastImage
                       source={
+                        friend.id === 0 ? placeHolder :
                         friend.images[0] === null
                           ? placeHolder
                           : { uri: friend.images[0].path }
@@ -111,7 +115,7 @@ class NewFriends extends React.Component {
                         <Image source={require("@assets/images/favourite.png")} />
                       </View>
                     ) : null}
-                    {friend.flag === 1 ? (
+                    {(friend.flag === 1 || friend.flag === 3) ? (
                       <View style={styles.onlineIconContainer}>
                         <LinearGradient
                           colors={GRADIENT.FRIEND_ONLINE_ICON}
@@ -127,10 +131,6 @@ class NewFriends extends React.Component {
             }
           }}
           // ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-        />
-        <PurchaseModal
-          isVisible={this.state.visiblePurchase}
-          onSwipeComplete={() => this.setState({visiblePurchase: false})}
         />
       </View>
     );

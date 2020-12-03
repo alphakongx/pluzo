@@ -80,6 +80,7 @@ class SearchScreen extends Component {
                 style={styles.inputField}
                 returnKeyType={"search"}
                 autoFocus={true}
+                allowFontScaling={false}
                 autoCapitalize={"none"}
                 clearButtonMode={"always"}
                 onChangeText={text => this.onSearch(text)}

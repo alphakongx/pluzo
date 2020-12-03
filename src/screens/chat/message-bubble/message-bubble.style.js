@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { widthPercentageToDP as wp } from "@helpers";
+import { widthPercentageToDP as wp, FontHelper } from "@helpers";
 import { COLOR } from "@config";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -28,17 +28,21 @@ export default StyleSheet.create({
     borderBottomRightRadius: wp(8),
     backgroundColor: COLOR.MESSAGE_BUBBLE_BACKGROUND_USER,
   },
-  text: {
+  text: FontHelper.font({
     fontFamily: "OpenSans",
     fontSize: wp(14),
     fontWeight: "600",
     lineHeight: wp(16),
-  },
+  }),
   otherUserText: {
     color: COLOR.MESSAGE_BUBBLE_TEXT,
   },
   currentUserText: {
     color: COLOR.MESSAGE_BUBBLE_TEXT_USER,
+  },
+  urlText: {
+    textDecorationLine: "underline",
+    color: "blue",
   },
   imageText: {
     top: -wp(18),
@@ -58,5 +62,29 @@ export default StyleSheet.create({
   },
   imageFullRound: {
     borderRadius: wp(20),
+  },
+
+  tickContainer: {
+    flexDirection: "row-reverse",
+  },
+  tickView: {
+    borderRadius: wp(20),
+    width: wp(8),
+    height: wp(8),
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: wp(2),
+    marginRight: wp(5),
+  },
+  tickViewSent: {
+    backgroundColor: "#EBE6FF",
+  },
+  tickViewReceived: {
+    backgroundColor: "#02FFF3",
+  },
+  tick: {
+    width: wp(4.4),
+    height: wp(3.5),
+    color: "black",
   },
 });

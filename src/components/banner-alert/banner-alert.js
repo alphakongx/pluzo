@@ -15,7 +15,7 @@ const BannerAlert: () => React$Node = props => {
   const [animValue] = useState(new Animated.Value(0));
   var translateY = animValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [-50, 0],
+    outputRange: [-150, 0],
   });
 
   const shadowOption = {
@@ -49,6 +49,12 @@ const BannerAlert: () => React$Node = props => {
       }, 10000);
     });
   }, [props.notification]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(hideTimeout.current);
+    }
+  }, []);
 
   return (
     <SafeAreaView>
@@ -86,10 +92,11 @@ const BannerAlert: () => React$Node = props => {
               {props.notification.type === "chat" && props.notification.message === null
                 ? "sent an image"
                 : props.notification.message}
+              {props.notification.type === "friend-match" && `${props.notification.user.first_name} is now your friend! 👏`}
             </Text>
           </View>
 
-          {props.notification.type !== "chat" && (
+          {props.notification.type !== "chat" && props.notification.type !== "friend-match" && (
             <View style={styles.circleButton}>
               <IconButton
                 backColor={"#ABA7D5"}
@@ -106,7 +113,7 @@ const BannerAlert: () => React$Node = props => {
               />
             </View>
           )}
-          {props.notification.type !== "chat" && (
+          {props.notification.type !== "chat" && props.notification.type !== "friend-match" && (
             <View style={styles.circleButton}>
               <IconButton
                 backColor={"#00FF77"}
