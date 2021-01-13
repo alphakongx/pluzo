@@ -24,7 +24,7 @@ const ProfileDetail: () => React$Node = props => {
   if (first_name === null || first_name === "") {
     first_name = "No Name";
   }
-  birthday = moment.duration(moment().diff(moment.unix(birthday))).years();
+  birthday = moment().diff(moment.unix(birthday), "years");
   var distance = " - ";
   if (latitude !== null && longitude !== null && location !== null) {
     distance = Distance.getDistance(
@@ -81,8 +81,8 @@ const ProfileDetail: () => React$Node = props => {
           return (
             <Image
               key={`badge-${badge}`}
-              source={Images.live[AppBadges[badge].icon]}
               style={styles.badgeIcon}
+              source={Images.badges[AppBadges[badge-1].id]}
             />
           );
         })}

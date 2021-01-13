@@ -1,15 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, FlatList } from "react-native";
-import { Text, Screen, BlurView, Touchable, BackButton } from "@components";
+import { Text, Screen, BlurView, Touchable, NotificationModal } from "@components";
 import Modal from "react-native-modal";
 import SearchPeopleItem from "../../search/search-people-item";
+import { API } from "@helpers";
+import { API_ENDPOINTS } from "@config";
 
 import styles from "./friends-modal.style";
 
 const FriendsModal: () => React$Node = props => {
+  const [visibleConfirmDelete, setVisibleConfirmDelete] = useState(false);
   const onModalWillShow = () => {
     props.loadFriends(props.token);
   };
+
+  const onDeleteUser = () => {
+    if (this.removeUser) {
+      let userId = this.removeUser.id || this.removeUser._id;
+
+      let data = new FormData();
+      data.append("username", this.removeUser.username || user.name);
+      data.append("user_target_id", userId);
+
+      let url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
+
+      API.request({
+        method: "post",
+        url: url,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + props.token,
+        },
+        data,
+      });
+    }
+  }
 
   return (
     <Modal
@@ -53,9 +78,21 @@ const FriendsModal: () => React$Node = props => {
                   friend={true}
                   onChat={() => props.onSwipeComplete()}
                   onDismiss={() => props.onSwipeComplete()}
+                  onRemoveFriend={() => {
+                    this.removeUser = friend;
+                    setVisibleConfirmDelete(true);
+                  }}
                 />
               </View>
             );
+          }}
+        />
+        <NotificationModal
+          isVisible={visibleConfirmDelete}
+          onBack={() => setVisibleConfirmDelete(false)}
+          onConfirm={(userId, userName) => {
+            setVisibleConfirmDelete(false);
+            onDeleteUser();
           }}
         />
       </Screen>

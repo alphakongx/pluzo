@@ -18,6 +18,7 @@ import {
   GradientButton,
   BoxShadow,
   SortableList,
+  NotificationModal
 } from "@components";
 import { Notification, widthPercentageToDP as wp } from "@helpers";
 import Images from "@assets/Images";
@@ -27,6 +28,7 @@ import Header from "./header";
 import UserProfile from "./user-profile";
 import ProfileAmounts from "./profile-amounts";
 import PurchaseModal from "./purchase-modal";
+// import LockedBadgeModal from "./locked-badge-modal";
 import ChooseBadgeModal from "./choose-badge-modal";
 import FriendsModal from "./friends-modal";
 import SwipePurchaseModal from "../swipe/swipe-purchase-modal";
@@ -52,6 +54,8 @@ class ProfileSettings extends React.Component {
       visibleBoost: false,
       visibleSuperlike: false,
       visibleRewind: false,
+      visibleNotification: false,
+      notificationText: "",
       avatarUploading: false,
       uploading: false,
       bioText: this.props.user.bio || "",
@@ -124,7 +128,7 @@ class ProfileSettings extends React.Component {
 
   onAddImage = () => {
     if (this.props.user.images.length > 8) {
-      Notification.alert("You already uploaded 9 photos");
+      this.setState({notificationText: "You already uploaded 9 photos.", visibleNotification: true});
       return;
     }
     this.setState({ editingImage: false });
@@ -137,6 +141,7 @@ class ProfileSettings extends React.Component {
       height: 800,
       cropping: true,
       compressImageQuality: 0.7,
+      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Videos', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'SlomoVideos', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'Animated', 'LongExposure'],
     };
 
     if (index === 0) {
@@ -152,9 +157,7 @@ class ProfileSettings extends React.Component {
 
   onUploadImage = data => {
     let photoUriSplit = data.path.split("/");
-    console.log(data.path);
     NativeModules.ImageDetector.check(data.path, (value) => {
-      console.log(value);
       if (value === "SFW") {
         const image = {
           uri: data.path,
@@ -167,7 +170,7 @@ class ProfileSettings extends React.Component {
           this.props.updateUser(params, this.props.token);
         });
       } else {
-        Notification.alert("The photo can't use in the app");
+        this.setState({notificationText: "This photo can't be used here.", visibleNotification: true});
       }
     });
   };
@@ -223,7 +226,6 @@ class ProfileSettings extends React.Component {
   };
 
   _onChangeOrder = (key, currentOrder) => {
-    console.log(currentOrder);
     this.nextImageOrder = currentOrder;
   };
 
@@ -303,7 +305,9 @@ class ProfileSettings extends React.Component {
               text={"Choose Badges"}
               textStyle={styles.chooseBadgeText}
               containerStyle={styles.chooseBadgeButton}
-              onPress={() => this.setState({ visibleChooseBadge: true })}
+              onPress={() => {
+                this.setState({ visibleChooseBadge: true });
+              }}
             />
           </View>
           <View style={styles.imageContainer}>
@@ -413,7 +417,7 @@ class ProfileSettings extends React.Component {
                   colors={GRADIENT.PURCHASE_BUTTON}
                   shadowColor={"#FF6F00"}
                   onPress={() => this.setState({ visiblePurchase: true })}
-                  noButton={this.props.user.premium === 1}
+                  // noButton={this.props.user.premium === 1}
                 />
               </View>
             </View>
@@ -446,9 +450,15 @@ class ProfileSettings extends React.Component {
                 barColors={["rgba(255, 168, 55, 0)", "rgba(255, 168, 55, 0.57)"]}
                 barHeight={wp(123)}
                 iconWidth={wp(35)}
-                amounts={user.advanced ? user.advanced.reminds : 0}
+                amounts={user.premium === 1 ? "∞" : user.advanced ? user.advanced.rewinds : 0}
                 icon={Images.app.icRewind}
-                onPress={() => this.setState({ visibleRewind: true })}
+                onPress={() => {
+                  if (user.premium === 1) {
+                    return;
+                  } else {
+                    this.setState({ visibleRewind: true })
+                  }
+                }}
               />
             </View>
           </View>
@@ -462,6 +472,12 @@ class ProfileSettings extends React.Component {
         <ChooseBadgeModal
           isVisible={this.state.visibleChooseBadge}
           dismissModal={() => this.setState({ visibleChooseBadge: false })}
+          onPurchase={() => {
+            this.setState({ visibleChooseBadge: false });
+            setTimeout(() => {
+              this.setState({ visiblePurchase: true })
+            }, 400);
+          }}
         />
 
         <FriendsModal
@@ -472,6 +488,7 @@ class ProfileSettings extends React.Component {
         <SwipePurchaseModal
           isVisible={this.state.visibleBoost}
           uptoLogo
+          purchaseType={"boost"}
           onConfirm={() => this.setState({ visibleBoost: false })}
           onPluzoPlus={() => this.setState({ visibleBoost: false })}
           onHide={() => this.setState({ visibleBoost: false })}
@@ -479,6 +496,7 @@ class ProfileSettings extends React.Component {
 
         <SwipePurchaseModal
           isVisible={this.state.visibleSuperlike}
+          purchaseType={"superlike"}
           colors={["#0C0518", "#080A47", "#0032BB"]}
           mainLogo={Images.swipe.superLikeLogo}
           mainLogoCenter={Images.swipe.superLikeLogoCenter}
@@ -492,6 +510,7 @@ class ProfileSettings extends React.Component {
 
         <SwipePurchaseModal
           isVisible={this.state.visibleRewind}
+          purchaseType={"rewinds"}
           colors={["#0C0518", "#320847", "#A10046"]}
           mainLogo={Images.swipe.rewindLogo}
           mainLogoCenter={Images.swipe.rewindLogoCenter}
@@ -502,6 +521,19 @@ class ProfileSettings extends React.Component {
           onPluzoPlus={() => this.setState({ visibleRewind: false })}
           onHide={() => this.setState({ visibleRewind: false })}
         />
+
+        <NotificationModal 
+          isVisible={this.state.visibleNotification}
+          title={this.state.notificationText}
+          message={""}
+          logoIcon={Images.app.icInfo}
+          logoBackground={"#ABA7D5"}
+          buttonColors={["#ABA7D5", "#ABA7D5"]}
+          buttonText={"Okay"}
+          buttonTextStyle={"#0B0516"}
+          buttonContainerStyle={{marginTop: 32}}
+          onBack={() => this.setState({visibleNotification: false})}
+          onConfirm={(a, b) => this.setState({visibleNotification: false})} />
 
         <ActionSheet
           ref={o => (this.ActionSheet = o)}

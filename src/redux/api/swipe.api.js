@@ -21,6 +21,7 @@ export function sendLike(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
+    slient: true,
   }).then(response => response);
 }
 
@@ -79,10 +80,11 @@ export function runBoost(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
+    slient: true,
   }).then(response => response);
 }
 
-export function runRewinds(accessToken) {
+export function runRewinds(data, accessToken) {
   return API.request({
     method: "post",
     url: `${API_ENDPOINTS.RUN_REWIND}`,
@@ -90,5 +92,6 @@ export function runRewinds(accessToken) {
       "Content-Type": "multipart/form-data",
       Authorization: "Bearer " + accessToken,
     },
+    data,
   }).then(response => response);
 }

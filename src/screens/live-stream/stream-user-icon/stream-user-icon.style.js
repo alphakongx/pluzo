@@ -27,4 +27,7 @@ export default StyleSheet.create({
     height: wp(10),
     resizeMode: "contain",
   },
+  muted: {
+    backgroundColor: "#FF0036",
+  },
 });

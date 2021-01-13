@@ -7,6 +7,7 @@ import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import { Format } from "@helpers";
+import { SCREENS } from "@constants";
 import Images from "@assets/Images";
 
 import styles from "./discover-people-item.style";
@@ -19,7 +20,10 @@ const DiscoverPeopleItem: () => React$Node = props => {
   let isOnline = Format.isRecently(props.user.last_activity);
 
   return (
-    <View style={styles.peopleContainer}>
+    <Touchable style={styles.peopleContainer}
+      onPress={() => {
+        props.onShowProfile && props.onShowProfile();
+      }}>
       <FastImage
         source={typeof picture === "string" ? { uri: picture } : picture}
         style={styles.peoplePicture}
@@ -47,7 +51,7 @@ const DiscoverPeopleItem: () => React$Node = props => {
           <Image source={Images.app.icPlus} style={styles.plusIcon} />
         </LinearGradient>
       </Touchable>
-    </View>
+    </Touchable>
   );
 };
 

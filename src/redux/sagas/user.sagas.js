@@ -2,8 +2,6 @@ import { call, put, takeEvery, select, take } from "redux-saga/effects";
 import {
   UserCreators,
   UserTypes,
-  RegistrationCreators,
-  RegistrationTypes,
 } from "../actions";
 import {
   login,
@@ -18,12 +16,14 @@ import {
   updateUser,
   deleteImage,
   getProfile,
-  checkUsername,
   reorderImages,
   checkPhone,
   deleteAccount,
   updatePhoneSend,
   updatePhoneConfirm,
+  userBlock,
+  userUnblock,
+  getBlockedUsers,
 } from "@redux/api";
 import moment from "moment";
 import { registrationSelector, userSelector } from "../selectors";
@@ -34,7 +34,6 @@ import { Platform } from "react-native";
 
 export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_LOGIN, requestLogin);
-  yield takeEvery(RegistrationTypes.REQUEST_CHECK_USERNAME, requestCheckUsername);
   yield takeEvery(UserTypes.REQUEST_REGISTRATION, requestRegistration);
   yield takeEvery(UserTypes.REQUEST_PROFILE, requestProfile);
   yield takeEvery(UserTypes.REQUEST_CHECK_PHONE, requestCheckPhone);
@@ -68,6 +67,11 @@ export function* watchUserRequests() {
 
   yield takeEvery(UserTypes.REQUEST_UPDATE_PHONE_SEND_CODE, requestUpdatePhoneSendCode);
   yield takeEvery(UserTypes.REQUEST_UPDATE_PHONE_CONFIRM_CODE, requestUpdatePhoneConfirmCode);
+
+  // block users
+  yield takeEvery(UserTypes.REQUEST_BLOCK_USER, requestBlockUser);
+  yield takeEvery(UserTypes.REQUEST_UNBLOCK_USER, requestUnblockUser);
+  yield takeEvery(UserTypes.REQUEST_BLOCKED_USERS, requestBlockedUsers);
 }
 
 function* requestLogin(action) {
@@ -81,20 +85,6 @@ function* requestLogin(action) {
     yield put(UserCreators.loginSuccess(response.data.data));
   } catch (error) {
     yield put(UserCreators.loginFailure());
-  }
-}
-
-function* requestCheckUsername(action) {
-  try {
-    const { username } = action;
-    const requestParams = new FormData();
-    requestParams.append("username", username);
-    yield call(checkUsername, requestParams);
-
-    yield put(RegistrationCreators.checkUsernameDone());
-    NavigationService.navigate(SCREENS.SIGNUP_IMAGE, {});
-  } catch (error) {
-    yield put(RegistrationCreators.checkUsernameDone());
   }
 }
 
@@ -392,5 +382,44 @@ function* requestUpdatePhoneConfirmCode(action) {
   } catch (error) {
     console.log(error);
     yield put(UserCreators.updatePhoneConfirmCodeFail());
+  }
+}
+
+function* requestBlockUser(action) {
+  try {
+    const { user_id, token } = action;
+
+    const params = new FormData();
+    params.append("user_target_id", user_id);
+    
+    yield call(userBlock, params, token);
+  } catch (error) {
+    console.log("block user", error);
+  }
+}
+
+function* requestUnblockUser(action) {
+  try {
+    const { user_id, token } = action;
+
+    const params = new FormData();
+    params.append("user_target_id", user_id);
+    
+    yield call(userUnblock, params, token);
+  } catch (error) {
+    console.log("unblock user", error);
+  }
+}
+
+function* requestBlockedUsers(action) {
+  try {
+    const { token } = action;
+    
+    const res = yield call(getBlockedUsers, token);
+    
+    yield put(UserCreators.loadBlockedUsersSuccess(res.data.data));
+
+  } catch (error) {
+    console.log("blocked list", error);
   }
 }

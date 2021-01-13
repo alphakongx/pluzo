@@ -84,7 +84,7 @@ const UpdatePhoneModal: () => React$Node = props => {
             <TextInput
               value={phoneNumber}
               onChangeText={setPhoneNumber}
-              placeholder={"Your phone number"}
+              placeholder={"New Phone Number"}
               keyboardType={"phone-pad"}
             />
           </View>

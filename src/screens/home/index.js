@@ -19,6 +19,7 @@ const mapDispatchToProps = {
   rejectFriendRequest: InboxCreators.requestRejectFriend,
   updateNotification: UserCreators.updateNotification,
   initLiveUsers: LiveCreators.streamUserListSuccess,
+  updateChannelName: LiveCreators.updateChannelName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

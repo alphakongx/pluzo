@@ -19,10 +19,17 @@ const SearchChatItem: () => React$Node = props => {
   return (
     <Touchable
       onPress={() => {
-        NavigationService.navigate(SCREENS.CHAT, {
-          chatId: chat_id,
-          chatUser: props.item.id ? props.item : 0,
-        });
+        if (parseInt(props.item.id, 10) !== props.currentUser.id) {
+          NavigationService.navigate(SCREENS.CHAT, {
+            chatId: chat_id,
+            chatUser: props.item.id === 0 ? 0 : props.item,
+          });
+        } else {
+          NavigationService.navigate(SCREENS.CHAT, {
+            chatId: chat_id,
+            chatUser: props.item.partner_model.id === 0 ? 0 : props.item.partner_model,
+          });
+        }
       }}
     >
       <View style={styles.messageContainer}>

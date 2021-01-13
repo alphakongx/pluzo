@@ -120,11 +120,8 @@ class Messages extends React.Component {
                   {badges.map(badge => {
                     if (badge > AppBadges.length) return null;
                     return (
-                      <Image
-                        key={`user-badge-${badge}`}
-                        source={Images.live[AppBadges[badge].icon]}
-                        style={styles.badgeImage}
-                      />
+                      <Image key={`user-badge-${badge}`} style={styles.badgeImage} 
+                        source={Images.badges[AppBadges[badge-1].id]} />
                     );
                   })}
                 </View>
@@ -133,7 +130,7 @@ class Messages extends React.Component {
                   numberOfLines={1}
                 >
                   {isMyMessage && "You: "}
-                  {channel.messages[0].type === "invite" && "invited to the live"}
+                  {channel.messages[0].type === "invite" && "invited you to the live"}
                   {channel.messages[0].type === "close" && "The Live has ended."}
                   {channel.messages[0].type === "message" && channel.messages[0].image !== null && !isMyMessage && `${channel.messages[0].user.first_name} sent an image`}
                   {channel.messages[0].type === "message" && channel.messages[0].image !== null && isMyMessage && `You sent an image`}

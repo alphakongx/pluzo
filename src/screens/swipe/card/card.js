@@ -22,7 +22,9 @@ class Card extends React.Component {
       imageIndex: 0,
     };
 
-    FastImage.preload(this.props.card.images.map(item => ({ uri: item.path })));
+    if (this.props.card && this.props.card.images && this.props.card.images.length > 0) {
+      FastImage.preload(this.props.card.images.map(item => ({ uri: item.path ? item.path : "https://via.placeholder.com/728x90.png?text=No+Image" })));
+    }
     this._rightAnimValue = new Animated.Value(0);
   }
 
@@ -58,7 +60,6 @@ class Card extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.index === 0 && prevProps.showAnimation !== this.props.showAnimation) {
-      console.log(this.props.showAnimation);
       if (this.props.showAnimation) {
         this._animationRef.start();
       } else {
@@ -97,6 +98,11 @@ class Card extends React.Component {
   renderCard = () => {
     const { card, showAnimation } = this.props;
     const { imageIndex } = this.state;
+
+    if (!card) {
+      return null;
+    }
+
     let isBio = card.bio !== undefined && card.bio !== null && card.bio !== "";
 
     return (<Touchable
@@ -105,7 +111,7 @@ class Card extends React.Component {
       onPress={e => this.onCardPressed(e)}
     >
       <View style={styles.card}>
-        {card && card.images.length > 0 ? (
+        {card && card.images && card.images.length > 0 ? (
           imageIndex > card.images.length - 1 ? (
             <View style={styles.cardImage}>
               <FastImage

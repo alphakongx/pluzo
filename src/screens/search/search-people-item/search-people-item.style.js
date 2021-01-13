@@ -32,7 +32,8 @@ export default StyleSheet.create({
   },
   timeContainer: {
     marginHorizontal: wp(10),
-    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
   },
   addButton: {
     height: wp(25),
@@ -44,4 +45,9 @@ export default StyleSheet.create({
     fontSize: wp(12),
     color: "black",
   },
+  removeFriendButton: {
+    width: wp(25),
+    height: wp(25),
+    marginRight: wp(13),
+  }
 });

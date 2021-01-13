@@ -2,6 +2,10 @@ import { NavigationActions, StackActions } from "react-navigation";
 
 let _navigator = null;
 
+function isNavigator() {
+  return _navigator !== null;
+}
+
 function setTopLevelNavigator(navigatorRef) {
   _navigator = navigatorRef;
 }
@@ -25,4 +29,5 @@ export const NavigationService = {
   popToTop,
   navigate,
   setTopLevelNavigator,
+  isNavigator,
 };

@@ -15,6 +15,16 @@ const privacyCategories = [
 const TermsOfService: () => React$Node = props => {
   let isPrivacy = props.navigation.state.params.content !== undefined;
 
+  const renderEmail = (email) => {
+    return (
+      <Text
+        style={styles.linkText}
+        onPress={() => Linking.openURL(`mailto:${email}`)}>
+        {email}
+      </Text>
+    )
+  }
+
   const renderLink = (url) => {
     return (
       <Text
@@ -36,7 +46,7 @@ const TermsOfService: () => React$Node = props => {
 
   const renderPrivacyRow = (category) => {
     return (
-      <View style={styles.flexTableRow}>
+      <View style={styles.flexTableRow} key={`category-${category.number}`}>
         <View style={styles.tableRowOne}>
           <Text style={styles.tableContentText}>{category.number}</Text>
         </View>
@@ -171,7 +181,7 @@ const TermsOfService: () => React$Node = props => {
         {"\n"}Questions?{"\n"}
         </Text>
         <Text style={styles.contentText}>
-          If you have questions or requests regarding our privacy practices, please contact us at ___________.
+          If you have questions or requests regarding our privacy practices, please contact us at {renderEmail("contact@pluzo.com")}.
         </Text>
       </View>
     )
@@ -200,7 +210,7 @@ const TermsOfService: () => React$Node = props => {
           {"\n\n"}<Text style={styles.boldText}>“License”</Text> means the limited License company grants you to the Services, as set forth in Section 2(b) herein. 
           {"\n\n"}<Text style={styles.boldText}>“Notice”</Text> means, a delivered writing by e-mail or courier delivery to the other party at their respective address and will be effective upon receipt.  
           {"\n\n"}<Text style={styles.boldText}>“Privacy Policy”</Text> means, Company’s policy regarding privacy, which also governs your use of the Services and is incorporated herein by reference. The current version is available on our website via the .
-          {"\n\n"}<Text style={styles.boldText}>“Service” (or “Services”)</Text> means, any website or mobile application provided by Company including without limitation the App and the Company website {renderLink("https://www.pluzo.comApp/")}.
+          {"\n\n"}<Text style={styles.boldText}>“Service” (or “Services”)</Text> means, any website or mobile application provided by Company including without limitation the App and the Company website {renderLink("https://www.pluzo.com/")}.
           {"\n\n"}<Text style={styles.boldText}>“Terms of Service” (or “Terms”)</Text> means, the terms and conditions in this agreement.
         </Text>
 
@@ -361,7 +371,7 @@ const TermsOfService: () => React$Node = props => {
         {"\n"}14. Contact Us{"\n"}
         </Text>
         <Text style={[styles.contentText, styles.paddingLeft]}>
-          If you have any questions or comments about these Terms or our Services, please contact us at: 
+          If you have any questions or comments about these Terms or our Services, please contact us at: {renderEmail("contact@pluzo.com")}
         </Text>
       </View>
     )

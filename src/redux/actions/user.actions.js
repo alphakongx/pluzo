@@ -72,6 +72,12 @@ const { Types, Creators } = createActions({
   updateNotification: ["data"],
   updatePushStatus: ["status"],
 
+  // block users
+  requestBlockUser: ["user_id", "token"],
+  requestUnblockUser: ["user_id", "token"],
+  requestBlockedUsers: ["token"],
+  loadBlockedUsersSuccess: ["data"],
+
   logout: null,
 });
 

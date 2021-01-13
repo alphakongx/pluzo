@@ -13,6 +13,7 @@ const Header: () => React$Node = props => {
 
   const onSearchPress = () => {
     setSearchActive(!isSearchActive);
+    props.onSearch("");
   };
 
   const onFilterPress = () => {
@@ -22,7 +23,8 @@ const Header: () => React$Node = props => {
   return (
     <View style={isSearchActive ? styles.bottomMargin : styles.bottomMarginSmall}>
       <View style={styles.header}>
-        <LeftElement isSearchActive={isSearchActive} />
+        <LeftElement isSearchActive={isSearchActive}
+          onSearch={props.onSearch} />
         <RightElement
           isSearchActive={isSearchActive}
           onSearchPress={onSearchPress}

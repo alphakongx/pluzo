@@ -7,13 +7,21 @@ export default StyleSheet.create({
   container: {
     width: parseInt((width - wp(34)) / 2, 10),
     height: parseInt((((width - wp(34)) / 2) * wp(240)) / wp(170), 10),
-    overflow: "hidden",
-    borderRadius: wp(22),
+    ...Platform.select({
+      android: {
+        overflow: "hidden",
+      },
+      ios: {
+        borderRadius: wp(22),
+        overflow: "hidden",
+      }
+    }),
     marginHorizontal: wp(7),
   },
 
   userImage: {
-    flex: 1,
+    width: "100%",
+    height: "100%",
   },
 
   badgesContainer: {

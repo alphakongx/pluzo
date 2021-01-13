@@ -74,14 +74,11 @@ const Header: () => React$Node = props => {
             <View style={styles.flexFill}>
               <View style={styles.headerNameContainer}>
                 <Text style={styles.headerTitle}>{name}</Text>
-                {props.user !== 0 && badges.map(badge => {
+                {props.user !== 0 && badges && badges.map(badge => {
                   if (badge > AppBadges.length) return null;
                   return (
-                    <Image
-                      key={`user-badge-${badge}`}
-                      source={Images.live[AppBadges[badge].icon]}
-                      style={styles.badgeImage}
-                    />
+                    <Image key={`user-badge-${badge}`} style={styles.badgeImage} 
+                      source={Images.badges[AppBadges[badge-1].id]} />
                   );
                 })}
               </View>
@@ -91,6 +88,7 @@ const Header: () => React$Node = props => {
               </Text>
             </View>
           </Touchable>
+          {props.user !== 0 &&
           <View style={styles.reportButtonContainer}>
             <Touchable style={styles.reportButtonTouchable} onPress={props.onReport}>
               <Image
@@ -98,7 +96,7 @@ const Header: () => React$Node = props => {
                 style={styles.reportIcon}
               />
             </Touchable>
-          </View>
+          </View>}
         </View>
       </SafeAreaView>
     </View>

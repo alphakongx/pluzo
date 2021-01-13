@@ -8,6 +8,7 @@ import styles from "./left-element.style";
 
 const LeftElement: () => React$Node = props => {
   const [textInput, setTextInput] = useState(props.isSearchActive);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     setTextInput(props.isSearchActive);
@@ -19,7 +20,9 @@ const LeftElement: () => React$Node = props => {
         <View style={styles.searchContainer}>
           <SearchInput
             autoFocus
-            onSearch={() => {}}
+            onSearch={(text) => {
+              props.onSearch(text);
+            }}
             onRef={ref => {}}
             containerStyle={styles.searchInput}
           />

@@ -1,6 +1,6 @@
 import Live from "./live.screen";
 import { connect } from "react-redux";
-import { LiveCreators } from "@redux/actions";
+import { LiveCreators, UserCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -9,11 +9,14 @@ function mapStateToProps(state) {
     streamStatus: state.live.streamStatus,
     allStreams: state.live.allStreams,
     trendingStreams: state.live.trendingStreams,
+    channelName: state.live.channelName,
   };
 }
 
 const mapDispatchToProps = {
   requestStreamList: LiveCreators.requestStreamList,
+  updateUser: UserCreators.requestUpdateUser,
+  updateStreamInfo: LiveCreators.updateStreamInfo,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Live);

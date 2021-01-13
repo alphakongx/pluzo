@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { SafeAreaView, View } from "react-native";
-import { Screen, Image, Text, Touchable } from "@components";
+import { Screen, Image, Text, Touchable, NotificationModal } from "@components";
 import { SCREENS } from "@constants";
 import NewFriends from "./new-friends";
 import Messages from "./messages";
@@ -8,7 +8,6 @@ import AddFriendModal from "./add-friend-modal";
 import PendingRequestModal from "./pending-request-modal";
 import PendingRequestCountView from "./pending-request-count-view";
 import ReportModal from "../report-modal";
-import ConfirmDeleteModal from "../profile-view/confirm-delete-modal";
 import { API, widthPercentageToDP as wp } from "@helpers";
 import { API_ENDPOINTS } from "@config";
 import styles from "./inbox.style.js";
@@ -117,6 +116,7 @@ class Inbox extends Component {
           isVisible={visibleAddFriend}
           dismissModal={() => this.setState({ visibleAddFriend: false })}
           pendingRequest={() => this.onPendingRequest()}
+          navigation={this.props.navigation}
         />
 
         <PendingRequestModal
@@ -130,7 +130,7 @@ class Inbox extends Component {
           onDismiss={() => this.setState({ visibleReport: false })}
         />
 
-        <ConfirmDeleteModal
+        <NotificationModal
           isVisible={visibleConfirmDelete && removeUser !== null}
           userId={removeUser ? (removeUser.id || removeUser._id) : null}
           userName={removeUser ? (removeUser.name || removeUser.username) : null}

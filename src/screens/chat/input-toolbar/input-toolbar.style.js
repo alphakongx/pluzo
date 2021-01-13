@@ -29,16 +29,15 @@ export default StyleSheet.create({
   },
   inputField: FontHelper.font({
     fontFamily: "OpenSans",
-    fontSize: wp(14),
+    fontSize: 16,
     color: COLOR.TEXT_INPUT,
-    marginLeft: wp(14),
-    marginRight: wp(14),
-    paddingRight: wp(35),
+    marginLeft: wp(15),
+    marginRight: wp(45),
     ...Platform.select({
       ios: {
-        marginTop: wp(7.5),
-        marginBottom: wp(7.5),
-        lineHeight: wp(14),
+        marginTop: wp(3),
+        marginBottom: wp(2),
+        lineHeight: 20,
       },
       android: {
         marginBottom: wp(0),

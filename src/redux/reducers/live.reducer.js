@@ -1,19 +1,10 @@
+import actions from "redux-form/lib/actions";
 import { createReducer } from "reduxsauce";
 import { LiveTypes, UserTypes } from "../actions";
 import storeInitialState from "../store/initial-state";
 export const INITIAL_STATE = storeInitialState.live;
 
 const logout = (state, action) => INITIAL_STATE;
-
-const setSortBy = (state, action) => ({
-  ...state,
-  sortBy: action.sortBy,
-});
-
-const setFilterCountry = (state, action) => ({
-  ...state,
-  filterCountry: action.country,
-});
 
 const setEnabledCamera = (state, action) => ({
   ...state,
@@ -27,6 +18,23 @@ const resetEnabledSettings = (state, action) => ({
   ...state,
   isEnabledCamera: true,
   isEnabledMic: true,
+  mutedUsers: [],
+  remoteMutedUsers: [],
+  askedUsers: [],
+  inviteOnly: 0,
+  boostEndTime: 0,
+});
+const updateMutedUsers = (state, action) => ({
+  ...state,
+  mutedUsers: action.users,
+});
+const updateRemoteMutedUsers = (state, action) => ({
+  ...state,
+  remoteMutedUsers: action.users,
+});
+const updateAskedUsers = (state, action) => ({
+  ...state,
+  askedUsers: action.users,
 });
 
 const setStreamStatus = (state, action) => ({
@@ -90,6 +98,16 @@ const reqeustUserCancelAsk = (state, action) => ({
   ...state,
 });
 
+const requestStreamBanUser = (state, action) => ({
+  ...state,
+});
+const requestStreamKickUser = (state, action) => ({
+  ...state,
+});
+const requestStreamBanList = (state, action) => ({
+  ...state,
+});
+
 const requestStreamList = (state, action) => ({
   ...state,
 });
@@ -125,13 +143,34 @@ const requestStreamChatAddMsg = (state, action) => ({
   ...state,
 });
 
-export const HANDLERS = {
-  [LiveTypes.SET_SORT_BY]: setSortBy,
-  [LiveTypes.SET_FILTER_COUNTRY]: setFilterCountry,
+const updateChannelName = (state, action) => ({
+  ...state,
+  channelName: action.name,
+});
+const updateStreamInfo = (state, action) => ({
+  ...state,
+  inviteOnly: action.inviteOnly,
+  boostEndTime: action.boostEndTime,
+});
 
+const getFilterSettings = (state, action) => ({
+  ...state,
+});
+const setFilterSettings = (state, action) => ({
+  ...state,
+});
+const setFilterSettingsSuccess = (state, action) => ({
+  ...state,
+  settings: action.data,
+})
+
+export const HANDLERS = {
   [LiveTypes.SET_ENABLED_CAMERA]: setEnabledCamera,
   [LiveTypes.SET_ENABLED_MIC]: setEnabledMic,
   [LiveTypes.RESET_ENABLED_SETTINGS]: resetEnabledSettings,
+  [LiveTypes.UPDATE_MUTED_USERS]: updateMutedUsers,
+  [LiveTypes.UPDATE_REMOTE_MUTED_USERS]: updateRemoteMutedUsers,
+  [LiveTypes.UPDATE_ASKED_USERS]: updateAskedUsers,
 
   [LiveTypes.SET_STREAM_STATUS]: setStreamStatus,
   [LiveTypes.SET_IS_SCROLLING]: setIsScrolling,
@@ -156,6 +195,10 @@ export const HANDLERS = {
   [LiveTypes.REQUEST_USER_REFUSED_JOIN]: requestUserRefusedJoin,
   [LiveTypes.REQUEST_USER_CANCEL_ASK]: reqeustUserCancelAsk,
 
+  [LiveTypes.REQUEST_STREAM_BAN_USER]: requestStreamBanUser,
+  [LiveTypes.REQUEST_STREAM_KICK_USER]: requestStreamKickUser,
+  [LiveTypes.REQUEST_STREAM_BAN_LIST]: requestStreamBanList,
+
   [LiveTypes.REQUEST_STREAM_LIST]: requestStreamList,
   [LiveTypes.STREAM_LIST_SUCCESS]: streamListSuccess,
 
@@ -166,6 +209,12 @@ export const HANDLERS = {
 
   [LiveTypes.UPDATE_MESSAGES]: updateMessages,
   [LiveTypes.REQUEST_STREAM_CHAT_ADD_MSG]: requestStreamChatAddMsg,
+  [LiveTypes.UPDATE_CHANNEL_NAME]: updateChannelName,
+  [LiveTypes.UPDATE_STREAM_INFO]: updateStreamInfo,
+
+  [LiveTypes.GET_FILTER_SETTINGS]: getFilterSettings,
+  [LiveTypes.SET_FILTER_SETTINGS]: setFilterSettings,
+  [LiveTypes.SET_FILTER_SETTINGS_SUCCESS]: setFilterSettingsSuccess,
 
   [UserTypes.LOGOUT]: logout,
 };

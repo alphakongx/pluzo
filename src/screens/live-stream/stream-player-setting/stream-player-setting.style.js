@@ -1,6 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
 import { widthPercentageToDP as wp } from "@helpers";
-import { COLOR } from "@config";
 
 const { width } = Dimensions.get("window");
 
@@ -18,14 +17,11 @@ export default StyleSheet.create({
   },
 
   backButton: {
-    width: wp(30),
-    height: wp(30),
+    width: wp(31),
+    height: wp(5),
     borderRadius: wp(15),
-    backgroundColor: COLOR.HEADER_BACKGROUND,
-    top: wp(15),
-    zIndex: 9999,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#ABA7D5",
+    marginTop: wp(10),
     alignSelf: "center",
   },
   backImage: {

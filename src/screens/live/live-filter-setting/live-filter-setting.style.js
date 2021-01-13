@@ -5,6 +5,13 @@ export default StyleSheet.create({
   container: {
     flex: 1,
   },
+  absoluteFill: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    left: 0,
+  },
 
   contentContainer: {
     flex: 1,
@@ -77,5 +84,38 @@ export default StyleSheet.create({
     opacity: 0.15,
     marginTop: wp(20),
     marginBottom: wp(40),
+  },
+
+  locationContainer: {
+    flexDirection: "column-reverse"
+  },
+  locationRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: wp(10),
+    marginHorizontal: wp(10),
+  },
+  locationRowText: {
+    color: "white",
+    fontFamily: "OpenSans",
+    fontSize: wp(14),
+  },
+  codePickerContainer: {
+    height: wp(24),
+  },
+  codePicker: {
+    width: wp(120),
+    backgroundColor: "#E8E6FF",
+  },
+  codePickerContent: {
+    borderRadius: wp(12),
+  },
+  spacerStyle: {
+    height: wp(25),
+  },
+  flagStyle: {
+    width: wp(23),
+    height: wp(12),
   },
 });

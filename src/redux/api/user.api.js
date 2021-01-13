@@ -240,6 +240,57 @@ export function report(data, accessToken, type) {
   }).then(response => response);
 }
 
+export function requestHelp(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.HELP_REQUEST}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    slient: true,
+  }).then(response => response);
+}
+
+export function userBlock(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.USER_BLOCK}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    slient: true,
+  }).then(response => response);
+}
+
+export function userUnblock(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.USER_UNBLOCK}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    slient: true,
+  }).then(response => response);
+}
+
+export function getBlockedUsers(accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.GET_BLOCKED_UESRS}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    slient: true,
+  }).then(response => response);
+}
+
 export function userOnline(data, accessToken, type) {
   return API.request({
     method: "post",

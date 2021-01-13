@@ -6,12 +6,19 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { Screen, Image, BackButton, Text, Touchable, BorderButton } from "@components";
+import { Screen, Image, BackButton, Text, Touchable, BorderButton, NotificationModal } from "@components";
+import RNMasonryScroll from "react-native-masonry-scrollview";
+import LiveItem from "../live/live-item";
+import EventBus from "eventing-bus";
 import { COLOR } from "@config";
-import styles from "./search.style";
 import SearchPeopleItem from "./search-people-item";
 import SearchChatItem from "./search-chat-item";
 import { SafeAreaView } from "react-navigation";
+import { API } from "@helpers";
+import { API_ENDPOINTS } from "@config";
+import { StreamStatus } from "@constants";
+
+import styles from "./search.style";
 
 const FilterTypes = [
   { id: 1, name: "ALL" },
@@ -28,6 +35,8 @@ class SearchScreen extends Component {
       currentFilter: 1,
       searchKeyword: "",
       addingUsers: [],
+      visibleConfirmDelete: false,
+      deletedUsers: [],
     };
     this.searchInput = React.createRef();
   }
@@ -36,10 +45,15 @@ class SearchScreen extends Component {
     setTimeout(() => {
       this.searchInput.focus();
     }, 500);
+
+    this.streamStoppedAction = EventBus.on("StreamStopped", channelName => {
+      this.props.updateSearchLive(this.props.live.filter((value) => value.channel !== channelName));
+    });
   }
 
   componentWillUnmount() {
     this.props.initSearch();
+    this.streamStoppedAction();
   }
 
   onBack = () => {
@@ -57,9 +71,54 @@ class SearchScreen extends Component {
     }
   };
 
+  onDeleteUser = () => {
+    if (this.removeUser) {
+      let userId = this.removeUser.id || this.removeUser._id;
+
+      let data = new FormData();
+      data.append("username", this.removeUser.username || user.name);
+      data.append("user_target_id", userId);
+
+      let url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
+
+      API.request({
+        method: "post",
+        url: url,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + this.props.token,
+        },
+        data,
+      });
+      this.setState({deletedUsers: [...this.state.deletedUsers, userId]});
+    }
+  }
+
+  onJoinStream = channelName => {
+    let names = channelName.split("-");
+    if (names.length > 1 && parseInt(names[1], 10) === this.props.user.id ||
+      this.props.channelName === channelName) {
+      return;
+    }
+    let params = {
+      channelName,
+      isBroadcaster: false,
+      isJoin: true,
+    };
+    if (this.props.streamStatus !== StreamStatus.NONE) {
+      EventBus.publish("APP_END_STREAM_ACTION");
+      setTimeout(() => {
+        EventBus.publish("NEW_STREAM_ACTION", params);
+      }, 500);
+    } else {
+      EventBus.publish("NEW_STREAM_ACTION", params);
+    }
+  };
+
   render() {
     const { currentFilter } = this.state;
-    const { isSearching, friends, chat, people } = this.props;
+    const { isSearching, friends, chat, people, live } = this.props;console.log(chat);
+    let realFriends = friends.filter((value) => !this.state.deletedUsers.includes((value.id || value._id)));
     return (
       <Screen hasGradient style={styles.container}>
         <SafeAreaView style={styles.contentContainer}>
@@ -116,18 +175,22 @@ class SearchScreen extends Component {
             <ActivityIndicator size={"large"} color={"white"} />
           ) : (
             <ScrollView keyboardShouldPersistTaps={"always"}>
-              {(currentFilter === 1 || currentFilter === 2) && friends.length > 0 && (
+              {(currentFilter === 1 || currentFilter === 2) && realFriends.length > 0 && (
                 <View style={styles.sectionContainer}>
                   <Text style={styles.sectionText}>Friends</Text>
-                  {friends.map((item, index) => {
+                  {realFriends.map((item, index) => {
                     if (index > 1 && currentFilter === 1) {
                       return;
                     }
                     return (
-                      <SearchPeopleItem friend item={item} key={`friend-${index}`} />
+                      <SearchPeopleItem friend item={item} key={`friend-${index}`}
+                        onRemoveFriend={() => {
+                          this.removeUser = item;
+                          this.setState({visibleConfirmDelete: true});
+                        }} />
                     );
                   })}
-                  {friends.length > 2 && currentFilter === 1 && (
+                  {realFriends.length > 2 && currentFilter === 1 && (
                     <View style={styles.showAllContainer}>
                       <BorderButton
                         text={"Show all results"}
@@ -151,6 +214,7 @@ class SearchScreen extends Component {
                         item={item}
                         key={`chat-${index}`}
                         searchKeyword={this.state.searchKeyword}
+                        currentUser={this.props.user}
                       />
                     );
                   })}
@@ -187,9 +251,47 @@ class SearchScreen extends Component {
                   )}
                 </View>
               )}
+              {(currentFilter === 1 || currentFilter === 5) && live.length > 0 && (
+                <View style={styles.sectionContainer}>
+                  <Text style={styles.sectionText}>Live</Text>
+                  <RNMasonryScroll style={styles.masonryContainer} bounces={false}>
+                    {live.map((item, index) => {
+                      return (
+                        <Touchable
+                          style={styles.liveItemContainer}
+                          onPress={() => {
+                            this.onJoinStream(item.channel);
+                          }}
+                          key={`live-search-${index}`}
+                        >
+                          <LiveItem item={item}/>
+                        </Touchable>
+                      )
+                    })}
+                  </RNMasonryScroll>
+                  {live.length > 2 && currentFilter === 1 && (
+                    <View style={styles.showAllContainer}>
+                      <BorderButton
+                        text={"Show all results"}
+                        color={COLOR.TEXT_SECONDARY_4}
+                        textStyle={styles.showAllText}
+                        onPress={() => this.setState({ currentFilter: 5 })}
+                      />
+                    </View>
+                  )}
+                </View>
+              )}
             </ScrollView>
           )}
         </SafeAreaView>
+        <NotificationModal
+          isVisible={this.state.visibleConfirmDelete}
+          onBack={() => this.setState({visibleConfirmDelete: false})}
+          onConfirm={(userId, userName) => {
+            this.setState({visibleConfirmDelete: false});
+            this.onDeleteUser();
+          }}
+        />
       </Screen>
     );
   }

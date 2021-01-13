@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { widthPercentageToDP as wp, FontHelper } from "@helpers";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp, FontHelper } from "@helpers";
 
 export default StyleSheet.create({
   flexFill: {
@@ -9,12 +9,16 @@ export default StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: wp(20),
-    justifyContent: "center",
-    marginBottom: wp(135),
+  },
+  contentMargin: {
+    marginTop: hp(80),
+  },
+  contentMarginZero: {
+    marginTop: hp(10),
   },
   titleText: {
     color: "white",
-    fontSize: wp(22),
+    fontSize: wp(20),
     fontWeight: "bold",
   },
 
@@ -33,7 +37,7 @@ export default StyleSheet.create({
 
   attachButtonContainer: {
     flexDirection: "row",
-    height: wp(35),
+    height: wp(30),
     marginTop: wp(20),
     backgroundColor: "#ABA7D5",
     borderRadius: wp(18),
@@ -52,12 +56,12 @@ export default StyleSheet.create({
     color: "white",
   },
   buttonContainer: {
-    height: wp(35),
+    height: wp(30),
     marginTop: wp(20),
+  },
+  sendButton: {
+    height: wp(30),
     backgroundColor: "#E8E6FF",
-    borderRadius: wp(18),
-    justifyContent: "center",
-    alignItems: "center",
   },
   buttonText: {
     fontSize: wp(12),

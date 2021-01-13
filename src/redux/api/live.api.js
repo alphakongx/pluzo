@@ -180,6 +180,45 @@ export function userCancelAsk(data, accessToken) {
   }).then(response => response);
 }
 
+export function streamBanUser(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.STREAM_BAN_USER}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    silent: true,
+  }).then(response => response);
+}
+
+export function streamKickUser(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.STREAM_KICK_USER}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    silent: true,
+  }).then(response => response);
+}
+
+export function streamBanList(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.STREAM_BAN_LIST}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    silent: true,
+  }).then(response => response);
+}
+
 export function streamList(data, accessToken) {
   return API.request({
     method: "post",
@@ -210,6 +249,31 @@ export function streamChatAddMsg(data, accessToken) {
   return API.request({
     method: "post",
     url: `${API_ENDPOINTS.STREAM_CHAT_ADD_MSG}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    silent: true,
+  }).then(response => response);
+}
+
+export function getLiveSettings(accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.GET_LIVE_SETTINGS}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    silent: true,
+  }).then(response => response);
+}
+
+export function setLiveSettings(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.SET_LIVE_SETTINGS}`,
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: "Bearer " + accessToken,

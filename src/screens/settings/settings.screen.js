@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import { View, FlatList } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import { Touchable, Image, Text, DialogInput, TouchableSettingItem } from "@components";
+import RNIap from "react-native-iap";
 import { SCREENS } from "@constants";
-import { Notification } from "@helpers";
+import { Notification, API } from "@helpers";
+import { API_ENDPOINTS } from "@config";
+
 import Images from "@assets/Images";
 import Header from "./header";
 import LogoutModal from "./logout-modal/logout-modal";
@@ -45,6 +48,56 @@ class Settings extends Component {
     });
   };
 
+  onRestorePurchases = async () => {
+    try {
+      const purchases = await RNIap.getAvailablePurchases();
+
+      purchases.forEach(purchase => {
+        switch (purchase.productId) {
+        case 'com.pluzo.app.pluzoplus':
+        case 'com.pluzo.app.pluzoplus3':
+        case 'com.pluzo.app.pluzoplus12':
+          let params = new FormData();
+          let serviceId = 10;
+          let amount = 11.99;
+          if (purchase.productId === 'com.pluzo.app.pluzoplus3') {
+            serviceId = 11;
+            amount = 9.99;
+          } else if (purchase.productId === 'com.pluzo.app.pluzoplus12') {
+            serviceId = 12;
+            amount = 7.99;
+          }
+          params.append("service_id", serviceId);
+          params.append("receipt", purchase.transactionReceipt);
+          params.append("transaction_id", purchase.transactionId);
+          params.append("amount", amount);
+          params.append("payment_method", Platform.OS === "ios" ? "apple" : "google");
+          API.request({
+            method: "post",
+            url: `${API_ENDPOINTS.ITEM_PAY}`,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + this.props.token,
+            },
+            data: params,
+            slient: true,
+          })
+            .then(async response => {
+              this.props.updateUser(response.data.data.user);
+            })
+            .catch(e => {
+              console.log(e);
+            });
+          break
+        }
+      })
+
+      // Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles.join(', '));
+    } catch(err) {
+      console.warn(err);
+    }
+  }
+
   onItemPressed = itemId => {
     if (itemId === "1") {
       this.props.navigation.navigate(SCREENS.ACCOUNT_SETTINGS);
@@ -57,7 +110,9 @@ class Settings extends Component {
     } else if (itemId === "7") {
       this.props.navigation.navigate(SCREENS.HELP);
     } else if (itemId === "9") {
-      this.props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {});
+      this.props.navigation.navigate(SCREENS.LEGAL, {});
+    } else if (itemId === "11") {
+      this.onRestorePurchases();
     } else if (itemId === "16") {
       // delete account
       if (!this.props.isDeletingAccount) {

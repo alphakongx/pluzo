@@ -12,7 +12,7 @@ import { AppContainer } from "../screens";
 import Loading from "../screens/loading";
 import { WS } from "@components";
 import { NavigationService, IapManager } from "@helpers";
-import { SCREENS } from "@constants";
+import { SCREENS, TUTORIAL } from "@constants";
 import { COLOR } from "@config";
 import { UserCreators, InboxCreators, LiveCreators } from "@redux/actions";
 import { userOnline } from "@redux/api";
@@ -70,12 +70,24 @@ class App extends React.Component {
       OneSignal.getPermissionSubscriptionState((status) => {
         this.props.updatePushStatus(status.notificationsEnabled);
       });
-      this.props.token && userOnline(null, this.props.token, "online");
-    } else if (this.state.appState.match(/active/) && nextAppState === "background") {
-      this.props.token && userOnline(null, this.props.token, "offline");
+      this.props.token && userOnline(null, this.props.token, "online").catch(e => console.log(e));
+      // EventBus.publish("AppState_Active");
+    } else if (this.state.appState.match(/inactive/) && nextAppState === "background") {
+      this.props.token && userOnline(null, this.props.token, "offline").then(res => console.log("offline")).catch(e => console.log(e));
     }
     this.setState({ appState: nextAppState });
   };
+
+  _onInitTutorials = () => {
+    AsyncStorage.multiRemove([
+      TUTORIAL.MINIMIZED,
+      TUTORIAL.USERS,
+      TUTORIAL.KICK_BAN1,
+      TUTORIAL.KICK_BAN2,
+      TUTORIAL.SWIPE,
+      TUTORIAL.POINTER,
+    ]);
+  }
 
   isLogin = () => {
     const { user, token } = this.props;
@@ -90,15 +102,27 @@ class App extends React.Component {
   checkingLogin = async () => {
     const { user, token } = this.props;
     if (user !== null && token !== undefined && token !== "" && token !== null) {
+      if (token === this.oldToken) return;
       if (user.status === 1) {
-        AsyncStorage.setItem("USER_TOKEN", token);
-        FastImage.preload([{ uri: user.images[0].path }]);
-        NavigationService.navigate(SCREENS.HOMESTACK);
-        userOnline(null, token, "online");
-        if (user.first_login === 1) {
-          console.log("first");
-        } else {
-          console.log("not first");
+        if (NavigationService.isNavigator()) {
+          AsyncStorage.setItem("USER_TOKEN", token);
+          FastImage.preload([{ uri: user.images[0].path }]);
+          NavigationService.navigate(SCREENS.HOMESTACK);
+          userOnline(null, token, "online");
+          if (user.first_login === 1) {
+            this._onInitTutorials();
+            const params = new FormData();
+            params.append("first_login", 0);
+            this.props.updateUser(params, this.props.token);
+
+            this.props.updateNotification({
+              type: "chat",
+              message: "Welcome to Pluzo 🌟",
+              user: 0,
+              chatId: null,
+            });
+          }
+          this.oldToken = token;
         }
       } else {
         NavigationService.navigate(SCREENS.SIGNUP_CODE_VERIFICATION, {
@@ -108,6 +132,7 @@ class App extends React.Component {
     } else {
       AsyncStorage.removeItem("USER_TOKEN");
       NavigationService.navigate(SCREENS.AUTHSTACK);
+      this.oldToken = token;
     }
   };
 
@@ -115,10 +140,11 @@ class App extends React.Component {
     let data = JSON.parse(ev.data);
     if (data.action === "User_update") {
       let objData = JSON.parse(data.data);
-      if (objData.user._id === this.props.user.id) {
+      if (parseInt(objData.user._id, 10) === this.props.user.id) {
         let newProfile = objData.user;
-        newProfile.id = newProfile._id;
+        newProfile.id = parseInt(newProfile._id, 10);
         this.props.updateProfile(newProfile);
+        // console.log("user>>>", newProfile);
       }
       EventBus.publish("User_update", objData);
     } else if (data.action === "Friends") {
@@ -141,6 +167,14 @@ class App extends React.Component {
       }
     } else if (data.action === "Start_stream") {
       this.props.requestStreamList(this.props.token);
+      let objData = JSON.parse(data.data);
+      if (objData.friends.filter((value) => parseInt(value.id, 10) === this.props.user.id).length > 0) {
+        this.props.updateNotification({
+          type: "livefriend",
+          stream: objData.stream,
+          user: objData.host,
+        });
+      }
     } else if (data.action === "Stop_stream") {
       this.props.requestStreamList(this.props.token);
       EventBus.publish("StreamStopped", JSON.parse(data.data));
@@ -171,7 +205,6 @@ class App extends React.Component {
       if (userData.host._id === this.props.user.id || 
         userData.user_target_id._id === this.props.user.id) {
         EventBus.publish("Need_Update_Friends");
-        console.log(this.props.chatUserId, userData.host._id,userData.user_target_id._id);
         if (parseInt(this.props.chatUserId, 10) === parseInt(userData.host._id, 10) || 
           parseInt(this.props.chatUserId, 10) === parseInt(userData.user_target_id._id, 10)) {
           EventBus.publish("Need_Close_Chat");
@@ -181,6 +214,7 @@ class App extends React.Component {
       let userData = JSON.parse(data.data);
       if (userData.host._id === this.props.user.id || userData.user_target_id._id === this.props.user.id) {
         EventBus.publish("Need_Update_Friends");
+        this.props.requestProfile(this.props.token);
         this.props.updateNotification({
           type: "friend-match",
           user: userData.host._id === this.props.user.id ? userData.user_target_id : userData.host,
@@ -240,6 +274,7 @@ const mapDispatchToProps = {
   requestStreamList: LiveCreators.requestStreamList,
   updateNotification: UserCreators.updateNotification,
   updateProfile: UserCreators.updateUserSuccess,
+  updateUser: UserCreators.requestUpdateUser,
   updateFriends: InboxCreators.requestFriendsSuccess,
   loadPendingRequests: InboxCreators.requestPendingFriends,
 };

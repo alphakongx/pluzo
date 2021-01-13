@@ -10,6 +10,7 @@ import {
   GradientButton,
 } from "@components";
 import Modal from "react-native-modal";
+import moment from "moment";
 import RNIap from "react-native-iap";
 import * as Animatable from "react-native-animatable";
 import LinearGradient from "react-native-linear-gradient";
@@ -24,7 +25,7 @@ const { createAnimatableComponent } = Animatable;
 const AnimatableView = createAnimatableComponent(View);
 
 const SwipePurchaseModal: () => React$Node = props => {
-  const [boost, setBoost] = useState(1);
+  const [boost, setBoost] = useState(3);
   const [boxWidth, setBoxWidth] = useState(1);
   const [boxHeight, setBoxHeight] = useState(1);
   const [visiblePurchase, setVisiblePurchase] = useState(false);
@@ -40,6 +41,15 @@ const SwipePurchaseModal: () => React$Node = props => {
     offsetX: 0,
     offsetY: 0,
   };
+
+  let boostResetDate = 30;
+  let superlikesResetDate = 1;
+  if (props.user.premium === 1 && props.user.premium_info) {
+    let duration = moment.unix(props.user.premium_info.boost_reset_date).diff(moment(), "days");
+    boostResetDate = duration.toFixed(0);
+    duration = moment.unix(props.user.premium_info.super_like_reset_date).diff(moment(), "hours");
+    superlikesResetDate = duration.toFixed(0);
+  }
 
   const onPurchase = async () => {
     try {
@@ -138,38 +148,43 @@ const SwipePurchaseModal: () => React$Node = props => {
               />
             </View>
             <Text style={styles.titleText} pointerEvents={"none"}>
-              Out of {props.text}s!
+              {props.text.toLowerCase() === "boost" && (parseInt(props.user.advanced.boosts, 10) === 0 ? "Out of" : props.user.advanced.boosts)}
+              {props.text.toLowerCase() === "super like" && (parseInt(props.user.advanced.super_likes, 10) === 0 ? "Out of" : props.user.advanced.super_likes)}
+              {props.text.toLowerCase() === "rewind" && (parseInt(props.user.advanced.rewinds, 10) === 0 ? "Out of" : props.user.advanced.rewinds)}
+              &nbsp;{props.text}s!
             </Text>
+            {props.user.premium === 1 &&
             <Text style={styles.subText} pointerEvents={"none"}>
-              28 days until your next free {props.text}.
-            </Text>
+              {props.text.toLowerCase() === "boost" && `${props.user.premium === 1 ? boostResetDate : "30"} days until your next free ${props.text}.`}
+              {props.text.toLowerCase() === "super like" && `${props.user.premium === 1 ? superlikesResetDate : "24"} hours until your next free ${props.text}.`}
+            </Text>}
 
             <View style={styles.pricesContainer}>
               <PriceBoxView
                 count={1}
                 boxTitle={props.text}
-                selected={boost === 1}
-                onSelect={() => setBoost(1)}
+                selected={boost === 3}
+                onSelect={() => setBoost(3)}
                 selectColors={props.selectColors}
-                price={"6.99"}
+                price={"3.99"}
               />
               <PriceBoxView
                 count={5}
                 boxTitle={`${props.text}s`}
                 saveValue={14}
-                selected={boost === 2}
-                onSelect={() => setBoost(2)}
+                selected={boost === 4}
+                onSelect={() => setBoost(4)}
                 selectColors={props.selectColors}
-                price={"6.00"}
+                price={"2.99"}
               />
               <PriceBoxView
                 count={10}
                 boxTitle={`${props.text}s`}
                 saveValue={28}
-                selected={boost === 3}
-                onSelect={() => setBoost(3)}
+                selected={boost === 5}
+                onSelect={() => setBoost(5)}
                 selectColors={props.selectColors}
-                price={"5.00"}
+                price={"1.99"}
               />
             </View>
 
@@ -232,7 +247,7 @@ SwipePurchaseModal.defaultProps = {
   mainLogo: Images.swipe.boostLogo,
   mainLogoCenter: Images.swipe.boostLogoCenter,
   text: "Boost",
-  confirmText: "Boost me",
+  confirmText: "Get Boosts",
 };
 
 export default SwipePurchaseModal;

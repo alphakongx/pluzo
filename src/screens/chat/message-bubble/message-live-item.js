@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { View } from "react-native";
+import { connect } from "react-redux";
+import EventBus from "eventing-bus";
 import LinearGradient from "react-native-linear-gradient";
 import { Touchable, Text, BoxShadow } from "@components";
 import { widthPercentageToDP as wp } from "@helpers";
 import { GRADIENT } from "@config";
+import { StreamStatus } from "@constants";
 import LiveItem from "../../live/live-item";
 
 import styles from "./message-live-item.style";
 
 const MessageLiveItem: () => React$Node = props => {
-  const { currentMessage, isCurrentUser } = props;
+  const { currentMessage, isCurrentUser, currentUser } = props;
   const [height, setHeight] = useState(1);
-console.log(currentMessage.stream_info);
+
   const shadowOption = {
     width: wp(175),
     height: height,
@@ -43,7 +46,32 @@ console.log(currentMessage.stream_info);
   }
 
   return (
-    <Touchable onPress={() => console.log("OK")}>
+    <Touchable onPress={() => {
+      let channelName = currentMessage.stream_info.channel;
+      let names = channelName.split("-");
+      if (names.length > 1 && parseInt(names[1], 10) === parseInt(currentUser._id, 10) ||
+        props.channelName === channelName) {
+        return;
+      }
+      
+      if (currentMessage.stream_info.ban_list.filter((value) => value.user_id === currentUser._id).length > 0) {
+        return;
+      }
+  
+      let params = {
+        channelName,
+        isBroadcaster: false,
+        isJoin: true,
+      };
+      if (props.streamStatus !== StreamStatus.NONE) {
+        EventBus.publish("APP_END_STREAM_ACTION");
+        setTimeout(() => {
+          EventBus.publish("NEW_STREAM_ACTION", params);
+        }, 500);
+      } else {
+        EventBus.publish("NEW_STREAM_ACTION", params);
+      }
+    }}>
       <LinearGradient
         colors={GRADIENT.BUTTON}
         start={{ x: 1, y: 1 }}
@@ -61,4 +89,14 @@ console.log(currentMessage.stream_info);
   )
 };
 
-export default MessageLiveItem;
+function mapStateToProps(state) {
+  return {
+    streamStatus: state.live.streamStatus,
+    channelName: state.live.channelName,
+  };
+}
+
+const mapDispatchToProps = {
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageLiveItem);

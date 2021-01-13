@@ -6,6 +6,7 @@ import i18n from "i18next";
 import { CANCEL } from "redux-saga";
 
 const CancelToken = axios.CancelToken;
+const DEBUG = false;
 
 export class API {
   static headers() {
@@ -41,29 +42,31 @@ export class API {
         clearTimeout(timeoutHandler);
 
         if (options.silent === true) {
-          throw error;
+          console.log(error);
+          // throw error;
         } else if (error.message === "Network Error") {
           axios({
             mehtod: "get",
             url: "https://google.com",
           })
             .then(response => {
-              if (!options.silent)
+              if (!options.silent && DEBUG)
                 Notification.alert(i18n.t(`alerts.failure.serverNotResponding`));
 
-              throw error;
+              // throw error;
             })
             .catch(err => {
-              if (!options.silent) {
+              if (!options.silent && DEBUG) {
                 Notification.alert(i18n.t(`alerts.failure.checkInternetConnection`));
               }
-              throw err;
+              // throw err;
             });
         } else {
           if (error.response && error.response.status === 401) {
             Notification.alert("Invalid username/password");
           } else if (error.response && error.response.data && error.response.data.error) {
             if (!options.silent) {
+              console.log(options.url);
               Notification.alert(error.response.data.message);
             }
           }

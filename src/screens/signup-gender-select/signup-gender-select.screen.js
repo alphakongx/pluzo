@@ -15,6 +15,7 @@ const SignupGenderSelect: () => React$Node = props => {
     props.navigation.goBack();
   };
   const navigateNext = () => {
+    props.setLikeGender("both");
     props.navigation.navigate("SIGNUP_USERNAME", {});
   };
 
@@ -53,7 +54,7 @@ const SignupGenderSelect: () => React$Node = props => {
             </View>
           </View>
 
-          <Text style={[styles.titleText, styles.titleTop]}>I'm looking to meet...</Text>
+          {/* <Text style={[styles.titleText, styles.titleTop]}>I'm looking to meet...</Text>
 
           <View style={styles.selectionContainer}>
             <View style={styles.buttonContainer}>
@@ -109,12 +110,13 @@ const SignupGenderSelect: () => React$Node = props => {
                 />
               )}
             </View>
-          </View>
+          </View> */}
         </View>
 
         <View style={styles.footer}>
           <GradientButton
-            disabled={!props.gender || !props.likeGender}
+            // disabled={!props.gender || !props.likeGender}
+            disabled={!props.gender}
             onPress={navigateNext}
             text={"Continue"}
           />

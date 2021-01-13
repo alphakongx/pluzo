@@ -117,4 +117,8 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: "row",
   },
+
+  profileModal: {
+    margin: 0,
+  },
 });

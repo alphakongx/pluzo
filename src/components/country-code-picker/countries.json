@@ -1,4 +1,11 @@
-[ 
+[
+  {
+    "name": "United States",
+    "iso2": "us",
+    "dialCode": "1",
+    "priority": 0,
+    "areaCodes": null
+  },
   {
     "name": "Afghanistan",
     "iso2": "af",
@@ -1649,13 +1656,6 @@
     "name": "United Kingdom",
     "iso2": "gb",
     "dialCode": "44",
-    "priority": 0,
-    "areaCodes": null
-  },
-  {
-    "name": "United States",
-    "iso2": "us",
-    "dialCode": "1",
     "priority": 0,
     "areaCodes": null
   },

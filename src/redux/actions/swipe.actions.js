@@ -15,6 +15,7 @@ const { Types, Creators } = createActions({
 
   addDisLike: ["token", "userId"],
   addSuperLike: ["token", "userId"],
+  addSuperLikeDone: null,
 
   requestMatch: ["token"],
   requestMatchSuccess: null,
@@ -28,8 +29,10 @@ const { Types, Creators } = createActions({
   requestSetSettingsSuccess: ["settings"],
   requestSetSettingsFail: null,
 
-  requestRunBoost: ["token", "boostType"],
-  requestRunRewinds: ["token"],
+  requestRunBoost: ["token", "boostType", "channelName"],
+  runBoostSuccess: null,
+  requestRunRewinds: ["token", "userId"],
+  runRewindsSuccess: null,
 
   updateTutorialMode: ["show"],
 });

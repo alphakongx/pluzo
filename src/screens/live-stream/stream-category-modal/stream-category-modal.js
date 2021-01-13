@@ -3,7 +3,7 @@ import { View, SafeAreaView } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
 import { Touchable, Image } from "@components";
-import { AppBadges } from "@config";
+import { AppTags } from "@config";
 import Images from "@assets/Images";
 
 import styles from "./stream-cateogry-modal.style";
@@ -62,7 +62,8 @@ class StreamCategoryModal extends Component {
         <SafeAreaView style={styles.container}>
           <View style={styles.emojiButtonContainer}>
             <View style={styles.emojiButton}>
-              <Image source={Images.live[AppBadges[this.state.category].icon]} />
+              {/* <Image source={Images.live[AppTags[this.state.category].icon]} /> */}
+              <View style={[styles.itemColorView, { backgroundColor: AppTags[this.state.category].color}]} />
             </View>
           </View>
           <View style={styles.emojiContainer}>

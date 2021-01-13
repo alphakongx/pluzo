@@ -33,22 +33,28 @@ class StreamMessageBox extends Component {
       KeyboardManager.setShouldResignOnTouchOutside(false);
     }
     
+    if (EventBus.callbacks["Stream_new_message"]) {
+      EventBus.callbacks["Stream_new_message"] = EventBus.callbacks["Stream_new_message"].filter(function(callback) {
+        return false;
+      });
+    }
     this.newMessageAction = EventBus.on("Stream_new_message", jsonData => {
       if (jsonData === undefined) return;
       const { channelName } = this.props.streamParams;
       let data = JSON.parse(jsonData);
-      if (channelName === data.stream && this.props.user.id !== data.user._id) {
+      if (channelName === data.stream && this.props.user.id !== parseInt(data.user._id, 10)) {
         let newMessage = {
           id: `${moment().unix()}.${moment().millisecond()}`,
           user: data.user,
           message: data.message,
+          type: parseInt(data.type, 10) === 1 ? "user" : "system",
         };
         this.props.updateMessages([newMessage].concat(this.props.messages));
       }
     });
   }
 
-  componentWillUnMount() {
+  componentWillUnMount() {console.log("UnMounted");
     if (Platform.OS === "ios") {
       KeyboardManager.setEnable(true);
       KeyboardManager.setShouldResignOnTouchOutside(true);
@@ -70,7 +76,7 @@ class StreamMessageBox extends Component {
     this.setState({ keyboardShow: false });
   };
 
-  onSendMessage = msg => {
+  onSendMessage = (msg, msgType) => {
     let newMessage = {
       id: `${moment().unix()}.${moment().millisecond()}`,
       user: this.props.user,
@@ -79,12 +85,12 @@ class StreamMessageBox extends Component {
     this.props.updateMessages([newMessage].concat(this.props.messages));
 
     const { channelName } = this.props.streamParams;
-    this.props.requestChatAdd(channelName, msg, this.props.token);
+    this.props.requestChatAdd(channelName, msg, msgType, this.props.token);
   };
 
   onButtonsClicked = msg => {
     this.props.setStreamStatus(StreamStatus.JOIN_MESSAGED);
-    this.onSendMessage(msg);
+    this.onSendMessage(msg, 1);
   };
 
   renderMessageItem = message => {
@@ -140,7 +146,7 @@ class StreamMessageBox extends Component {
           onGameControls={this.props.onGameControls}
           onPlayerSetting={this.props.onPlayerSetting}
           onAskToJoin={this.props.onAskToJoin}
-          onSend={msg => this.onSendMessage(msg)}
+          onSend={msg => this.onSendMessage(msg, 1)}
           isAskedJoin={this.props.isAskedToJoin}
         />
 

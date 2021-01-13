@@ -8,20 +8,23 @@ import styles from "./help.style";
 
 const HelpScreen: () => React$Node = props => {
 
-  const helpButtons = ["I have a question", "I found a bug", "I'd like to report a Safety Concern", "Take me to Safety Center"];
+  const helpButtons = ["I have a question", "I found a bug", "I'd like to report a Safety Concern", "I have a suggestion"];
 
   const onHelp = (index) => {
-    props.navigation.navigate(SCREENS.HELP_CONTENT, {type: index});
+    props.navigation.navigate(SCREENS.HELP_CONTENT, {type: index + 1, 
+      onGoBack: () => {
+        props.navigation.goBack();
+      }
+    });
   }
 
   return (
     <Screen hasGradient style={styles.flexFill}>
       <SafeAreaView style={styles.flexFill}>
         <View style={styles.flexFill}>
-          <Header title={""} onBack={props.navigation.goBack} />
+          <Header title={"Help"} onBack={props.navigation.goBack} />
 
           <View style={styles.contentContainer}>
-            <Text style={styles.titleText}>Help</Text>
             {helpButtons.map((button, index) => {
               return (
                 <Touchable style={styles.buttonContainer} key={`help-button-${index}`}

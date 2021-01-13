@@ -1,7 +1,7 @@
 import React from "react";
 import { View, ActivityIndicator } from "react-native";
 import FastImage from "react-native-fast-image";
-import { Image, Text, UserCount, Touchable } from "@components";
+import { Text, UserCount, Touchable } from "@components";
 import Images from "@assets/Images";
 import { AppBadges } from "@config";
 import styles from "./user-profile.style";
@@ -44,10 +44,10 @@ class UserProfile extends React.Component {
             {user.badges.map(badge => {
               if (badge > AppBadges.length) return null;
               return (
-                <Image
+                <FastImage
                   key={`profile-badge-${badge}`}
-                  source={Images.live[AppBadges[badge].icon]}
                   style={styles.badgeImage}
+                  source={Images.badges[AppBadges[badge-1].id]}
                 />
               );
             })}
@@ -55,7 +55,7 @@ class UserProfile extends React.Component {
           <Text style={styles.usernameText}>{user !== null ? user.username : ""}</Text>
           <Touchable onPress={() => this.props.onFriends()}>
             <UserCount
-              count={parseInt(user.friends, 10)}
+              count={this.props.friends.length > 0 ? this.props.friends.length : parseInt(user.friends, 10)}
               style={styles.friendsContainer}
               iconStyle={styles.friendsIconImage}
               textStyle={styles.friendsCountText}

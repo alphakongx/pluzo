@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, NativeModules, View } from "react-native";
 import {
   GradientButton,
@@ -7,14 +7,15 @@ import {
   SolidButton,
   Text,
   Touchable,
+  NotificationModal
 } from "@components";
 import styles from "./signup-image.style.js";
 import ImagePicker from "react-native-image-crop-picker";
 import ActionSheet from "react-native-actionsheet";
-import { Notification } from "@helpers";
 import Images from "@assets/Images";
 
 const SignupImage: () => React$Node = props => {
+  const [visibleNotification, setVisibleNotification] = useState(false);
   let actionSheetRef = React.createRef();
   let currentImageIndex = 1;
 
@@ -41,6 +42,7 @@ const SignupImage: () => React$Node = props => {
       height: 800,
       cropping: true,
       compressImageQuality: 0.7,
+      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Videos', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'SlomoVideos', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'Animated', 'LongExposure'],
     };
 
     if (index === 0) {
@@ -56,7 +58,7 @@ const SignupImage: () => React$Node = props => {
 
   const onUploadImage = data => {
     let photoUriSplit = data.path.split("/");
-    NativeModules.ImageDetector.check(data.path, (value) => {
+    NativeModules.ImageDetector.check(data.path, (value) => {console.log(value);
       if (value === "SFW") {
         const image = {
           uri: data.path,
@@ -71,7 +73,7 @@ const SignupImage: () => React$Node = props => {
           props.setPicture3(image);
         }
       } else {
-        Notification.alert("The photo can't use in the app")
+        setVisibleNotification(true);
       }
     });
     
@@ -164,6 +166,19 @@ const SignupImage: () => React$Node = props => {
           cancelButtonIndex={2}
           onPress={index => onSelectImage(index)}
         />
+        
+        <NotificationModal 
+          isVisible={visibleNotification}
+          title={"This photo can't be used here."}
+          message={""}
+          logoIcon={Images.app.icInfo}
+          logoBackground={"#ABA7D5"}
+          buttonColors={["#ABA7D5", "#ABA7D5"]}
+          buttonText={"Okay"}
+          buttonTextStyle={"#0B0516"}
+          buttonContainerStyle={{marginTop: 32}}
+          onBack={() => setVisibleNotification(false)}
+          onConfirm={(a, b) => setVisibleNotification(false)} />
       </View>
     </Screen>
   );

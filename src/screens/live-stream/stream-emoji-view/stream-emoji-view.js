@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import { View, ScrollView } from "react-native";
 import { GradientButton, Screen, Text, Image, Touchable } from "@components";
 import LinearGradient from "react-native-linear-gradient";
+import { AppTags } from "@config";
 import Images from "@assets/Images";
 
 import styles from "./stream-emoji-view.style";
-
-const badges = require("@config/data/badges.json");
 
 const StreamEmojiView: () => React$Node = props => {
   const [expandCategory, setExpandCategory] = useState(false);
 
   const data = [];
-  Object.values(badges).forEach(value => {
+  Object.values(AppTags).forEach(value => {
     data.push(value);
   });
 
@@ -32,7 +31,8 @@ const StreamEmojiView: () => React$Node = props => {
                 style={styles.emojiButton}
                 onPress={() => onChangeEmoji(item)}
               >
-                <Image source={Images.live[item.icon]} />
+                {/* <Image source={Images.live[item.icon]} /> */}
+                <View style={[styles.itemColorView, { backgroundColor: item.color }]} />
               </Touchable>
             );
           })}
@@ -49,7 +49,8 @@ const StreamEmojiView: () => React$Node = props => {
                     style={styles.emojiButton}
                     onPress={() => onChangeEmoji(item)}
                   >
-                    <Image source={Images.live[item.icon]} />
+                    {/* <Image source={Images.live[item.icon]} /> */}
+                    <View style={[styles.itemColorView, { backgroundColor: item.color }]} />
                   </Touchable>
                 );
               })}

@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Image, Text, VerticalImagesLayout, } from "@components";
 import LinearGradient from "react-native-linear-gradient";
-import { GRADIENT, AppBadges } from "@config";
+import { GRADIENT, AppTags } from "@config";
 import Images from "@assets/Images";
 
 import styles from "./live-item.styles";
@@ -31,10 +31,11 @@ const LiveItem: () => React$Node = props => {
             <Text style={styles.memberCount}>{parseInt(item.count, 10)}</Text>
           </LinearGradient>
           <View style={styles.tagImages}>
-            <Image
-              source={Images.live[AppBadges[item.category].icon]}
+            {/* <Image
+              source={Images.live[AppTags[item.category].icon]}
               style={styles.tagImage}
-            />
+            /> */}
+            <View style={[styles.itemColorView, {backgroundColor: AppTags[item.category].color}]} />
           </View>
         </View>
       </View>

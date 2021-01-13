@@ -1,6 +1,6 @@
 import Chat from "./chat.screen";
 import { connect } from "react-redux";
-import { ChatCreators, InboxCreators } from "@redux/actions";
+import { ChatCreators, InboxCreators, UserCreators } from "@redux/actions";
 import { withSafeAreaInsets } from "react-native-safe-area-context";
 
 function mapStateToProps(state, { navigation }) {
@@ -24,6 +24,7 @@ const mapDispatchToProps = {
   requestOpenChat: ChatCreators.requestOpenChat,
   requestCloseChat: ChatCreators.requestCloseChat,
   readFlag: InboxCreators.requestReadFlag,
+  blockUser: UserCreators.requestBlockUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withSafeAreaInsets(Chat));
