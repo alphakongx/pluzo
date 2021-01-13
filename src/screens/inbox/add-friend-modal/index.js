@@ -6,6 +6,7 @@ function mapStateToProps(state) {
   return {
     isAddingFriend: state.inbox.isAddingFriend,
     token: state.user.token,
+    friends: state.inbox.friends,
   };
 }
 

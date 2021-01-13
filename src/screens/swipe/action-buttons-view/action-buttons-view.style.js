@@ -32,4 +32,38 @@ export default StyleSheet.create({
     width: wp(70),
     height: wp(70),
   },
+
+  boostButtonContainer: {
+    width: wp(50),
+    height: wp(50),
+    borderRadius: wp(25),
+    borderWidth: wp(3),
+    borderColor: "#D491FF",
+    backgroundColor: "rgba(11, 5, 22, 0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: wp(10),
+  },
+  boostText: {
+    color: "#D491FF",
+    fontSize: wp(15),
+    fontWeight: "bold",
+    textShadowColor: "#6E00FF",
+    textShadowRadius: 15,
+    textShadowOffset: {width: 0, height: 0},
+  },
+  boostRocketView1: {
+    position: "absolute",
+    top: -wp(18),
+    left: wp(18),
+    width: wp(24),
+    height: wp(24),
+  },
+  boostRocketView2: {
+    position: "absolute",
+    top: -wp(18),
+    left: -wp(0),
+    width: wp(24),
+    height: wp(24),
+  },
 });

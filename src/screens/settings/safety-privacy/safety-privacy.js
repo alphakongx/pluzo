@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView, View } from "react-native";
-import { Screen, Text, Image } from "@components";
+import { Screen, Text, Image, Touchable } from "@components";
+import { SCREENS } from "@constants";
 import Images from "@assets/Images";
 
 import Header from "../header";
 import styles from "./safety-privacy.style";
 
 const SafetyPrivacy: () => React$Node = props => {
+  const { getBlockedUsers, token } = props;
+
+  useEffect(() => {
+
+    getBlockedUsers(token);
+
+  }, [getBlockedUsers, token]);
+
   const renderItem = (title, text, hint) => {
     return (
       <View style={styles.itemPadding}>
@@ -26,11 +35,17 @@ const SafetyPrivacy: () => React$Node = props => {
         <View style={styles.flexFill}>
           <Header title={"Safety & Privacty"} onBack={props.navigation.goBack} />
 
-          {renderItem("Blocked Users", "0", null)}
+          <Touchable onPress={() => props.navigation.navigate(SCREENS.BLOCKED_USERS)}>
+            {renderItem("Blocked Users", props.blockedUsers.length, null)}
+          </Touchable>
           <View style={styles.seperator} />
-          {renderItem("Location", "", "Manage the access to your location data")}
+          <Touchable onPress={() => props.navigation.navigate(SCREENS.LOCATION_PERMISSION)}>
+            {renderItem("Location", "", "Manage the access to your location data")}
+          </Touchable>
           <View style={styles.emptyRow} />
-          {renderItem("Camera and microphone", "", null)}
+          <Touchable onPress={() => props.navigation.navigate(SCREENS.CAMERA_MIC_PERMISSION)}>
+            {renderItem("Camera and microphone", "", null)}
+          </Touchable>
           <View style={styles.seperator} />
           {renderItem("Personalization and data", "", null)}
         </View>

@@ -10,12 +10,16 @@ function mapStateToProps(state) {
     people: state.search.people,
     live: state.search.live,
     token: state.user.token,
+    user: state.user.user,
+    streamStatus: state.live.streamStatus,
+    channelName: state.live.channelName,
   };
 }
 
 const mapDispatchToProps = {
   initSearch: SearchCreators.initializeSearch,
   search: SearchCreators.requestSearch,
+  updateSearchLive: SearchCreators.updateSearchLive,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);

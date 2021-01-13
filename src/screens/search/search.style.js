@@ -61,6 +61,22 @@ export default StyleSheet.create({
     color: COLOR.TEXT_SECONDARY_4,
   },
 
+  masonryContainer: {
+    marginTop: wp(5),
+    marginHorizontal: wp(5),
+  },
+  liveItemContainer: {
+    flexDirection: "column",
+    backgroundColor: COLOR.LIVE_ITEM_BACKGROUND,
+    borderBottomLeftRadius: wp(22),
+    borderBottomRightRadius: wp(22),
+    borderTopLeftRadius: wp(22),
+    borderTopRightRadius: wp(22),
+    overflow: "hidden",
+    marginHorizontal: wp(5),
+    marginBottom: wp(10),
+  },
+
   sectionContainer: {},
   sectionText: {
     fontWeight: "bold",

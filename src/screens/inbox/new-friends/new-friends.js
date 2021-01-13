@@ -45,9 +45,20 @@ class NewFriends extends React.Component {
 
   render() {
     const { user, friends } = this.props;
-    let sortedFriends = friends.sort((a, b) => b.flag - a.flag);
+    // let sortedFriends = friends.sort((a, b) => {
+    //   if (b.flag > a.flag) {
+    //     if (a.flag === 1 && b.flag === 2) {
+    //       return -1;
+    //     }
+    //     return 1;
+    //   } else if (b.flag === a.flag) {
+    //     return 0;
+    //   } else {
+    //     return -1;
+    //   }
+    // });
     
-    let allFriends = [user, ...sortedFriends];
+    let allFriends = [user, ...friends];
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{"New Friends!"}</Text>

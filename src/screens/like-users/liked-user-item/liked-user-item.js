@@ -21,7 +21,7 @@ const LikedUserItem: () => React$Node = props => {
         {Platform.OS === "android" ? (
           <View style={styles.blurView}/>
         ) : (
-          <BlurView blurType={"light"}/>
+          <BlurView blurType={"light"} blurAmount={15}/>
         )}
         <View style={styles.blurWhiteView} />
         <View style={styles.blurGreenView} />
@@ -30,7 +30,7 @@ const LikedUserItem: () => React$Node = props => {
   }
 
   return (
-    <View style={[styles.container, props.zIndex ? {zIndex: 9999} : {zIndex: 0}]}>
+    <View style={[styles.container]}>
       <FastImage
         source={{ uri: likedUser.images[0].path }}
         style={styles.userImage}
@@ -43,9 +43,8 @@ const LikedUserItem: () => React$Node = props => {
           return (
             <FastImage
               key={`profile-badge-${badge}`}
-              source={Images.live[AppBadges[badge].icon]}
               style={styles.badgeIcon}
-            />
+              source={Images.badges[AppBadges[badge-1].id]} />
           );
         })}
       </View>

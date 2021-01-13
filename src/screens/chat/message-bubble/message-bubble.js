@@ -3,7 +3,6 @@ import { Linking, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { Touchable } from "@components";
 import styles from "./message-bubble.style.js";
-import PhotoView from "react-native-photo-view";
 import Images from "@assets/Images";
 import ParsedText from 'react-native-parsed-text';
 import MessageLiveItem from "./message-live-item.js";
@@ -42,7 +41,8 @@ const MessageBubble: () => React$Node = props => {
       <View style={[styles.container, styles.containerMargin]}>
         <MessageLiveItem
           currentMessage={currentMessage}
-          isCurrentUser={isCurrentUser} />
+          isCurrentUser={isCurrentUser}
+          currentUser={user} />
       </View>
     )
   }
@@ -59,7 +59,6 @@ const MessageBubble: () => React$Node = props => {
             ]}
             resizeMode={FastImage.resizeMode.cover}
           />
-          <PhotoView source={{ uri: currentMessage.image }} style={styles.hiddenImage} />
         </Touchable>
       ) : null}
       {currentMessage.text !== null && currentMessage.text !== "" && (
@@ -81,6 +80,7 @@ const MessageBubble: () => React$Node = props => {
               {type: "url", style: styles.urlText, onPress: handleUrlPress}
             ]}
             allowFontScaling={false}
+            selectable
           >
             {currentMessage.text}
           </ParsedText>

@@ -16,6 +16,12 @@ export default StyleSheet.create({
     flex: 1,
   },
 
+  loadingIndicator: {
+    position: "absolute",
+    top: "45%",
+    alignSelf: "center",
+  },
+
   closeButton: {
     position: "absolute",
     top: wp(10),

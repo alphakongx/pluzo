@@ -9,6 +9,8 @@ const { Types, Creators } = createActions({
   newPeopleSuccess: ["data"],
   newPeopleFail: null,
 
+  updateSearchLive: ["data"],
+
   initializeSearch: null,
 });
 

@@ -46,4 +46,10 @@ export default StyleSheet.create({
     height: wp(13),
     marginRight: wp(5),
   },
+  itemColorView: {
+    width: wp(13),
+    height: wp(13),
+    borderRadius: wp(6.5),
+    marginRight: wp(5),
+  },
 });

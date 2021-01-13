@@ -1,6 +1,8 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { FontHelper, widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
+
+const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -58,6 +60,11 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  itemColorView: {
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(10),
+  },
 
   streamTitle: FontHelper.font({
     fontWeight: "600",
@@ -102,7 +109,7 @@ export default StyleSheet.create({
   scrollView: {
     marginTop: wp(15),
     flex: 1,
-    paddingHorizontal: wp(10),
+    paddingLeft: wp(10),
   },
   flexRow: {
     flexDirection: "row",
@@ -123,9 +130,71 @@ export default StyleSheet.create({
   },
   userContainer: {
     flexDirection: "row",
-    marginBottom: wp(10),
+    marginBottom: wp(5),
     alignItems: "center",
   },
+  
+  broadcasterContainer: {
+    flex: 1, 
+    height: wp(60), 
+    overflow: "hidden",
+    marginLeft: wp(10),
+  },
+  swipeItemContainer: {
+    flexDirection: "row",
+    height: wp(60),
+    alignItems: "center",
+  },
+  kickBanContainer: {
+    width: wp(180),
+    position: "absolute",
+    right: -wp(180),
+    flexDirection: "row",
+  },
+  muteButton: {
+    flex: 1,
+    height: wp(60),
+    backgroundColor: "#ABA7D5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  kickButton: {
+    flex: 1,
+    height: wp(60),
+    backgroundColor: "#312446",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  banButton: {
+    flex: 1,
+    height: wp(60),
+    backgroundColor: "#FF0036",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  transparentContainer: {
+    width: wp(180),
+    height: wp(60),
+    flexDirection: "row",
+  },
+  transparentButton: {
+    flex: 1,
+    height: wp(60),
+  },
+  muteButtonText: {
+    color: "white",
+    fontSize: wp(11),
+    fontWeight: "600",
+  },
+  banButtonText: {
+    color: "#0B0516",
+    fontSize: wp(11),
+    fontWeight: "600",
+  },
+  streamRemoveIcon: {
+    marginRight: wp(10),
+  },
+
   nameTextContainer: {
     flex: 1,
     marginLeft: wp(5),
@@ -158,5 +227,59 @@ export default StyleSheet.create({
     height: wp(60),
     alignSelf: "center",
     marginBottom: wp(20),
+  },
+
+  tutorialContainer: {
+    flexDirection: "row",
+    backgroundColor: "#0B0516",
+    position: "absolute",
+    right: wp(10),
+    top: wp(250),
+    width: width - wp(265),
+    borderRadius: wp(13),
+    paddingHorizontal: wp(11),
+    paddingVertical: wp(6),
+    alignItems: "center",
+  },
+  tutorialText: {
+    flex: 1,
+    color: "white",
+    fontFamily: "OpenSans",
+    fontSize: wp(10),
+    fontWeight: "600",
+  },
+  tutorialIcon: {
+    width: wp(5),
+    height: wp(9),
+    resizeMode: "contain",
+  },
+
+  askedContainer: {
+    paddingHorizontal: wp(8),
+    paddingBottom: wp(1),
+    backgroundColor: "#617FFF",
+    borderRadius: wp(20),
+    alignSelf: "flex-start",
+    marginTop: -wp(5),
+    marginBottom: wp(5),
+  },
+  askedUserText: {
+    fontSize: wp(11),
+    fontWeight: "bold",
+    color: "white",
+  },
+  streamAskedContainer: {
+    width: wp(30),
+    height: wp(30),
+    borderRadius: wp(15),
+    marginRight: wp(10),
+    backgroundColor: "#617FFF",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  streamAskedIcon: {
+    width: wp(16),
+    height: wp(16),
+    
   },
 });

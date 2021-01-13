@@ -46,6 +46,11 @@ export default StyleSheet.create({
     height: wp(20),
     resizeMode: "contain",
   },
+  itemColorView: {
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(10),
+  },
   activeItem: {
     backgroundColor: COLOR.SEARCH_INPUT_BORDER,
   },

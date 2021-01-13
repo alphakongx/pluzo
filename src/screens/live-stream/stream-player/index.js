@@ -11,6 +11,9 @@ function mapStateToProps(state) {
     isEnabledCamera: state.live.isEnabledCamera,
     isEnabledMic: state.live.isEnabledMic,
     isAskedToJoin: state.live.isAskedToJoin,
+    mutedUsers: state.live.mutedUsers,
+    remoteMutedUsers: state.live.remoteMutedUsers,
+    askedUsers: state.live.askedUsers,
   };
 }
 
@@ -29,6 +32,10 @@ const mapDispatchToProps = {
   updateBroadcasters: LiveCreators.updateBroadcasters,
   updateMessages: LiveCreators.updateMessages,
   resetEnabledSettings: LiveCreators.resetEnabledSettings,
+  updateMutedUsers: LiveCreators.updateMutedUsers,
+  updateRemoteMutedUsers: LiveCreators.updateRemoteMutedUsers,
+  updateAskedUsers: LiveCreators.updateAskedUsers,
+  updateStreamInfo: LiveCreators.updateStreamInfo,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StreamPlayer);

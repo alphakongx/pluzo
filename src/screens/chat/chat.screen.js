@@ -2,7 +2,7 @@ import React from "react";
 import { Platform, View, Keyboard, ActivityIndicator, FlatList, Linking } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import ActionSheet from "react-native-actionsheet";
-import { Screen, Touchable, Text, Image } from "@components";
+import { Screen, Touchable, Text, Image, ConfirmModal, NotificationModal } from "@components";
 import { SCREENS } from "@constants";
 import { GiftedChat, SystemMessage } from "react-native-gifted-chat";
 import KeyboardManager from "react-native-keyboard-manager";
@@ -18,10 +18,11 @@ import EmptyView from "./empty-view";
 import { API } from "@helpers";
 import { API_ENDPOINTS } from "@config";
 import LinearGradient from "react-native-linear-gradient";
+import ZoomImageModal from "./zoom-image-modal";
+import UserSettingModal from "./user-setting-modal";
+import Images from "../../assets/Images";
 
 import styles from "./chat.style";
-import ZoomImageModal from "./zoom-image-modal";
-import Images from "../../assets/Images";
 
 class Chat extends React.Component {
   constructor(props) {
@@ -31,10 +32,14 @@ class Chat extends React.Component {
       msgText: "",
       visibleReport: false,
       visibleZoomImage: false,
+      visibleUserSetting: false,
+      visibleConfirmBlock: false,
+      visibleConfirmDelete: false,
       zoomImage: null,
       lastSeenTime: this.props.chatUser === 0 ? null : this.props.chatUser.last_activity,
       isOnline: false,
       openedChat: false,
+      sentSystemAlert: false,
     };
     this.ActionSheet = React.createRef();``
   }
@@ -226,16 +231,19 @@ class Chat extends React.Component {
       value => !value.system && parseInt(value.user._id, 10) === parseInt(opponentId, 10),
     );
     if (mymsgs.length === 0 || otherMsgs.length === 0) {
-      this.props.updateMessages(
-        [
-          {
-            _id: moment().millisecond(),
-            text: "You can't send photos till you both message each other first",
-            createdAt: new Date(),
-            system: true,
-          },
-        ].concat(this.props.messages),
-      );
+      if (this.state.sentSystemAlert === false) {
+        this.props.updateMessages(
+          [
+            {
+              _id: moment().millisecond(),
+              text: "You can't send photos till you both message each other first",
+              createdAt: new Date(),
+              system: true,
+            },
+          ].concat(this.props.messages),
+        );
+        this.setState({sentSystemAlert: true});
+      }
       return;
     }
 
@@ -250,6 +258,7 @@ class Chat extends React.Component {
       height: 395,
       compressImageQuality: 0.7,
       cropping: false,
+      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Videos', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'SlomoVideos', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'Animated', 'LongExposure'],
     };
 
     if (index === 0) {
@@ -320,6 +329,26 @@ class Chat extends React.Component {
     this.props.sendMessage(params, token);
   };
 
+  onDeleteFriend = () => {
+    const { chatUser } = this.props;
+
+    let data = new FormData();
+    data.append("username", chatUser.username);
+    data.append("user_target_id", (chatUser.id || chatUser._id));
+    let url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
+
+    API.request({
+      method: "post",
+      url: url,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer " + this.props.token,
+      },
+      data,
+    });
+    this.setState({visibleConfirmDelete: false});
+  }
+
   renderNotification = () => {
     if (Platform.OS === "ios" && this.props.pushEnabled === false) {
       return (
@@ -347,6 +376,39 @@ class Chat extends React.Component {
     return null;
   }
 
+  renderFooterView = () => {
+    return (
+      <FlatList
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        data={["Hello!", "Hey!", "Hey, how are you?", "Hi :)"]}
+        contentContainerStyle={styles.firstMessagesContentContainer}
+        keyExtractor={(item, index) => `first-${index}`}
+        renderItem={({item: item, index}) => {
+          return (
+            <Touchable
+              onPress={() => {
+                this.onSend([{
+                  _id: moment().unix(),
+                  text: item,
+                  image: null,
+                  createdAt: new Date(),
+                  user: {
+                    _id: this.props.user.id,
+                    name: this.props.user.name || this.props.user.username,
+                    avatar: this.props.user.images[0].path,
+                  },
+                }]);
+              }}
+              style={styles.firstMessage}>
+              <Text style={styles.firstMessageText}>{item}</Text>
+            </Touchable>
+          )
+        }}>
+      </FlatList>
+    )
+  }
+
   render() {
     const { chatUser, loading, messages } = this.props;
     let isFirstMsg = messages.filter((message) => !message.system && (message.user._id || message.user.id) === this.props.user.id).length === 0;
@@ -359,7 +421,7 @@ class Chat extends React.Component {
             if (chatUser === 0) return;
             this.props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: chatUser });
           }}
-          onReport={() => this.setState({ visibleReport: true })}
+          onReport={() => this.setState({ visibleUserSetting: true })}
           lastSeenTime={this.state.lastSeenTime}
           isOnline={this.state.isOnline}
         />
@@ -377,7 +439,7 @@ class Chat extends React.Component {
               text={this.state.msgText}
               isKeyboardInternallyHandled={true}
               bottomOffset={this.props.insets.bottom}
-              minComposerHeight={wp(20)}
+              // minComposerHeight={22.5}
               minInputToolbarHeight={Platform.OS === "ios" ? wp(57) : wp(50)}
               alwaysShowSend={true}
               containerStyle={{
@@ -400,7 +462,10 @@ class Chat extends React.Component {
               }}
               renderInputToolbar={props => {
                 this.onSendNew = props.onSend;
-                return <InputToolbar {...props} onAttachment={this.onAddAttachment} />;
+                return <InputToolbar {...props} onAttachment={this.onAddAttachment}
+                  onSendMessage={() => {
+                    props.onSend({ text: this.state.msgText }, true);
+                  }} />;
               }}
               renderTime={props => {
                 return <View />;
@@ -415,48 +480,13 @@ class Chat extends React.Component {
                 if (isFirstMsg === false || chatUser === 0) {
                   return null;
                 }
-                return (
-                  <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    data={["Hello!", "Hey!", "Hey, how are you?", "Hi :)"]}
-                    contentContainerStyle={styles.firstMessagesContentContainer}
-                    keyExtractor={(item, index) => `first-${index}`}
-                    renderItem={({item: item, index}) => {
-                      return (
-                        <Touchable
-                          onPress={() => {
-                            this.onSend([{
-                              _id: moment().unix(),
-                              text: item,
-                              image: null,
-                              createdAt: new Date(),
-                              user: {
-                                _id: this.props.user.id,
-                                name: this.props.user.name || this.props.user.username,
-                                avatar: this.props.user.images[0].path,
-                              },
-                            }]);
-                          }}
-                          style={styles.firstMessage}>
-                          <Text style={styles.firstMessageText}>{item}</Text>
-                        </Touchable>
-                      )
-                    }}>
-                  </FlatList>
-                )
+                return this.renderFooterView();
               }}
               user={{
                 _id: this.props.user.id,
               }}
               onSend={msgs => this.onSend(msgs)}
-              onInputTextChanged={msgText => {
-                if (msgText.lastIndexOf("\n") !== -1) {
-                  this.onSendNew({ text: msgText.trim() }, true);
-                } else {
-                  this.setState({ msgText: msgText.replace("\n", "") });
-                }
-              }}
+              onInputTextChanged={msgText => this.setState({ msgText: msgText })}
             />
           )}
           {this.renderNotification()}
@@ -468,11 +498,51 @@ class Chat extends React.Component {
           cancelButtonIndex={2}
           onPress={index => this.onSelectImage(index)}
         />
+        <UserSettingModal
+          isVisible={this.state.visibleUserSetting}
+          user={chatUser}
+          onDismiss={() => this.setState({ visibleUserSetting: false })}
+          onReport={() => {
+            setTimeout(() => {
+              this.setState({visibleReport: true});
+            }, 400);
+          }}
+          onBlock={() => {
+            setTimeout(() => {
+              this.setState({visibleConfirmBlock: true});
+            }, 400);
+          }}
+          onUnfriend={() => {
+            setTimeout(() => {
+              this.setState({visibleConfirmDelete: true});
+            }, 400);
+          }}
+        />
         <ReportModal
           isVisible={this.state.visibleReport}
           keyboardDisable={true}
           userId={(chatUser.id || chatUser._id)}
           onDismiss={() => this.setState({ visibleReport: false })}
+        />
+        <ConfirmModal 
+          isVisible={this.state.visibleConfirmBlock}
+          user={chatUser}
+          onDismiss={() => this.setState({ visibleConfirmBlock: false })}
+          onConfirm={() => {
+            this.props.blockUser((chatUser.id || chatUser._id), this.props.token);
+            this.setState({ visibleConfirmBlock: false }, () => {
+              setTimeout(() => {
+                this.props.navigation.goBack();
+              }, 1000);
+            });
+          }}/>
+        <NotificationModal
+          isVisible={this.state.visibleConfirmDelete}
+          onBack={() => this.setState({visibleConfirmDelete: false})}
+          onConfirm={(userId, userName) => {
+            this.setState({visibleConfirmDelete: false});
+            this.onDeleteFriend();
+          }}
         />
         <ZoomImageModal
           isVisible={this.state.visibleZoomImage}

@@ -22,8 +22,8 @@ class SignupFirstName extends React.Component {
   };
   navigateNext = () => {
     const { birthDate } = this.props;
-    let age = moment.duration(moment().diff(moment(birthDate))).years();
-    if (age < 13) {
+    let age = moment().diff(moment(birthDate), "years");
+    if (Math.abs(age) < 13) {
       Notification.alert("You must be at least 13 years old to make an account");
       return;
     }

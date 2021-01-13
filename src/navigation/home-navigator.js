@@ -20,8 +20,12 @@ import SwipeSettings from "../screens/settings/swipe-settings";
 import AccountSettings from "../screens/settings/account-settings";
 import SafetyPrivacy from "../screens/settings/safety-privacy";
 import TermsOfService from "../screens/settings/terms-of-service";
+import LegalScreen from "../screens/settings/legal";
 import HelpScreen from "../screens/settings/help";
 import HelpContentScreen from "../screens/settings/help/help-content";
+import BlockedUsersScreen from "../screens/settings/blocked-users";
+import LocationPermissionScreen from "../screens/settings/safety-privacy/location-permission";
+import CameraMicPermissionScreen from "../screens/settings/safety-privacy/camera-mic-permission";
 import UpdatePhoneVerification from "../screens/settings/account-settings/update-phone-verification";
 import LikeUsersScreen from "../screens/like-users";
 
@@ -127,6 +131,10 @@ const HomeStack = createStackNavigator(
     [SCREENS.UPDATE_PHONE_VERIFICATION]: UpdatePhoneVerification,
     [SCREENS.HELP]: HelpScreen,
     [SCREENS.HELP_CONTENT]: HelpContentScreen,
+    [SCREENS.BLOCKED_USERS]: BlockedUsersScreen,
+    [SCREENS.LOCATION_PERMISSION]: LocationPermissionScreen,
+    [SCREENS.CAMERA_MIC_PERMISSION]: CameraMicPermissionScreen,
+    [SCREENS.LEGAL]: LegalScreen,
   },
   {
     initialRouteName: SCREENS.MAIN,

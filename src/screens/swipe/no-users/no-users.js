@@ -6,6 +6,7 @@ import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
 
 import styles from "./no-users.style";
+import { SCREENS } from "@constants";
 import SwipeSettings from "../../settings/swipe-settings";
 
 class NoUsers extends React.Component {
@@ -108,6 +109,7 @@ class NoUsers extends React.Component {
               this.setState({ visibleSetting: false });
             }}
             isModal={true}
+            navigation={this.props.navigation}
           />
         </Modal>
       </View>

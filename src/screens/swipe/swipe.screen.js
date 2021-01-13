@@ -4,8 +4,11 @@ import { SafeAreaView } from "react-navigation";
 import { Screen, Image, Text } from "@components";
 import Swiper from "react-native-deck-swiper";
 import EventBus from "eventing-bus";
+import { CANCEL } from "redux-saga";
 import AsyncStorage from "@react-native-community/async-storage";
-import { getCurrentLocation } from "@helpers";
+import { API, getCurrentLocation } from "@helpers";
+import { API_ENDPOINTS } from "@config";
+import { TUTORIAL } from "@constants";
 import { SwipeTypes } from "@redux/actions";
 import Images from "@assets/Images";
 
@@ -17,6 +20,7 @@ import Card from "./card";
 import NoUsers from "./no-users";
 import MatchesView from "./matches-view";
 import SwipePurchaseModal from "./swipe-purchase-modal";
+import BoostTimeModal from "./boost-time-modal";
 
 const LABEL_TYPES = {
   NONE: "none",
@@ -33,9 +37,9 @@ class Swipe extends React.Component {
     super(props);
     this.state = {
       cards: [],
-      cardIndex: 0,
       likeCount: 0,
       location: null,
+      visibleRemainingBoost: false,
       visibleBoost: false,
       visibleSuperlike: false,
       visibleRewind: false,
@@ -45,10 +49,14 @@ class Swipe extends React.Component {
       reportId: null,
       tutorialPointer: false,
       tutorialSwipe: false,
+      swipedCount: 0,
       isSwiping: false,
+      enableRewinds: false,
+      enableSuperLike: true,
     };
 
     this.swiper = React.createRef();
+    this.cardIndex = 0;
   }
 
   componentDidMount() {
@@ -63,24 +71,26 @@ class Swipe extends React.Component {
     });
 
     this.reloadAction = EventBus.on(SwipeTypes.REQUEST_SET_SETTINGS_SUCCESS, () => {
-      console.log("RELOAD CARDS");
+      this.cardIndex = 0;
       this.props.loadCards(this.props.token);
     });
 
     this.matchesAction = EventBus.on("New_Matches", user => {
       this.setState({ matchedUser: user });
     });
+
+    // this.rewindAction = EventBus.on(SwipeTypes.RUN_REWINDS_SUCCESS, this.onSwiperRewind);
     
     // checking tutorial mode
-    AsyncStorage.getItem("TUTORIAL_POINTER", (error, result) => {
+    AsyncStorage.getItem(TUTORIAL.SWIPE, (error, result) => {
+      if (result === null || result === "0") {
+        this.setState({tutorialSwipe: true});
+      }
+    });
+    AsyncStorage.getItem(TUTORIAL.POINTER, (error, result) => {
       if (result === null || result === "0") {
         this.setState({tutorialPointer: true}); 
       }
-      AsyncStorage.getItem("TUTORIAL_SWIPE", (error, result) => {
-        if (result === null || result === "0") {
-          this.setState({tutorialSwipe: true});
-        }
-      });
     });
   }
 
@@ -91,9 +101,8 @@ class Swipe extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.isSwiping !== this.state.isSwiping || 
-      prevState.tutorialSwipe !== this.state.tutorialSwipe ||
-      prevState.tutorialPointer !== this.state.tutorialPointer) {
-      if (this.state.tutorialSwipe && !this.state.isSwiping && !this.state.tutorialPointer) {
+      prevState.tutorialSwipe !== this.state.tutorialSwipe) {
+      if (this.state.tutorialSwipe && !this.state.isSwiping) {
         this.props.updateTutorialMode(true);
       } else {
         this.props.updateTutorialMode(false);
@@ -114,7 +123,7 @@ class Swipe extends React.Component {
   onSuperLikeClicked = () => {
     const { user } = this.props;
     let superLikesCount = parseInt(user.advanced.super_likes, 10);
-    if (user.premium === 1 || superLikesCount > 0) {
+    if (superLikesCount > 0) {
       this.setState({ labelType: LABEL_TYPES.TOP });
       this.swiper.swipeTop(false);
     } else {
@@ -122,16 +131,20 @@ class Swipe extends React.Component {
     }
   };
 
-  onRocketClicked = () => {
+  onRocketClicked = (boosting) => {
+    if (boosting) {
+      this.setState({visibleRemainingBoost: true});
+      return;
+    }
     const { user, token } = this.props;
     let boostsCount = parseInt(user.advanced.boosts, 10);
-    if (user.premium === 1 || boostsCount > 0) {
+    if (boostsCount > 0) {
       this.setState({ labelType: LABEL_TYPES.BOOST }, () => {
         setTimeout(() => {
           this.setState({ labelType: LABEL_TYPES.NONE });
         }, 350);
       });
-      this.props.runBoost(token, 1);
+      this.props.runBoost(token, 1, null);
     } else {
       this.setState({ visibleBoost: true });
     }
@@ -139,21 +152,29 @@ class Swipe extends React.Component {
 
   onRewindClicked = () => {
     const { user, token } = this.props;
-    let rewindsCount = parseInt(user.advanced.reminds, 10);
-    if (user.premium === 1 || rewindsCount > 0) {
+    let rewindsCount = user.premium === 1 ? 1 : parseInt(user.advanced.rewinds, 10);
+    if (rewindsCount > 0) {
       this.setState({ labelType: LABEL_TYPES.REWIND }, () => {
         setTimeout(() => {
           this.setState({ labelType: LABEL_TYPES.NONE });
         }, 350);
       });
-      this.props.runRewinds(token);
+      this.setState({ enableRewinds: false });
+      this.props.runRewinds(token, this.props.cards[this.cardIndex].id);
+      this.onSwiperRewind();
     } else {
       this.setState({ visibleRewind: true });
     }
   };
 
+  onSwiperRewind = () => {
+    this.cardIndex = this.cardIndex - 1;
+    this.swiper.swipeBack();
+  }
+
   onSwipedAllCards = () => {
     setTimeout(() => {
+      this.cardIndex = 0;
       this.props.loadCards(this.props.token);
     }, 300);
   };
@@ -163,33 +184,62 @@ class Swipe extends React.Component {
     if (index === this.props.cards.length - 1) {
       return;
     }
-    this.setState({ cardIndex: index + 1 });
+    
+    if (this.props.isRewinding) this.rewindsChecking[CANCEL]();
+    
+    this.setState({ enableRewinds: false });
+    if (this.cardIndex === -1) {
+      this.cardIndex = 0;
+    } else {
+      let data = new FormData();
+      data.append("user_target_id", this.props.cards[this.cardIndex].id);
+      this.rewindsChecking = API.request({
+        method: "post",
+        url: `${API_ENDPOINTS.IS_FRIENDS}`,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + this.props.token,
+        },
+        data,
+        slient: true,
+      })
+        .then(response => {
+          let res = response.data.data;
+          if (res.friend === 4) {
+            this.setState({ enableRewinds: false });
+          } else {
+            this.setState({ enableRewinds: true });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   onSwipedWithDirection = (index, type) => {
     const { token, cards } = this.props;
 
     if (this.state.tutorialSwipe && (type === "left" || type === "right")) {
-      AsyncStorage.setItem("TUTORIAL_SWIPE", "1");
+      AsyncStorage.setItem(TUTORIAL.SWIPE, "1");
       this.setState({tutorialSwipe: false});
     }
 
     if (type === "left") {
       // dislike
       this.props.addDisLike(token, cards[index].id);
+      this.setState({swipedCount: (this.state.swipedCount + 1)});
     } else if (type === "right") {
       // like
       this.props.addLike(token, cards[index].id);
+      this.setState({swipedCount: (this.state.swipedCount + 1)});
     } else {
       // super like
-      // this.swiper.swipeBack();
-      this.props.addSuperLike(token, cards[index].id);
-      this.setState({ labelType: LABEL_TYPES.TOP }, () => {
-        setTimeout(() => {
-          this.setState({ labelType: LABEL_TYPES.NONE });
-        }, 350);
-      });
+      if (cards && cards[index]) {
+        this.props.addSuperLike(token, cards[index].id);
+      }
     }
+    this.cardIndex = index;
   };
 
   onSwiping = (animatedValueX, animatedValueY) => {
@@ -224,12 +274,12 @@ class Swipe extends React.Component {
 
   render() {
     const { isLoadingCards, cards, visibleDetail } = this.props;
-    const { labelType, tutorialPointer } = this.state;
+    const { labelType, tutorialPointer, swipedCount } = this.state;
 
     if (isLoadingCards || cards === null || cards.length === 0) {
       return (
         <Screen hasGradient style={styles.emptyContainer}>
-          <NoUsers />
+          <NoUsers navigation={this.props.navigation} />
         </Screen>
       );
     }
@@ -275,8 +325,8 @@ class Swipe extends React.Component {
                   onSuperLike={this.onSuperLikeClicked}
                   location={this.state.location}
                   onReport={(userId) => this.setState({ reportId: userId, visibleReport: true })}
-                  onClickedCard={tutorialPointer ? () => {
-                    AsyncStorage.setItem("TUTORIAL_POINTER", "1");
+                  onClickedCard={(tutorialPointer && swipedCount === 3) ? () => {
+                    AsyncStorage.setItem(TUTORIAL.POINTER, "1");
                     this.setState({tutorialPointer: false});
                   } : null}
                   index={index}
@@ -311,6 +361,8 @@ class Swipe extends React.Component {
               onSuperLike={this.onSuperLikeClicked}
               onRocket={this.onRocketClicked}
               onReload={this.onRewindClicked}
+              isRewinds={this.state.enableRewinds}
+              isSuperLike={this.state.enableSuperLike}
             />
           )}
 
@@ -323,7 +375,7 @@ class Swipe extends React.Component {
             </View>
           )}
 
-          {tutorialPointer && <View style={styles.tutorialContainer} pointerEvents={"none"}>
+          {(tutorialPointer && swipedCount === 3) && <View style={styles.tutorialContainer} pointerEvents={"none"}>
             <View style={styles.tutorialPointerLeft}>
               <Image source={Images.tutorial.icPointer} />
               <Text style={styles.tutorialText}>Previous Photo</Text>
@@ -377,6 +429,17 @@ class Swipe extends React.Component {
             userId={this.state.reportId}
             onDismiss={() => this.setState({ visibleReport: false })}
           />
+
+          <BoostTimeModal 
+            isVisible={this.state.visibleRemainingBoost}
+            onBack={() => this.setState({visibleRemainingBoost: false})}
+            onBoost={(boosting) => {
+              this.setState({visibleRemainingBoost: false});
+              setTimeout(() => {
+                this.onRocketClicked(false);
+              }, 500);
+            }}
+            isSwipe={true} />
         </SafeAreaView>
       </Screen>
     );

@@ -35,15 +35,18 @@ export default StyleSheet.create({
   },
 
   listContainer: {
-    marginBottom: wp(50),
-    paddingHorizontal: wp(3),
-  },
-  listContentContainer: {
     flex: 1,
   },
+  listContentContainer: {
+    marginBottom: wp(50),
+    paddingHorizontal: wp(3),
+    flexWrap: "wrap",
+    flexDirection: "row",
+  },
   itemContainer: {
-    width: width / 2,
+    width: width / 2 - wp(4),
     height: parseInt((((width - wp(34)) / 2) * wp(240)) / wp(170), 10),
+    marginBottom: wp(12),
   },
   itemSeparator: {
     height: wp(10),

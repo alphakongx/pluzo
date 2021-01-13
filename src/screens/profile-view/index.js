@@ -1,5 +1,6 @@
 import ProfileView from "./profile-view.screen";
 import { connect } from "react-redux";
+import { UserCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -8,6 +9,8 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  blockUser: UserCreators.requestBlockUser,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileView);

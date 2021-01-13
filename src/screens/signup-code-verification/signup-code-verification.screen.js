@@ -9,6 +9,8 @@ import moment from "moment";
 import EventBus from "eventing-bus";
 import { UserTypes } from "@redux/actions";
 import { NavigationService } from "@helpers";
+import AsyncStorage from "@react-native-community/async-storage";
+import { TUTORIAL } from "@constants";
 
 import styles from "./signup-code-verification.style.js";
 
@@ -23,10 +25,13 @@ class SignupCodeVerification extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.codeActionSubscription = EventBus.on(
       UserTypes.PHONE_VERIFICATION_SEND_CODE_SUCCESS,
-      this.startCountDown,
+      () => {
+        AsyncStorage.setItem(TUTORIAL.SMS_LAST_TIME, `${moment().unix()}`);
+        this.startCountDown(60);
+      },
     );
     if (Platform.OS === "android") {
       RNOtpVerify.getOtp()
@@ -35,7 +40,24 @@ class SignupCodeVerification extends Component {
         })
         .catch(p => console.log(p));
     }
-    this.resendCode();
+
+    let lastTime = 0;
+    try {
+      lastTime = await AsyncStorage.getItem(TUTORIAL.SMS_LAST_TIME);
+    } catch (error) {
+      console.log(error);
+      lastTime = 0;
+    }
+    if (lastTime === 0 || lastTime === null) {
+      this.resendCode();
+    } else {
+      let passTime = moment().diff(moment.unix(lastTime), "seconds");
+      if (passTime < 60) {
+        this.startCountDown(60 - passTime);
+      } else {
+        this.resendCode();
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -67,9 +89,9 @@ class SignupCodeVerification extends Component {
     this.props.requestPhoneVerificationSendCode(phoneNumber);
   };
 
-  startCountDown = () => {
+  startCountDown = (seconds) => {
     this.setState({
-      countdownTime: moment().add(60, "seconds").unix(),
+      countdownTime: moment().add(seconds, "seconds").unix(),
       canResend: false,
     });
   };

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import EventBus from "eventing-bus";
-import { Text, Touchable, GradientButton, SolidButton } from "@components";
+import { Text, Touchable, GradientButton, SolidButton, IconButton } from "@components";
 import { NavigationService } from "@helpers";
 import { SCREENS } from "@constants";
 import styles from "./search-people-item.style";
 import FastImage from "react-native-fast-image";
+import Images from "@assets/Images";
 
 const SearchPeopleItem: () => React$Node = props => {
   const [adding, setAdding] = useState(false);
@@ -59,6 +60,16 @@ const SearchPeopleItem: () => React$Node = props => {
           <Text style={styles.preview}>{username}</Text>
         </View>
         <View style={styles.timeContainer}>
+          {id !== 0 && props.friend &&
+          <View style={styles.removeFriendButton}>
+            <IconButton
+              backColor={"#FF0036"}
+              icon={Images.app.icCross}
+              iconWidth={12}
+              iconHeight={12}
+              onPress={() => props.onRemoveFriend && props.onRemoveFriend()}
+            />
+          </View>}
           {props.friend ? (
             <GradientButton
               containerStyle={styles.addButton}

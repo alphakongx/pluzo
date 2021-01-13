@@ -26,6 +26,11 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  itemColorView: {
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(10),
+  },
 
   emojiContainer: {
     marginHorizontal: wp(10),

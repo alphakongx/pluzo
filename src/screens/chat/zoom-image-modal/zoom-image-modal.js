@@ -1,8 +1,7 @@
 import React from "react";
-import { View } from "react-native";
-import { Touchable, Image } from "@components";
+import { View, ActivityIndicator } from "react-native";
+import { Touchable, Image, ImageZoomViewer } from "@components";
 import Modal from "react-native-modal";
-import PhotoView from "react-native-photo-view";
 import Images from "@assets/Images";
 
 import styles from "./zoom-image-modal.style";
@@ -10,6 +9,9 @@ import styles from "./zoom-image-modal.style";
 class ZoomImageModal extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loading: false,
+    }
   }
 
   render() {
@@ -31,7 +33,9 @@ class ZoomImageModal extends React.Component {
         style={styles.container}
       >
         <View style={styles.flexFill} pointerEvents={"box-none"}>
-          <PhotoView source={{ uri: this.props.zoomImage }} style={styles.image} />
+          <ImageZoomViewer imageUrl={{ uri: this.props.zoomImage }} />
+          {this.state.loading &&
+          <ActivityIndicator color={"white"} size={"small"} style={styles.loadingIndicator} />}
           <Touchable
             style={[styles.closeButton, { top: this.props.insets.top + 15 }]}
             onPress={this.props.onSwipeComplete}

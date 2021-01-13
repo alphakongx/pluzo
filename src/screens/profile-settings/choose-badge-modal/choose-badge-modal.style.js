@@ -25,7 +25,7 @@ export default StyleSheet.create({
 
   myBadgeScroll: {
     backgroundColor: COLOR.SEARCH_INPUT_BORDER,
-    height: wp(58),
+    height: 58,
   },
   scrollContentCenter: {
     flexGrow: 1,
@@ -50,6 +50,9 @@ export default StyleSheet.create({
     height: wp(16),
     resizeMode: "contain",
   },
+  // badgeImage: {
+  //   fontSize: wp(12),
+  // },
   badgeActive: {
     backgroundColor: "white",
   },
@@ -70,7 +73,7 @@ export default StyleSheet.create({
   },
 
   allBadgeScroll: {
-    height: wp(155),
+    height: wp(250),
   },
   flexWrap: {
     flexWrap: "wrap",
@@ -98,5 +101,47 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#312466",
+  },
+
+  badgeText: {
+    color: "white",
+    fontSize: wp(12),
+    fontWeight: "600",
+    marginLeft: ((screenWidth - wp(42)) / 6 - wp(30)) / 2,
+  },
+  badgePlusText: {
+    color: "white",
+    fontSize: wp(12),
+    fontWeight: "600",
+    marginLeft: ((screenWidth - wp(42)) / 6 - wp(30)) / 2,
+    marginTop: wp(28),
+  },
+  badgePlusMask: {
+    backgroundColor: "#0B0516",
+    opacity: 0.5,
+    position: "absolute",
+    left: 0, 
+    right: 0,
+    top: wp(5),
+    bottom: -wp(300),
+  },
+
+  buttonContainer: {
+    position: "absolute",
+    left: wp(17.5),
+    right: wp(17.5),
+    bottom: wp(25),
+    color: "white",
+  },
+  plusContainer: {
+    position: "absolute",
+    top: -wp(2),
+    bottom: -wp(2),
+    alignSelf: "center",
+    width: screenWidth - wp(145),
+  },
+  plusImage: {
+    width: "100%",
+    height: "100%",
   },
 });

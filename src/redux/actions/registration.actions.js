@@ -13,7 +13,6 @@ const { Types, Creators } = createActions({
   setPhoneNumber: ["phoneNumber"],
   resetRegistration: null,
 
-  requestCheckUsername: ["username"],
   checkUsernameDone: null,
 });
 

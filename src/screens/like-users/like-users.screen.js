@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import { FlatList, SafeAreaView, View } from "react-native";
-import { Screen, BackButton, Image, Text, Touchable, GradientButton } from "@components";
+import { SafeAreaView, ScrollView, View } from "react-native";
+import { Screen, BackButton, Image, Text, AnimatedButton } from "@components";
+import moment from "moment";
 import { SCREENS } from "@constants";
 import { getLikedUsers } from "@redux/api";
-import * as Animatable from "react-native-animatable";
 import Images from "@assets/Images";
 import LikedUserItem from "./liked-user-item";
-import Swiper from "react-native-deck-swiper";
+import PluzoLikeSwiper from "./pluzo-like-swiper";
 import PurchaseModal from "../profile-settings/purchase-modal";
-import styles from "./like-users.style";
+import SwipePurchaseModal from "../swipe/swipe-purchase-modal";
+import BoostTimeModal from "../swipe/boost-time-modal";
 
-const { createAnimatableComponent } = Animatable;
-const AnimatableView = createAnimatableComponent(View);
+import styles from "./like-users.style";
 
 class LikeUsersScreen extends Component {
   constructor(props) {
@@ -19,14 +19,67 @@ class LikeUsersScreen extends Component {
     this.state = {
       likedUsers: [],
       visiblePurchase: false,
-      swipeIndex: -1,
+      scrollEnabled: true,
+      visibleBoost: false,
+      visibleRemainingBoost: false,
     };
+
+    this.boosting = false;
+    this.restSeconds = 0;
+    this.boostInterval = null;
   }
 
   componentDidMount() {
     getLikedUsers(this.props.token).then(response => {
       this.setState({ likedUsers: response.data.data });
-    });console.log(this.props.user);
+    });
+    this.checkingBoostTime();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.boostInterval);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.user.advanced.last_boost_time.end_boost_swipe_time !== this.props.user.advanced.last_boost_time.end_boost_swipe_time) {console.log("ok");
+      this.checkingBoostTime();
+    }
+  }
+
+  checkingBoostTime = () => {
+    let boostTime = this.props.user.advanced.last_boost_time.end_boost_swipe_time;  
+    if (boostTime) {
+      clearInterval(this.boostInterval);
+      let duration = moment.unix(boostTime).diff(moment(), "seconds");
+      if (duration > 0) {
+        this.boosting = true;
+        this.restSeconds = duration;
+        this.boostInterval = setInterval(() => {
+          if (this.restSeconds < 0) {
+            clearInterval(this.boostInterval);
+            this.boosting = false;
+          } else {
+            this.restSeconds -= 1;
+          }
+        }, 1000);
+      } else {
+        this.boosting = false;
+      }
+    }
+  }
+
+  onBoost = (boost) => {
+    if (boost) {
+      this.setState({visibleRemainingBoost: true});
+      return;
+    }
+    const { user, token } = this.props;
+    let boostsCount = parseInt(user.advanced.boosts, 10);
+    if (boostsCount > 0) {
+      this.props.runBoost(token, 1, null);
+    } else {
+      this.setState({ visibleBoost: true });
+    }
   }
 
   onSwipedWithDirection = (eventIndex, type) => {
@@ -44,7 +97,7 @@ class LikeUsersScreen extends Component {
   };
 
   render() {
-    const { likedUsers, swipeIndex } = this.state;
+    const { likedUsers, scrollEnabled } = this.state;
     return (
       <Screen hasGradient style={styles.container}>
         <SafeAreaView style={styles.container}>
@@ -60,125 +113,72 @@ class LikeUsersScreen extends Component {
               </View>
             </View>
 
-            <FlatList
-              style={styles.listContainer}
-              contentContainerStyle={styles.listContentContainer}
-              data={likedUsers}
-              numColumns={2}
-              keyExtractor={(item, index) => `liked-user-${index}`}
-              ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-              renderItem={({ item: likedUser, index }) => {
-                if (this.props.user.premium === 0) {
-                  return (
-                    <Touchable
-                      disabled={true}
-                    >
-                      <LikedUserItem likedUser={likedUser} />
-                    </Touchable>
-                  )
-                }
-                return (
-                  <View
-                    style={[styles.itemContainer, swipeIndex === index ? styles.zIndexHigh : styles.zIndexZero]}>
-                    <Swiper
-                      horizontalThreshold={25}
-                      overlayOpacityHorizontalThreshold={25}
-                      cards={[likedUser]}
-                      cardIndex={0}
-                      cardVerticalMargin={0}
-                      cardHorizontalMargin={0}
-                      backgroundColor={"transparent"}
-                      renderCard={(card, cardIndex) => {
+            <ScrollView
+              scrollEnabled={scrollEnabled && likedUsers.length !== 0}
+              style={[
+                styles.listContainer, 
+                { overflow: scrollEnabled ? "hidden" : "visible" }]}
+              contentContainerStyle={likedUsers.length === 0 ? {flex: 1} : {}}>
+                {likedUsers.length === 0 ? (
+                  <View style={styles.emptyContainer}>
+                    <Text style={styles.emptyText}>{"You have no likes\nSwipe to meet more people!"}</Text>
+                  </View>
+                ) : (
+                  <View style={styles.listContentContainer}>
+                  {
+                    likedUsers.map((likedUser, index) => {
+                      if (this.props.user.premium === 0) {
                         return (
-                          <Touchable onPress={() => {console.log("OK");
+                          <View key={`like-users-${index}`}
+                            style={styles.itemContainer}>
+                            <LikedUserItem likedUser={{user: likedUser.user}} />
+                          </View>
+                        )
+                      }
+                      return (
+                        <PluzoLikeSwiper
+                          key={`like-users-${index}`}
+                          style={styles.itemContainer}
+                          onDragStart={() => this.setState({scrollEnabled: false})}
+                          onDragEnd={() => this.setState({scrollEnabled: true})}
+                          onSwipedDirection={(direction) => this.onSwipedWithDirection(index, direction)}
+                          onPress={() => {
                             this.props.navigation.navigate(SCREENS.PROFILE_VIEW, {
-                              user: card.user,
+                              user: likedUser.user,
                             });
                           }}>
-                          <LikedUserItem likedUser={card}
-                            zIndex={swipeIndex !== -1 && likedUsers[swipeIndex].user._id === card.user._id} />
-                          </Touchable>
-                        );
-                      }}
-                      verticalSwipe={false}
-                      overlayLabels={{
-                        left: {
-                          element: <Image source={require("@assets/images/swipe-screen/swipe-cross.png")} />,
-                          style: { wrapper: styles.overlayDislike }
-                        },
-                        right: {
-                          element: <Image source={require("@assets/images/swipe-screen/swipe-heart.png")} />,
-                          style: { wrapper: styles.overlayDislike }
-                        },
-                      }}
-                      dragStart={() => this.setState({swipeIndex: index})}
-                      dragEnd={() => this.setState({swipeIndex: -1})}
-                      onSwipedLeft={(swipedIndex) => this.onSwipedWithDirection(index, "left")}
-                      onSwipedRight={(swipedIndex) => this.onSwipedWithDirection(index, "right")}
-                    />
-                  </View>
-                );
-              }}
-              ListEmptyComponent={() => {
-                return (
-                  <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyText}>{"You have no likes\nSwipe to meet more people!"}</Text>
+                            <LikedUserItem likedUser={{user: likedUser.user}} />
+                        </PluzoLikeSwiper>
+                      )
+                    })
+                  }
                   </View>
                 )
-              }}
-            />
+              }
+            </ScrollView>
             
             {this.props.user.premium === 0 &&
             <View style={styles.buttonContainer}>
-              <GradientButton
+              <AnimatedButton
                 colors={["#FF7131", "#E0E552"]}
                 shadowColor={"#FF6F00"}
                 text={"Get Pluzo Plus"}
+                animImage={Images.swipe.pluzoPlusMark}
                 onPress={() => this.setState({visiblePurchase: true})}
               />
-              <AnimatableView
-                animation={{
-                  from: {["translateY"]: -2.5},
-                  to: {["translateY"]: 2.5}
-                }}
-                iterationCount={"infinite"}
-                direction="alternate"
-                duration={1500}
-                style={styles.plusMark}
-                pointerEvents={"box-none"}>
-                <Image
-                  source={Images.swipe.pluzoPlusMark}
-                  pointerEvents={"none"}
-                  style={styles.plusImage}
-                />
-              </AnimatableView>
             </View>}
             {this.props.user.premium === 1 &&
             <View style={styles.buttonContainer}>
-              <GradientButton
+              <AnimatedButton
                 colors={["#9C3DE2", "#D491FF"]}
                 shadowColor={"#6E00FF"}
                 text={"Boost me"}
                 icon={Images.app.icRocket}
                 containerStyle={styles.flexRow}
                 iconStyle={styles.boostIcon}
+                onPress={() => this.onBoost(this.boosting)}
+                loading={this.props.isBoosting}
               />
-              <AnimatableView
-                animation={{
-                  from: {["translateY"]: -2.5},
-                  to: {["translateY"]: 2.5}
-                }}
-                iterationCount={"infinite"}
-                direction="alternate"
-                duration={1500}
-                style={styles.plusMark}
-                pointerEvents={"box-none"}>
-                <Image
-                  source={Images.app.boostBubbles}
-                  pointerEvents={"none"}
-                  style={styles.bubblesImage}
-                />
-              </AnimatableView>
             </View>}
           </View>
 
@@ -186,6 +186,26 @@ class LikeUsersScreen extends Component {
             isVisible={this.state.visiblePurchase}
             onSwipeComplete={() => this.setState({visiblePurchase: false})}
           />
+
+          <SwipePurchaseModal
+            isVisible={this.state.visibleBoost}
+            uptoLogo
+            purchaseType={"boost"}
+            onConfirm={() => this.setState({ visibleBoost: false })}
+            onPluzoPlus={() => this.setState({ visibleBoost: false })}
+            onHide={() => this.setState({ visibleBoost: false })}
+          />
+          
+          <BoostTimeModal 
+            isVisible={this.state.visibleRemainingBoost}
+            onBack={() => this.setState({visibleRemainingBoost: false})}
+            onBoost={() => {
+              this.setState({visibleRemainingBoost: false});
+              setTimeout(() => {
+                this.onBoost(false);
+              }, 500);
+            }}
+            isSwipe={true} />
         </SafeAreaView>
       </Screen>
     );

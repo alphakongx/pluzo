@@ -6,6 +6,8 @@ import Clipboard from "@react-native-community/clipboard";
 import RNOtpVerify from "react-native-otp-verify";
 import { Countdown } from "react-native-countdown-text";
 import moment from "moment";
+import AsyncStorage from "@react-native-community/async-storage";
+import { TUTORIAL } from "@constants";
 
 import styles from "./login-phone-code-verification.style.js";
 
@@ -14,13 +16,13 @@ class LoginPhoneCodeVerification extends React.Component {
     super(props);
     this.state = {
       code: "",
-      countdownTime: moment().add(15, "seconds").unix(),
-      canResend: true,
+      countdownTime: moment().add(0, "seconds").unix(),
+      canResend: false,
       phoneNumber: this.props.navigation.state.params.phoneNumber,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (Platform.OS === "android") {
       RNOtpVerify.getHash().then(console.log).catch(console.log);
       RNOtpVerify.getOtp()
@@ -29,13 +31,31 @@ class LoginPhoneCodeVerification extends React.Component {
         })
         .catch(p => console.log(p));
     }
-    this.resendCode();
+
+    let lastTime = 0;
+    try {
+      lastTime = await AsyncStorage.getItem(TUTORIAL.SMS_LAST_TIME);
+    } catch (error) {
+      console.log(error);
+      lastTime = 0;
+    }
+    if (lastTime === 0 || lastTime === null) {
+      this.resendCode();
+    } else {
+      let passTime = moment().diff(moment.unix(lastTime), "seconds");
+      if (passTime < 60) {
+        this.resetCountdwon(60 - passTime);
+      } else {
+        this.resendCode();
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.isSendingCode !== this.props.isSendingCode) {
       if (!this.props.isSendingCode) {
-        this.resetCountdwon();
+        AsyncStorage.setItem(TUTORIAL.SMS_LAST_TIME, `${moment().unix()}`);
+        this.resetCountdwon(60);
       }
     }
   }
@@ -46,10 +66,10 @@ class LoginPhoneCodeVerification extends React.Component {
     }
   }
 
-  resetCountdwon = () => {
+  resetCountdwon = (seconds) => {
     this.setState({
       canResend: false,
-      countdownTime: moment().add(60, "seconds").unix(),
+      countdownTime: moment().add(seconds, "seconds").unix(),
     });
   };
 

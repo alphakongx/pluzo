@@ -1,9 +1,6 @@
 import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
-  setSortBy: ["sortBy"],
-  setFilterCountry: ["country"],
-
   setStreamStatus: ["streamStatus"],
   setIsScrolling: ["isScrolling"],
   setAskedToJoin: ["askedJoin"],
@@ -12,6 +9,9 @@ const { Types, Creators } = createActions({
   setEnabledCamera: ["enabled"],
   setEnabledMic: ["enabled"],
   resetEnabledSettings: null,
+  updateMutedUsers: ["users"],
+  updateRemoteMutedUsers: ["users"],
+  updateAskedUsers: ["users"],
 
   requestStreamUpdate: ["params", "token"],
   streamUpdateSuccess: ["data"],
@@ -33,6 +33,11 @@ const { Types, Creators } = createActions({
   requestUserRefusedJoin: ["channel_id", "user_id", "token"],
   requestUserCancelAsk: ["channel_id", "token"],
 
+  // kick, ban, mute
+  requestStreamBanUser: ["user_id", "channel_id", "token"],
+  requestStreamKickUser: ["user_id", "channel_id", "token"],
+  requestStreamBanList: ["channel_id", "token"],
+
   requestStreamList: ["token"],
   streamListSuccess: ["data"],
 
@@ -42,7 +47,14 @@ const { Types, Creators } = createActions({
   updateBroadcasters: ["data"],
 
   updateMessages: ["messages"],
-  requestStreamChatAddMsg: ["channel_id", "message", "token"],
+  requestStreamChatAddMsg: ["channel_id", "message", "msg_type", "token"],
+  updateChannelName: ["name"],
+  updateStreamInfo: ["boostEndTime", "inviteOnly"],
+
+  /// get filter settings
+  getFilterSettings: ["token"],
+  setFilterSettings: ["data", "token"],
+  setFilterSettingsSuccess: ["data"],
 });
 
 export const LiveTypes = Types;

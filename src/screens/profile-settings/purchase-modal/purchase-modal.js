@@ -12,6 +12,7 @@ import Images from "@assets/Images";
 import { widthPercentageToDP as wp, ItemSkus } from "@helpers";
 
 import styles, { screenWidth } from "./purchase-modal.style";
+import PurchaseSelectModal from "./puchase-select-modal";
 
 const { createAnimatableComponent } = Animatable;
 const AnimatableView = createAnimatableComponent(View);
@@ -49,6 +50,7 @@ class PurchaseModal extends React.Component {
     super(props);
     this.state = {
       products: [],
+      visibleSelect: false,
     };
   }
 
@@ -101,7 +103,7 @@ class PurchaseModal extends React.Component {
         swipeDirection={"down"}
         swipeThreshold={100}
         useNativeDriver={false}
-        propagateSwipe={false}
+        propagateSwipe={true}
       >
         <View style={styles.container}>
           <View>
@@ -135,17 +137,9 @@ class PurchaseModal extends React.Component {
                   {this.renderDetails()}
                 </View>
 
-                <Text style={styles.priceText}>For $9.99/month</Text>
+                <Text style={styles.priceText}>{"For $11.99/month"}</Text>
               </View>
 
-              {/* <AnimatableView
-                style={styles.plusContainer}
-                animation={plusAnimation}
-                iterationCount={"infinite"}
-                direction="alternate"
-                duration={4000}>
-                <Image source={Images.app.pluzoplusPlus} style={styles.pluzoplusPlus} />
-              </AnimatableView> */}
             </LinearGradient>
           </View>
           <View style={styles.buttonContainer}>
@@ -153,7 +147,7 @@ class PurchaseModal extends React.Component {
               text={"Purchase"}
               colors={GRADIENT.PURCHASE_BUTTON}
               shadowColor={"#FF6F00"}
-              onPress={() => this.onPurchase(ItemSkus[0])}
+              onPress={() => this.setState({visibleSelect: true})}
             />
             <AnimatableView
               animation={plusAnimation}
@@ -161,7 +155,7 @@ class PurchaseModal extends React.Component {
               direction="alternate"
               duration={1500}
               style={styles.plusContainer}
-              pointerEvents={"box-none"}>
+              pointerEvents={"none"}>
               <Image
                 source={Images.swipe.pluzoPlusMark}
                 pointerEvents={"none"}
@@ -169,6 +163,15 @@ class PurchaseModal extends React.Component {
               />
             </AnimatableView>
           </View>
+
+          <PurchaseSelectModal 
+            isVisible={this.state.visibleSelect}
+            onSwipeComplete={() => this.setState({visibleSelect: false})}
+            onConfirm={(index) => {
+              this.setState({visibleSelect: false});
+              this.onPurchase(ItemSkus[index]);
+            }}
+            />
         </View>
       </Modal>
     );

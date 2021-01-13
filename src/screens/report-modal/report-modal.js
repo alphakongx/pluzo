@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { View, TextInput, Platform } from "react-native";
+import { View, TextInput, Platform, ActivityIndicator } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
 import Modal from "react-native-modal";
-import { Screen, Touchable, Image, Text } from "@components";
+import { Screen, Touchable, Image, Text, AppAlert } from "@components";
 import { report } from "@redux/api";
 
 import Images from "@assets/Images";
@@ -21,14 +21,12 @@ class ReportModal extends Component {
         { id: 5, select: false, text: "Other" },
       ],
       msgText: "",
+      visibleAlert: false,
+      loading: false,
     };
   }
 
-  onModalShow = () => {
-    if (Platform.OS === "ios") {
-      KeyboardManager.setEnable(true);
-      KeyboardManager.setShouldResignOnTouchOutside(true);
-    }
+  onInit = () => {
     this.setState({
       typeButtons: [
         { id: 1, select: false, text: "Harassment" },
@@ -37,8 +35,17 @@ class ReportModal extends Component {
         { id: 4, select: false, text: "Propaganda" },
         { id: 5, select: false, text: "Other" },
       ],
-      msgText: ""
+      msgText: "",
+      visibleAlert: false,
     });
+  }
+
+  onModalShow = () => {
+    if (Platform.OS === "ios") {
+      KeyboardManager.setEnable(true);
+      KeyboardManager.setShouldResignOnTouchOutside(true);
+    }
+    this.onInit();
   };
 
   onModalHide = () => {
@@ -50,7 +57,7 @@ class ReportModal extends Component {
 
   onReport = () => {
     let selectedButtons = this.state.typeButtons.filter((button) => button.select === true);
-    if (selectedButtons.length > 0 && this.state.msgText !== "") {
+    if (selectedButtons.length > 0) {
       let params = new FormData();
       params.append("reason", selectedButtons[0].id);
       params.append("msg", this.state.msgText);
@@ -61,9 +68,14 @@ class ReportModal extends Component {
       } else {
         params.append("user_id", this.props.userId);
       }
-      report(params, this.props.token, type);
+      this.setState({loading: true}, () => {
+        report(params, this.props.token, type).then((res) => {
+          this.setState({loading: false, visibleAlert: true});
+        }).catch(e => {
+          this.setState({loading: false});
+        });
+      });
     }
-    this.props.onDismiss && this.props.onDismiss();
   };
 
   onTypeSelect = typeId => {
@@ -94,6 +106,8 @@ class ReportModal extends Component {
   };
 
   render() {
+    let selectedButtons = this.state.typeButtons.filter((button) => button.select === true);
+    let disabledReport = this.state.loading || selectedButtons.length === 0;
     return (
       <Modal
         {...this.props}
@@ -148,11 +162,24 @@ class ReportModal extends Component {
                 style={styles.reportContentText}
                 onChangeText={(text) => this.setState({msgText: text})}
               />
-              <Touchable style={[styles.reportButton]} onPress={this.onReport}>
-                <Text style={styles.reportButtonText}>Report</Text>
+              <Touchable style={[styles.reportButton]} onPress={this.onReport}
+                disabled={disabledReport}>
+                {this.state.loading ? (
+                  <ActivityIndicator size={"small"} color={"#0B0516"} />
+                ) : (
+                  <Text style={styles.reportButtonText}>Report</Text>
+                )}
               </Touchable>
             </Screen>
           </View>
+          <AppAlert 
+            isVisible={this.state.visibleAlert}
+            onDismiss={() => {
+              this.onInit();
+              this.props.onDismiss && this.props.onDismiss();
+            }}
+            title={`You successfully reported this ${this.props.liveStream ? "live" : "user"}.`}
+            content={"Thanks. We take an from here."} />
         </View>
       </Modal>
     );

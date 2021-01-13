@@ -23,6 +23,7 @@ class GradientButton extends Component {
     var {
       text,
       disabled,
+      disabledButton=true,
       loading,
       colors,
       containerStyle,
@@ -58,7 +59,7 @@ class GradientButton extends Component {
           style={[
             styles.container,
             containerStyle,
-            disabled ? styles.buttonDisabled : {},
+            (disabled && disabledButton) ? styles.buttonDisabled : {},
           ]}
           onLayout={e => {
             const { layout } = e.nativeEvent;
@@ -80,7 +81,7 @@ class GradientButton extends Component {
                   style={[
                     styles.buttonText,
                     textStyle,
-                    disabled ? styles.buttonTextDisabled : {},
+                    (disabled && disabledButton) ? styles.buttonTextDisabled : {},
                   ]}
                 >
                   {text}

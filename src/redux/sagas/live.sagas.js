@@ -18,6 +18,11 @@ import {
   streamList,
   streamUserList,
   streamChatAddMsg,
+  streamBanUser,
+  streamKickUser,
+  streamBanList,
+  getLiveSettings,
+  setLiveSettings
 } from "@redux/api";
 
 export function* watchLiveRequests() {
@@ -42,10 +47,17 @@ export function* watchLiveRequests() {
   yield takeLatest(LiveTypes.REQUEST_USER_REFUSED_JOIN, requestUserRefusedJoin);
   yield takeLatest(LiveTypes.REQUEST_USER_CANCEL_ASK, requestUserCancelAsk);
 
+  yield takeLatest(LiveTypes.REQUEST_STREAM_BAN_USER, requestStreamBanUser);
+  yield takeLatest(LiveTypes.REQUEST_STREAM_KICK_USER, requestStreamKickUser);
+  yield takeLatest(LiveTypes.REQUEST_STREAM_BAN_LIST, requestStreamBanList);
+
   yield takeLatest(LiveTypes.REQUEST_STREAM_LIST, requestStreamList);
   yield takeLatest(LiveTypes.REQUEST_STREAM_USER_LIST, requestStreamUserList);
 
   yield takeLatest(LiveTypes.REQUEST_STREAM_CHAT_ADD_MSG, requestStreamChatAddMsg);
+
+  yield takeLatest(LiveTypes.GET_FILTER_SETTINGS, requestGetSettings);
+  yield takeLatest(LiveTypes.SET_FILTER_SETTINGS, requestSetSettings);
 }
 
 function* requestStreamUpdate(action) {
@@ -236,6 +248,44 @@ function* requestUserCancelAsk(action) {
   }
 }
 
+function* requestStreamBanUser(action) {
+  try {
+    const { channel_id, user_id, token } = action;
+    const requestParams = new FormData();
+    requestParams.append("channel_id", channel_id);
+    requestParams.append("user_id", user_id);
+
+    yield call(streamBanUser, requestParams, token);
+  } catch (error) {
+    console.log("stream ban user >>>", error.response.data.message);
+  }
+}
+
+function* requestStreamKickUser(action) {
+  try {
+    const { channel_id, user_id, token } = action;
+    const requestParams = new FormData();
+    requestParams.append("channel_id", channel_id);
+    requestParams.append("user_id", user_id);
+
+    yield call(streamKickUser, requestParams, token);
+  } catch (error) {
+    console.log("stream kick user >>>", error.response.data.message);
+  }
+}
+
+function* requestStreamBanList(action) {
+  try {
+    const { channel_id, token } = action;
+    const requestParams = new FormData();
+    requestParams.append("channel_id", channel_id);
+
+    yield call(streamBanList, requestParams, token);
+  } catch (error) {
+    console.log("stream ban list >>>", error.response.data.message);
+  }
+}
+
 function* requestStreamList(action) {
   try {
     const { token } = action;
@@ -263,14 +313,42 @@ function* requestStreamUserList(action) {
 
 function* requestStreamChatAddMsg(action) {
   try {
-    const { channel_id, token, message } = action;
+    const { channel_id, token, msg_type, message } = action;
     const requestParams = new FormData();
 
     requestParams.append("channel_id", channel_id);
     requestParams.append("message", message);
+    requestParams.append("type", msg_type);
 
     yield call(streamChatAddMsg, requestParams, token);
   } catch (error) {
-    console.log("stream add chat >>>", error);
+    console.log("stream add chat >>>", error.data);
+  }
+}
+
+function* requestGetSettings(action) {
+  try {
+    const { token } = action;
+
+    const res = yield call(getLiveSettings, token);
+    yield put(LiveCreators.setFilterSettingsSuccess(res.data.data));
+  } catch (error) {
+    console.log("get live settings >>>", error.data);
+  }
+}
+
+function* requestSetSettings(action) {
+  try {
+    const { token, data } = action;
+    const requestParams = new FormData();
+    
+    requestParams.append("filter", data.filter);
+    requestParams.append("country", data.country);
+    requestParams.append("state", data.state === null ? "Alabama" : data.state);
+
+    const res = yield call(setLiveSettings, requestParams, token);
+    yield put(LiveCreators.setFilterSettingsSuccess(res.data.data));
+  } catch (error) {
+    console.log("set live settings >>>", error);
   }
 }

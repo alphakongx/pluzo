@@ -14,6 +14,8 @@ class StreamUserIcon extends Component {
 
   render() {
     const { isBroadcaster, user } = this.props;
+    let isMuted = this.props.mutedUsers.includes((user.id || user._id));
+    let isRemoteMuted = this.props.remoteMutedUsers.includes((user.id || user._id));
     return (
       <Touchable
         style={[styles.container, this.props.style]}
@@ -22,7 +24,7 @@ class StreamUserIcon extends Component {
       >
         <FastImage source={{ uri: user.images[0].path }} style={styles.image} />
         {isBroadcaster && (
-          <View style={styles.micContainer}>
+          <View style={[styles.micContainer, (isMuted || isRemoteMuted) ? styles.muted : {}]}>
             <Image source={Images.app.icMic} style={styles.mic} />
           </View>
         )}

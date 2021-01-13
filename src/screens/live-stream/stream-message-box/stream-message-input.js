@@ -54,7 +54,7 @@ class StreamMessageInput extends Component {
             returnKeyType={"send"}
             returnKeyLabel={"Send"}
             blurOnSubmit={false}
-            autoCorrect={false}
+            autoCorrect={true}
             allowFontScaling={false}
             numberOfLines={1}
             onChangeText={message => this.setState({ message })}

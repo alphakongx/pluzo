@@ -12,6 +12,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   logout: UserCreators.logout,
   deleteAccount: UserCreators.requestDeleteAccount,
+  updateUser: UserCreators.updateUserSuccess,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

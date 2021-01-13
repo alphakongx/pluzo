@@ -34,10 +34,17 @@ const initializeSearch = (state, action) => ({
   live: [],
 });
 
+const updateSearchLive = (state, action) => ({
+  ...state,
+  live: action.data,
+});
+
 export const HANDLERS = {
   [SearchTypes.REQUEST_SEARCH]: requestSearch,
   [SearchTypes.SEARCH_SUCCESS]: searchSuccess,
   [SearchTypes.SEARCH_FAILURE]: searchFailure,
+
+  [SearchTypes.UPDATE_SEARCH_LIVE]: updateSearchLive,
 
   [SearchTypes.INITIALIZE_SEARCH]: initializeSearch,
 

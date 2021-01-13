@@ -47,6 +47,11 @@ const addDisLike = (state, action) => ({
 });
 const addSuperLike = (state, action) => ({
   ...state,
+  isSuperLiking: true,
+});
+const addSuperLikeDone = (state, action) => ({
+  ...state,
+  isSuperLiking: false,
 });
 
 const requestMatch = (state, action) => ({
@@ -88,9 +93,19 @@ const requestSetSettingsFail = (state, action) => ({
 
 const requestRunBoost = (state, action) => ({
   ...state,
+  isBoosting: true,
+});
+const runBoostSuccess = (state, action) => ({
+  ...state,
+  isBoosting: false,
 });
 const requestRunRewinds = (state, action) => ({
   ...state,
+  isRewinding: true,
+});
+const runRewindsSuccess = (state, action) => ({
+  ...state,
+  isRewinding: false,
 });
 
 const updateTutorialMode = (state, action) => ({
@@ -113,6 +128,7 @@ export const HANDLERS = {
 
   [SwipeTypes.ADD_DIS_LIKE]: addDisLike,
   [SwipeTypes.ADD_SUPER_LIKE]: addSuperLike,
+  [SwipeTypes.ADD_SUPER_LIKE_DONE]: addSuperLikeDone,
 
   [SwipeTypes.REQUEST_MATCH]: requestMatch,
   [SwipeTypes.REQUEST_MATCH_SUCCESS]: requestMatchSuccess,
@@ -127,7 +143,9 @@ export const HANDLERS = {
   [SwipeTypes.REQUEST_SET_SETTINGS_FAIL]: requestSetSettingsFail,
 
   [SwipeTypes.REQUEST_RUN_BOOST]: requestRunBoost,
+  [SwipeTypes.RUN_BOOST_SUCCESS]: runBoostSuccess,
   [SwipeTypes.REQUEST_RUN_REWINDS]: requestRunRewinds,
+  [SwipeTypes.RUN_REWINDS_SUCCESS]: runRewindsSuccess,
 
   [SwipeTypes.UPDATE_TUTORIAL_MODE]: updateTutorialMode,
 

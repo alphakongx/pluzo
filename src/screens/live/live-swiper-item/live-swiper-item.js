@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Image, Text, Touchable, HorizontalImagesLayout } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import Images from "@assets/Images";
-import { GRADIENT, AppBadges } from "@config";
+import { GRADIENT, AppTags } from "@config";
 
 import styles from "./live-swiper-item.style";
 
@@ -19,7 +19,7 @@ const LiveSwiperItem: () => React$Node = props => {
     <Touchable
       style={styles.container}
       onPress={() => {
-        props.onJoinStream(item.channel);
+        props.onJoinStream(item);
       }}
     >
       <View style={styles.imageContainer}>
@@ -44,10 +44,11 @@ const LiveSwiperItem: () => React$Node = props => {
             />
             <Text style={styles.memberCount}>{parseInt(item.count, 10)}</Text>
           </LinearGradient>
-          <Image
-            source={Images.live[AppBadges[item.category].icon]}
+          {/* <Image
+            source={Images.live[AppTags[item.category].icon]}
             style={styles.tagImage}
-          />
+          /> */}
+          <View style={[styles.itemColorView, {backgroundColor: AppTags[item.category].color}]} />
         </View>
         <Text style={styles.userName} numberOfLines={1}>
           {combinedNames}

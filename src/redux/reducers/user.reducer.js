@@ -233,6 +233,21 @@ const updatePushStatus = (state, action) => ({
   pushEnabled: action.status,
 });
 
+// blocked users
+const requestBlockUser = (state, action) => ({
+  ...state,
+});
+const requestUnblockUser = (state, action) => ({
+  ...state,
+});
+const requestBlockedUsers = (state, action) => ({
+  ...state,
+});
+const loadBlockedUsersSuccess = (state, action) => ({
+  ...state,
+  blockedUsers: action.data,
+});
+
 export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
@@ -304,6 +319,12 @@ export const HANDLERS = {
 
   [UserTypes.UPDATE_NOTIFICATION]: updateNotification,
   [UserTypes.UPDATE_PUSH_STATUS]: updatePushStatus,
+
+  // blocked users
+  [UserTypes.REQUEST_BLOCK_USER]: requestBlockUser,
+  [UserTypes.REQUEST_UNBLOCK_USER]: requestUnblockUser,
+  [UserTypes.REQUEST_BLOCKED_USERS]: requestBlockedUsers,
+  [UserTypes.LOAD_BLOCKED_USERS_SUCCESS]: loadBlockedUsersSuccess,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

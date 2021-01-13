@@ -81,7 +81,6 @@ export default StyleSheet.create({
   badgeIcon: {
     width: wp(18),
     height: wp(18),
-    resizeMode: "contain",
     marginRight: wp(5),
     marginBottom: wp(5),
   },

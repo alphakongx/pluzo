@@ -20,6 +20,7 @@ import { API_ENDPOINTS } from "@config";
 import { Notification } from "@helpers";
 import Images from "@assets/Images";
 import PendingRequestCountView from "../pending-request-count-view";
+import ProfileView from "../../profile-view";
 import styles from "./add-friend-modal.style";
 
 class AddFriendModal extends Component {
@@ -30,6 +31,9 @@ class AddFriendModal extends Component {
       requestSuccess: "none", // none, success, fail
       newPeoples: [],
       addingNewFriend: false,
+      delayAdding: false,
+      selectedUser: null,
+      visibleProfile: false,
     };
   }
 
@@ -92,7 +96,11 @@ class AddFriendModal extends Component {
     }
     Keyboard.dismiss();
     if (user !== null) {
-      this.setState({ addingNewFriend: true });
+      this.setState({ addingNewFriend: true, delayAdding: true }, () => {
+        setTimeout(() => {
+          this.setState({ delayAdding: false });
+        }, 1500);
+      });
     }
     this.props.addFriend(user === null ? username : user.username, token);
     if (user !== null) {
@@ -103,7 +111,7 @@ class AddFriendModal extends Component {
   };
 
   render() {
-    const { username, requestSuccess, addingNewFriend } = this.state;
+    const { username, requestSuccess, addingNewFriend, delayAdding } = this.state;
     const { isAddingFriend } = this.props;
 
     return (
@@ -173,7 +181,7 @@ class AddFriendModal extends Component {
               <Text style={styles.successText}>Friend Request successful!</Text>
             )}
             {requestSuccess === "fail" && (
-              <Text style={styles.failText}>User doesn't exist</Text>
+              <Text style={styles.failText}>User doesn't exist or already sent</Text>
             )}
 
             <Text style={styles.subtitleText}>Discover New People</Text>
@@ -185,13 +193,24 @@ class AddFriendModal extends Component {
                       user={item}
                       key={`new-people-${item.phone}`}
                       onAddPeople={() => this.onAddFriend(item)}
-                      disabled={addingNewFriend}
+                      disabled={addingNewFriend || delayAdding}
+                      onShowProfile={() => this.setState({selectedUser: item, visibleProfile: true})}
                     />
                   );
                 })}
               </View>
             </ScrollView>
           </View>
+          <Modal isVisible={this.state.visibleProfile} style={styles.profileModal}>
+            <View style={styles.flexFill}>
+              {this.state.selectedUser && (
+                <ProfileView
+                  user={this.state.selectedUser}
+                  goBack={() => this.setState({ visibleProfile: false, selectedUser: null })}
+                />
+              )}
+            </View>
+          </Modal>
         </Screen>
       </Modal>
     );

@@ -12,7 +12,7 @@ import * as Animatable from "react-native-animatable";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-swiper";
 import EventBus from "eventing-bus";
-import { widthPercentageToDP as wp } from "@helpers";
+import { widthPercentageToDP as wp, getCurrentLocation } from "@helpers";
 import { GRADIENT } from "@config";
 import { StreamStatus } from "@constants";
 
@@ -34,6 +34,7 @@ class Live extends Component {
     this.state = {
       category: 0,
       livePosition: {},
+      searchText: "",
     };
   }
 
@@ -44,13 +45,28 @@ class Live extends Component {
       LiveTypes.STREAM_LIST_SUCCESS,
       this.updateStreamList,
     );
-    this.updateActionStreams = EventBus.on("Start_update", () => {
+    this.updateActionStreams = EventBus.on("Start_update", (jsonData) => {
       this.props.requestStreamList(this.props.token);
+
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (this.props.channelName === data.stream.channel) {console.log(data.stream.invite_only);
+        this.props.updateStreamInfo(data.stream.boost_end_time, parseInt(data.stream.invite_only, 10));
+      }
+    });
+    this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
+      getCurrentLocation(position => {
+        const params = new FormData();
+        params.append("latitude", position.coords.latitude);
+        params.append("longitude", position.coords.longitude);
+        this.props.updateUser(params, this.props.token);
+      });
     });
   }
 
   componentWillUnmount() {
     clearInterval(this.updateInterval);
+    this._unsubscribe;
     this.updateActionSubscription();
     this.updateActionStreams();
   }
@@ -95,42 +111,50 @@ class Live extends Component {
     }
   };
 
-  onJoinStream = channelName => {
+  onJoinStream = channelItem => {
+    let channelName = channelItem.channel;
     let names = channelName.split("-");
-    if (names.length > 1 && parseInt(names[1], 10) === this.props.user.id) {
+    if (names.length > 1 && parseInt(names[1], 10) === this.props.user.id ||
+      this.props.channelName === channelName) {
       return;
     }
+    
+    if (channelItem.ban_list.filter((value) => value.user_id === this.props.user.id).length > 0) {
+      return;
+    }
+
+    let params = {
+      channelName,
+      isBroadcaster: false,
+      isJoin: true,
+    };
     if (this.props.streamStatus !== StreamStatus.NONE) {
       EventBus.publish("APP_END_STREAM_ACTION");
       setTimeout(() => {
-        let params = {
-          channelName,
-          isBroadcaster: false,
-          isJoin: true,
-        };
         EventBus.publish("NEW_STREAM_ACTION", params);
       }, 500);
     } else {
-      let params = {
-        channelName,
-        isBroadcaster: false,
-        isJoin: true,
-      };
       EventBus.publish("NEW_STREAM_ACTION", params);
     }
   };
 
   renderStaticViews = () => {
-    const { category } = this.state;
+    const { category, searchText } = this.state;
     let streams = this.props.trendingStreams;
     if (category !== 0) {
       streams = this.props.trendingStreams.filter(
-        stream => parseInt(stream.category, 10) === this.state.category,
+        stream => parseInt(stream.category, 10) === category
+      );
+    }
+    if (searchText !== "") {
+      streams = this.props.trendingStreams.filter(
+        stream => stream.name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) > -1
       );
     }
     return (
       <View>
-        <Header navigation={this.props.navigation} />
+        <Header navigation={this.props.navigation}
+          onSearch={(text) => this.setState({searchText: text})} />
         <View style={styles.separator} />
         <LiveTags onChangeCategory={value => this.setState({ category: value })} />
 
@@ -156,7 +180,7 @@ class Live extends Component {
                 <LiveSwiperItem
                   key={`trending-live-${index}`}
                   item={stream}
-                  onJoinStream={channelName => this.onJoinStream(channelName)}
+                  onJoinStream={channelItem => this.onJoinStream(channelItem)}
                 />
               );
             })}
@@ -176,7 +200,7 @@ class Live extends Component {
         <Touchable
           style={styles.itemContainer}
           onPress={() => {
-            this.onJoinStream(item.channel);
+            this.onJoinStream(item);
           }}
         >
           <LiveItem item={item}/>
@@ -224,11 +248,16 @@ class Live extends Component {
   };
 
   render() {
-    const { category } = this.state;
+    const { category, searchText } = this.state;
     let streams = this.props.allStreams;
     if (category !== 0) {
       streams = this.props.allStreams.filter(
         stream => parseInt(stream.category, 10) === this.state.category,
+      );
+    }
+    if (searchText !== "") {
+      streams = this.props.allStreams.filter(
+        stream => stream.name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) > -1,
       );
     }
     return (

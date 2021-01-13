@@ -10,6 +10,7 @@ import styles from "./live-users.style";
 
 const LiveUsers: () => React$Node = props => {
   const onJoinStream = item => {
+    if (props.channelName === item.channel) return;
     let params = {
       channelName: item.channel,
       isBroadcaster: false,

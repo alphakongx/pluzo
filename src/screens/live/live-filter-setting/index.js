@@ -4,14 +4,16 @@ import { LiveCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
-    sortBy: state.live.sortBy,
-    filterCountry: state.live.filterCountry,
+    user: state.user.user,
+    token: state.user.token,
+    settings: state.live.settings,
   };
 }
 
 const mapDispatchToProps = {
-  setSortBy: LiveCreators.setSortBy,
-  setFilterCountry: LiveCreators.setFilterCountry,
+  getFilterSettings: LiveCreators.getFilterSettings,
+  setFilterSettings: LiveCreators.setFilterSettings,
+  updateFilterSettings: LiveCreators.setFilterSettingsSuccess,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiveFilterSetting);

@@ -60,6 +60,9 @@ class InputToolbar extends React.Component {
               autoCorrect: true,
               allowFontScaling: false,
               returnKeyType: "send",
+              onSubmitEditing: (e) => {
+                props.onSendMessage();
+              }
             }}
           />
         </View>

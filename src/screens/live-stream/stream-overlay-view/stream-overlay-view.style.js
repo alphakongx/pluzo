@@ -27,14 +27,18 @@ export default StyleSheet.create({
   broadcasterContainer: {
     position: "absolute",
     bottom: wp(110),
-    width: wp(70),
+    width: wp(202),
     alignSelf: "flex-end",
+  },
+  broadcasterList: {
+    flex: 1,
   },
   streamUserContainer: {
     width: wp(70),
     height: wp(60),
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "flex-end",
   },
   streamUser: {
     // marginBottom: wp(10),
@@ -52,6 +56,7 @@ export default StyleSheet.create({
   // all users
   usersContainer: {
     position: "absolute",
+    left: 0,
     right: 0,
     top: 0,
     bottom: 0,

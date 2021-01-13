@@ -9,8 +9,7 @@ export default StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingHorizontal: wp(20),
-    justifyContent: "center",
-    marginBottom: wp(135),
+    marginTop: wp(25),
   },
   titleText: {
     color: "white",

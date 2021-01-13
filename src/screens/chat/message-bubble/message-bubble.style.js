@@ -14,7 +14,7 @@ export default StyleSheet.create({
   textContainer: {
     borderRadius: wp(22),
     paddingTop: wp(10),
-    paddingBottom: wp(12),
+    paddingBottom: wp(10),
   },
   otherUserTextContainer: {
     paddingLeft: wp(14),
@@ -30,9 +30,8 @@ export default StyleSheet.create({
   },
   text: FontHelper.font({
     fontFamily: "OpenSans",
-    fontSize: wp(14),
-    fontWeight: "600",
-    lineHeight: wp(16),
+    fontSize: 16,
+    lineHeight: wp(18),
   }),
   otherUserText: {
     color: COLOR.MESSAGE_BUBBLE_TEXT,
@@ -55,10 +54,6 @@ export default StyleSheet.create({
     borderTopLeftRadius: wp(20),
     borderTopRightRadius: wp(20),
     resizeMode: "cover",
-  },
-  hiddenImage: {
-    width: 0,
-    height: 0,
   },
   imageFullRound: {
     borderRadius: wp(20),

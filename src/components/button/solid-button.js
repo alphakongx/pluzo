@@ -27,11 +27,13 @@ class WhiteButton extends Component {
       textStyle,
       shadowColor = "#FFFFFF",
       loadingColor = "white",
+      noShadow,
     } = this.props;
     const { width, height, radius, blur } = this.state;
 
     return (
       <Touchable disabled={disabled} onPress={onPress}>
+        {!noShadow &&
         <BoxShadow
           setting={{
             width: width,
@@ -44,7 +46,7 @@ class WhiteButton extends Component {
             offsetX: 0,
             offsetY: 0,
           }}
-        />
+        />}
         <View
           style={[styles.container, containerStyle]}
           onLayout={e => {

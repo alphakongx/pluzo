@@ -60,7 +60,7 @@ export const API_ENDPOINTS = {
   GET_SWIPE_SETTING: `${BASE_URL}/get-swipe-setting`,
   SET_SWIPE_SETTING: `${BASE_URL}/set-swipe-setting`,
   RUN_BOOST: `${BASE_URL}/run-boost`,
-  RUN_REWIND: `${BASE_URL}/run-remind`,
+  RUN_REWIND: `${BASE_URL}/run-rewind`,
 
   SEARCH: `${BASE_URL}/search`,
 
@@ -86,14 +86,24 @@ export const API_ENDPOINTS = {
   STREAM_USER_REFUSED_JOIN: `${BASE_URL}/stream-user-refused-join`,
   STREAM_USER_CANCEL_ASK: `${BASE_URL}/stream-user-cancel-ask`,
 
+  STREAM_BAN_USER: `${BASE_URL}/stream-ban-user`,
+  STREAM_KICK_USER: `${BASE_URL}/stream-kick-user`,
+  STREAM_BAN_LIST: `${BASE_URL}/stream-ban-list`,
+
   STREAM_CHAT_ADD_MSG: `${BASE_URL}/stream-chat-add-msg`,
 
+  GET_LIVE_SETTINGS: `${BASE_URL}/get-live-setting`,
+  SET_LIVE_SETTINGS: `${BASE_URL}/set-live-setting`,
   STREAM_LIST: `${BASE_URL}/stream-list`,
   STREAM_USER_LIST: `${BASE_URL}/stream-user-list-api`,
 
   // report
   STREAM_REPORT: `${BASE_URL}/stream-report`,
   USER_REPORT: `${BASE_URL}/user-report`,
+  HELP_REQUEST: `${BASE_URL}/ask-question`,
+  USER_BLOCK: `${BASE_URL}/user-block`,
+  USER_UNBLOCK: `${BASE_URL}/user-unblock`,
+  GET_BLOCKED_UESRS: `${BASE_URL}/get-blocked`,
 
   // payment
   ITEM_PAY: `${BASE_URL}/pay`,

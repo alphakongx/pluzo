@@ -22,6 +22,7 @@ export default {
     isSendingPhoneUpdateCode: false,
     isConfirmingPhoneUpdateCode: false,
     pushEnabled: true,
+    blockedUsers: [],
   },
   registration: {
     firstName: "",
@@ -34,17 +35,8 @@ export default {
     picture2: null,
     picture3: null,
     phoneNumber: "",
-    isCheckingUsername: false,
   },
   live: {
-    sortBy: "friends",
-    filterCountry: {
-      name: "Worldwide",
-      iso2: "worldwide",
-      dialCode: "",
-      priority: 0,
-      areaCodes: null,
-    },
     // camera, mic
     isEnabledCamera: true,
     isEnabledMic: true,
@@ -58,6 +50,15 @@ export default {
     audiences: [],
     messages: [],
     stream: null,
+    channelName: null,
+    mutedUsers: [],
+    remoteMutedUsers: [],
+    askedUsers: [],
+    inviteOnly: 0,
+    boostEndTime: 0,
+
+    // filter settings
+    settings: null,
   },
   inbox: {
     channels: [],
@@ -81,6 +82,9 @@ export default {
     isLoadingMatch: false,
     settings: null,
     showSwipeTutorial: false,
+    isRewinding: false,
+    isBoosting: false,
+    isSuperLiking: false,
   },
   search: {
     friends: [],

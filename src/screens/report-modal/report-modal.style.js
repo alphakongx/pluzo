@@ -97,4 +97,7 @@ export default StyleSheet.create({
     fontWeight: "bold",
     fontSize: wp(16),
   },
+  disabledReport: {
+    opacity: 0.5,
+  },
 });

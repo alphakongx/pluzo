@@ -13,7 +13,7 @@ import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import { GRADIENT } from "@config";
-import { CardProgressBar, Touchable, BoxShadow, IconButton } from "@components";
+import { CardProgressBar, Touchable, BoxShadow, IconButton, ConfirmModal, NotificationModal } from "@components";
 import Images from "@assets/Images";
 import { initialWindowMetrics } from "react-native-safe-area-context";
 
@@ -22,7 +22,7 @@ import { API_ENDPOINTS } from "@config";
 import Header from "./header";
 import ProfileDetail from "./profile-detail";
 import ReportModal from "../report-modal";
-import ConfirmDeleteModal from "./confirm-delete-modal";
+import UserSettingModal from "../chat/user-setting-modal";
 
 import styles from "./profile-view.style";
 
@@ -44,11 +44,13 @@ class ProfileView extends React.Component {
       imageIndex: 0,
       imageWidth: 1,
       imageHeight: 1,
-      visibleReport: false,
       friend: 0,
       loading: false,
       updating: false,
       rejecting: false,
+      visibleReport: false,
+      visibleConfirmBlock: false,
+      visibleUserSetting: false,
       visibleConfirmDelete: false,
     };
 
@@ -309,7 +311,7 @@ class ProfileView extends React.Component {
             onBack={() => {
               this.onBack();
             }}
-            onReport={() => this.setState({ visibleReport: true })}
+            onReport={() => this.setState({ visibleUserSetting: true })}
           />
         </Animated.View>
         <SafeAreaView style={styles.container} pointerEvents={"box-none"}>
@@ -436,13 +438,49 @@ class ProfileView extends React.Component {
           </Animated.View>
         </SafeAreaView>
 
+        <UserSettingModal
+          isVisible={this.state.visibleUserSetting}
+          user={user}
+          isFriend={this.state.friend === 4}
+          onDismiss={() => this.setState({ visibleUserSetting: false })}
+          onReport={() => {
+            setTimeout(() => {
+              this.setState({visibleReport: true});
+            }, 400);
+          }}
+          onBlock={() => {
+            setTimeout(() => {
+              this.setState({visibleConfirmBlock: true});
+            }, 400);
+          }}
+          onUnfriend={() => {
+            setTimeout(() => {
+              this.setState({visibleConfirmDelete: true});
+            }, 400);
+          }}
+        />
+
         <ReportModal
           isVisible={visibleReport}
           userId={(user.id || user._id)}
           onDismiss={() => this.setState({ visibleReport: false })}
         />
         
-        <ConfirmDeleteModal
+        <ConfirmModal
+          isVisible={this.state.visibleConfirmBlock}
+          user={user}
+          onDismiss={() => this.setState({ visibleConfirmBlock: false })}
+          onConfirm={() => {
+            this.props.blockUser((user.id || user._id), this.props.token);
+            this.setState({ visibleConfirmBlock: false }, () => {
+              setTimeout(() => {
+                this.props.navigation.goBack();
+              }, 1000);
+            });
+          }}
+        />
+        
+        <NotificationModal
           isVisible={visibleConfirmDelete}
           onBack={() => this.setState({visibleConfirmDelete: false})}
           onConfirm={(userId, userName) => {

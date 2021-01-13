@@ -6,7 +6,7 @@ import EventBus from "eventing-bus";
 import { BoxShadow, BannerAlert, GestureRecognizer, Touchable, Text } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
-import { StreamStatus, SCREENS } from "@constants";
+import { StreamStatus, SCREENS, TUTORIAL } from "@constants";
 import LiveStream from "../live-stream";
 import StreamStopModal from "./stream-stop-modal";
 
@@ -28,7 +28,7 @@ const shadowOptions = {
 
 const Home = props => {
   const insets = useSafeAreaInsets();
-  const { setStreamStatus, updateMessages, initLiveUsers } = props;
+  const { setStreamStatus, updateMessages, initLiveUsers, updateChannelName } = props;
   const [visibleStream, setVisibleStream] = useState(false);
   const [isBroadcaster, setBroadcaster] = useState(false);
   const [streamParams, setStreamParams] = useState({
@@ -247,6 +247,7 @@ const Home = props => {
   const onLeaveRoom = () => {
     setVisibleStream(false);
     setStreamStatus(StreamStatus.NONE);
+    updateChannelName(null);
   };
 
   const onHideNotification = () => {
@@ -255,6 +256,9 @@ const Home = props => {
 
   const onJoinLive = (stream) => {
     if (props.streamStatus !== StreamStatus.NONE) {
+      if (streamParams.channelName === stream.channel) {
+        return;
+      }
       EventBus.publish("APP_END_STREAM_ACTION");
       setTimeout(() => {
         let params = {
@@ -280,34 +284,35 @@ const Home = props => {
       initLiveUsers({ broadcasters: [], audience: [] });
       setStreamParams(params);
       setMinimized(false);
+      let systemMsg = {
+        id: "1",
+        message: "Please make sure you follow the community guidelines. No bullying, hate speech, nudity or violence.\nPlease report any users violating the rules.",
+        type: "system",
+      };
+      updateMessages([systemMsg]);
       if (params.isJoin) {
         setStreamStatus(StreamStatus.JOINED);
         setBroadcaster(false);
-        updateMessages([]);
       } else {
         setStreamStatus(StreamStatus.PREPARING);
         setBroadcaster(true);
-        let systemMsg = {
-          id: "1",
-          message: "Please make sure you follow the community guidelines. No bullying, hate speech, nudity or violence.\nPlease report any users violating the rules.",
-          type: "system",
-        };
-        updateMessages([systemMsg]);
       }
+      updateChannelName(params.channelName);
       setVisibleStream(true);
     });
     const endStreamAction = EventBus.on("APP_END_STREAM_ACTION", () => {
       setVisibleStream(false);
       setStreamStatus(StreamStatus.NONE);
+      updateChannelName(null);
     });
     return () => {
       newStreamAction();
       endStreamAction();
     };
-  }, [initLiveUsers, setStreamStatus, updateMessages]);
+  }, [initLiveUsers, setStreamStatus, updateMessages, updateChannelName]);
 
   useEffect(() => {
-    AsyncStorage.getItem("TUTORIAL_MINIMIZED", (error, result) => {
+    AsyncStorage.getItem(TUTORIAL.MINIMIZED, (error, result) => {
       if (result === null || result === "0") {
         setTutorialMode(true);
       }
@@ -374,11 +379,13 @@ const Home = props => {
           config={{directionalOffsetThreshold: 10}}
         >
           <Touchable onPress={() => {
-            if (props.notification.type === "livestream") {
+            if (props.notification.type === "livestream" || props.notification.type === "livefriend") {
               props.notification.stream && onJoinLive(props.notification.stream);
             } else if (props.notification.type === "chat") {
               props.navigation.navigate(SCREENS.CHAT, { 
                 chatId: props.notification.chatId, chatUser: props.notification.user });
+            } else if (props.notification.type === "friend-match") {
+              props.navigation.navigate(SCREENS.CHAT, { chatUser: props.notification.user });
             }
             onHideNotification();
           }}>
@@ -432,7 +439,7 @@ const Home = props => {
           onLeaveRoom();
           if (tutorialMode) {
             setTutorialMode(false);
-            AsyncStorage.setItem("TUTORIAL_MINIMIZED", "1");
+            AsyncStorage.setItem(TUTORIAL.MINIMIZED, "1");
           }
         }}
       />

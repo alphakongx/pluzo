@@ -92,15 +92,13 @@ const StreamPlayerSetting: () => React$Node = props => {
       maxMoveDown={100}
       onSwipeDown={state => props.onHidePlayerSetting()}
     >
-      <Touchable
-        style={styles.backButton}
-        onPress={() => {
-          props.onHidePlayerSetting && props.onHidePlayerSetting();
-        }}
-      >
-        <Image source={Images.app.icBack} style={styles.backImage} />
-      </Touchable>
       <Screen hasGradient style={styles.contentContainer}>
+        <Touchable
+          style={styles.backButton}
+          onPress={() => {
+            props.onHidePlayerSetting && props.onHidePlayerSetting();
+          }}
+        />
         <SafeAreaView style={styles.buttonContainer}>
           {items.map((item, index) => {
             return renderItem(item);

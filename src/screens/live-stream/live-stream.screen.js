@@ -46,6 +46,7 @@ class LiveStream extends Component {
           isBroadcaster={this.state.isBroadcaster}
           style={styles.streamPlayer}
           onEndedStream={() => this.setState({ visibleEnd: true })}
+          onLeaveRoom={this.props.onLeaveRoom}
           onChangeRole={broadcaster => this.setState({ isBroadcaster: broadcaster })}
           onChangeStreamers={count => {
             this.setState({ streamerCount: count });

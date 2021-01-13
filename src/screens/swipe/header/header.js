@@ -13,7 +13,7 @@ const Header: () => React$Node = props => {
   if (first_name === null || first_name === "") {
     first_name = "No Name";
   }
-  birthday = moment.duration(moment().diff(moment.unix(birthday))).years();
+  birthday = moment().diff(moment.unix(birthday), "years");
 
   return (
     <View pointerEvents={"box-none"}>
@@ -42,8 +42,8 @@ const Header: () => React$Node = props => {
           return (
             <Image
               key={`badge-${badge}`}
-              source={Images.live[AppBadges[badge].icon]}
               style={styles.badgeIcon}
+              source={Images.badges[AppBadges[badge-1].id]}
             />
           );
         })}
