@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { SafeAreaView, ScrollView, View } from "react-native";
-import { Screen, BackButton, Image, Text, AnimatedButton } from "@components";
+import { Screen, BackButton, Image, Text, AnimatedButton, Touchable } from "@components";
 import moment from "moment";
 import { SCREENS } from "@constants";
 import { getLikedUsers } from "@redux/api";
@@ -129,10 +129,11 @@ class LikeUsersScreen extends Component {
                     likedUsers.map((likedUser, index) => {
                       if (this.props.user.premium === 0) {
                         return (
-                          <View key={`like-users-${index}`}
-                            style={styles.itemContainer}>
+                          <Touchable key={`like-users-${index}`}
+                            style={styles.itemContainer}
+                            onPress={() => this.setState({visiblePurchase: true})}>
                             <LikedUserItem likedUser={{user: likedUser.user}} />
-                          </View>
+                          </Touchable>
                         )
                       }
                       return (

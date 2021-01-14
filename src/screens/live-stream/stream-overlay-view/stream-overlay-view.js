@@ -275,8 +275,16 @@ const StreamOverlayView = props => {
             isVisible={visibleRemainingBoost}
             onBack={() => setVisibleRemainingBoost(false)}
             onBoost={() => {
-              setVisibleRemainingBoost(false)
-              props.runBoost(props.token, 2, props.streamParams.channelName);
+              setVisibleRemainingBoost(false);
+              const { user } = props;
+              let boostsCount = parseInt(user.advanced.boosts, 10);
+              if (boostsCount > 0) {
+                props.runBoost(props.token, 2, props.streamParams.channelName);
+              } else {
+                setTimeout(() => {
+                  setVisibleBoost(true);
+                }, 500);
+              }
             }}
             isSwipe={false}
             buttonDisable={props.isBoosting}

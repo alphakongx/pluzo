@@ -201,7 +201,7 @@ class Swipe extends React.Component {
           Authorization: "Bearer " + this.props.token,
         },
         data,
-        slient: true,
+        silent: true,
       })
         .then(response => {
           let res = response.data.data;
@@ -219,6 +219,10 @@ class Swipe extends React.Component {
 
   onSwipedWithDirection = (index, type) => {
     const { token, cards } = this.props;
+
+    if (index >= cards.length) {
+      return;
+    }
 
     if (this.state.tutorialSwipe && (type === "left" || type === "right")) {
       AsyncStorage.setItem(TUTORIAL.SWIPE, "1");

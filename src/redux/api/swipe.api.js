@@ -21,7 +21,7 @@ export function sendLike(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-    slient: true,
+    silent: true,
   }).then(response => response);
 }
 
@@ -80,7 +80,7 @@ export function runBoost(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-    slient: true,
+    silent: true,
   }).then(response => response);
 }
 
