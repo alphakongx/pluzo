@@ -70,7 +70,7 @@ const ActionButtonsView: () => React$Node = props => {
       let duration = moment.unix(boostTime).diff(moment(), "seconds");
       if (duration > 0) {
         setBoosting(true);
-        let restSeconds = duration;console.log(duration);
+        let restSeconds = duration;
         boostInterval.current = setInterval(() => {
           if (restSeconds < 0) {
             clearInterval(boostInterval.current);

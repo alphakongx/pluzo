@@ -236,7 +236,7 @@ export function report(data, accessToken, type) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-    slient: true,
+    silent: true,
   }).then(response => response);
 }
 
@@ -249,7 +249,7 @@ export function requestHelp(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-    slient: true,
+    silent: true,
   }).then(response => response);
 }
 
@@ -262,7 +262,7 @@ export function userBlock(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-    slient: true,
+    silent: true,
   }).then(response => response);
 }
 
@@ -275,7 +275,7 @@ export function userUnblock(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-    slient: true,
+    silent: true,
   }).then(response => response);
 }
 
@@ -287,7 +287,7 @@ export function getBlockedUsers(accessToken) {
       "Content-Type": "multipart/form-data",
       Authorization: "Bearer " + accessToken,
     },
-    slient: true,
+    silent: true,
   }).then(response => response);
 }
 
@@ -300,6 +300,6 @@ export function userOnline(data, accessToken, type) {
       Authorization: "Bearer " + accessToken,
     },
     data,
-    slient: true,
+    silent: true,
   }).then(response => response);
 }

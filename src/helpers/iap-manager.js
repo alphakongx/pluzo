@@ -106,7 +106,7 @@ class IapManager extends Component {
         Authorization: "Bearer " + this.props.token,
       },
       data: params,
-      slient: true,
+      silent: true,
     })
       .then(async response => {
         this.props.updateUser(response.data.data.user);
