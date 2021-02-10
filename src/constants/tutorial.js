@@ -8,6 +8,7 @@ export const TUTORIAL = {
   // swipe screen
   SWIPE: "TUTORIAL_SWIPE",
   POINTER: "TUTORIAL_POINTER",
+  SHOW_GENDER: "TUTORIAL_GENDER",
 
   // the last time you sent the sms
   SMS_LAST_TIME: "SMS_LAST_TIME",

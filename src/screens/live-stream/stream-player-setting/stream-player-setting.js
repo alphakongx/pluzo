@@ -20,19 +20,27 @@ const items = [
 
 const StreamPlayerSetting: () => React$Node = props => {
   const [shareScreen, setShareScreen] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const onItemClicked = itemId => {
     if (itemId === 1) {
-      EventBus.publish(StreamSetting.SWITCH_CAMERA);
+      EventBus.publish("player_actions", StreamSetting.SWITCH_CAMERA, "");
     } else if (itemId === 2) {
+      if (disableButton) {
+        return;
+      }
       props.setEnabledCamera(!props.isEnabledCamera);
+      setDisableButton(true);
+      setTimeout(() => {
+        setDisableButton(false);
+      }, 500);
     } else if (itemId === 3) {
       props.setEnabledMic(!props.isEnabledMic);
     } else if (itemId === 4) {
       setShareScreen(!shareScreen);
       EventBus.publish(StreamSetting.CHANGE_SHARE);
     } else {
-      console.log("coming soon");
+      props.onShowFilters && props.onShowFilters()
     }
   };
 

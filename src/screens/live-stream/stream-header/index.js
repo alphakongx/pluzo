@@ -5,6 +5,7 @@ function mapStateToProps(state) {
   return {
     broadcasters: state.live.broadcasters,
     audiences: state.live.audiences,
+    askedUsers: state.live.askedUsers,
   };
 }
 

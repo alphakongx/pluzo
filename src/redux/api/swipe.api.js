@@ -93,5 +93,6 @@ export function runRewinds(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
+    silent: true,
   }).then(response => response);
 }

@@ -52,6 +52,19 @@ const SignupGenderSelect: () => React$Node = props => {
                 <SolidButton onPress={() => props.setGender("female")} text={"Female"} />
               )}
             </View>
+
+            <View style={styles.buttonSeparator} />
+
+            <View style={styles.buttonContainer}>
+              {props.gender === "other" ? (
+                <GradientButton
+                  onPress={() => props.setGender("other")}
+                  text={"Other"}
+                />
+              ) : (
+                <SolidButton onPress={() => props.setGender("other")} text={"Other"} />
+              )}
+            </View>
           </View>
 
           {/* <Text style={[styles.titleText, styles.titleTop]}>I'm looking to meet...</Text>

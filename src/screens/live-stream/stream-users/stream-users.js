@@ -24,7 +24,7 @@ import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Switch } from "react-native-switch";
 import { SwipeRow } from "react-native-swipe-list-view";
-import { Notification, widthPercentageToDP as wp } from "@helpers";
+import { Notification, widthPercentageToDP as wp, Format } from "@helpers";
 import { GRADIENT, AppBadges, AppTags } from "@config";
 import { TUTORIAL } from "@constants";
 import Images from "@assets/Images";
@@ -80,7 +80,7 @@ class StreamUsers extends Component {
     }).start(() => {
       AsyncStorage.getItem(TUTORIAL.KICK_BAN2, (err, result) => {
         if (result === null || result === "0") {
-          if (this.props.stream && this.props.stream.user._id === this.props.user.id) {
+          if (this.props.stream && this.state.creator === this.props.user.id) {
             this.setState({visibleTutorial: true});
           }
         }
@@ -90,8 +90,11 @@ class StreamUsers extends Component {
 
   componentWillUnmount() {
     this.props.setIsScrolling(false);
-    if (this.props.isBroadcaster === true) {
-      this.props.updateStream(this.props.stream, this.props.token);
+    if (this.props.isBroadcaster === true && this.props.stream !== null) {
+      let stream = this.props.stream;
+      stream.name = Format.cleanText(stream.name);
+      this.props.streamUpdateSuccess(stream);
+      this.props.updateStream(stream, this.props.token);
     }
   }
 
@@ -158,7 +161,11 @@ class StreamUsers extends Component {
   };
 
   onChangeTitleUpdate = () => {
-    this.props.updateStream(this.props.stream, this.props.token);
+    let stream = this.props.stream;
+    stream.name = Format.cleanText(stream.name);
+    this.props.streamUpdateSuccess(stream);
+    this.props.updateStream(stream, this.props.token);
+    this.setState({ streamName: stream.name });
   };
 
   onInviteOnlyChanged = val => {
@@ -219,6 +226,7 @@ class StreamUsers extends Component {
       user: this.props.user,
       message: msg,
       type: "system",
+      created_at: new Date().getTime(),
     };
     this.props.updateMessages([newMessage].concat(this.props.messages));
     this.props.requestChatAdd(this.props.stream.channel, msg, 2, this.props.token);
@@ -227,7 +235,7 @@ class StreamUsers extends Component {
   renderBroadCasterRow = (index, user, isBroadcaster, isStreamer) => {
     let isOwner = false;
     if (this.props.stream) {
-      isOwner = this.props.stream.user._id === user._id;
+      isOwner = this.state.creator === user._id;
     }
     let userID = parseInt(user._id, 10);
     let isMuted = false;
@@ -368,8 +376,20 @@ class StreamUsers extends Component {
                   }}
                   style={[styles.emojiButton]}
                 >
-                  {/* <Image source={Images.live[AppTags[stream.category].icon]} /> */}
-                  <View style={[styles.itemColorView, { backgroundColor: AppTags[stream.category].color}]} />
+                  {parseInt(stream.category) === 0 ?
+                  (
+                    <Text style={styles.emptyCategoryText}>Category</Text>
+                  ): (
+                  <LinearGradient
+                    colors={Object.values(AppTags[stream.category].color)}
+                    start={{x: 1, y: 0}}
+                    end={{x: 0, y: 1}}
+                    style={styles.emojiCategoryContainer}>
+                    <Text style={[styles.itemText, {textShadowColor: AppTags[stream.category].shadowColor}]}>
+                      {AppTags[stream.category].name}
+                    </Text>
+                  </LinearGradient>
+                  )}
                 </Touchable>
               ) : (
                 <View style={styles.headerTitleContainer}>
@@ -443,7 +463,7 @@ class StreamUsers extends Component {
               </View>
               {broadcasters.map((user, index) => {
                 return (
-                  <View key={"stream" + index} style={styles.userContainer}
+                  <View key={`stream-${index}`} style={styles.userContainer}
                     onLayout={(e) => {
                       if (index === 0) {
                         this.setState({tutorialPadding: e.nativeEvent.layout.y});
@@ -471,7 +491,7 @@ class StreamUsers extends Component {
               </View></View>}
               {audiences.map((user, index) => {
                 return (
-                  <View key={"viewer" + user.id} style={styles.userContainer}>
+                  <View key={`viewer-${index}`} style={styles.userContainer}>
                     <StreamUserIcon
                       isStreamer={false}
                       user={user}
@@ -540,9 +560,9 @@ class StreamUsers extends Component {
                 this.onSendSystemMsg(`${this.state.notificationData.userName} banned.`);
               } else {
                 if (this.state.notificationData.type === "unmute") {
-                  EventBus.publish("REMOTE_USER_MUTE", {userId: userID, mute: false});
+                  EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: userID, mute: false});
                 } else {
-                  EventBus.publish("REMOTE_USER_MUTE", {userId: userID, mute: true});
+                  EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: userID, mute: true});
                 }
               }
             })} 

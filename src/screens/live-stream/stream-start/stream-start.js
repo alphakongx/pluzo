@@ -3,6 +3,7 @@ import { View, SafeAreaView, KeyboardAvoidingView, Platform } from "react-native
 import KeyboardManager from "react-native-keyboard-manager";
 import { GradientButton } from "@components";
 import { StreamStatus } from "@constants";
+import { Format } from "@helpers";
 import StreamHeader from "../stream-header";
 import StreamEmojiView from "../stream-emoji-view";
 
@@ -46,7 +47,9 @@ const StreamStart: () => React$Node = props => {
           selectedEmoji={category}
           onEmojiClick={onEmojiClick}
           onBack={props.onBack}
-          onChangeTitle={text => setTitle(text)}
+          onChangeTitle={text => {
+            setTitle(Format.cleanText(text));
+          }}
         />
 
         <View style={styles.liveButtonContainer}>

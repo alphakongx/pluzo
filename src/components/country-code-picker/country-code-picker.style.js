@@ -49,6 +49,11 @@ export default StyleSheet.create({
     height: wp(14),
     resizeMode: "stretch",
   },
+  flagWorld: {
+    width: wp(18),
+    height: wp(18),
+    resizeMode: "contain",
+  },
   currentLocationText: {
     color: "white",
     fontWeight: "600",

@@ -8,7 +8,7 @@ const TextInputField = props => {
     ...rest
   } = props;
   const showError = touched && error;
-  console.log(input);
+
   return (
     <TextInput
       onChange={input.onChange}

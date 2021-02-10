@@ -17,6 +17,7 @@ class WS extends React.Component {
     onMessage: PropTypes.func,
     onError: PropTypes.func,
     onClose: PropTypes.func,
+    isActive: PropTypes.string,
   };
 
   send = data => this.state.ws.send(data);
@@ -24,6 +25,14 @@ class WS extends React.Component {
   componentDidMount() {
     this.reconnect = !!this.props.reconnect;
     this._handleWebSocketSetup();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isActive !== this.props.isActive) {
+      if (this.connected === false) {
+        this._handleWebSocketSetup();
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -38,6 +47,7 @@ class WS extends React.Component {
   _handleWebSocketSetup = () => {
     const ws = new WebSocket(this.props.url);
     ws.onopen = () => {
+      this.connected = true;
       this.props.onOpen && this.props.onOpen();
     };
     ws.onmessage = event => {
@@ -46,10 +56,12 @@ class WS extends React.Component {
     ws.onerror = error => {
       this.props.onError && this.props.onError(error);
     };
-    ws.onclose = () =>
+    ws.onclose = () => {
+      this.connected = false;
       this.reconnect
         ? this._handleWebSocketSetup()
         : this.props.onClose && this.props.onClose();
+    }
     this.setState({ ws });
   };
 }

@@ -18,6 +18,9 @@ const ImageZoomViewer: () => React$Node = props => {
       imageHeight={height}
       enableDoubleClickZoom={true}
       doubleClickInterval={200}
+      enableSwipeDown
+      swipeDownThreshold={20}
+      onSwipeDown={() => props.onSwipeDown && props.onSwipeDown()}
     >
       
       <FastImage

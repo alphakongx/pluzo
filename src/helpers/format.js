@@ -1,4 +1,5 @@
 import moment from "moment";
+import Filter from "bad-words";
 import { PhoneNumberUtil } from "google-libphonenumber";
 
 const phoneUtil = PhoneNumberUtil.getInstance();
@@ -30,13 +31,22 @@ class Format {
 
       return `+${countryCode} ******${phone.substring(phone.length - 4)}`;
     } catch (err) {
-      console.log(err);
       return phone;
     }
   }
 
   static capitalize(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  static cleanText(text) {
+    let filter = new Filter();
+    if (text && text.length > 0) {
+      let filterText = `${text} ABC`;
+      return filter.clean(filterText).substring(0, text.length);
+    } else {
+      return "";
+    }
   }
 }
 

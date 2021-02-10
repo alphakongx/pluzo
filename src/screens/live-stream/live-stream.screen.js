@@ -6,6 +6,8 @@ import StreamPlayer from "./stream-player";
 import StreamOverlayView from "./stream-overlay-view";
 import ProfileView from "../profile-view";
 import StreamEndModal from "./stream-end-modal";
+import KeepAwake from "@sayem314/react-native-keep-awake";
+import { isStreamLive } from "@redux/api";
 
 import styles from "./live-stream.style";
 
@@ -23,6 +25,15 @@ class LiveStream extends Component {
 
   componentDidMount() {
     this.props.setAskedToJoin(false);
+    if (this.props.streamParams.isJoin) {
+      let requestParams = new FormData();
+      requestParams.append("channel_id", this.props.streamParams.channelName);
+      isStreamLive(requestParams, this.props.token).then(response => {
+        if (response.data.data === false) {
+          this.setState({visibleEnd: true});
+        }
+      });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -40,6 +51,7 @@ class LiveStream extends Component {
 
     return (
       <View style={styles.container}>
+        <KeepAwake />
         <StreamPlayer
           navigation={this.props.navigation}
           streamParams={this.props.streamParams}

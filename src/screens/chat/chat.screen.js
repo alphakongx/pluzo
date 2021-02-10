@@ -13,9 +13,8 @@ import MessageBubble from "./message-bubble";
 import Avatar from "./avatar";
 import InputToolbar from "./input-toolbar";
 import ReportModal from "../report-modal";
-import { widthPercentageToDP as wp, Notification } from "@helpers";
+import { widthPercentageToDP as wp, Notification, API } from "@helpers";
 import EmptyView from "./empty-view";
-import { API } from "@helpers";
 import { API_ENDPOINTS } from "@config";
 import LinearGradient from "react-native-linear-gradient";
 import ZoomImageModal from "./zoom-image-modal";
@@ -41,7 +40,10 @@ class Chat extends React.Component {
       openedChat: false,
       sentSystemAlert: false,
     };
-    this.ActionSheet = React.createRef();``
+    this.ActionSheet = React.createRef();
+    this._appIsActive = true;
+    this._unreadMessages = [];
+    this._pushCount = 0;
   }
 
   componentDidMount() {
@@ -50,7 +52,7 @@ class Chat extends React.Component {
       KeyboardManager.setEnable(false);
       KeyboardManager.setShouldResignOnTouchOutside(false);
     }
-
+    this.props.updateMessages([]);
     this.checkingOnlineStatus();
 
     this.chatIdAction = EventBus.on("NEW_CHAT_ID", chatId => {
@@ -71,7 +73,7 @@ class Chat extends React.Component {
       }
     });
 
-    this.openChatAction = EventBus.on("Open_chat", (jsonData) => {console.log("Open_chat");
+    this.openChatAction = EventBus.on("Open_chat", (jsonData) => {
       let data = JSON.parse(jsonData);
       const { chatUser } = this.props;
 
@@ -83,7 +85,7 @@ class Chat extends React.Component {
     });
 
     this.closeChatAction = EventBus.on("Close_chat", (jsonData) => {
-      let data = JSON.parse(jsonData);console.log("Close_chat");
+      let data = JSON.parse(jsonData);
       const { chatUser } = this.props;
 
       if (chatUser !== 0 && data.user === parseInt((chatUser.id || chatUser._id), 10)) {
@@ -161,17 +163,39 @@ class Chat extends React.Component {
       });
       this.props.updateMessages(newMessages.concat(messages));
       if (arrData[0].user._id !== user.id) {
-        this.props.readMessage([arrData[0].id], token);
+        if (this._appIsActive) {
+          this.props.readMessage([arrData[0].id], token);
+        } else {
+          this._unreadMessages.push(arrData[0].id);
+        }
       }
     });
 
-    const { token, chatUser, chatId } = this.props;
+    this.appActiveAction = EventBus.on("AppState_Active", () => {
+      this._appIsActive = true;
+      if (this._unreadMessages.length > 0 && this.props.token) {
+        this.props.readMessage(this._unreadMessages, this.props.token);
+        this._unreadMessages = [];
+      }
+    });
+    this.appInActiveAction = EventBus.on("AppState_InActive", () => {
+      this._appIsActive = false;
+    });
+
+    const { token, chatUser, chatId, allMessages } = this.props;
+    let userId = 0;
     if (chatUser === 0) {
+      userId = 0;
       this.props.requestMessages(chatId, chatUser, token);
     } else {
+      userId = parseInt(chatUser.id || chatUser._id, 10);
       this.props.requestMessages(chatId, chatUser.id || chatUser._id, token);
     }
     this.props.readFlag(chatUser === 0 ? 0 : (chatUser.id || chatUser._id), token);
+    
+    if (allMessages[`${this.props.user.id}-${userId}`]) {
+      this.props.updateMessages(allMessages[`${this.props.user.id}-${userId}`]);
+    }
   }
 
   componentWillUnmount() {
@@ -191,6 +215,16 @@ class Chat extends React.Component {
     this.friendRemoveAction();
 
     this.props.requestCloseChat(this.state.chatId, this.props.token);
+    if (this.props.chatUser !== null) {
+      let userId = this.props.chatUser === 0 ? 0 : parseInt((this.props.chatUser.id || this.props.chatUser._id), 10);
+      this.props.updateAllMessages(`${this.props.user.id}-${userId}`, this.props.messages);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isOnline !== this.state.isOnline) {
+      this._pushCount = 0;
+    }
   }
 
   checkingOnlineStatus = () => {
@@ -210,7 +244,7 @@ class Chat extends React.Component {
       let data = response.data.data;
       if (data.online === 1) {
         this.setState({isOnline: true});
-      }
+      } 
       // if (this.state.lastSeenTime === null) {
       //   this.setState({lastSeenTime: data.last_activity});
       // }
@@ -258,7 +292,8 @@ class Chat extends React.Component {
       height: 395,
       compressImageQuality: 0.7,
       cropping: false,
-      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Videos', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'SlomoVideos', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'Animated', 'LongExposure'],
+      mediaType: 'photo',
+      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'LongExposure'],
     };
 
     if (index === 0) {
@@ -318,12 +353,22 @@ class Chat extends React.Component {
     messages[0].message_info = {sent: 1,received: this.state.openedChat ? 1 : 0,}
     this.props.updateMessages([messages[0]].concat(this.props.messages));
 
+    let sendPush = 1;
+    // if (!this.state.isOnline) {
+    //   if (this._pushCount === 0) {
+    //     sendPush = 1;
+    //     this._pushCount = 1;
+    //   } else {
+    //     sendPush = 2;
+    //   }
+    // }
     const { chatUser } = this.props;
     const params = {
       chatId: this.state.chatId,
       text: messages[0].text,
       image: null,
       sendTo: chatUser === 0 ? chatUser : chatUser.id || chatUser._id,
+      send_push: sendPush,
     };
     const { token } = this.props;
     this.props.sendMessage(params, token);
@@ -350,13 +395,14 @@ class Chat extends React.Component {
   }
 
   renderNotification = () => {
+    let fullname = this.props.chatUser === 0 ? "Pluzo Team" : this.props.chatUser.first_name;
     if (Platform.OS === "ios" && this.props.pushEnabled === false) {
       return (
         <Touchable style={styles.notifyContainer}
           onPress={() => {
-            Notification.confirmAlert("Get notified?", `Would you like to know when ${this.props.chatUser.first_name} answer your message?`,
-              "Open Settings", "Not now", () => {
-                Linking.openURL('app-settings:');
+            Notification.confirmAlert("Get notified?", `Would you like to know when ${fullname} answer your message?`,
+              "Open Settings", "Not now", async () => {
+                await Linking.openSettings();
               });
           }}>
           <LinearGradient
@@ -366,7 +412,7 @@ class Chat extends React.Component {
             style={styles.notifySubContainer}>
             <Image source={Images.app.icNotify} style={styles.notifyIcon} />
             <View>
-              <Text style={styles.notifyTitle}>{`See when ${this.props.chatUser.first_name} replies.`}</Text>
+              <Text style={styles.notifyTitle}>{`See when ${fullname} replies.`}</Text>
               <Text style={styles.notifySubText}>{"Enable push notifications."}</Text>
             </View>
           </LinearGradient>
@@ -426,68 +472,68 @@ class Chat extends React.Component {
           isOnline={this.state.isOnline}
         />
         <View style={styles.body}>
-          {loading ? (
+          {loading && messages.length === 0 ? (
             <ActivityIndicator
               size={"large"}
               color={"white"}
               style={styles.loadingIndicator}
             />
           ) : (
-            <GiftedChat
-              listViewProps={{ keyboardDismissMode: "on-drag" }}
-              messages={messages}
-              text={this.state.msgText}
-              isKeyboardInternallyHandled={true}
-              bottomOffset={this.props.insets.bottom}
-              // minComposerHeight={22.5}
-              minInputToolbarHeight={Platform.OS === "ios" ? wp(57) : wp(50)}
-              alwaysShowSend={true}
-              containerStyle={{
-                right: { marginBottom: 0 }
-              }}
-              renderBubble={bubbleProps => (
-                <MessageBubble
-                  {...bubbleProps}
-                  onLongPress={this._onOpenActionSheet}
-                  onPress={this._openAttachment}
-                  onFullImage={image => {
-                    this.setState({ zoomImage: image, visibleZoomImage: true });
-                  }}
-                />
-              )}
-              renderAvatar={avatarProps => {
-                return <Avatar {...avatarProps} onPress={() => {
-                  this.props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: chatUser });
+          <GiftedChat
+            listViewProps={{ keyboardDismissMode: "on-drag" }}
+            messages={messages}
+            text={this.state.msgText}
+            isKeyboardInternallyHandled={true}
+            bottomOffset={this.props.insets.bottom}
+            minComposerHeight={Platform.OS === "ios" ? 33 : 20}
+            minInputToolbarHeight={Platform.OS === "ios" ? wp(57) : wp(45)}
+            alwaysShowSend={true}
+            containerStyle={{
+              right: { marginBottom: 0 }
+            }}
+            renderBubble={bubbleProps => (
+              <MessageBubble
+                {...bubbleProps}
+                onLongPress={this._onOpenActionSheet}
+                onPress={this._openAttachment}
+                onFullImage={image => {
+                  this.setState({ zoomImage: image, visibleZoomImage: true });
+                }}
+              />
+            )}
+            renderAvatar={avatarProps => {
+              return <Avatar {...avatarProps} onPress={() => {
+                this.props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: chatUser });
+              }} />;
+            }}
+            renderInputToolbar={props => {
+              this.onSendNew = props.onSend;
+              return <InputToolbar {...props} disableComposer={loading} onAttachment={this.onAddAttachment}
+                onSendMessage={() => {
+                  props.onSend({ text: this.state.msgText }, true);
                 }} />;
-              }}
-              renderInputToolbar={props => {
-                this.onSendNew = props.onSend;
-                return <InputToolbar {...props} onAttachment={this.onAddAttachment}
-                  onSendMessage={() => {
-                    props.onSend({ text: this.state.msgText }, true);
-                  }} />;
-              }}
-              renderTime={props => {
-                return <View />;
-              }}
-              renderSystemMessage={props => {
-                return <SystemMessage {...props} containerStyle={styles.systemMessage} />;
-              }}
-              renderChatEmpty={() => {
-                return <EmptyView user={chatUser} navigation={this.props.navigation} />;
-              }}
-              renderFooter={() => {
-                if (isFirstMsg === false || chatUser === 0) {
-                  return null;
-                }
-                return this.renderFooterView();
-              }}
-              user={{
-                _id: this.props.user.id,
-              }}
-              onSend={msgs => this.onSend(msgs)}
-              onInputTextChanged={msgText => this.setState({ msgText: msgText })}
-            />
+            }}
+            renderTime={props => {
+              return <View />;
+            }}
+            renderSystemMessage={props => {
+              return <SystemMessage {...props} containerStyle={styles.systemMessage} />;
+            }}
+            renderChatEmpty={() => {
+              return <EmptyView user={chatUser} navigation={this.props.navigation} />;
+            }}
+            renderFooter={() => {
+              if (isFirstMsg === false || chatUser === 0) {
+                return null;
+              }
+              return this.renderFooterView();
+            }}
+            user={{
+              _id: this.props.user.id,
+            }}
+            onSend={msgs => this.onSend(msgs)}
+            onInputTextChanged={msgText => this.setState({ msgText: msgText })}
+          />
           )}
           {this.renderNotification()}
         </View>

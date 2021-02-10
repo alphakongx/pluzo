@@ -41,7 +41,6 @@ const SignupPhoneNumber: () => React$Node = props => {
         <View
           style={styles.contentContainer}
           onLayout={e => {
-            console.log(e.nativeEvent.layout.height);
             if (e.nativeEvent.layout.height < (height / 100) * 18 + wp(170)) {
               setMarginTop(15);
             } else {

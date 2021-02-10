@@ -140,18 +140,20 @@ class Card extends React.Component {
           style={styles.gradientOpacityBack}
         />
         <SafeAreaView pointerEvents={"box-none"}>
-          <CardProgressBar
-            count={isBio ? card.images.length + 1 : card.images.length}
-            activeIndex={imageIndex}
-            onPress={index => {
-              this.setState({imageIndex: index});
-            }}
-          />
-          <Header
-            item={card}
-            showBio={card && imageIndex > card.images.length - 1}
-            onReport={() => this.props.onReport((card.id || card._id))}
-          />
+          <View>
+            <CardProgressBar
+              count={isBio ? card.images.length + 1 : card.images.length}
+              activeIndex={imageIndex}
+              onPress={index => {
+                this.setState({imageIndex: index});
+              }}
+            />
+            <Header
+              item={card}
+              showBio={card && imageIndex > card.images.length - 1}
+              onReport={() => this.props.onReport((card.id || card._id))}
+            />
+          </View>
         </SafeAreaView>
       </View>
       {showAnimation && 

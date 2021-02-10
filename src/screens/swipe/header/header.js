@@ -8,12 +8,27 @@ import Images from "@assets/Images";
 import styles from "./header.style";
 
 const Header: () => React$Node = props => {
-  var { first_name, birthday, address, state, city, badges, bio } = props.item;
+  var { first_name, birthday, age, address, state, city, badges, bio } = props.item;
 
   if (first_name === null || first_name === "") {
     first_name = "No Name";
   }
-  birthday = moment().diff(moment.unix(birthday), "years");
+  birthday = age; //moment().diff(moment.unix(birthday), "years");
+  let strAddress = (address !== null && address !== "null") ? address : "";
+  if (city !== null && state !== null) {
+    strAddress = `${city}, ${state}`;
+  } else {
+    if (city === null && state === null) {
+      strAddress = strAddress;
+    } else {
+      if (city === null) {
+        strAddress = `${state}, ${strAddress}`;
+      } else {
+        strAddress = `${city}, ${strAddress}`;
+      }
+    }
+  }
+  let addresses = strAddress.split(", ");
 
   return (
     <View pointerEvents={"box-none"}>
@@ -31,11 +46,12 @@ const Header: () => React$Node = props => {
           <Image source={require("@assets/images/report.png")} />
         </Touchable>
       </View>
+      {strAddress !== "" &&
       <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
         <Image source={require("@assets/images/swipe-screen/location.png")} />
-        <Text style={styles.topBarCity}>{state === null ? city : state},</Text>
-        <Text style={styles.topBarLocation}>{address === null ? "" : address}</Text>
-      </View>
+        {addresses.length > 1 && <Text style={styles.topBarCity}>{addresses[0]},</Text>}
+        <Text style={styles.topBarLocation}>{addresses.length > 1 ? addresses[1] : addresses[0]}</Text>
+      </View>}
       <View style={styles.badgeContainer}>
         {badges.map(badge => {
           if (badge > AppBadges.length) return null;

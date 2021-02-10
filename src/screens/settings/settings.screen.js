@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Alert } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import { Touchable, Image, Text, DialogInput, TouchableSettingItem } from "@components";
 import RNIap from "react-native-iap";
@@ -81,18 +81,15 @@ class Settings extends Component {
             },
             data: params,
             silent: true,
-          })
-            .then(async response => {
-              this.props.updateUser(response.data.data.user);
-            })
-            .catch(e => {
-              console.log(e);
-            });
+          }).then(async response => {
+            this.props.updateUser(response.data.data.user);
+          }).catch(e => {
+            console.log(e);
+          });
+          Alert.alert('Restore Successful', 'You successfully restored');
           break
         }
       })
-
-      // Alert.alert('Restore Successful', 'You successfully restored the following purchases: ' + restoredTitles.join(', '));
     } catch(err) {
       console.warn(err);
     }

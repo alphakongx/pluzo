@@ -72,7 +72,7 @@ class InviteFriendsModal extends Component {
       },
       data,
     }).then(response => {
-      console.log(response.data.data);
+      // console.log(response.data.data);
     });
   };
 
@@ -80,7 +80,7 @@ class InviteFriendsModal extends Component {
     const { friends } = this.props;
     let filteredFriends = friends.filter((value) => value.id !== 0);
     if (this.state.searchKeyword !== "") {
-      filteredFriends = friends.filter(value =>
+      filteredFriends = filteredFriends.filter(value =>
         value.first_name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()),
       );
     }

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Platform } from "react-native";
+import { View, Platform, Image } from "react-native";
 import { Text, BlurView } from "@components";
 import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
@@ -31,11 +31,19 @@ const LikedUserItem: () => React$Node = props => {
 
   return (
     <View style={[styles.container]}>
-      <FastImage
-        source={{ uri: likedUser.images[0].path }}
-        style={styles.userImage}
-        resizeMode={FastImage.resizeMode.cover}
-      />
+      {Platform.OS === "ios" ? (
+        <FastImage
+          source={{ uri: likedUser.images[0].path }}
+          style={styles.userImage}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+      ) : (
+        <Image
+          source={{ uri: likedUser.images[0].path }}
+          style={styles.userImage}
+          borderRadius={22}
+        />
+      )}      
 
       <View style={styles.badgesContainer}>
         {likedUser.badges.map(badge => {

@@ -36,14 +36,13 @@ function* requestCards(action) {
 
     yield put(SwipeCreators.requestCardsSuccess(response.data.data));
   } catch (error) {
-    console.log(error);
     yield put(SwipeCreators.requestCardsFail());
   }
 }
 
 function* addLike(action) {
   try {
-    const { token, userId } = action;
+    const { token, userId, showMatches } = action;
 
     const params = new FormData();
     params.append("user_target_id", userId);
@@ -51,7 +50,7 @@ function* addLike(action) {
     const response = yield call(sendLike, params, token);
     
     let lastLikeData = response.data.data.last_like_data;
-    if (lastLikeData.like_match === 1) {
+    if (lastLikeData.like_match === 1 && showMatches === true) {
       EventBus.publish("New_Matches", lastLikeData.user_target_id);
     }
 
@@ -86,7 +85,7 @@ function* addDisLike(action) {
     params.append("is_like", "0");
     yield call(sendLike, params, token);
   } catch (error) {
-    console.log(error);
+    console.log(error, error.message);
   }
 }
 
@@ -97,11 +96,11 @@ function* addSuperLike(action) {
     const params = new FormData();
     params.append("user_target_id", userId);
     params.append("is_like", "2");
-    yield call(sendLike, params, token);
+    const response = yield call(sendLike, params, token);
 
+    yield put(UserCreators.updateUserSuccess(response.data.data.last_like_data.host));
     yield put(SwipeCreators.addSuperLikeDone());
   } catch (error) {
-    console.log(error);
     yield put(SwipeCreators.addSuperLikeDone());
   }
 }
@@ -135,19 +134,21 @@ function* requestSetSettings(action) {
     const { token, params } = action;
 
     const requestParams = new FormData();
-    requestParams.append("gender", params.gender);
-    requestParams.append("age_from", params.age_from);
-    requestParams.append("age_to", params.age_to);
-    requestParams.append("distance", params.distance);
-    requestParams.append("global", params.global);
-    requestParams.append("hide", params.hide);
-    if (params.latitude !== null && params.longitude !== null) {
-      requestParams.append("latitude", params.latitude);
-      requestParams.append("longitude", params.longitude);
+    requestParams.append("gender", `${params.gender}`);
+    if (params.age_from) {
+      requestParams.append("age_from", params.age_from);
+      requestParams.append("age_to", params.age_to);
+      requestParams.append("distance", params.distance);
+      requestParams.append("global", params.global);
+      requestParams.append("hide", params.hide);
+      if (params.latitude !== null && params.longitude !== null) {
+        requestParams.append("latitude", params.latitude);
+        requestParams.append("longitude", params.longitude);
+      }
+      requestParams.append("country", params.country);
+      requestParams.append("state", params.state);
+      requestParams.append("current_location", params.current_location);
     }
-    requestParams.append("country", params.country);
-    requestParams.append("state", params.state);
-    requestParams.append("current_location", params.current_location);
 
     const response = yield call(setSwipeSetting, requestParams, token);
 
@@ -171,7 +172,6 @@ function* requestRunBoost(action) {
     yield put(UserCreators.updateUserSuccess(response.data.data.user));
     yield put(SwipeCreators.runBoostSuccess());
   } catch (error) {
-    console.log(error);
     yield put(SwipeCreators.runBoostSuccess());
   }
 }
@@ -188,7 +188,6 @@ function* requestRunRewinds(action) {
     yield put(UserCreators.updateUserSuccess(response.data.data.user));
     yield put(SwipeCreators.runRewindsSuccess());
   } catch (error) {
-    console.log("error", error);
     yield put(SwipeCreators.runRewindsSuccess());
   }
 }

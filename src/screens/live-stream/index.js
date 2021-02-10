@@ -3,7 +3,9 @@ import { LiveCreators } from "@redux/actions";
 import { connect } from "react-redux";
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    token: state.user.token,
+  };
 }
 
 const mapDispatchToProps = {

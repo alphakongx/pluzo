@@ -8,19 +8,22 @@ const logout = (state, action) => INITIAL_STATE;
 const requestCards = (state, action) => ({
   ...state,
   isLoadingCards: true,
+  removedIndex: -1,
 });
-
 const requestCardsSuccess = (state, action) => ({
   ...state,
-  cards: action.swipeData.swipe,
-  likecount: action.swipeData.like_info.like,
+  cards: action.swipeData.swipe === undefined ? [] : action.swipeData.swipe,
   isLoadingCards: false,
 });
-
 const requestCardsFail = (state, action) => ({
   ...state,
   isLoadingCards: false,
 });
+const requestCardsUpdate = (state, action) => ({
+  ...state,
+  removedIndex: action.removedIndex,
+  cards: action.swipeData.swipe === undefined ? [] : action.swipeData.swipe,
+})
 
 const addLike = (state, action) => ({
   ...state,
@@ -46,6 +49,10 @@ const addDisLike = (state, action) => ({
   ...state,
 });
 const addSuperLike = (state, action) => ({
+  ...state,
+  isSuperLiking: true,
+});
+const addSuperLikeStart = (state, action) => ({
   ...state,
   isSuperLiking: true,
 });
@@ -117,6 +124,7 @@ export const HANDLERS = {
   [SwipeTypes.REQUEST_CARDS]: requestCards,
   [SwipeTypes.REQUEST_CARDS_SUCCESS]: requestCardsSuccess,
   [SwipeTypes.REQUEST_CARDS_FAIL]: requestCardsFail,
+  [SwipeTypes.REQUEST_CARDS_UPDATE]: requestCardsUpdate,
 
   [SwipeTypes.ADD_LIKE]: addLike,
   [SwipeTypes.ADD_LIKE_SUCCESS]: addLikeSuccess,
@@ -128,6 +136,7 @@ export const HANDLERS = {
 
   [SwipeTypes.ADD_DIS_LIKE]: addDisLike,
   [SwipeTypes.ADD_SUPER_LIKE]: addSuperLike,
+  [SwipeTypes.ADD_SUPER_LIKE_START]: addSuperLikeStart,
   [SwipeTypes.ADD_SUPER_LIKE_DONE]: addSuperLikeDone,
 
   [SwipeTypes.REQUEST_MATCH]: requestMatch,

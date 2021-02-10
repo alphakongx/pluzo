@@ -36,7 +36,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   buttonSeparator: {
-    width: wp(30),
+    width: wp(15),
   },
   footer: {
     marginBottom: wp(20),

@@ -202,6 +202,7 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation project(path: ':deepar')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
@@ -225,6 +226,7 @@ dependencies {
     }
 
     implementation 'com.github.nipunru:nsfw-detector-android:1.0.0'
+    implementation "io.agora.rtc:full-sdk:3.3.0"
 //    api "com.google.firebase:firebase-ml-vision:24.1.0"
 //    implementation "com.google.firebase:firebase-ml-vision-automl:18.0.6"
 //    implementation "com.google.firebase:firebase-ml-model-interpreter:22.0.4"

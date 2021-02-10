@@ -56,6 +56,12 @@ const requestCloseChat = (state, action) => ({
   chatUserId: null,
 });
 
+const updateAllMessages = (state, action) => {
+  let allMessages = state.allMessages;
+  allMessages[action.chat_id] = action.messages;
+  return {...state, allMessages: allMessages }
+}
+
 export const HANDLERS = {
   [ChatTypes.REQUEST_GET_CURRENT_CHAT]: requestGetCurrentChat,
   [ChatTypes.GET_CURRENT_CHAT_SUCCESS]: getCurrentChatSuccess,
@@ -71,6 +77,8 @@ export const HANDLERS = {
 
   [ChatTypes.REQUEST_CLOSE_CHAT]: requestCloseChat,
   [ChatTypes.REQUEST_OPEN_CHAT]: requestOpenChat,
+
+  [ChatTypes.UPDATE_ALL_MESSAGES]: updateAllMessages,
 
   [UserTypes.LOGOUT]: logout,
 };

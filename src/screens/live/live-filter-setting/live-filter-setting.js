@@ -89,7 +89,7 @@ const LiveFilterSetting: () => React$Node = props => {
       );
     });
   };
-  console.log(liveSettings.state);
+
   return (
     <View style={styles.container}>
       <Touchable style={styles.absoluteFill}

@@ -5,7 +5,6 @@ const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
-    justifyContent: "center",
     flex: 1,
   },
   verticalCenter: {
@@ -18,8 +17,8 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   contentContainer: {
+    flex: 1,
     paddingHorizontal: wp(37),
-    justifyContent: "center",
   },
   contentPadding: {
     paddingTop: (height / 100) * 18,
@@ -37,7 +36,6 @@ export default StyleSheet.create({
   takenPosition: {
     position: "absolute",
     right: wp(8),
-    // top: wp(9.5),
   },
   takenIcon: {
     width: wp(15),
@@ -125,9 +123,14 @@ export default StyleSheet.create({
     marginTop: wp(3),
     marginRight: wp(5),
   },
+  buttonSeparator: {
+    flex: 1,
+  },
   footer: {
-    marginTop: wp(40),
-    paddingHorizontal: wp(37),
+    marginTop: wp(10),
     marginBottom: wp(40),
   },
+  footer1: {
+    height: wp(45),
+  }
 });

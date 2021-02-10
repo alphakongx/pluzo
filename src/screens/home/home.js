@@ -7,12 +7,14 @@ import { BoxShadow, BannerAlert, GestureRecognizer, Touchable, Text } from "@com
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import { StreamStatus, SCREENS, TUTORIAL } from "@constants";
+import { NavigationService } from "@helpers";
 import LiveStream from "../live-stream";
 import StreamStopModal from "./stream-stop-modal";
 
 import styles, { width, height } from "./home.style";
 import PushNotification from "./push-notification";
 import AsyncStorage from "@react-native-community/async-storage";
+import PendingRequestModal from "../inbox/pending-request-modal/pending-request-modal";
 
 const shadowOptions = {
   width: 130,
@@ -29,6 +31,7 @@ const shadowOptions = {
 const Home = props => {
   const insets = useSafeAreaInsets();
   const { setStreamStatus, updateMessages, initLiveUsers, updateChannelName } = props;
+  const [visiblePendingRequest, setVisiblePendingRequest] = useState(false);
   const [visibleStream, setVisibleStream] = useState(false);
   const [isBroadcaster, setBroadcaster] = useState(false);
   const [streamParams, setStreamParams] = useState({
@@ -288,6 +291,7 @@ const Home = props => {
         id: "1",
         message: "Please make sure you follow the community guidelines. No bullying, hate speech, nudity or violence.\nPlease report any users violating the rules.",
         type: "system",
+        created_at: new Date().getTime(),
       };
       updateMessages([systemMsg]);
       if (params.isJoin) {
@@ -305,9 +309,13 @@ const Home = props => {
       setStreamStatus(StreamStatus.NONE);
       updateChannelName(null);
     });
+    const showRequestAction = EventBus.on("NEW_PENDING_REQUEST", () => {
+      setVisiblePendingRequest(true);
+    });
     return () => {
       newStreamAction();
       endStreamAction();
+      showRequestAction();
     };
   }, [initLiveUsers, setStreamStatus, updateMessages, updateChannelName]);
 
@@ -382,10 +390,20 @@ const Home = props => {
             if (props.notification.type === "livestream" || props.notification.type === "livefriend") {
               props.notification.stream && onJoinLive(props.notification.stream);
             } else if (props.notification.type === "chat") {
-              props.navigation.navigate(SCREENS.CHAT, { 
-                chatId: props.notification.chatId, chatUser: props.notification.user });
+              if (NavigationService.getCurrentRoute(null) === "CHAT") {
+                NavigationService.popToTop();
+              }
+              setTimeout(() => {
+                props.navigation.navigate(SCREENS.CHAT, { 
+                  chatId: props.notification.chatId, chatUser: props.notification.user });
+              }, 500);
             } else if (props.notification.type === "friend-match") {
-              props.navigation.navigate(SCREENS.CHAT, { chatUser: props.notification.user });
+              if (NavigationService.getCurrentRoute(null) === "CHAT") {
+                NavigationService.popToTop();
+              }
+              setTimeout(() => {
+                props.navigation.navigate(SCREENS.CHAT, { chatUser: props.notification.user });
+              }, 500);
             }
             onHideNotification();
           }}>
@@ -444,6 +462,9 @@ const Home = props => {
         }}
       />
       <PushNotification />
+      <PendingRequestModal 
+        isVisible={visiblePendingRequest}
+        dismissModal={() => setVisiblePendingRequest(false)}/>
     </View>
   );
 };

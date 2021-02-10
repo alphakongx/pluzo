@@ -65,7 +65,6 @@ const SwipePurchaseModal: () => React$Node = props => {
       props.onHide();
     } catch (err) {
       setPurchasing(false);
-      console.log(err.code, err.message);
     }
   };
 
@@ -161,30 +160,30 @@ const SwipePurchaseModal: () => React$Node = props => {
 
             <View style={styles.pricesContainer}>
               <PriceBoxView
-                count={1}
+                count={props.text.toLowerCase() === "boost" ? 1 : 5}
                 boxTitle={props.text}
                 selected={boost === 3}
                 onSelect={() => setBoost(3)}
                 selectColors={props.selectColors}
-                price={"3.99"}
+                price={props.text.toLowerCase() === "boost" ? "3.99" : "0.99"}
               />
               <PriceBoxView
-                count={5}
+                count={props.text.toLowerCase() === "boost" ? 5 : 20}
                 boxTitle={`${props.text}s`}
                 saveValue={14}
                 selected={boost === 4}
                 onSelect={() => setBoost(4)}
                 selectColors={props.selectColors}
-                price={"2.99"}
+                price={props.text.toLowerCase() === "boost" ? "2.99" : "0.75"}
               />
               <PriceBoxView
-                count={10}
+                count={props.text.toLowerCase() === "boost" ? 10 : 50}
                 boxTitle={`${props.text}s`}
                 saveValue={28}
                 selected={boost === 5}
                 onSelect={() => setBoost(5)}
                 selectColors={props.selectColors}
-                price={"1.99"}
+                price={props.text.toLowerCase() === "boost" ? "1.99" : "0.59"}
               />
             </View>
 

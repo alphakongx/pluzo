@@ -14,6 +14,8 @@ function mapStateToProps(state) {
     mutedUsers: state.live.mutedUsers,
     remoteMutedUsers: state.live.remoteMutedUsers,
     askedUsers: state.live.askedUsers,
+    maskMode: state.live.maskMode,
+    readyDeepAr: state.live.readyDeepAr,
   };
 }
 
@@ -36,6 +38,7 @@ const mapDispatchToProps = {
   updateRemoteMutedUsers: LiveCreators.updateRemoteMutedUsers,
   updateAskedUsers: LiveCreators.updateAskedUsers,
   updateStreamInfo: LiveCreators.updateStreamInfo,
+  setReadyDeepAr: LiveCreators.setReadyDeepAr,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StreamPlayer);

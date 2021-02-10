@@ -34,7 +34,6 @@ const StatesPicker: () => React$Node = props => {
       <Touchable
         style={[styles.currentItem, props.style]}
         onPress={() => {
-          console.log(showPicker);
           setShowPicker(!showPicker);
         }}
       >

@@ -45,7 +45,6 @@ class SignupCodeVerification extends Component {
     try {
       lastTime = await AsyncStorage.getItem(TUTORIAL.SMS_LAST_TIME);
     } catch (error) {
-      console.log(error);
       lastTime = 0;
     }
     if (lastTime === 0 || lastTime === null) {
@@ -69,7 +68,6 @@ class SignupCodeVerification extends Component {
 
   otpHandler = message => {
     const otp = /(\d{4})/.exec(message);
-    console.log("SMS::", otp);
     if (otp !== null) {
       Clipboard.setString(otp[1]);
       RNOtpVerify.removeListener();

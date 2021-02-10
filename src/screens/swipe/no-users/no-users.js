@@ -1,12 +1,11 @@
 import React from "react";
-import { View, Animated, Easing, SafeAreaView } from "react-native";
+import { View, Animated, Easing, SafeAreaView, Linking } from "react-native";
 import FastImage from "react-native-fast-image";
 import { Text, GradientButton, Touchable } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
 
 import styles from "./no-users.style";
-import { SCREENS } from "@constants";
 import SwipeSettings from "../../settings/swipe-settings";
 
 class NoUsers extends React.Component {
@@ -45,7 +44,7 @@ class NoUsers extends React.Component {
         outputRange: [1, 0.04],
       }),
     };
-    const { user } = this.props;
+    const { user, permission } = this.props;
 
     return (
       <View style={styles.rootContainer}>
@@ -54,26 +53,39 @@ class NoUsers extends React.Component {
             <Animated.View style={[styles.containerC, rippleStyle]} />
             <Animated.View style={[styles.containerB, rippleStyle]} />
             <Animated.View style={[styles.containerA, rippleStyle]} />
-            {user !== null && user.images !== null && user.images.length > 0 && (
+            {!permission && user !== null && user.images !== null && user.images.length > 0 && (
               <FastImage
                 source={{ uri: this.props.user.images[0].path }}
                 style={styles.userImage}
               />
             )}
+            {permission && 
+            <>
+              <Text style={styles.permissionTitle}>Oops!</Text>
+              <Text style={styles.permissionDescription}>
+                {"In order to use Pluzo you\nneed to enable your location."}
+              </Text>
+            </>}
           </View>
         </View>
 
         <View style={styles.contentContainer}>
           <SafeAreaView>
             <Text style={styles.descriptionText}>
-              There's noone around you. Expand your discovery settings to see more people.
+              {permission ? 
+              "Go to Settings > Pluzo > Location >\nEnable Location while using the app" :
+              "There's no one around you. Expand your discovery settings to see more people."}
             </Text>
             <View style={styles.buttonContainer}>
               <GradientButton
                 style={styles.settingButton}
-                text={"Discovery Settings"}
+                text={permission ? "Show Settings" : "Discovery Settings"}
                 onPress={() => {
-                  this.setState({ visibleSetting: true });
+                  if (permission) {
+                    Linking.openSettings();
+                  } else {
+                    this.setState({ visibleSetting: true });
+                  }
                 }}
               />
             </View>

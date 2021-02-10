@@ -5,6 +5,7 @@ import { AppTags } from "@config";
 import Images from "@assets/Images";
 
 import styles from "./live-tags.style";
+import LinearGradient from "react-native-linear-gradient";
 
 const LiveTags: () => React$Node = props => {
   const [currentTag, setCurrentTag] = useState(0);
@@ -37,12 +38,21 @@ const LiveTags: () => React$Node = props => {
               </View>
             )}
             {tag.id !== 0 && (
-              <View
+              <LinearGradient
+                colors={Object.values(tag.color)}
+                start={{x: 1, y: 0}}
+                end={{x: 0, y: 1}}
                 style={[styles.itemImageContainer, isActive ? styles.activeItem : {}]}
               >
-                {/* <Image source={Images.live[tag.icon]} style={styles.itemImage} /> */}
-                <View style={[styles.itemColorView, { backgroundColor: tag.color }]} />
-              </View>
+                <Text style={[styles.itemText, {textShadowColor: tag.shadowColor}]}>{tag.name}</Text>
+                {tag.icon && 
+                <Image
+                  source={Images.live[tag.icon]} 
+                  style={[
+                      tag.id === 1 ? styles.itemImage1 : styles.itemImage,
+                      tag.id === 3 && { top: 3 },
+                    ]} />}
+              </LinearGradient>
             )}
           </Touchable>
         );

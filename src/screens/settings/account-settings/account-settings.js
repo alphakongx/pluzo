@@ -17,7 +17,6 @@ const AccountSettings: () => React$Node = props => {
   const [visiblePhone, setVisiblePhone] = useState(false);
 
   const onUpdatePhoneNumber = (phone) => {
-    console.log(phone);
     props.navigation.navigate(SCREENS.UPDATE_PHONE_VERIFICATION, {phoneNumber: phone});
   }
 
@@ -44,13 +43,13 @@ const AccountSettings: () => React$Node = props => {
           {renderItem("Birth Date", Format.date(props.user.birthday), false)}
           <View style={styles.seperator} />
           {renderItem("Gender", Format.stringFromGender(props.user.gender), false)}
-          <View style={styles.emptyRow} />
+          <View style={styles.seperator} />
           {renderItem("Username", props.user.username, false)}
           <View style={styles.seperator} />
           <Touchable onPress={() => setVisiblePhone(true)}>
             {renderItem("Phone Number", Format.phoneNumber(props.user.phone), false)}
           </Touchable>
-          <View style={styles.emptyRow} />
+          <View style={styles.seperator} />
           <Touchable onPress={() => setVisiblePassword(true)}>
             {renderItem("Change Password", "", true)}
           </Touchable>

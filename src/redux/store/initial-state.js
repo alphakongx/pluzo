@@ -56,6 +56,8 @@ export default {
     askedUsers: [],
     inviteOnly: 0,
     boostEndTime: 0,
+    maskMode: 0,
+    readyDeepAr: true,
 
     // filter settings
     settings: null,
@@ -73,11 +75,11 @@ export default {
     chatUserId: null,
     messages: [],
     isLoadingMessages: false,
+    allMessages: [],
   },
   swipe: {
     cards: [],
-    likecount: 0,
-    visibleDetail: false,
+    removedIndex: -1,
     isLoadingCards: false,
     isLoadingMatch: false,
     settings: null,

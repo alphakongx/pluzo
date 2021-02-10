@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, PermissionsAndroid, Platform, SafeAreaView } from "react-native";
+import { View, PermissionsAndroid, Platform, SafeAreaView, NativeEventEmitter, NativeModules } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import EventBus from "eventing-bus";
 import RtcEngine, {
@@ -12,8 +12,9 @@ import RtcEngine, {
   RtcRemoteView,
   VideoRemoteState,
   VideoRenderMode,
+  RtcEngineConfig
 } from "react-native-agora";
-import { Screen, Text, Touchable, NotificationModal } from "@components";
+import { Screen, Text, Touchable, NotificationModal, PluzoArView } from "@components";
 import { RTCENGINE } from "@config";
 import { StreamSetting } from "@constants";
 import { widthPercentageToDP as wp } from "@helpers";
@@ -42,6 +43,9 @@ const requestCameraAndAudioPermission = async () => {
   }
 };
 
+const {RNEventEmitter, RNDeepAr} = NativeModules;
+const eventEmitter = new NativeEventEmitter(RNEventEmitter);
+
 class StreamPlayer extends Component {
   constructor(props) {
     super(props);
@@ -63,14 +67,17 @@ class StreamPlayer extends Component {
         buttonColors: ["#ABA7D5", "#ABA7D5"],
         buttonText: "Okay",
         buttonTextStyle: "#0B0516",
-      }
+      },
+      capturing: false,
+      frontCamera: true,
+      externalVideo: false,
     };
     this._engine = null;
     this.users = 0;
 
     if (Platform.OS === "android") {
       requestCameraAndAudioPermission().then(() => {
-        console.log("requested!");
+        // console.log("requested!");
       });
     }
 
@@ -79,197 +86,13 @@ class StreamPlayer extends Component {
 
   componentDidMount() {
     this.initRtcEngine();
-    this.streamStoppedAction = EventBus.on("StreamStopped", channelName => {
-      if (this.state.channelName === channelName) {
-        this.props.onEndedStream();
-      }
-    });
-    this.streamJoinAction = EventBus.on("Stream_join_user", jsonData => {
-      if (jsonData === undefined) return;
-      const { streamParams, audiences } = this.props;
-      let data = JSON.parse(jsonData);
-      if (streamParams.channelName === data.stream) {
-        let users = audiences.filter(audience => audience._id === data.user._id);
-        if (users.length === 0) {
-          let newAudiences = [data.user, ...audiences];
-          this.props.updateAudiences(newAudiences);
-        }
-
-        if (data.user._id === this.props.user.id) {
-          this.props.updateStreamInfo(data.stream_info.boost_end_time, parseInt(data.stream_info.invite_only, 10));
-        }
-      }
-    });
-    this.streamLeaveAction = EventBus.on("Stream_disconnect_user", jsonData => {
-      if (jsonData === undefined) return;
-      const { streamParams, audiences } = this.props;
-      let data = JSON.parse(jsonData);
-      if (streamParams.channelName === data.stream) {
-        this.props.updateAskedUsers(this.props.askedUsers.filter((value) => value._id !== data.user._id));
-        let newAudiences = audiences.filter(audience => audience._id !== data.user._id);
-        this.props.updateAudiences(newAudiences);
-        this.props.updateMutedUsers(this.props.mutedUsers.filter((value) => value !== data.user._id));
-        this.props.updateRemoteMutedUsers(this.props.remoteMutedUsers.filter((value) => value !== data.user._id));
-      }
-    });
-    this.streamAskToJoin = EventBus.on("Stream_ask_join", jsonData => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      if (data.stream !== this.state.channelName) return;
-      if (data.user._id === this.props.user.id) {
-        this.setState({ askedByUser: false, askedUser: data.host, visibleJoin: true });
-      }
-    });
-    this.streamRefusedJoin = EventBus.on("Stream_refused_join", jsonData => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      if (data.stream !== this.state.channelName) return;
-      if (this.props.isBroadcaster) {
-        const { audiences } = this.props;
-        let newAudiences = [];
-        audiences.forEach((audience, index) => {
-          if (audience._id === data.user._id) {
-            audience.sendRequest = false;
-          }
-          newAudiences.push(audience);
-        });
-        this.props.updateAudiences(newAudiences);
-      }
-    });
-    this.streamSwitchUser = EventBus.on(
-      "Stream_broadcast_disconnect_by_host",
-      jsonData => {
-        if (jsonData === undefined) return;
-        let data = JSON.parse(jsonData);
-        if (data.user._id === this.props.user.id) {
-          this._engine.setClientRole(ClientRole.Audience);
-          this.props.setAskedToJoin(false);
-          this.props.onChangeRole(false);
-          this.props.resetEnabledSettings();
-          // this._engine.disableVideo();
-        }
-      },
-    );
-    this.userAskJoin = EventBus.on("Stream_user_ask_join", jsonData => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      if (data.host._id === this.props.user.id) {
-        // this.setState({ askedByUser: true, askedUser: data.user, visibleJoin: true });
-        console.log(data.user._id);
-        this.props.updateAskedUsers([data.user._id, ...this.props.askedUsers]);
-      }
-    });
-    this.userAcceptJoin = EventBus.on("Stream_user_accept_join", async jsonData => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      if (data.user._id === this.props.user.id) {
-        this._engine.setClientRole(ClientRole.Broadcaster);
-        this.props.setAskedToJoin(false);
-        this.props.onChangeRole(true);
-        await this._engine.enableVideo();
-      }
-    });
-    this.userRefusedJoin = EventBus.on("Stream_user_refused_join", jsonData => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      if (data.user._id === this.props.user.id) {
-        this.props.setAskedToJoin(false);
-      }
-    });
-    this.unsubscribeUpdateBadges = EventBus.on("Update_badges", jsonData => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      const { audiences, broadcasters } = this.props;
-      for (let index = 0; index < audiences.length; index++) {
-        if (audiences[index]._id === data.user) {
-          audiences[index].badges = data.badges;
-          break;
-        }
-      }
-      for (let index = 0; index < broadcasters.length; index++) {
-        if (broadcasters[index]._id === data.user) {
-          broadcasters[index].badges = data.badges;
-          break;
-        }
-      }
-      this.props.updateAudiences(audiences);
-      this.props.updateBroadcasters(broadcasters);
-    });
-
-    this.remoteMuteAction = EventBus.on("REMOTE_USER_MUTE", data => {
-      this._engine.muteRemoteAudioStream(data.userId, data.mute);
-      if (data.mute === true) {
-        this.props.updateRemoteMutedUsers([data.userId, ...this.props.remoteMutedUsers]);
-      } else {
-        this.props.updateRemoteMutedUsers(this.props.remoteMutedUsers.filter((value) => value !== data.userId));
-      }
-    });
-    this.streamUserKickAction = EventBus.on("Stream_user_kick", async (jsonData) => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      if (parseInt(data.user, 10) === this.props.user.id) {
-        this.onLeaveRoom();
-        this.setState({notificationData: {
-          text: "You've been kicked from this live",
-          logoBackground: "#312446",
-          logoTintColor: "white",
-          buttonColors: ["#312446", "#312446"],
-          buttonText: "Okay",
-          buttonTextStyle: "white",
-        }, visibleNotification: true});
-      }
-    });
-    this.streamUserBanAction = EventBus.on("Stream_user_ban", jsonData => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      if (parseInt(data.user, 10) === this.props.user.id) {
-        this.onLeaveRoom();
-        this.setState({notificationData: {
-          text: "You've been banned from this live",
-          logoBackground: "#FF0036",
-          logoTintColor: "black",
-          buttonColors: ["#FF0036", "#FF0036"],
-          buttonText: "Okay",
-          buttonTextStyle: "black",
-        }, visibleNotification: true});
-      }
-    });
-
-    this.switchCameraAction = EventBus.on(StreamSetting.SWITCH_CAMERA, () => {
-      this._engine.switchCamera();
-    });
-    this.updateUsersAction = EventBus.on("User_update", data => {
-      const { broadcasters, audiences } = this.props;
-      let filteredUsers = broadcasters.filter(
-        broadcaster => broadcaster._id === data.user._id,
-      );
-      if (filteredUsers.length > 0) {
-        this.updateChannelInformation();
-      } else {
-        filteredUsers = audiences.filter(audience => audience._id === data.user._id);
-        if (filteredUsers.length > 0) {
-          this.updateChannelInformation();
-        }
-      }
+    this._streamAction = EventBus.on("player_actions", (action, jsonData) => {
+      this._onPlayerActions(action, jsonData);
     });
   }
 
   async componentWillUnmount() {
-    this.streamStoppedAction();
-    this.streamJoinAction();
-    this.streamLeaveAction();
-    this.streamAskToJoin();
-    this.streamRefusedJoin();
-    this.remoteMuteAction();
-    this.streamUserKickAction();
-    this.streamUserBanAction();
-    this.userAskJoin();
-    this.userAcceptJoin();
-    this.userRefusedJoin();
-    this.switchCameraAction();
-    this.streamSwitchUser();
-    this.updateUsersAction();
-
+    this._streamAction();
     this.onLeaveRoom();
   }
 
@@ -296,9 +119,172 @@ class StreamPlayer extends Component {
     }
   }
 
+  _onPlayerActions = (action, jsonData) => {
+    if (action === "StreamStopped") {
+      if (this.state.channelName === jsonData) {
+        this.props.onEndedStream();
+      }
+    } else if (action === "Stream_join_user") {
+      if (jsonData === undefined) return;
+      const { streamParams, audiences } = this.props;
+      let data = JSON.parse(jsonData);
+      if (streamParams.channelName === data.stream) {
+        let users = audiences.filter(audience => audience._id === data.user._id);
+        if (users.length === 0) {
+          let newAudiences = [data.user, ...audiences];
+          this.props.updateAudiences(newAudiences);
+        }
+        if (data.user._id === this.props.user.id) {
+          this.props.updateStreamInfo(data.stream_info.boost_end_time, parseInt(data.stream_info.invite_only, 10));
+        }
+      }
+    } else if (action === "Stream_disconnect_user") {
+      if (jsonData === undefined) return;
+      const { streamParams, audiences } = this.props;
+      let data = JSON.parse(jsonData);
+      if (streamParams.channelName === data.stream) {
+        this.props.updateAskedUsers(this.props.askedUsers.filter((value) => value !== data.user._id));
+        let newAudiences = audiences.filter(audience => audience._id !== data.user._id);
+        this.props.updateAudiences(newAudiences);
+        this.props.updateMutedUsers(this.props.mutedUsers.filter((value) => value !== data.user._id));
+        this.props.updateRemoteMutedUsers(this.props.remoteMutedUsers.filter((value) => value !== data.user._id));
+      }
+    } else if (action === "Stream_ask_join") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (data.stream !== this.state.channelName) return;
+      if (data.user._id === this.props.user.id) {
+        this.setState({ askedByUser: false, askedUser: data.host, visibleJoin: true });
+      }
+    } else if (action === "Stream_refused_join") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (data.stream !== this.state.channelName) return;
+      if (this.props.isBroadcaster) {
+        const { audiences } = this.props;
+        let newAudiences = [];
+        audiences.forEach((audience, index) => {
+          if (audience._id === data.user._id) {
+            audience.sendRequest = false;
+          }
+          newAudiences.push(audience);
+        });
+        this.props.updateAudiences(newAudiences);
+      }
+    } else if (action === "Stream_broadcast_disconnect_by_host") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (data.user._id === this.props.user.id) {
+        this._engine.setClientRole(ClientRole.Audience);
+        this.props.setAskedToJoin(false);
+        this.props.onChangeRole(false);
+        this.props.resetEnabledSettings();
+      }
+    } else if (action === "Stream_user_ask_join") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (data.host._id === this.props.user.id) {
+        // this.setState({ askedByUser: true, askedUser: data.user, visibleJoin: true });
+        let users = this.props.audiences.filter((value) => value._id === data.user._id);
+        if (users.length > 0) {
+          if(!this.props.askedUsers.includes(data.user._id)) {
+            this.props.updateAskedUsers([data.user._id, ...this.props.askedUsers]);
+          }
+        }
+      }
+    } else if (action === "Stream_user_cancel_ask") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (data.stream === this.props.streamParams.channelName ) {
+        this.props.updateAskedUsers(this.props.askedUsers.filter((value) => value !== data.user._id));
+      }
+    } else if (action === "Stream_user_accept_join") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (data.user._id === this.props.user.id) {
+        this.onBroadcaster();
+      }
+    } else if (action === "Stream_user_refused_join") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (data.user._id === this.props.user.id) {
+        this.props.setAskedToJoin(false);
+      }
+    } else if (action === "Update_badges") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      const { audiences, broadcasters } = this.props;
+      for (let index = 0; index < audiences.length; index++) {
+        if (audiences[index]._id === data.user) {
+          audiences[index].badges = data.badges;
+          break;
+        }
+      }
+      for (let index = 0; index < broadcasters.length; index++) {
+        if (broadcasters[index]._id === data.user) {
+          broadcasters[index].badges = data.badges;
+          break;
+        }
+      }
+      this.props.updateAudiences(audiences);
+      this.props.updateBroadcasters(broadcasters);
+    } else if (action === "REMOTE_USER_MUTE") {
+      this._engine.muteRemoteAudioStream(jsonData.userId, jsonData.mute);
+      if (jsonData.mute === true) {
+        this.props.updateRemoteMutedUsers([jsonData.userId, ...this.props.remoteMutedUsers]);
+      } else {
+        this.props.updateRemoteMutedUsers(this.props.remoteMutedUsers.filter((value) => value !== jsonData.userId));
+      }
+    } else if (action === "Stream_user_kick") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (parseInt(data.user, 10) === this.props.user.id) {
+        this.onLeaveRoom();
+        this.setState({notificationData: {
+          text: "You've been kicked from this live",
+          logoBackground: "#312446",
+          logoTintColor: "white",
+          buttonColors: ["#312446", "#312446"],
+          buttonText: "Okay",
+          buttonTextStyle: "white",
+        }, visibleNotification: true});
+      }
+    } else if (action === "Stream_user_ban") {
+      if (jsonData === undefined) return;
+      let data = JSON.parse(jsonData);
+      if (parseInt(data.user, 10) === this.props.user.id) {
+        this.onLeaveRoom();
+        this.setState({notificationData: {
+          text: "You've been banned from this live",
+          logoBackground: "#FF0036",
+          logoTintColor: "black",
+          buttonColors: ["#FF0036", "#FF0036"],
+          buttonText: "Okay",
+          buttonTextStyle: "black",
+        }, visibleNotification: true});
+      }
+    } else if (action === "User_update") {
+      const { broadcasters, audiences } = this.props;
+      let filteredUsers = broadcasters.filter(
+        broadcaster => broadcaster._id === jsonData.user._id,
+      );
+      if (filteredUsers.length > 0) {
+        this.updateChannelInformation();
+      } else {
+        filteredUsers = audiences.filter(audience => audience._id === jsonData.user._id);
+        if (filteredUsers.length > 0) {
+          this.updateChannelInformation();
+        }
+      }
+    } else if (action === StreamSetting.SWITCH_CAMERA) {
+      // this._engine.switchCamera();
+      this.setState({frontCamera: !this.state.frontCamera});
+    }
+  }
+
   initRtcEngine = async () => {
     const { appId, channelName } = this.state;
-    this._engine = await RtcEngine.create(appId);
+    this._engine = await RtcEngine.createWithConfig(new RtcEngineConfig(appId));
     this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
 
     if (this.props.isBroadcaster) {
@@ -317,13 +303,20 @@ class StreamPlayer extends Component {
       });
     await this._engine.enableVideo();
     this.addRtcListeners();
-    this._engine.joinChannel(null, channelName, null, this.props.user.id);
+    await this._engine.joinChannel(null, channelName, null, this.props.user.id);
   };
 
   onLeaveRoom = async () => {
     if (this._engine !== null) {
+      this._engine.removeAllListeners("UserJoined");
+      this._engine.removeAllListeners("UserOffline");
+      this._engine.removeAllListeners("JoinChannelSuccess");
+      this._engine.removeAllListeners("ClientRoleChanged");
+      this._engine.removeAllListeners("RemoteVideoStateChanged");
+      this._engine.removeAllListeners("UserMuteAudio");
+      this._engine.removeAllListeners("AudioVolumeIndication");
       await this._engine.leaveChannel();
-      this._engine.destroy();
+      await this._engine.destroy();
       this._engine = null;
 
       let names = this.state.channelName.split("-");
@@ -367,6 +360,13 @@ class StreamPlayer extends Component {
     this._engine.addListener("JoinChannelSuccess", (channel, uid, elapsed) => {
       if (this.props.isBroadcaster) {
         this.addStreamer(uid);
+        if (uid === this.props.user.id) {
+          this.setState({
+            externalVideo: !this.state.externalVideo, 
+            frontCamera: this.state.frontCamera,
+            capturing: true
+          });
+        }
       } else {
         this.props.streamJoin(this.props.streamParams.channelName, this.props.token);
       }
@@ -466,6 +466,27 @@ class StreamPlayer extends Component {
     this.props.streamUserList(channelName, this.props.token);
   };
 
+  onBroadcaster = async () => {
+    this.props.setAskedToJoin(false);
+    this.props.onChangeRole(true);
+    await this._engine.setClientRole(ClientRole.Broadcaster);
+    this._engine
+      .setVideoEncoderConfiguration({
+        frameRate: VideoFrameRate.Fps60,
+        minFrameRate: VideoFrameRate.Fps30,
+        degradationPrefer: DegradationPreference.MaintainQuality,
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    await this._engine.enableVideo();
+    this.setState({
+      externalVideo: !this.state.externalVideo,
+      frontCamera:  this.state.frontCamera,
+      capturing: true
+    });
+  }
+
   renderNoVideos = () => {
     return (
       <SafeAreaView style={styles.flexFill}>
@@ -511,12 +532,18 @@ class StreamPlayer extends Component {
     const { channelName } = this.state;
     if (this.props.user.id === uid) {
       return (
-        <RtcLocalView.SurfaceView
-          style={[styles.flexFill]}
-          channelId={channelName}
-          renderMode={VideoRenderMode.Hidden}
-          zOrderMediaOverlay={false}
-        />
+        <PluzoArView
+          style={[styles.flexFill, {backgroundColor: "rgba(0, 177, 255, 0.5)"}]}
+          startCapture={this.state.capturing}
+          externalVideo={this.state.externalVideo}
+          maskMode={this.props.maskMode}
+          frontCamera={this.state.frontCamera} />
+        // <RtcLocalView.SurfaceView
+        //   style={[styles.flexFill]}
+        //   channelId={channelName}
+        //   renderMode={VideoRenderMode.Hidden}
+        //   zOrderMediaOverlay={false}
+        // />
       );
     } else {
       return (
@@ -591,10 +618,7 @@ class StreamPlayer extends Component {
                 this.props.userAcceptJoin(channelName, askedUser._id, this.props.token);
               } else {
                 this.props.streamAcceptJoin(channelName, askedUser._id, this.props.token);
-                this.props.setAskedToJoin(false);
-                this.props.onChangeRole(true);
-                this._engine.setClientRole(ClientRole.Broadcaster);
-                this._engine.enableVideo();
+                this.onBroadcaster();
               }
               this.setState({ visibleJoin: false, askedUser: null });
             }}

@@ -53,17 +53,45 @@ export default StyleSheet.create({
     borderRadius: wp(3),
   },
   emojiButton: {
-    width: wp(40),
-    height: wp(40),
+    width: wp(77),
+    height: wp(35),
     borderRadius: wp(20),
-    backgroundColor: "#312446",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  emptyCategoryText: {
+    color: "#E8E6FF",
+    fontWeight: "600",
+    fontSize: wp(12),
+  },
+  emojiButton: {
+    width: wp(77),
+    height: wp(35),
+    borderRadius: wp(20),
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  emptyCategoryText: {
+    color: "#E8E6FF",
+    fontWeight: "600",
+    fontSize: wp(12),
+  },
+  emojiCategoryContainer: {
+    ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
   },
-  itemColorView: {
-    width: wp(20),
-    height: wp(20),
-    borderRadius: wp(10),
+  itemText: {
+    fontSize: wp(10),
+    fontWeight: "900",
+    color: COLOR.TEXT_PRIMARY,
+    textShadowColor: "rgba(255, 255, 255, 0.1)",
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
 
   streamTitle: FontHelper.font({

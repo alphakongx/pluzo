@@ -102,7 +102,8 @@ class AddFriendModal extends Component {
         }, 1500);
       });
     }
-    this.props.addFriend(user === null ? username : user.username, token);
+    let paramName = user === null ? username : user.username;
+    this.props.addFriend(paramName, token);
     if (user !== null) {
       this.setState({
         newPeoples: this.state.newPeoples.filter(item => item.id !== user.id),

@@ -17,7 +17,6 @@ const LocationPermissionScreen: () => React$Node = props => {
     }
     checkMultiple(arrPermissions).then((statuses) => {
       if (Platform.OS === "ios") {
-        console.log(statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE]);
         if (statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED) {
           setLocationEnabled("Enabled");
         } else if (statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.BLOCKED) {

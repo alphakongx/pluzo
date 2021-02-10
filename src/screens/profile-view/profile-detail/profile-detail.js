@@ -18,13 +18,14 @@ const ProfileDetail: () => React$Node = props => {
     latitude,
     longitude,
     badges,
+    age,
   } = props.user;
   const { location, imageIndex } = props;
 
   if (first_name === null || first_name === "") {
     first_name = "No Name";
   }
-  birthday = moment().diff(moment.unix(birthday), "years");
+  birthday = age;//moment().diff(moment.unix(birthday), "years");
   var distance = " - ";
   if (latitude !== null && longitude !== null && location !== null) {
     distance = Distance.getDistance(
@@ -35,6 +36,21 @@ const ProfileDetail: () => React$Node = props => {
     );
   }
   let isOwner = true; //props.owner.id === (props.user.id || props.user._id);
+  let strAddress = (address !== null && address !== "null") ? address : "";
+  if (city !== null && state !== null) {
+    strAddress = `${city}, ${state}`;
+  } else {
+    if (city === null && state === null) {
+      strAddress = strAddress;
+    } else {
+      if (city === null) {
+        strAddress = `${state}, ${strAddress}`;
+      } else {
+        strAddress = `${city}, ${strAddress}`;
+      }
+    }
+  }
+  let addresses = strAddress.split(", ");
 
   return (
     <View style={styles.container}>
@@ -66,15 +82,16 @@ const ProfileDetail: () => React$Node = props => {
           )}
         </View>
       </View>
+      {strAddress !== "" &&
       <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
         <Image source={require("@assets/images/swipe-screen/location.png")} />
-        {(state !== null || city !== null) && (
-          <Text style={styles.topBarCity}>{state === null ? city : state},</Text>
+        {addresses.length > 1 && (
+          <Text style={styles.topBarCity}>{addresses[0]},</Text>
         )}
         <Text style={styles.topBarLocation}>
-          {address === null ? "no address" : address}
+          {addresses.length > 1 ? addresses[1] : addresses[0]}
         </Text>
-      </View>
+      </View>}
       <View style={styles.badgeContainer}>
         {badges.map(badge => {
           if (badge > AppBadges.length) return null;

@@ -1,7 +1,11 @@
 import { StyleSheet } from "react-native";
 import { FontHelper, widthPercentageToDP as wp } from "@helpers";
+import { COLOR } from "@config";
 
 export default StyleSheet.create({
+  flexFill: {
+    flex: 1,
+  },
   flexRow: {
     flexDirection: "row-reverse",
   },
@@ -34,19 +38,32 @@ export default StyleSheet.create({
     fontSize: wp(14),
   }),
   emojiButton: {
-    width: wp(40),
-    height: wp(40),
+    width: wp(77),
+    height: wp(35),
     borderRadius: wp(20),
-    backgroundColor: "#000000",
-    opacity: 0.6,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: wp(10),
+    overflow: "hidden",
   },
-  itemColorView: {
-    width: wp(20),
-    height: wp(20),
-    borderRadius: wp(10),
+  emptyCategoryText: {
+    color: "#E8E6FF",
+    fontWeight: "600",
+    fontSize: wp(12),
+  },
+  emojiCategoryContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  itemText: {
+    fontSize: wp(10),
+    fontWeight: "900",
+    color: COLOR.TEXT_PRIMARY,
+    textShadowColor: "rgba(255, 255, 255, 0.1)",
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
 
   userCountStyle: {
@@ -89,5 +106,27 @@ export default StyleSheet.create({
     width: wp(9),
     height: wp(9),
     resizeMode: "contain",
+  },
+
+  raisedContainer: {
+    flexDirection: "row",
+    backgroundColor: "#0B0516",
+    alignItems: "center",
+    borderRadius: wp(20),
+    paddingHorizontal: wp(9),
+    paddingVertical: wp(4),
+    marginRight: wp(8),
+  },
+  raisedIcon: {
+    width: wp(14),
+    height: wp(14),
+    resizeMode: "contain",
+  },
+  raisedText: {
+    fontFamily: "OpenSans",
+    fontSize: wp(13),
+    fontWeight: "700",
+    color: "white",
+    paddingHorizontal: wp(5),
   },
 });

@@ -5,6 +5,8 @@ import { UserCreators } from "@redux/actions";
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import EventBus from "eventing-bus";
+import { SCREENS } from "@constants";
+import { NavigationService } from "@helpers";
 
 class PushNotification extends React.Component {
   constructor(props) {
@@ -17,14 +19,14 @@ class PushNotification extends React.Component {
     OneSignal.init("b183cfca-4929-462d-b50d-d28ded4347a2", {
       kOSSettingsKeyAutoPrompt: false,
       kOSSettingsKeyInAppLaunchURL: false,
-      kOSSettingsKeyInFocusDisplayOption: 2,
+      kOSSettingsKeyInFocusDisplayOption: 0,
     });
-    OneSignal.inFocusDisplaying(2); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
+    OneSignal.inFocusDisplaying(0); // Controls what should happen if a notification is received while the app is open. 2 means that the notification will go directly to the device's notification center.
 
     // The promptForPushNotifications function code will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step below)
     if (Platform.OS === "ios") {
       OneSignal.promptForPushNotificationsWithUserResponse(permission => {
-        console.log("Permissions: ", permission);
+        // console.log("Permissions: ", permission);
       });
     }
 
@@ -57,18 +59,60 @@ class PushNotification extends React.Component {
   };
 
   onReceived(notification) {
-    console.log("Notification received: ", notification);
+    // console.log("Notification received: ", notification);
   }
 
   onOpened(openResult) {
-    console.log("Message: ", openResult.notification.payload.body);
-    console.log("Data: ", openResult.notification.payload.additionalData);
-    console.log("isActive: ", openResult.notification.isAppInFocus);
-    console.log("openResult: ", openResult);
+    let data = openResult.notification.payload.additionalData;
+    if (data) {
+      if (data.action === "chat") {
+        if (data.chat_id && data.user_model) {
+          if (NavigationService.getCurrentRoute(null) === "CHAT") {
+            NavigationService.popToTop();
+          }
+          setTimeout(() => {
+            NavigationService.navigate(SCREENS.CHAT, {chatId: data.chat_id, chatUser: data.user_model});
+          }, 500);
+        }
+      } else if (data.action === "friend_request") {
+        if (data.user_model) {
+          EventBus.publish("NEW_PENDING_REQUEST");
+          // NavigationService.navigate(SCREENS.CHAT, {chatUser: data.user_model});
+        }
+      } else if (data.action === "friends") {
+        if (data.user_model) {
+          if (NavigationService.getCurrentRoute(null) === "CHAT") {
+            NavigationService.popToTop();
+          }
+          setTimeout(() => {
+            NavigationService.navigate(SCREENS.CHAT, {chatUser: data.user_model});
+          }, 500);
+        }
+      } else if (data.action === "stream") {
+        EventBus.publish("APP_END_STREAM_ACTION");
+        setTimeout(() => {
+          let params = {
+            channelName: data.channel_id,
+            isBroadcaster: false,
+            isJoin: true,
+          };
+          EventBus.publish("NEW_STREAM_ACTION", params);
+        }, 1000);
+      } else if (data.action === "stream_invite") {
+        EventBus.publish("APP_END_STREAM_ACTION");
+        setTimeout(() => {
+          let params = {
+            channelName: data.channel_id,
+            isBroadcaster: false,
+            isJoin: true,
+          };
+          EventBus.publish("NEW_STREAM_ACTION", params);
+        }, 1000);
+      }
+    }
   }
 
   onIds(device) {
-    console.log(device);
     AsyncStorage.setItem("PUSH_TOKEN", device.userId, err => {
       if (err === null) {
         EventBus.publish("UPDATE_PUSH_TOKEN");

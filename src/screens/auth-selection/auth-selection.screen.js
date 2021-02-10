@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
+import React from "react";
+import { View, Linking } from "react-native";
 import { Image, SolidButton, GradientButton, Screen, Text, Touchable } from "@components";
 import { SCREENS } from "@constants";
+import { SERVER } from "@config";
 import styles from "./auth-selection.style.js";
 
 const AuthSelection: () => React$Node = props => {
@@ -15,11 +16,13 @@ const AuthSelection: () => React$Node = props => {
   };
 
   const navigateToTerms = () => {
-    props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {});
+    // props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {});
+    Linking.openURL(SERVER.TOS);
   };
 
   const navigateToPrivacy = () => {
-    props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, { content: "privacy" });
+    // props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, { content: "privacy" });
+    Linking.openURL(SERVER.PRIVACY);
   };
 
   return (

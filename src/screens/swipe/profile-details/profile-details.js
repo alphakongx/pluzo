@@ -19,6 +19,7 @@ class ProfileDetails extends React.Component {
     var {
       first_name,
       birthday,
+      age,
       address,
       bio,
       latitude,
@@ -30,7 +31,7 @@ class ProfileDetails extends React.Component {
     if (first_name === null || first_name === "") {
       first_name = "No Name";
     }
-    birthday = moment().diff(moment.unix(birthday), "years");
+    birthday = age; //moment().diff(moment.unix(birthday), "years");
     var distance = " - ";
     console.log(location);
     console.log(latitude, longitude);

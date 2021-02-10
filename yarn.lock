@@ -1243,6 +1243,11 @@
   resolved "https://registry.yarnpkg.com/@redux-saga/types/-/types-1.1.0.tgz#0e81ce56b4883b4b2a3001ebe1ab298b84237204"
   integrity sha512-afmTuJrylUU/0OtqzaRkbyYFFNgCF73Bvel/sw90pvGrWIZ+vyoIJqA6eMSoA6+nb443kTmulmBtC9NerXboNg==
 
+"@sayem314/react-native-keep-awake@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@sayem314/react-native-keep-awake/-/react-native-keep-awake-1.0.4.tgz#b50479e01aa33519797e1fb36717f504a7829135"
+  integrity sha512-P88tiTDzVyT/323Ipx8j+q5Ua3U2X+EX+6YK3ibp2FLtvDlj8TZ/kmlCQTPOCzJyNQSA4+y6EXy0zJSgLZtuLQ==
+
 "@scarf/scarf@^1.0.5":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-1.1.0.tgz#b84b4a91cd938a688d36245b7a7db6fbc476a499"
@@ -1873,6 +1878,18 @@ babel-preset-jest@^25.5.0:
   dependencies:
     babel-plugin-jest-hoist "^25.5.0"
     babel-preset-current-node-syntax "^0.1.2"
+
+bad-words@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/bad-words/-/bad-words-3.0.4.tgz#044c83935c4c363a905d47b5e0179f7241fecaec"
+  integrity sha512-v/Q9uRPH4+yzDVLL4vR1+S9KoFgOEUl5s4axd6NIAq8SV2mradgi4E8lma/Y0cw1ltVdvyegCQQKffCPRCp8fg==
+  dependencies:
+    badwords-list "^1.0.0"
+
+badwords-list@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/badwords-list/-/badwords-list-1.0.0.tgz#5e9856dbf13482a295c3b0b304afb9d4cfc5c579"
+  integrity sha1-XphW2/E0gqKVw7CzBK+51M/FxXk=
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -5989,10 +6006,10 @@ react-native-actionsheet@^2.4.2:
   resolved "https://registry.yarnpkg.com/react-native-actionsheet/-/react-native-actionsheet-2.4.2.tgz#6a00dd51a75ef2c8974312130e405af73191500f"
   integrity sha512-DBoWIvVwuWXuptF4t46pBqkFxaUxS+rsIdHiA05t0n4BdTIDV2R4s9bLEUVOGzb94D7VxIamsXZPA/3mmw+SXg==
 
-react-native-agora@^3.0.1-rc.2:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-agora/-/react-native-agora-3.0.1.tgz#d67f808446ef5cd4e8c3cc16f600d80d71ba6381"
-  integrity sha512-IpAvE8GaSQ9iIn40obOKjEYQvLNIosw5kEwJlfmZ/R00fvvBDZnWGoWO7kPu2MzOHjfqJi0xBgFYpWH8QqHFmQ==
+react-native-agora@^3.3.0-rc.1:
+  version "3.3.0-rc.1"
+  resolved "https://registry.yarnpkg.com/react-native-agora/-/react-native-agora-3.3.0-rc.1.tgz#271c8b41f75f3689f363679c17bfdc97dd3fd559"
+  integrity sha512-eiM/14UIfnDTeF6W3uAHZqn8DFZ+k/B4+EVsjOpYyxXCNaPP5Pxnr+DS1H1vR+qBfUdus3Cmy5fbXK9P6hrAcQ==
 
 react-native-animatable@1.3.3, react-native-animatable@^1.3.3:
   version "1.3.3"
@@ -6000,6 +6017,11 @@ react-native-animatable@1.3.3, react-native-animatable@^1.3.3:
   integrity sha512-2ckIxZQAsvWn25Ho+DK3d1mXIgj7tITkrS4pYDvx96WyOttSvzzFeQnM2od0+FUMzILbdHDsDEqZvnz1DYNQ1w==
   dependencies:
     prop-types "^15.7.2"
+
+react-native-background-timer@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-background-timer/-/react-native-background-timer-2.4.1.tgz#a3bc1cafa8c1e3aeefd0611de120298b67978a0f"
+  integrity sha512-TE4Kiy7jUyv+hugxDxitzu38sW1NqjCk4uE5IgU2WevLv7sZacaBc6PZKOShNRPGirLl1NWkaG3LDEkdb9Um5g==
 
 react-native-calendars@^1.300.0:
   version "1.403.0"

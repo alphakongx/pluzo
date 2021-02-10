@@ -17,6 +17,7 @@ import StreamMessageBox from "../stream-message-box";
 import StreamUsers from "../stream-users";
 import StreamHeader from "../stream-header";
 import StreamStart from "../stream-start";
+import StreamFilters from "../stream-filters";
 import StreamPlayerSetting from "../stream-player-setting";
 import StreamSpeakerView from "../stream-speaker-view";
 import StreamAskModal from "../stream-ask-modal";
@@ -25,9 +26,10 @@ import SwipePurchaseModal from "../../swipe/swipe-purchase-modal";
 
 import styles from "./stream-overlay-view.style";
 
-const StreamOverlayView = props => {
+const StreamOverlayView: () => React$Node = props => {
   const insets = useSafeAreaInsets();
   const [showUsers, setShowUsers] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [showPlayerSetting, setShowPlayerSetting] = useState(false);
   const [visibleReport, setVisibleReport] = useState(false);
   const [visibleInviteFriends, setVisibleInviteFriends] = useState(false);
@@ -49,24 +51,14 @@ const StreamOverlayView = props => {
     props.setStreamStatus(StreamStatus.STARTED);
   };
 
-  const onKeyboardShow = e => {
-    if (visibleInviteFriends) return;
-    setKeyboardHeight(e.endCoordinates.height);
-    setMessageBoxHeight(300);
-  };
-
-  const onKeyboardHide = e => {
-    if (visibleInviteFriends) return;
-    setKeyboardHeight(0);
-    setMessageBoxHeight("50%");
-  };
-
   useEffect(() => {
-    const userAcceptJoin = EventBus.on("Stream_user_accept_join", async jsonData => {
-      if (jsonData === undefined) return;
-      let data = JSON.parse(jsonData);
-      if (data.user._id === userId) {
-        setVisibleAskModal(false);
+    const userAcceptJoin = EventBus.on("player_actions", (action, jsonData) => {
+      if (action === "Stream_user_accept_join") {
+        if (jsonData === undefined) return;
+        let data = JSON.parse(jsonData);
+        if (data.user._id === userId) {
+          setVisibleAskModal(false);
+        }
       }
     });
     return () => {
@@ -81,6 +73,37 @@ const StreamOverlayView = props => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    let keyboardShowListener, keyboardHideListener;
+    if (Platform.OS === "ios") {
+      keyboardShowListener = Keyboard.addListener("keyboardWillShow", (e) => {
+        if (visibleInviteFriends) return;
+        setKeyboardHeight(e.endCoordinates.height);
+        setMessageBoxHeight(300);
+      });
+      keyboardHideListener = Keyboard.addListener("keyboardWillHide", (e) => {
+        if (visibleInviteFriends) return;
+        setKeyboardHeight(0);
+        setMessageBoxHeight("50%");
+      });
+    } else {
+      keyboardShowListener = Keyboard.addListener("keyboarDidShow", (e) => {
+        if (visibleInviteFriends) return;
+        setKeyboardHeight(e.endCoordinates.height);
+        setMessageBoxHeight(300);
+      });
+      keyboardHideListener = Keyboard.addListener("keyboardDidHide", (e) => {
+        if (visibleInviteFriends) return;
+        setKeyboardHeight(0);
+        setMessageBoxHeight("50%");
+      });
+    }
+    return () => {
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    }
+  }, [visibleInviteFriends]);
 
   useEffect(() => {
     if (props.inviteOnly === 1) {
@@ -132,14 +155,27 @@ const StreamOverlayView = props => {
         />
       ) : (
         <SafeAreaView style={styles.container} pointerEvents={"box-none"}>
-          {messageBoxHeight === 300 && (
+          {(messageBoxHeight === 300 || showFilters) && (
             <TouchableOpacity
               style={styles.absolute}
-              onPress={() => Keyboard.dismiss()}
+              onPress={() => {
+                if (showFilters) {
+                  setShowFilters(false);
+                } else {
+                  Keyboard.dismiss()
+                }
+              }}
             />
           )}
           {props.streamerCount > 0 && (
-            <View style={[styles.broadcasterContainer, { top: insets.top + wp(50) }]}>
+            <TouchableOpacity style={[styles.broadcasterContainer, { top: insets.top + wp(50) }]}
+              onPress={() => {
+                if (showFilters) {
+                  setShowFilters(false);
+                } else {
+                  Keyboard.dismiss()
+                }
+              }}>
               <FlatList
                 keyboardShouldPersistTaps={"always"}
                 data={props.broadcasters}
@@ -156,9 +192,10 @@ const StreamOverlayView = props => {
                   />
                 )}
               />
-            </View>
+            </TouchableOpacity>
           )}
 
+          {!showFilters &&
           <View
             style={[
               styles.messageBox,
@@ -170,14 +207,13 @@ const StreamOverlayView = props => {
               streamStatus={props.streamStatus}
               isBroadcaster={props.isBroadcaster}
               streamParams={props.streamParams}
-              onKeyboardShow={onKeyboardShow}
-              onKeyboardHide={onKeyboardHide}
+              keyboardHeight={keyboardHeight}
               onPlayerSetting={() => setShowPlayerSetting(true)}
               onAskToJoin={() => setVisibleAskModal(true)}
               onShowProfile={props.onShowProfile}
               bottomPadding={keyboardHeight > 0 ? 5 : insets.bottom + 5}
             />
-          </View>
+          </View>}
 
           {showUsers && (
             <TouchableOpacity
@@ -219,9 +255,18 @@ const StreamOverlayView = props => {
             showTutorial={visibleTutorialUsers}
           />
 
+          {showFilters &&
+          <StreamFilters onBack={() => {
+            setShowFilters(false);
+            setShowPlayerSetting(true);
+          }} />}
           {showPlayerSetting && (
             <StreamPlayerSetting
               onHidePlayerSetting={() => setShowPlayerSetting(false)}
+              onShowFilters={() => {
+                setShowPlayerSetting(false);
+                setShowFilters(true);
+              }}
             />
           )}
           {showUsers && (

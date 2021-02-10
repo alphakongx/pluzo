@@ -42,7 +42,6 @@ export class API {
         clearTimeout(timeoutHandler);
 
         if (options.silent === true) {
-          console.log(error);
           // throw error;
         } else if (error.message === "Network Error") {
           axios({
@@ -66,7 +65,6 @@ export class API {
             Notification.alert("Invalid username/password");
           } else if (error.response && error.response.data && error.response.data.error) {
             if (!options.silent) {
-              console.log(options.url);
               Notification.alert(error.response.data.message);
             }
           }

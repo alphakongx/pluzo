@@ -8,6 +8,7 @@ function mapStateToProps(state, { navigation }) {
     token: state.user.token,
     user: state.user.user,
     messages: state.chat.messages,
+    allMessages: state.chat.allMessages,
     loading: state.chat.isLoadingMessages,
     chatUser: navigation.getParam("chatUser"),
     chatId: navigation.getParam("chatId"),
@@ -25,6 +26,7 @@ const mapDispatchToProps = {
   requestCloseChat: ChatCreators.requestCloseChat,
   readFlag: InboxCreators.requestReadFlag,
   blockUser: UserCreators.requestBlockUser,
+  updateAllMessages: ChatCreators.updateAllMessages,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withSafeAreaInsets(Chat));

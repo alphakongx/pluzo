@@ -44,7 +44,6 @@ const UpdatePasswordModal: () => React$Node = props => {
       })
       .catch(e => {
         setLoading(false);
-        console.log(e);
       });
   };
 

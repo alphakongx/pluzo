@@ -34,7 +34,6 @@ class ResetPasswordCodeVerification extends React.Component {
     try {
       lastTime = await AsyncStorage.getItem(TUTORIAL.SMS_LAST_TIME);
     } catch (error) {
-      console.log(error);
       lastTime = 0;
     }
     if (lastTime === 0 || lastTime === null) {
@@ -74,7 +73,6 @@ class ResetPasswordCodeVerification extends React.Component {
 
   otpHandler = message => {
     const otp = /(\d{4})/.exec(message);
-    console.log("SMS::", otp);
     if (otp !== null) {
       Clipboard.setString(otp[1]);
       RNOtpVerify.removeListener();

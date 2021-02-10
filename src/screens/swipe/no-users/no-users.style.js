@@ -54,6 +54,18 @@ export default StyleSheet.create({
     borderRadius: screenWidth / 2,
     position: "absolute",
   },
+  permissionTitle: {
+    fontWeight: "bold",
+    fontSize: wp(16),
+    color: "white",
+    marginBottom: wp(10),
+  },
+  permissionDescription: {
+    fontWeight: "600",
+    fontSize: wp(14),
+    color: "#ABA7D5",
+    textAlign: "center",
+  },
 
   contentContainer: {
     position: "absolute",

@@ -50,23 +50,26 @@ class Live extends Component {
 
       if (jsonData === undefined) return;
       let data = JSON.parse(jsonData);
-      if (this.props.channelName === data.stream.channel) {console.log(data.stream.invite_only);
+      if (this.props.channelName === data.stream.channel) {
         this.props.updateStreamInfo(data.stream.boost_end_time, parseInt(data.stream.invite_only, 10));
       }
     });
     this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
       getCurrentLocation(position => {
-        const params = new FormData();
-        params.append("latitude", position.coords.latitude);
-        params.append("longitude", position.coords.longitude);
-        this.props.updateUser(params, this.props.token);
+        if (position) {
+          const params = new FormData();
+          params.append("latitude", position.coords.latitude);
+          params.append("longitude", position.coords.longitude);
+          this.props.updateUser(params, this.props.token);
+        }
       });
+      this.updateStreamList();
     });
   }
 
   componentWillUnmount() {
-    clearInterval(this.updateInterval);
     this._unsubscribe;
+    clearInterval(this.updateInterval);
     this.updateActionSubscription();
     this.updateActionStreams();
   }
@@ -79,11 +82,12 @@ class Live extends Component {
 
   updateStreamList = () => {
     setTimeout(() => {
-      if (this.updateInterval === undefined) {
-        this.updateInterval = setInterval(() => {
-          this.props.requestStreamList(this.props.token);
-        }, 5000);
+      if (this.updateInterval) {
+        clearInterval(this.updateInterval);
       }
+      this.updateInterval = setInterval(() => {
+        this.props.requestStreamList(this.props.token);
+      }, 30000);
     }, 500);
   };
 

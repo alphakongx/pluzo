@@ -1,11 +1,70 @@
 {
-  "1": { "id": 1, "icon": "tagPicture", "color": "#FF0000", "selected": false },
-  "2": { "id": 2, "icon": "tagMusic", "color": "#FFA500", "selected": false },
-  "3": { "id": 3, "icon": "tagBox", "color": "#FFFF00", "selected": false },
-  "4": { "id": 4, "icon": "tagLove", "color": "#00FF00", "selected": false },
-  "5": { "id": 5, "icon": "tagSport", "color": "#0000FF", "selected": false },
-  "6": { "id": 6, "icon": "tagSea", "color": "#800080", "selected": false },
-  "7": { "id": 7, "icon": "tagTravel", "color": "#A52A2A", "selected": false },
-  "8": { "id": 8, "icon": "tagTravel", "color": "#000000", "selected": false },
-  "9": { "id": 9, "icon": "tagTravel", "color": "#FFFFFF", "selected": false }
+  "1": {
+    "id": 1,
+    "name": "5+ People",
+    "icon": "categoryPeople",
+    "color": [
+      "#E2FF00",
+      "#89FF00",
+      "#00E0E0",
+      "#5C68FF"
+    ],
+    "shadowColor": "rgba(0, 29, 255, 0.6)",
+    "selected": false
+  },
+  "2": {
+    "id": 2,
+    "name": "Music",
+    "icon": null,
+    "color": [
+      "#00B1FF",
+      "#041AC1"
+    ],
+    "shadowColor": "rgba(0, 15, 131, 0.6)",
+    "selected": false
+  },
+  "3": {
+    "id": 3,
+    "name": "Comedy",
+    "icon": "categoryComedy",
+    "color": [
+      "#FFFF00",
+      "#FF6200"
+    ],
+    "shadowColor": "rgba(255, 0, 0, 0.6)",
+    "selected": false
+  },
+  "4": {
+    "id": 4,
+    "name": "Sports",
+    "icon": "categorySports",
+    "color": [
+      "#FF0000",
+      "#C10471"
+    ],
+    "shadowColor": "rgba(85, 0, 0, 0.6)",
+    "selected": false
+  },
+  "5": {
+    "id": 5,
+    "name": "Games",
+    "icon": "categoryGames",
+    "color": [
+      "#FFF500",
+      "#04C128"
+    ],
+    "shadowColor": "rgba(0, 29, 255, 0.6)",
+    "selected": false
+  },
+  "6": {
+    "id": 6,
+    "name": "Business",
+    "icon": null,
+    "color": [
+      "#343434",
+      "#0437C1"
+    ],
+    "shadowColor": "rgba(0, 0, 0, 0.6)",
+    "selected": false
+  }
 }

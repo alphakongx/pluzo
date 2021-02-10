@@ -29,6 +29,7 @@ export const API_ENDPOINTS = {
   DELETE_ACCOUNT: `${BASE_URL}/delete-account`,
   UPDATE_PHONE_SEND: `${BASE_URL}/update-phone-send`,
   UPDATE_PHONE_CONFIRM: `${BASE_URL}/update-phone-code`,
+  GET_USER_INFO: `${BASE_URL}/get-user-info`,
 
   GET_CHAT: `${BASE_URL}/get-chat`,
   GET_CHAT_MSG: `${BASE_URL}/get-chat-msg`,
@@ -96,6 +97,7 @@ export const API_ENDPOINTS = {
   SET_LIVE_SETTINGS: `${BASE_URL}/set-live-setting`,
   STREAM_LIST: `${BASE_URL}/stream-list`,
   STREAM_USER_LIST: `${BASE_URL}/stream-user-list-api`,
+  IS_STREAM_LIVE: `${BASE_URL}/is-live`,
 
   // report
   STREAM_REPORT: `${BASE_URL}/stream-report`,
@@ -108,3 +110,8 @@ export const API_ENDPOINTS = {
   // payment
   ITEM_PAY: `${BASE_URL}/pay`,
 };
+
+export const SERVER = {
+  PRIVACY: "https://www.pluzo.com/policy",
+  TOS: "https://www.pluzo.com/tos",
+}
