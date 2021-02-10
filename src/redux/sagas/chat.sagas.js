@@ -74,7 +74,6 @@ function* requestCurrentChat(action) {
       yield put(ChatCreators.getCurrentChatSuccess(result));
     }
   } catch (error) {
-    console.log(error);
     yield put(ChatCreators.getCurrentChatFailure());
   }
 }
@@ -93,6 +92,9 @@ function* requestSendMsg(action) {
     }
     if (params.image !== null) {
       requestParams.append("image", params.image);
+    }
+    if (params.send_push !== 0) {
+      requestParams.append("send_push", 1);
     }
 
     const response = yield call(sendMsg, requestParams, token);

@@ -7,11 +7,16 @@ import Modal from "react-native-modal";
 import EventBus from "eventing-bus";
 
 import Images from "@assets/Images";
+import ProfileView from "../../profile-view";
 import styles from "./pending-request-modal.style";
 
 class PendingRequestModal extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      visibleProfile: false,
+      selectedUser: null,
+    }
   }
 
   onDismissModal = () => {
@@ -86,7 +91,10 @@ class PendingRequestModal extends Component {
                 keyExtractor={item => `pending-requests-${item._id}`}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 renderItem={({ item: item, index }) => (
-                  <Touchable key={`pending-requests-${item._id}`}>
+                  <Touchable key={`pending-requests-${item._id}`}
+                    onPress={() => {
+                      this.setState({selectedUser: item, visibleProfile: true});
+                    }}>
                     <View style={styles.requestContainer}>
                       <View style={styles.imageContainer}>
                         <FastImage
@@ -120,6 +128,16 @@ class PendingRequestModal extends Component {
               />
             )}
           </View>
+          <Modal isVisible={this.state.visibleProfile} style={styles.profileModal}>
+            <View style={styles.flexFill}>
+              {this.state.selectedUser && (
+                <ProfileView
+                  user={this.state.selectedUser}
+                  goBack={() => this.setState({ visibleProfile: false, selectedUser: null })}
+                />
+              )}
+            </View>
+          </Modal>
         </Screen>
       </Modal>
     );

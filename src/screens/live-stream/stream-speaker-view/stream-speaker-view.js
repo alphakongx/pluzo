@@ -77,6 +77,7 @@ const StreamSpeakerView: () => React$Node = props => {
       user: props.user,
       message: msg,
       type: "system",
+      created_at: new Date().getTime(),
     };
     props.updateMessages([newMessage].concat(props.messages));
     props.requestChatAdd(props.stream.channel, msg, 2, props.token);
@@ -178,9 +179,9 @@ const StreamSpeakerView: () => React$Node = props => {
               onSendSystemMsg(`${props.broadcaster.first_name} banned.`);
             } else {
               if (isMuted) {
-                EventBus.publish("REMOTE_USER_MUTE", {userId: broadcasterId, mute: false});
+                EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: broadcasterId, mute: false});
               } else {
-                EventBus.publish("REMOTE_USER_MUTE", {userId: broadcasterId, mute: true});
+                EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: broadcasterId, mute: true});
               }
             }
           }} 

@@ -1,6 +1,6 @@
 import AddFriendModal from "./add-friend-modal";
 import { connect } from "react-redux";
-import { InboxCreators } from "@redux/actions";
+import { InboxCreators, SwipeCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {

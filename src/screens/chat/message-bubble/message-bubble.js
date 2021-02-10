@@ -1,5 +1,5 @@
-import React from "react";
-import { Linking, View } from "react-native";
+import React, { useState } from "react";
+import { Linking, View, ActivityIndicator, Image } from "react-native";
 import FastImage from "react-native-fast-image";
 import { Touchable } from "@components";
 import styles from "./message-bubble.style.js";
@@ -8,6 +8,7 @@ import ParsedText from 'react-native-parsed-text';
 import MessageLiveItem from "./message-live-item.js";
 
 const MessageBubble: () => React$Node = props => {
+  const [loading, setLoading] = useState(true);
   const { currentMessage, user, nextMessage } = props;
   const isCurrentUser = currentMessage.user._id === user._id;
   const hasImage = currentMessage.image ? true : false;
@@ -37,6 +38,7 @@ const MessageBubble: () => React$Node = props => {
   }
 
   if (currentMessage.type === "invite" || currentMessage.type === "close") {
+    if (currentMessage.stream_info === null) return null;
     return (
       <View style={[styles.container, styles.containerMargin]}>
         <MessageLiveItem
@@ -46,19 +48,27 @@ const MessageBubble: () => React$Node = props => {
       </View>
     )
   }
-
+if (hasImage && currentMessage.image.includes("https://")) console.log(currentMessage.image);
   return (
     <View style={[styles.container, hasImage && hasText ? {} : styles.containerMargin]}>
       {hasImage ? (
-        <Touchable onPress={() => props.onFullImage(currentMessage.image)}>
+        <Touchable
+          style={styles.imageContainer}
+          onPress={() => props.onFullImage(currentMessage.image)}>
           <FastImage
             source={{ uri: currentMessage.image }}
             style={[
               styles.messageImage,
               hasText ? styles.imageTextRound : styles.imageFullRound,
             ]}
-            resizeMode={FastImage.resizeMode.cover}
+            // resizeMode={FastImage.resizeMode.cover}
+            onLoad={(e) => {
+              setLoading(false);
+            }}
           />
+          {loading && 
+            <ActivityIndicator size={"large"} style={styles.loadingIndicator} color={"white"} />
+          }
         </Touchable>
       ) : null}
       {currentMessage.text !== null && currentMessage.text !== "" && (

@@ -19,7 +19,7 @@ export default StyleSheet.create({
     marginHorizontal: wp(25),
   },
   buttonRowMargin: {
-    marginBottom: wp(30),
+    marginBottom: wp(20),
     marginTop: wp(20),
   },
   buttonSmall: {

@@ -5,7 +5,6 @@ import {
   Touchable,
   GradientButton,
   BoxShadow,
-  KeyboardListener,
 } from "@components";
 import { COLOR } from "@config";
 import { InputToolbar as RNInputToolbar, Send, Composer } from "react-native-gifted-chat";
@@ -18,7 +17,6 @@ class InputToolbar extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      isFocused: false,
       width: 1,
       height: 1,
       composerHeight: 35,
@@ -66,16 +64,6 @@ class InputToolbar extends React.Component {
             }}
           />
         </View>
-        <KeyboardListener
-          onWillShow={() => this.setState({ isFocused: true })}
-          onWillHide={() => {
-            this.setState({ isFocused: false });
-          }}
-          onDidShow={() => this.setState({ isFocused: true })}
-          onDidHide={() => {
-            this.setState({ isFocused: false });
-          }}
-        />
       </View>
     );
   };

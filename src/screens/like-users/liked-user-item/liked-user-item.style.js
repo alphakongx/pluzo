@@ -20,8 +20,16 @@ export default StyleSheet.create({
   },
 
   userImage: {
-    width: "100%",
-    height: "100%",
+    ...Platform.select({
+      android: {
+        width: "100%",
+        height: "100%",
+      },
+      ios: {
+        width: "100%",
+        height: "100%",
+      }
+    })
   },
 
   badgesContainer: {
@@ -51,6 +59,12 @@ export default StyleSheet.create({
     bottom: 0,
     top: 0,
     opacity: 0.9,
+    ...Platform.select({
+      android: {
+        borderBottomLeftRadius: wp(22),
+        borderBottomRightRadius: wp(22),
+      },
+    }),
   },
   nameText: {
     color: "white",
@@ -89,6 +103,7 @@ export default StyleSheet.create({
     bottom: 0,
     backgroundColor: "white",
     opacity: 0.9,
+    borderRadius: wp(22),
   },
   blurWhiteView: {
     position: "absolute",

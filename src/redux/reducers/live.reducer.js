@@ -23,6 +23,8 @@ const resetEnabledSettings = (state, action) => ({
   askedUsers: [],
   inviteOnly: 0,
   boostEndTime: 0,
+  maskMode: 0,
+  readyDeepAr: true,
 });
 const updateMutedUsers = (state, action) => ({
   ...state,
@@ -162,7 +164,16 @@ const setFilterSettings = (state, action) => ({
 const setFilterSettingsSuccess = (state, action) => ({
   ...state,
   settings: action.data,
-})
+});
+
+const setMaskMode = (state, action) => ({
+  ...state,
+  maskMode: action.mode,
+});
+const setReadyDeepAr = (state, action) => ({
+  ...state,
+  readyDeepAr: action.status,
+});
 
 export const HANDLERS = {
   [LiveTypes.SET_ENABLED_CAMERA]: setEnabledCamera,
@@ -215,6 +226,9 @@ export const HANDLERS = {
   [LiveTypes.GET_FILTER_SETTINGS]: getFilterSettings,
   [LiveTypes.SET_FILTER_SETTINGS]: setFilterSettings,
   [LiveTypes.SET_FILTER_SETTINGS_SUCCESS]: setFilterSettingsSuccess,
+
+  [LiveTypes.SET_MASK_MODE]: setMaskMode,
+  [LiveTypes.SET_READY_DEEP_AR]: setReadyDeepAr,
 
   [UserTypes.LOGOUT]: logout,
 };

@@ -1,5 +1,7 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { widthPercentageToDP as wp } from "@helpers";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   flexFill: {
@@ -9,6 +11,7 @@ export default StyleSheet.create({
   container: {
     borderRadius: wp(20),
     overflow: "hidden",
+    maxHeight: height * 4 / 5,
   },
 
   header: {

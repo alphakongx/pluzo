@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { SafeAreaView, ScrollView, View } from "react-native";
-import { Screen, BackButton, Image, Text, AnimatedButton, Touchable } from "@components";
+import { Screen, BackButton, Image, Text, AnimatedButton, Touchable, BoostConfirmModal } from "@components";
 import moment from "moment";
 import { SCREENS } from "@constants";
 import { getLikedUsers } from "@redux/api";
@@ -22,6 +22,7 @@ class LikeUsersScreen extends Component {
       scrollEnabled: true,
       visibleBoost: false,
       visibleRemainingBoost: false,
+      visibleBoostConfirm: false,
     };
 
     this.boosting = false;
@@ -41,16 +42,16 @@ class LikeUsersScreen extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.user.advanced.last_boost_time.end_boost_swipe_time !== this.props.user.advanced.last_boost_time.end_boost_swipe_time) {console.log("ok");
+    if (prevProps.user.advanced.last_boost_time.boost_swipe_remaining_time !== this.props.user.advanced.last_boost_time.boost_swipe_remaining_time) {
       this.checkingBoostTime();
     }
   }
 
   checkingBoostTime = () => {
-    let boostTime = this.props.user.advanced.last_boost_time.end_boost_swipe_time;  
-    if (boostTime) {
+    let boostTime = parseInt(this.props.user.advanced.last_boost_time.boost_swipe_remaining_time, 10); //end_boost_swipe_time;  
+    if (boostTime > 0) {
       clearInterval(this.boostInterval);
-      let duration = moment.unix(boostTime).diff(moment(), "seconds");
+      let duration = boostTime; //moment.unix(boostTime).diff(moment(), "seconds");
       if (duration > 0) {
         this.boosting = true;
         this.restSeconds = duration;
@@ -65,18 +66,25 @@ class LikeUsersScreen extends Component {
       } else {
         this.boosting = false;
       }
+    } else {
+      clearInterval(this.boostInterval);
+      this.boosting = false;
     }
   }
 
-  onBoost = (boost) => {
+  onBoost = (boost, confirmed) => {
     if (boost) {
       this.setState({visibleRemainingBoost: true});
       return;
     }
-    const { user, token } = this.props;
+    const { user } = this.props;
     let boostsCount = parseInt(user.advanced.boosts, 10);
     if (boostsCount > 0) {
-      this.props.runBoost(token, 1, null);
+      if (confirmed) {
+        this.props.runBoost(this.props.token, 1, null);
+      } else {
+        this.setState( { visibleBoostConfirm: true });
+      }
     } else {
       this.setState({ visibleBoost: true });
     }
@@ -92,7 +100,7 @@ class LikeUsersScreen extends Component {
     if (type === "left") {
       this.props.addDisLike(token, eventedUserId);
     } else if (type === "right") {
-      this.props.addLike(token, eventedUserId);
+      this.props.addLike(token, eventedUserId, false);
     }
   };
 
@@ -129,7 +137,7 @@ class LikeUsersScreen extends Component {
                     likedUsers.map((likedUser, index) => {
                       if (this.props.user.premium === 0) {
                         return (
-                          <Touchable key={`like-users-${index}`}
+                          <Touchable key={`like-users-${likedUser.user._id}`}
                             style={styles.itemContainer}
                             onPress={() => this.setState({visiblePurchase: true})}>
                             <LikedUserItem likedUser={{user: likedUser.user}} />
@@ -138,7 +146,7 @@ class LikeUsersScreen extends Component {
                       }
                       return (
                         <PluzoLikeSwiper
-                          key={`like-users-${index}`}
+                          key={`like-users-${likedUser.user._id}`}
                           style={styles.itemContainer}
                           onDragStart={() => this.setState({scrollEnabled: false})}
                           onDragEnd={() => this.setState({scrollEnabled: true})}
@@ -177,7 +185,7 @@ class LikeUsersScreen extends Component {
                 icon={Images.app.icRocket}
                 containerStyle={styles.flexRow}
                 iconStyle={styles.boostIcon}
-                onPress={() => this.onBoost(this.boosting)}
+                onPress={() => this.onBoost(this.boosting, false)}
                 loading={this.props.isBoosting}
               />
             </View>}
@@ -203,10 +211,21 @@ class LikeUsersScreen extends Component {
             onBoost={() => {
               this.setState({visibleRemainingBoost: false});
               setTimeout(() => {
-                this.onBoost(false);
+                this.onBoost(false, true);
               }, 500);
             }}
             isSwipe={true} />
+            
+          <BoostConfirmModal
+            isVisible={this.state.visibleBoostConfirm}
+            title={"Boost your profile"}
+            content={"Keep swiping for the best results."}
+            onBack={() => this.setState({visibleBoostConfirm: false})}
+            onBoost={() => {
+              this.props.runBoost(this.props.token, 1, null);
+              this.setState({visibleBoostConfirm: false});
+            }} 
+          />
         </SafeAreaView>
       </Screen>
     );

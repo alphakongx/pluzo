@@ -30,9 +30,9 @@ const BoostTimeModal: () => React$Node = props => {
   if (props.isSwipe) {
     useEffect(() => {
       clearInterval(boostInterval.current);
-      let boostTime = props.user.advanced.last_boost_time.end_boost_swipe_time;
-      if (boostTime) {
-        let duration = moment.unix(boostTime).diff(moment(), "seconds");
+      let boostTime = parseInt(props.user.advanced.last_boost_time.boost_swipe_remaining_time, 10);
+      if (boostTime > 0) {
+        let duration = boostTime; //moment.unix(boostTime).diff(moment(), "seconds");
         if (duration > 0) {
           setBoosting(true);
           let restSeconds = duration;
@@ -50,11 +50,15 @@ const BoostTimeModal: () => React$Node = props => {
           setRestTime(0);
           setBoosting(false);
         }
+      } else {
+        clearInterval(boostInterval.current);
+        setBoosting(false);
+        setRestTime(0);
       }
       return () => {
         clearInterval(boostInterval.current);
       }
-    }, [props.user.advanced.last_boost_time.end_boost_swipe_time]);
+    }, [props.user.advanced.last_boost_time.boost_swipe_remaining_time]);
   } else {
     useEffect(() => {
       clearInterval(boostInterval.current);

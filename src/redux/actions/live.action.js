@@ -55,6 +55,9 @@ const { Types, Creators } = createActions({
   getFilterSettings: ["token"],
   setFilterSettings: ["data", "token"],
   setFilterSettingsSuccess: ["data"],
+
+  setMaskMode: ["mode"],
+  setReadyDeepAr: ["status"],
 });
 
 export const LiveTypes = Types;

@@ -74,7 +74,7 @@ function* requestStreamUpdate(action) {
     const response = yield call(streamUpdate, requestParams, token);
     yield put(LiveCreators.streamUpdateSuccess(response.data.data.stream));
   } catch (error) {
-    console.log("stream update >>>", JSON.stringify(error));
+    console.log("stream update >>>", error);
   }
 }
 
@@ -102,7 +102,7 @@ function* requestStreamStop(action) {
 
     yield call(streamStop, requestParams, token);
   } catch (error) {
-    console.log("stream stop >>>", error.response.data);
+    console.log("stream stop >>>", error);
   }
 }
 
@@ -114,7 +114,7 @@ function* requestStreamJoin(action) {
 
     yield call(streamJoin, requestParams, token);
   } catch (error) {
-    console.log("stream join >>>", error.response.data.message);
+    console.log("stream join >>>", error);
   }
 }
 
@@ -126,13 +126,12 @@ function* requestStreamLeave(action) {
 
     yield call(streamLeave, requestParams, token);
   } catch (error) {
-    console.log("stream leave >>>", error.response.data.message);
+    console.log("stream leave >>>", error);
   }
 }
 
 function* requestStreamUserType(action) {
   try {
-    console.log("actions?>>>>", action);
     const { channel_id, user_id, token, user_type } = action;
     const requestParams = new FormData();
     requestParams.append("channel_id", channel_id);
@@ -148,14 +147,13 @@ function* requestStreamUserType(action) {
 function* requestStreamAskJoin(action) {
   try {
     const { channel_id, user_id, token } = action;
-    console.log(action);
     const requestParams = new FormData();
     requestParams.append("channel_id", channel_id);
     requestParams.append("user_id", user_id);
 
     yield call(streamAskJoin, requestParams, token);
   } catch (error) {
-    console.log("stream ask join >>>", error.response.data.message);
+    console.log("stream ask join >>>", error);
   }
 }
 
@@ -168,7 +166,7 @@ function* requestStreamAcceptJoin(action) {
 
     yield call(streamAcceptJoin, requestParams, token);
   } catch (error) {
-    console.log("stream accept join >>>", error.response.data.message);
+    console.log("stream accept join >>>", error);
   }
 }
 
@@ -181,7 +179,7 @@ function* requestStreamRefusedJoin(action) {
 
     yield call(streamRefusedJoin, requestParams, token);
   } catch (error) {
-    console.log("stream refused join >>>", error.response.data.message);
+    console.log("stream refused join >>>", error);
   }
 }
 
@@ -194,7 +192,7 @@ function* requestStreamDisconnectBroad(action) {
 
     yield call(streamDisconnectBroad, requestParams, token);
   } catch (error) {
-    console.log("stream refused join >>>", error.response.data.message);
+    console.log("stream refused join >>>", error);
   }
 }
 
@@ -206,7 +204,7 @@ function* requestUserAskJoin(action) {
 
     yield call(userAskJoin, requestParams, token);
   } catch (error) {
-    console.log("user ask join >>>", error.response.data.message);
+    console.log("user ask join >>>", error);
   }
 }
 
@@ -219,7 +217,7 @@ function* requestUserAcceptJoin(action) {
 
     yield call(userAcceptJoin, requestParams, token);
   } catch (error) {
-    console.log("user accept join >>>", error.response.data.message);
+    console.log("user accept join >>>", error);
   }
 }
 
@@ -232,7 +230,7 @@ function* requestUserRefusedJoin(action) {
 
     yield call(userRefusedJoin, requestParams, token);
   } catch (error) {
-    console.log("user refused join >>>", error.response.data.message);
+    console.log("user refused join >>>", error);
   }
 }
 
@@ -244,7 +242,7 @@ function* requestUserCancelAsk(action) {
 
     yield call(userCancelAsk, requestParams, token);
   } catch (error) {
-    console.log("user cancel ask >>>", error.response.data.message);
+    console.log("user cancel ask >>>", error);
   }
 }
 
@@ -257,7 +255,7 @@ function* requestStreamBanUser(action) {
 
     yield call(streamBanUser, requestParams, token);
   } catch (error) {
-    console.log("stream ban user >>>", error.response.data.message);
+    console.log("stream ban user >>>", error);
   }
 }
 
@@ -270,7 +268,7 @@ function* requestStreamKickUser(action) {
 
     yield call(streamKickUser, requestParams, token);
   } catch (error) {
-    console.log("stream kick user >>>", error.response.data.message);
+    console.log("stream kick user >>>", error);
   }
 }
 
@@ -282,7 +280,7 @@ function* requestStreamBanList(action) {
 
     yield call(streamBanList, requestParams, token);
   } catch (error) {
-    console.log("stream ban list >>>", error.response.data.message);
+    console.log("stream ban list >>>", error);
   }
 }
 
@@ -322,7 +320,7 @@ function* requestStreamChatAddMsg(action) {
 
     yield call(streamChatAddMsg, requestParams, token);
   } catch (error) {
-    console.log("stream add chat >>>", error.data);
+    console.log("stream add chat >>>", error);
   }
 }
 
@@ -333,7 +331,7 @@ function* requestGetSettings(action) {
     const res = yield call(getLiveSettings, token);
     yield put(LiveCreators.setFilterSettingsSuccess(res.data.data));
   } catch (error) {
-    console.log("get live settings >>>", error.data);
+    console.log("get live settings >>>", error);
   }
 }
 

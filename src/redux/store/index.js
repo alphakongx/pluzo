@@ -17,7 +17,6 @@ export default function configureStore(initialState) {
     initialState,
     compose(applyMiddleware(...middlewares)),
   );
-  global.store = store;
 
   sagaMiddleware.run(rootSaga);
 

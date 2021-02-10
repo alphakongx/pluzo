@@ -1,5 +1,7 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { widthPercentageToDP as wp } from "@helpers";
+
+export const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {

@@ -47,9 +47,17 @@ export default StyleSheet.create({
     marginRight: wp(5),
   },
   itemColorView: {
-    width: wp(13),
-    height: wp(13),
-    borderRadius: wp(6.5),
-    marginRight: wp(5),
+    height: wp(18),
+    borderRadius: wp(9),
+    justifyContent: "center",
+  },
+  itemText: {
+    fontSize: wp(8),
+    fontWeight: "900",
+    color: COLOR.TEXT_PRIMARY,
+    textShadowColor: "rgba(255, 255, 255, 0.1)",
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
+    paddingHorizontal: wp(5),
   },
 });

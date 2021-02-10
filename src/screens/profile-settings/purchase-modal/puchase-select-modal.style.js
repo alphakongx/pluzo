@@ -8,9 +8,10 @@ export default StyleSheet.create({
     flex: 1,
   },
   container: {
-    alignItems: "center",
+    // alignItems: "center",
+    marginTop: -wp(60),
   },
-  
+
   mainBackground: {
     width: screenWidth - wp(40),
     height: ((screenWidth - wp(40)) * 375) / 335,
@@ -19,7 +20,7 @@ export default StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.15)",
     overflow: "hidden",
   },
-/// 637, 680
+  /// 637, 680
   maskContainer: {
     position: "absolute",
     left: -wp(162),
@@ -73,7 +74,7 @@ export default StyleSheet.create({
     borderRadius: wp(15),
     alignItems: "center",
     paddingTop: wp(15),
-    paddingBottom: wp(20),
+    paddingBottom: wp(8),
     marginBottom: wp(10),
   },
   itemActive: {
@@ -94,25 +95,26 @@ export default StyleSheet.create({
     flex: 1,
   },
   itemSaveText: {
-    fontSize: wp(10),
+    fontSize: wp(8),
     fontWeight: "900",
     color: "#00FF77",
     marginBottom: wp(2),
+    marginTop: wp(10),
   },
   itemPriceText: {
     color: "#E5DB59",
     fontWeight: "bold",
-    fontSize: wp(20),
+    fontSize: wp(19),
   },
   itemUnitText: {
     color: "#ABA7D5",
     fontWeight: "600",
     fontSize: wp(8),
   },
-  itemUnitText: {
-    color: "#ABA7D5",
-    fontWeight: "600",
-    fontSize: wp(8),
+  itemFullPriceText: {
+    color: "white",
+    fontSize: wp(14),
+    fontWeight: "bold",
   },
   selectButton: {
     height: wp(25),
@@ -123,5 +125,23 @@ export default StyleSheet.create({
   },
   itemActiveText: {
     color: "#0B0516",
+  },
+
+  descriptionContainer: {
+    position: "absolute",
+    top: wp(20),
+  },
+  descriptionTitle: {
+    fontFamily: "OpenSans",
+    fontWeight: "600",
+    fontSize: wp(12),
+    color: "white",
+    textAlign: "center",
+  },
+  descriptionContent: {
+    fontFamily: "OpenSans",
+    fontSize: wp(12),
+    color: "white",
+    textAlign: "center",
   },
 });

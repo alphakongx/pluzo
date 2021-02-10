@@ -46,8 +46,10 @@ class SearchScreen extends Component {
       this.searchInput.focus();
     }, 500);
 
-    this.streamStoppedAction = EventBus.on("StreamStopped", channelName => {
-      this.props.updateSearchLive(this.props.live.filter((value) => value.channel !== channelName));
+    this.streamStoppedAction = EventBus.on("player_actions", (action, channelName) => {
+      if (action === "StreamStopped") {
+        this.props.updateSearchLive(this.props.live.filter((value) => value.channel !== channelName));
+      }
     });
   }
 
@@ -117,7 +119,7 @@ class SearchScreen extends Component {
 
   render() {
     const { currentFilter } = this.state;
-    const { isSearching, friends, chat, people, live } = this.props;console.log(chat);
+    const { isSearching, friends, chat, people, live } = this.props;
     let realFriends = friends.filter((value) => !this.state.deletedUsers.includes((value.id || value._id)));
     return (
       <Screen hasGradient style={styles.container}>

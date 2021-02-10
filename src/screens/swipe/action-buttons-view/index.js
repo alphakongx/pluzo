@@ -1,5 +1,6 @@
 import ActionButtonsView from "./action-buttons-view";
 import { connect } from "react-redux";
+import { SwipeCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -11,6 +12,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+  addSuperLikeStart: SwipeCreators.addSuperLikeStart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionButtonsView);

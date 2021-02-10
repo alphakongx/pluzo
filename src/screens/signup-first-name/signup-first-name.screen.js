@@ -24,7 +24,9 @@ const SignupFirstName: () => React$Node = props => {
 
   useEffect(() => {
     getCurrentLocation(position => {
-      updateLocation(position);
+      if (position) {
+        updateLocation(position);
+      }
     });
   }, [updateLocation]);
 

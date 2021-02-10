@@ -36,7 +36,8 @@ const HelpContentScreen: () => React$Node = props => {
   const onSelectImage = (index) => {
     const options = {
       compressImageQuality: 0.7,
-      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Videos', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'SlomoVideos', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'Animated', 'LongExposure'],
+      mediaType: 'photo',
+      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'LongExposure'],
     };
 
     if (index === 0) {
@@ -63,7 +64,6 @@ const HelpContentScreen: () => React$Node = props => {
       setLoading(false);
     }).catch(e => {
       setLoading(false);
-      console.log("Help", e);
     });
   }
 

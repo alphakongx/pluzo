@@ -41,24 +41,40 @@ export default StyleSheet.create({
       },
       android: {
         marginBottom: wp(0),
-        lineHeight: wp(18),
+        lineHeight: 20,
       },
     }),
   }),
   sendButtonContainer: {
-    width: wp(25),
-    height: wp(25),
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
     right: wp(18),
     top: Platform.OS === "ios" ? wp(15) : wp(17),
+    ...Platform.select({
+      ios: {
+        width: wp(25),
+        height: wp(25),
+      },
+      android: {
+        width: wp(28),
+        height: wp(28),
+      },
+    }),
   },
   sendButton: {
-    width: wp(25),
-    height: wp(25),
     justifyContent: "center",
     alignItems: "center",
+    ...Platform.select({
+      ios: {
+        width: wp(25),
+        height: wp(25),
+      },
+      android: {
+        width: wp(28),
+        height: wp(28),
+      },
+    }),
   },
   sendButtonIcon: {
     width: wp(16),
@@ -75,7 +91,7 @@ export default StyleSheet.create({
         top: wp(12),
       },
       android: {
-        top: wp(14),
+        top: wp(15),
       },
     }),
   },

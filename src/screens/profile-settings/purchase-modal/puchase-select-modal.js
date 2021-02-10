@@ -54,9 +54,9 @@ class PurchaseSelectModal extends React.Component {
       products: [],
       activePeriod: 1,
       periods: [
-        {period: "1 month", price: "$11.99", saving: ""},
-        {period: "3 months", price: "$9.99", saving: "Save 14%"},
-        {period: "1 year", price: "$7.99", saving: "Save 28%"}
+        { period: "1 month", price: "$11.99", fullprice: "$11.99", saving: "", numberOfPeriod: 1 },
+        { period: "3 months", price: "$9.99", fullprice: "$29.99", saving: "Save 14%", numberOfPeriod: 3 },
+        { period: "1 year", price: "$7.99", fullprice: "$95.99", saving: "Save 28%", numberOfPeriod: 12 }
       ]
     };
   }
@@ -89,8 +89,8 @@ class PurchaseSelectModal extends React.Component {
             <LinearGradient
               colors={["#1A023E", "#0C0518", "#110029"]}
               locations={[0, 0.65, 1]}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
               style={styles.mainBackground}>
               <AnimatableView
                 style={styles.maskContainer}
@@ -111,22 +111,42 @@ class PurchaseSelectModal extends React.Component {
                 <View style={styles.detailContainer}>
                   {[0, 1, 2].map((value) => {
                     let disabled = this.state.activePeriod !== value;
+                    let buttonText = "Select";
+                    if (this.props.purchasedMonths > 0) {
+                      if (this.props.purchasedMonths === this.state.periods[value].numberOfPeriod) {
+                        buttonText = "Purchased";
+                      } else {
+                        buttonText = "Change";
+                      }
+                    }
                     return (
                       <View style={styles.itemContainer} key={`select-period-${value}`}>
                         <BoxShadow
                           setting={shadowItemOptions}
                         />
-                        <Touchable onPress={() => this.setState({activePeriod: value})} activeOpacity={1}>
+                        <Touchable onPress={() => {
+                          if (disabled) {
+                            this.setState({ activePeriod: value });
+                          } else {
+                            if (buttonText !== "Purchased") {
+                              this.props.onConfirm(this.state.activePeriod);
+                            }
+                          }
+                        }} activeOpacity={1}>
                           <Screen hasGradient style={[styles.itemContentContainer, !disabled && styles.itemActive]}>
-                            <Text style={styles.itemPeriodText}>{this.state.periods[value].period}</Text>
+                            <Text style={[styles.itemPeriodText, !disabled && { color: "#FF7131" }]}>{this.state.periods[value].period}</Text>
                             <Text style={styles.itemPopularText}>{value == 1 ? "Most Popular" : ""}</Text>
                             <Text style={styles.itemSaveText}>{this.state.periods[value].saving}</Text>
-                            <Text style={styles.itemPriceText}>{this.state.periods[value].price}</Text>
+                            <Text style={styles.itemPriceText}>{this.state.periods[value].fullprice}</Text>
+                            <View style={{ flex: 1 }} />
+                            <Text style={styles.itemFullPriceText}>
+                              {this.state.periods[value].price}
+                            </Text>
                             <Text style={styles.itemUnitText}>a month</Text>
                           </Screen>
                         </Touchable>
-                        <GradientButton 
-                          text={"Select"}
+                        <GradientButton
+                          text={buttonText}
                           textStyle={[styles.selectButtonText, !disabled && styles.itemActiveText]}
                           containerStyle={[styles.selectButton]}
                           colors={disabled ? ["#0B0516", "#1A023E"] : ["#FF7131", "#E0E552"]}
@@ -134,9 +154,11 @@ class PurchaseSelectModal extends React.Component {
                           disabledButton={false}
                           onPress={() => {
                             if (disabled) {
-                              this.setState({activePeriod: value});
+                              this.setState({ activePeriod: value });
                             } else {
-                              this.props.onConfirm(this.state.activePeriod);
+                              if (buttonText !== "Purchased") {
+                                this.props.onConfirm(this.state.activePeriod);
+                              }
                             }
                           }} />
                       </View>
@@ -146,6 +168,14 @@ class PurchaseSelectModal extends React.Component {
               </View>
 
             </LinearGradient>
+          </View>
+          <View>
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.descriptionTitle}>Recurring billing, cancel anytime.</Text>
+              <Text style={styles.descriptionContent}>
+                By tapping Select, your payment will be charged to your iTunes account, and your subscription will automatically renew for the same package length at the same price until you cancel in settings in the iTunes Store at least 24 hours perior to the end of the current period. By tapping Select, you agree to our Privacy Policy and Terms.
+              </Text>
+            </View>
           </View>
         </View>
       </Modal>

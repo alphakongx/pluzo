@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   textContainer: {
     borderRadius: wp(22),
-    paddingTop: wp(10),
+    paddingTop: wp(8),
     paddingBottom: wp(10),
   },
   otherUserTextContainer: {
@@ -31,7 +31,8 @@ export default StyleSheet.create({
   text: FontHelper.font({
     fontFamily: "OpenSans",
     fontSize: 16,
-    lineHeight: wp(18),
+    // lineHeight: 18,
+    // backgroundColor: "red"
   }),
   otherUserText: {
     color: COLOR.MESSAGE_BUBBLE_TEXT,
@@ -47,6 +48,10 @@ export default StyleSheet.create({
     top: -wp(18),
     marginBottom: -wp(8),
   },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   messageImage: {
     width: SCREEN_WIDTH * 0.7,
     height: SCREEN_WIDTH * 0.55,
@@ -57,6 +62,9 @@ export default StyleSheet.create({
   },
   imageFullRound: {
     borderRadius: wp(20),
+  },
+  loadingIndicator: {
+    position: "absolute",
   },
 
   tickContainer: {

@@ -35,7 +35,7 @@ class SwipeSettings extends Component {
         visiblePurchase: false,
       };
     } else {
-      let birthday = moment().diff(moment.unix(user.birthday), "years");
+      let birthday = user.age; //moment().diff(moment.unix(user.birthday), "years");
 
       let age_from = settings.age_from;
       let age_to = settings.age_to;
@@ -91,7 +91,7 @@ class SwipeSettings extends Component {
 
   updateStates = () => {
     const { settings, user } = this.props;
-    let birthday = moment().diff(moment.unix(user.birthday), "years");
+    let birthday = user.age; //moment().diff(moment.unix(user.birthday), "years");
 
     let age_from = settings.age_from;
     let age_to = settings.age_to;
@@ -125,8 +125,22 @@ class SwipeSettings extends Component {
 
   render() {
     const { distance, minAge, maxAge, aroundWorld, hideMe, gender } = this.state;
-    const { state, city, address } = this.props.user;
-    let birthday = moment().diff(moment.unix(this.props.user.birthday), "years");
+    const { state, city, address, age } = this.props.user;
+    let birthday = age; //moment().diff(moment.unix(this.props.user.birthday), "years");
+    let strAddress = (address !== null && address !== "null") ? address : "";
+    if (city !== null && state !== null) {
+      strAddress = `${city}, ${state}`;
+    } else {
+      if (city === null && state === null) {
+        strAddress = strAddress;
+      } else {
+        if (city === null) {
+          strAddress = `${state}, ${strAddress}`;
+        } else {
+          strAddress = `${city}, ${strAddress}`;
+        }
+      }
+    }
 
     if (this.props.settings === null) {
       return (
@@ -173,8 +187,7 @@ class SwipeSettings extends Component {
                 {
                   this.state.current_location === 1 ? (
                     <Text style={styles.subValueText}>
-                      {(state !== null || city !== null) ? state === null ? city : state : ""},&nbsp;
-                      {address === null ? "no address" : address}
+                      {strAddress}
                     </Text>
                   ) : (
                     <Text style={styles.subValueText}>
@@ -210,7 +223,7 @@ class SwipeSettings extends Component {
                 this.props.isModal ? screenWidth - wp(90) : screenWidth - wp(50)
               }
               min={0}
-              max={101}
+              max={100}
               values={[distance]}
             />
 
@@ -221,7 +234,7 @@ class SwipeSettings extends Component {
               <Text style={styles.titleText}>Show Me</Text>
               <View>
                 <Text style={styles.valueText}>
-                  {gender === 0 ? "Both" : gender === 1 ? "Male" : "Female"}
+                  {gender === 0 ? "Everyone" : gender === 1 ? "Male" : "Female"}
                 </Text>
               </View>
               <Image source={Images.app.icRight} style={styles.arrowRight} />
@@ -314,10 +327,12 @@ class SwipeSettings extends Component {
             this.setState({current_location: current, state: states, country: country});
             if (current === 1) {
               getCurrentLocation(position => {
-                const params = new FormData();
-                params.append("latitude", position.coords.latitude);
-                params.append("longitude", position.coords.longitude);
-                this.props.updateUser(params, this.props.token);
+                if (position) {
+                  const params = new FormData();
+                  params.append("latitude", position.coords.latitude);
+                  params.append("longitude", position.coords.longitude);
+                  this.props.updateUser(params, this.props.token);
+                }
               });
             }
           }} />

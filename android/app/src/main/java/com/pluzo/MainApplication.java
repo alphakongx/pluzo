@@ -11,6 +11,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.google.firebase.FirebaseApp;
+import com.pluzo.arview.PluzoArViewPackage;
 import com.pluzo.detector.ImageDetectorPackage;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,6 +33,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
             packages.add(new ImageDetectorPackage());
+            packages.add(new PluzoArViewPackage());
           return packages;
         }
 

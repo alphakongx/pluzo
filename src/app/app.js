@@ -71,9 +71,13 @@ class App extends React.Component {
         this.props.updatePushStatus(status.notificationsEnabled);
       });
       this.props.token && userOnline(null, this.props.token, "online").catch(e => console.log(e));
-      // EventBus.publish("AppState_Active");
+      if (!this.state.firstLoading) {
+        this.props.token && this.props.requestProfile(this.props.token);
+        EventBus.publish("AppState_Active");
+      }
     } else if (this.state.appState.match(/inactive/) && nextAppState === "background") {
       this.props.token && userOnline(null, this.props.token, "offline").then(res => console.log("offline")).catch(e => console.log(e));
+      EventBus.publish("AppState_InActive");
     }
     this.setState({ appState: nextAppState });
   };
@@ -86,6 +90,7 @@ class App extends React.Component {
       TUTORIAL.KICK_BAN2,
       TUTORIAL.SWIPE,
       TUTORIAL.POINTER,
+      TUTORIAL.SHOW_GENDER,
     ]);
   }
 
@@ -146,7 +151,7 @@ class App extends React.Component {
         this.props.updateProfile(newProfile);
         // console.log("user>>>", newProfile);
       }
-      EventBus.publish("User_update", objData);
+      EventBus.publish("player_actions", "User_update", objData);
     } else if (data.action === "Friends") {
       //Friend_overlap
       if (this.props.user.id === data.user) {
@@ -177,7 +182,7 @@ class App extends React.Component {
       }
     } else if (data.action === "Stop_stream") {
       this.props.requestStreamList(this.props.token);
-      EventBus.publish("StreamStopped", JSON.parse(data.data));
+      EventBus.publish("player_actions", "StreamStopped", JSON.parse(data.data));
     } else if (data.action === "Stream_invite") {
       let objData = JSON.parse(data.data);
       if (data.user === this.props.user.id) {
@@ -219,7 +224,28 @@ class App extends React.Component {
           type: "friend-match",
           user: userData.host._id === this.props.user.id ? userData.user_target_id : userData.host,
         });
+        let compareId = userData.host._id === this.props.user.id ? userData.user_target_id._id : userData.host._id;
+        if (this.props.cards) {
+          let tmpIndex = this.props.cards.findIndex((value) => value.id === parseInt(compareId, 10));
+          if (tmpIndex !== -1) {
+            EventBus.publish("Need_Update_Cards", tmpIndex);
+          }
+        }
       }
+    } else if (
+      data.action === "Stream_join_user" || 
+      data.action === "Stream_disconnect_user" ||
+      data.action === "Stream_ask_join" ||
+      data.action === "Stream_refused_join" ||
+      data.action === "Stream_broadcast_disconnect_by_host" ||
+      data.action === "Stream_user_ask_join" ||
+      data.action === "Stream_user_cancel_ask" ||
+      data.action === "Stream_user_accept_join" ||
+      data.action === "Stream_user_refused_join" ||
+      data.action === "Update_badges" ||
+      data.action === "Stream_user_kick" ||
+      data.action === "Stream_user_ban") {
+      EventBus.publish("player_actions", data.action, data.data);
     } else {
       EventBus.publish(data.action, data.data);
     }
@@ -243,14 +269,17 @@ class App extends React.Component {
             NavigationService.setTopLevelNavigator(navigatorRef);
             this.checkingLogin();
           }}
+          uriPrefix={"pluzo://"}
         />
         {this.isLogin() && (
           <WS
             url={"ws://3.134.208.235:27800?user=" + this.props.user.id}
             onMessage={this.onMessage}
-            onError={console.log}
-            onClose={console.log}
+            onOpen={() => console.log("Opened socket")}
+            onError={() => console.log("Error socket")}
+            onClose={() => console.log("Closed socket")}
             reconnect
+            isActive={this.state.appState}
           />
         )}
         {this.isLogin() && <IapManager />}
@@ -265,6 +294,7 @@ function mapStateToProps(state) {
     user: state.user.user,
     loading: state.user.isLoadingProfile,
     chatUserId: state.chat.chatUserId,
+    cards: state.swipe.cards,
   };
 }
 

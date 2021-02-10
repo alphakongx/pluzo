@@ -95,4 +95,8 @@ export default StyleSheet.create({
     tintColor: "#0B0516",
     resizeMode: "contain",
   },
+
+  profileModal: {
+    margin: 0,
+  },
 });

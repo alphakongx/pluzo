@@ -206,7 +206,6 @@ class ProfileView extends React.Component {
         this.setState({ friend: res.friend, loading: false });
       })
       .catch(err => {
-        console.log(err);
         this.setState({ loading: false });
       });
   };
@@ -258,9 +257,13 @@ class ProfileView extends React.Component {
           updating: false,
           rejecting: false,
         });
+        if (type === "accept" || type === "reject") {
+          const { pendingFriends } = this.props;
+          let requests = pendingFriends.filter(value => value._id !== userId);
+          this.props.updatePendings(requests);
+        }
       })
       .catch(err => {
-        console.log(err);
         this.setState({ updating: false, rejecting: false });
       });
   };

@@ -20,7 +20,7 @@ import {
   SortableList,
   NotificationModal
 } from "@components";
-import { Notification, widthPercentageToDP as wp } from "@helpers";
+import { Notification, widthPercentageToDP as wp, Format } from "@helpers";
 import Images from "@assets/Images";
 import { GRADIENT } from "@config";
 
@@ -28,7 +28,6 @@ import Header from "./header";
 import UserProfile from "./user-profile";
 import ProfileAmounts from "./profile-amounts";
 import PurchaseModal from "./purchase-modal";
-// import LockedBadgeModal from "./locked-badge-modal";
 import ChooseBadgeModal from "./choose-badge-modal";
 import FriendsModal from "./friends-modal";
 import SwipePurchaseModal from "../swipe/swipe-purchase-modal";
@@ -141,7 +140,8 @@ class ProfileSettings extends React.Component {
       height: 800,
       cropping: true,
       compressImageQuality: 0.7,
-      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Videos', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'SlomoVideos', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'Animated', 'LongExposure'],
+      mediaType: 'photo',
+      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'LongExposure'],
     };
 
     if (index === 0) {
@@ -360,10 +360,11 @@ class ProfileSettings extends React.Component {
                   }
                 }}
                 onEndEditing={() => {
+                  let cleanText = Format.cleanText(this.state.bioText);
                   const params = new FormData();
-                  params.append("bio", this.state.bioText);
+                  params.append("bio", cleanText);
                   this.props.updateUser(params, this.props.token);
-                  this.setState({editingBio: false});
+                  this.setState({editingBio: false, bioText: cleanText});
                 }}
                 onFocus={(e) => {
                   this.setState({editingBio: true});

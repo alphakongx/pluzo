@@ -9,6 +9,7 @@ export default StyleSheet.create({
   container: {
     borderRadius: wp(22),
     paddingBottom: wp(20),
+    overflow: "hidden",
   },
 
   buttonContainer: {
@@ -18,5 +19,18 @@ export default StyleSheet.create({
 
   spacer: {
     height: wp(15),
+  },
+
+  backdrop: {
+    flex: 1,
+    backgroundColor: "#0B0516",
+    opacity: 0.6,
+  },
+  tutorialTitle: {
+    fontSize: wp(22),
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
+    marginTop: wp(15),
   },
 });

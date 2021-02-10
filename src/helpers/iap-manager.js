@@ -87,10 +87,14 @@ class IapManager extends Component {
     } else if (serviceId === 2) {
       amount = 7.99;
       params.append("receipt", purchase.transactionReceipt);
-    } else if (serviceId === 3 || serviceId === 6 || serviceId === 9) {
+    } else if (serviceId === 3) {
       amount = 3.99;
+    } else if (serviceId === 6 || serviceId === 9) {
+      amount = 4.99;
     } else if (serviceId === 4 || serviceId === 7 || serviceId === 10) {
       amount = 14.99;
+    } else if (serviceId === 8 || serviceId === 11) {
+      amount = 29.99;
     } else {
       amount = 19.99;
     }
@@ -121,7 +125,7 @@ class IapManager extends Component {
   }
 }
 
-function mapStateToProps(state, { navigation }) {
+function mapStateToProps(state) {
   return {
     token: state.user.token,
   };

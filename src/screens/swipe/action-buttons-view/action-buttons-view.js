@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Animated, Easing } from "react-native";
-import { SafeAreaView } from "react-navigation";
+import { View, Animated, SafeAreaView } from "react-native";
 import { Image, Touchable, Text } from "@components";
 import moment from "moment";
 import styles from "./action-buttons-view.style";
 
 const ActionButtonsView: () => React$Node = props => {
-  const [enableSuperLike, setEnableSuperLike] = useState(true);
   const [boosting, setBoosting] = useState(false);
   const [remainTime, setRemainTime] = useState(0);
   const boostInterval = useRef(null);
@@ -65,9 +63,10 @@ const ActionButtonsView: () => React$Node = props => {
   }, [boosting]);
 
   useEffect(() => {
-    let boostTime = props.user.advanced.last_boost_time.end_boost_swipe_time;
-    if (boostTime) {
-      let duration = moment.unix(boostTime).diff(moment(), "seconds");
+    clearInterval(boostInterval.current);
+    let boostTime = parseInt(props.user.advanced.last_boost_time.boost_swipe_remaining_time, 0);
+    if (boostTime > 0) {
+      let duration = boostTime; //moment.unix(boostTime).diff(moment(), "seconds");
       if (duration > 0) {
         setBoosting(true);
         let restSeconds = duration;
@@ -83,25 +82,28 @@ const ActionButtonsView: () => React$Node = props => {
       } else {
         setBoosting(false);
       }
+    } else {
+      clearInterval(boostInterval.current);
+      setBoosting(false);
     }
     return () => {
       clearInterval(boostInterval.current);
     }
-  }, [props.user.advanced.last_boost_time.end_boost_swipe_time]);
+  }, [props.user.advanced.last_boost_time.boost_swipe_remaining_time]);
 
   return (
     <View style={styles.bottomActions} pointerEvents={"box-none"}>
-      <SafeAreaView>
+      <SafeAreaView pointerEvents={"box-none"}>
         <View style={styles.bottomContainer} pointerEvents={"box-none"}>
           <View style={[styles.buttonRow]} pointerEvents={"box-none"}>
             <Touchable onPress={() => props.onReload()}
               disabled={!props.isRewinds}>
               <Image
-                style={[styles.buttonSmall, !props.isRewinds ? {opacity: 0.5} : {}]}
+                style={[styles.buttonSmall]}
                 source={require("@assets/images/swipe-screen/swipe-refresh.png")}
               />
             </Touchable>
-            <Touchable onPress={() => props.onRocket(boosting)}
+            <Touchable onPress={() => props.onRocket(boosting, true)}
               disabled={props.isBoosting}>
               {!boosting &&
               <Image
@@ -146,16 +148,13 @@ const ActionButtonsView: () => React$Node = props => {
             </Touchable>
             <Touchable
               onPress={() => {
+                props.addSuperLikeStart();
                 props.onSuperLike();
-                setEnableSuperLike(false);
-                setTimeout(() => {
-                  setEnableSuperLike(true);
-                }, 800);
               }}
-              disabled={!enableSuperLike || props.isSuperLiking}>
+              disabled={props.isSuperLiking}>
               <Image
                 source={require("@assets/images/swipe-screen/swipe-star.png")}
-                style={[styles.buttonSmall, !enableSuperLike ? {opacity: 0.5} : {}]}
+                style={[styles.buttonSmall, props.isSuperLiking ? {opacity: 0.5} : {}]}
               />
             </Touchable>
             <Touchable onPress={() => props.onLike()}>

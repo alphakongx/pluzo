@@ -119,7 +119,6 @@ function* requestRegistration(action) {
 
     yield put(UserCreators.registrationSuccess(response.data.data));
   } catch (error) {
-    console.log(error);
     yield put(UserCreators.registrationFailure());
   }
 }
@@ -363,7 +362,6 @@ function* requestUpdatePhoneSendCode(action) {
     
     yield put(UserCreators.updatePhoneSendCodeSuccess());
   } catch (error) {
-    console.log(error);
     yield put(UserCreators.updatePhoneSendCodeFail());
   }
 }
@@ -380,7 +378,6 @@ function* requestUpdatePhoneConfirmCode(action) {
     yield put(UserCreators.updatePhoneConfirmCodeSuccess());
     yield put(UserCreators.loadProfileSuccess(res.data.data));
   } catch (error) {
-    console.log(error);
     yield put(UserCreators.updatePhoneConfirmCodeFail());
   }
 }

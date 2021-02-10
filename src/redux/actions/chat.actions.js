@@ -15,6 +15,8 @@ const { Types, Creators } = createActions({
 
   requestOpenChat: ["chat_id", "token"],
   requestCloseChat: ["chat_id", "token"],
+
+  updateAllMessages: ["chat_id", "messages"],
 });
 
 export const ChatTypes = Types;

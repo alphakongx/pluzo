@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { View, SafeAreaView } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
-import { Touchable, Image } from "@components";
+import { Touchable, Text } from "@components";
 import { AppTags } from "@config";
-import Images from "@assets/Images";
+import LinearGradient from "react-native-linear-gradient";
 
 import styles from "./stream-cateogry-modal.style";
 import StreamEmojiView from "../stream-emoji-view";
@@ -13,7 +13,7 @@ class StreamCategoryModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      category: this.props.stream.category,
+      category: parseInt(this.props.stream.category, 10) > 6 ? 0 : parseInt(this.props.stream.category, 10),
     };
   }
 
@@ -59,11 +59,23 @@ class StreamCategoryModal extends Component {
         onModalWillHide={this.onModalHide}
         style={styles.modalContainer}
       >
-        <SafeAreaView style={styles.container}>
-          <View style={styles.emojiButtonContainer}>
-            <View style={styles.emojiButton}>
-              {/* <Image source={Images.live[AppTags[this.state.category].icon]} /> */}
-              <View style={[styles.itemColorView, { backgroundColor: AppTags[this.state.category].color}]} />
+        <SafeAreaView style={styles.container} pointerEvents={"box-none"}>
+          <View style={styles.emojiButtonContainer} pointerEvents={"box-none"}>
+            <View style={styles.emojiButton} pointerEvents={"box-none"}>
+              {this.state.category === 0 ?
+              (
+                <Text style={styles.emptyCategoryText}>Category</Text>
+              ): (
+              <LinearGradient
+                colors={Object.values(AppTags[this.state.category].color)}
+                start={{x: 1, y: 0}}
+                end={{x: 0, y: 1}}
+                style={styles.emojiCategoryContainer}>
+                <Text style={[styles.itemText, {textShadowColor: AppTags[this.state.category].shadowColor}]}>
+                  {AppTags[this.state.category].name}
+                </Text>
+              </LinearGradient>
+              )}
             </View>
           </View>
           <View style={styles.emojiContainer}>

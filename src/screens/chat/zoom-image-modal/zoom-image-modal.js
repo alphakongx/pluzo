@@ -26,14 +26,12 @@ class ZoomImageModal extends React.Component {
         backdropOpacity={1}
         animationIn={"zoomIn"}
         animationOut={"zoomOut"}
-        swipeDirection={["down", "up"]}
-        swipeThreshold={100}
         useNativeDriver={false}
-        propagateSwipe={false}
         style={styles.container}
       >
         <View style={styles.flexFill} pointerEvents={"box-none"}>
-          <ImageZoomViewer imageUrl={{ uri: this.props.zoomImage }} />
+          <ImageZoomViewer imageUrl={{ uri: this.props.zoomImage }}
+            onSwipeDown={this.props.onSwipeComplete} />
           {this.state.loading &&
           <ActivityIndicator color={"white"} size={"small"} style={styles.loadingIndicator} />}
           <Touchable

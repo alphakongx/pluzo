@@ -282,3 +282,16 @@ export function setLiveSettings(data, accessToken) {
     silent: true,
   }).then(response => response);
 }
+
+export function isStreamLive(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.IS_STREAM_LIVE}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    silent: true,
+  }).then(response => response);
+}

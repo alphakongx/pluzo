@@ -18,14 +18,25 @@ const Screen: () => React$Node = props => {
       {props.children}
     </LinearGradient>
   ) : (
-    <ImageBackground
-      source={require("@assets/images/bg.png")}
-      style={styles.imageBackground}
-    >
-      <ContainerComponent style={[styles.container, props.style]}>
-        {props.children}
+    props.noFill ? (      
+      <ContainerComponent style={props.containerStyle}>
+        <ImageBackground
+          source={require("@assets/images/bg.png")}
+          style={props.style}
+        >
+          {props.children}
+        </ImageBackground>
       </ContainerComponent>
-    </ImageBackground>
+    ) : (
+      <ImageBackground
+        source={require("@assets/images/bg.png")}
+        style={styles.imageBackground}
+      >
+        <ContainerComponent style={[styles.container, props.style]}>
+          {props.children}
+        </ContainerComponent>
+      </ImageBackground>
+    )
   );
 };
 

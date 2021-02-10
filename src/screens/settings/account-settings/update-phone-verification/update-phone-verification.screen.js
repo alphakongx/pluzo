@@ -51,7 +51,6 @@ class UpdatePhoneVerification extends Component {
 
   otpHandler = message => {
     const otp = /(\d{4})/.exec(message);
-    console.log("SMS::", otp);
     if (otp !== null) {
       Clipboard.setString(otp[1]);
       RNOtpVerify.removeListener();

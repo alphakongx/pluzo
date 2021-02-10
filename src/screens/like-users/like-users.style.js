@@ -1,7 +1,7 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { widthPercentageToDP as wp } from "@helpers";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -42,6 +42,11 @@ export default StyleSheet.create({
     paddingHorizontal: wp(3),
     flexWrap: "wrap",
     flexDirection: "row",
+    ...Platform.select({
+      android: {
+        minHeight: height,
+      }
+    })
   },
   itemContainer: {
     width: width / 2 - wp(4),

@@ -23,6 +23,19 @@ export function getProfile(accessToken) {
   }).then(response => response);
 }
 
+export function getUserInfo(accessToken, data) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.GET_USER_INFO}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    silent: true,
+  }).then(response => response);
+}
+
 export function checkPhone(data) {
   return API.request({
     method: "post",

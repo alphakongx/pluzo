@@ -44,11 +44,15 @@ const LiveSwiperItem: () => React$Node = props => {
             />
             <Text style={styles.memberCount}>{parseInt(item.count, 10)}</Text>
           </LinearGradient>
-          {/* <Image
-            source={Images.live[AppTags[item.category].icon]}
-            style={styles.tagImage}
-          /> */}
-          <View style={[styles.itemColorView, {backgroundColor: AppTags[item.category].color}]} />
+          {parseInt(item.category, 10) !== 0 && parseInt(item.category, 10) < 7 &&
+          <LinearGradient
+            colors={Object.values(AppTags[item.category].color)}
+            start={{ x: 1, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.itemColorView}
+          >
+            <Text style={[styles.itemText, {textShadowColor: AppTags[item.category].shadowColor}]}>{AppTags[item.category].name}</Text>
+          </LinearGradient>}
         </View>
         <Text style={styles.userName} numberOfLines={1}>
           {combinedNames}

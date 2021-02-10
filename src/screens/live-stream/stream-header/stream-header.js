@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, TextInput as RNTextInput } from "react-native";
 import { Touchable, Image, UserCount, BackDownButton, Text, IconButton } from "@components";
+import LinearGradient from "react-native-linear-gradient";
 import { StreamStatus } from "@constants";
 import { AppTags } from "@config";
 import Images from "@assets/Images";
 
 import styles from "./stream-header.style";
-
-const appTags = Object.values(AppTags);
 
 const StreamHeader: () => React$Node = props => {
   const [emojiOpacity, setEmojiOpacity] = useState(0.6);
@@ -47,8 +46,20 @@ const StreamHeader: () => React$Node = props => {
             }}
             style={[styles.emojiButton, { opacity: emojiOpacity }]}
           >
-            {/* <Image source={Images.live[appTags[props.selectedEmoji - 1].icon]} /> */}
-            <View style={[styles.itemColorView, { backgroundColor: appTags[props.selectedEmoji - 1].color }]} />
+            {props.selectedEmoji === 0 ?
+            (
+              <Text style={styles.emptyCategoryText}>Category</Text>
+            ): (
+            <LinearGradient
+              colors={Object.values(AppTags[props.selectedEmoji].color)}
+              start={{x: 1, y: 0}}
+              end={{x: 0, y: 1}}
+              style={styles.emojiCategoryContainer}>
+              <Text style={[styles.itemText, {textShadowColor: AppTags[props.selectedEmoji].shadowColor}]}>
+                {AppTags[props.selectedEmoji].name}
+              </Text>
+            </LinearGradient>
+            )}
           </Touchable>
         </View>
       ) : (
@@ -79,6 +90,14 @@ const StreamHeader: () => React$Node = props => {
             <Text style={styles.tutorialText}>Click to see who's here</Text>
             <Image source={Images.app.icRight} style={styles.tutorialArrow} />
           </View>}
+          { !showTutorial && props.askedUsers.length > 0 &&
+          <Touchable style={styles.raisedContainer}
+          onPress={() => {
+            props.showUsers && props.showUsers();
+          }}>
+            <Image source={Images.live.icHand} style={styles.raisedIcon} />
+            <Text style={styles.raisedText}>{props.askedUsers.length}</Text>
+          </Touchable> }
         </View>
       )}
     </View>

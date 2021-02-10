@@ -42,7 +42,8 @@ const SignupImage: () => React$Node = props => {
       height: 800,
       cropping: true,
       compressImageQuality: 0.7,
-      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Videos', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'SlomoVideos', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'Animated', 'LongExposure'],
+      mediaType: 'photo',
+      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'LongExposure'],
     };
 
     if (index === 0) {
@@ -58,7 +59,7 @@ const SignupImage: () => React$Node = props => {
 
   const onUploadImage = data => {
     let photoUriSplit = data.path.split("/");
-    NativeModules.ImageDetector.check(data.path, (value) => {console.log(value);
+    NativeModules.ImageDetector.check(data.path, (value) => {
       if (value === "SFW") {
         const image = {
           uri: data.path,

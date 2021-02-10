@@ -86,6 +86,11 @@ class PurchaseModal extends React.Component {
   }
 
   render() {
+    let totalMonth = 0;
+    if (this.props.user.premium === 1) {
+      totalMonth = this.props.user.premium_info.total_month;
+    }
+
     return (
       <Modal
         {...this.props}
@@ -136,15 +141,17 @@ class PurchaseModal extends React.Component {
                   <Text style={styles.includesText}>includes:</Text>
                   {this.renderDetails()}
                 </View>
-
-                <Text style={styles.priceText}>{"For $11.99/month"}</Text>
+                
+                <Text style={styles.priceText}>
+                  {this.props.user.premium === 0 ? "For $11.99/month" : ""}
+                </Text>
               </View>
 
             </LinearGradient>
           </View>
           <View style={styles.buttonContainer}>
             <GradientButton
-              text={"Purchase"}
+              text={this.props.user.premium === 1 ? "Purchased" : "Purchase"}
               colors={GRADIENT.PURCHASE_BUTTON}
               shadowColor={"#FF6F00"}
               onPress={() => this.setState({visibleSelect: true})}
@@ -166,6 +173,7 @@ class PurchaseModal extends React.Component {
 
           <PurchaseSelectModal 
             isVisible={this.state.visibleSelect}
+            purchasedMonths={totalMonth}
             onSwipeComplete={() => this.setState({visibleSelect: false})}
             onConfirm={(index) => {
               this.setState({visibleSelect: false});

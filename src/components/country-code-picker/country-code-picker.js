@@ -35,6 +35,7 @@ const CountryCodePicker: () => React$Node = props => {
   const [showPicker, setShowPicker] = useState(false);
   const [country, setCountry] = useState(initialCountry);
   const [visibility] = useState(new Animated.Value(0));
+  const flagName = country === undefined ? "us" : country.iso2;
 
   useEffect(() => {
     Animated.timing(visibility, {
@@ -60,13 +61,13 @@ const CountryCodePicker: () => React$Node = props => {
         <Text style={styles.currentLocationText1}>Current Location</Text>}
         {country.iso2 !== "worldwide" && currentLocation &&
           <Image
-            source={Images.flags[country === undefined ? "us" : country.iso2]}
-            style={[styles.flag, props.flagStyle]}
+            source={Images.flags[flagName]}
+            style={[styles.flag, props.flagStyle, flagName === "worldwide" && styles.flagWorld]}
           />}
         {!currentLocation &&
         <Image
-          source={Images.flags[country === undefined ? "us" : country.iso2]}
-          style={[styles.flag, props.flagStyle]}
+          source={Images.flags[flagName]}
+          style={[styles.flag, props.flagStyle, flagName === "worldwide" && styles.flagWorld]}
         />}
         {arrowIcon && <View style={styles.arrowDown}/>}
       </Touchable>
@@ -107,9 +108,9 @@ const CountryCodePicker: () => React$Node = props => {
                   {item.iso2 === "worldwide" && currentLocation &&
                   <Text style={styles.currentLocationText}>Current Location</Text>}
                   {item.iso2 !== "worldwide" && currentLocation &&
-                  <Image source={Images.flags[item.iso2]} style={[styles.flag, props.flagStyle]} />}
+                  <Image source={Images.flags[item.iso2]} style={[styles.flag, props.flagStyle, item.iso2 === "worldwide" && styles.flagWorld]} />}
                   {!currentLocation &&
-                  <Image source={Images.flags[item.iso2]} style={[styles.flag, props.flagStyle]} />}
+                  <Image source={Images.flags[item.iso2]} style={[styles.flag, props.flagStyle, item.iso2 === "worldwide" && styles.flagWorld]} />}
                 </Touchable>
               );
             })}

@@ -4,8 +4,9 @@ const { Types, Creators } = createActions({
   requestCards: ["token"],
   requestCardsSuccess: ["swipeData"],
   requestCardsFail: null,
+  requestCardsUpdate: ["swipeData", "removedIndex"],
 
-  addLike: ["token", "userId"],
+  addLike: ["token", "userId", "showMatches"],
   addLikeSuccess: null,
   addLikeFail: null,
 
@@ -16,6 +17,7 @@ const { Types, Creators } = createActions({
   addDisLike: ["token", "userId"],
   addSuperLike: ["token", "userId"],
   addSuperLikeDone: null,
+  addSuperLikeStart: null,
 
   requestMatch: ["token"],
   requestMatchSuccess: null,

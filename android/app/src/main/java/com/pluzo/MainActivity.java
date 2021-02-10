@@ -3,6 +3,8 @@ package com.pluzo;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
+import com.pluzo.arview.PluzoArView;
+
 import org.devio.rn.splashscreen.SplashScreen;
 
 public class MainActivity extends ReactActivity {
@@ -20,5 +22,14 @@ public class MainActivity extends ReactActivity {
   protected void onCreate(Bundle savedInstanceState) {
     SplashScreen.show(this, R.style.SplashScreenTheme);
     super.onCreate(savedInstanceState);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    if (PluzoArView.deepAR != null) {
+      PluzoArView.deepAR.release();
+    }
   }
 }

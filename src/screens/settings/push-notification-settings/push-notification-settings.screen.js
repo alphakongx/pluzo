@@ -16,7 +16,6 @@ class PushNotificationSettings extends Component {
   constructor(props) {
     super(props);
     const { user_setting } = this.props.user;
-    console.log(user_setting);
     this.state = {
       newFriends: user_setting.push_new_friend === 1 ? true : false,
       requestFriend: user_setting.push_friend_request === 1 ? true : false,
