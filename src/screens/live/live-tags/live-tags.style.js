@@ -18,12 +18,13 @@ export default StyleSheet.create({
   },
   itemTextContainer: {
     width: wp(97),
-    height: wp(50),
+    height: wp(55),
     marginRight: wp(10),
     borderRadius: wp(12),
     justifyContent: "flex-end",
     borderWidth: wp(2),
     borderColor: COLOR.SEARCH_INPUT_BORDER,
+    backgroundColor: COLOR.SEARCH_INPUT_BORDER,
   },
   itemText: {
     fontSize: wp(10),
@@ -37,9 +38,10 @@ export default StyleSheet.create({
   },
   itemImageContainer: {
     width: wp(97),
-    height: wp(50),
+    height: wp(55),
     marginRight: wp(10),
     borderRadius: wp(12),
+    borderWidth: wp(2),
     justifyContent: "flex-end",
     overflow: "hidden",
   },
@@ -64,6 +66,6 @@ export default StyleSheet.create({
     borderRadius: wp(10),
   },
   activeItem: {
-    backgroundColor: COLOR.SEARCH_INPUT_BORDER,
+    borderColor: "white",
   },
 });

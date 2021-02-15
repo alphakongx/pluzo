@@ -55,7 +55,7 @@ public class PluzoArViewManager extends SimpleViewManager<PluzoArView> {
 
     @Override
     public void onDropViewInstance(@NonNull PluzoArView view) {
-        super.onDropViewInstance(view);
         view.cleanData();
+        super.onDropViewInstance(view);
     }
 }

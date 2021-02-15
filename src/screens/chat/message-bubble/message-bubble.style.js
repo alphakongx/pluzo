@@ -6,10 +6,10 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 export default StyleSheet.create({
   container: {
     maxWidth: SCREEN_WIDTH * 0.7,
-    marginLeft: wp(8),
+    marginLeft: wp(6),
   },
   containerMargin: {
-    marginBottom: wp(10),
+    marginBottom: wp(4),
   },
   textContainer: {
     borderRadius: wp(22),
@@ -88,6 +88,11 @@ export default StyleSheet.create({
   tick: {
     width: wp(4.4),
     height: wp(3.5),
+    color: "black",
+  },
+  tickPedning: {
+    width: wp(6),
+    height: wp(6),
     color: "black",
   },
 });

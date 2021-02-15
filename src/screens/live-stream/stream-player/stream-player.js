@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, PermissionsAndroid, Platform, SafeAreaView, NativeEventEmitter, NativeModules } from "react-native";
+import { View, PermissionsAndroid, Platform, SafeAreaView } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import EventBus from "eventing-bus";
 import RtcEngine, {
@@ -14,7 +14,7 @@ import RtcEngine, {
   VideoRenderMode,
   RtcEngineConfig
 } from "react-native-agora";
-import { Screen, Text, Touchable, NotificationModal, PluzoArView } from "@components";
+import { Screen, Text, Touchable, NotificationModal } from "@components";
 import { RTCENGINE } from "@config";
 import { StreamSetting } from "@constants";
 import { widthPercentageToDP as wp } from "@helpers";
@@ -43,9 +43,6 @@ const requestCameraAndAudioPermission = async () => {
   }
 };
 
-const {RNEventEmitter, RNDeepAr} = NativeModules;
-const eventEmitter = new NativeEventEmitter(RNEventEmitter);
-
 class StreamPlayer extends Component {
   constructor(props) {
     super(props);
@@ -68,9 +65,6 @@ class StreamPlayer extends Component {
         buttonText: "Okay",
         buttonTextStyle: "#0B0516",
       },
-      capturing: false,
-      frontCamera: true,
-      externalVideo: false,
     };
     this._engine = null;
     this.users = 0;
@@ -91,7 +85,7 @@ class StreamPlayer extends Component {
     });
   }
 
-  async componentWillUnmount() {
+  componentWillUnmount() {
     this._streamAction();
     this.onLeaveRoom();
   }
@@ -277,8 +271,8 @@ class StreamPlayer extends Component {
         }
       }
     } else if (action === StreamSetting.SWITCH_CAMERA) {
-      // this._engine.switchCamera();
-      this.setState({frontCamera: !this.state.frontCamera});
+      this._engine.switchCamera();
+      // this.setState({frontCamera: !this.state.frontCamera});
     }
   }
 
@@ -438,7 +432,7 @@ class StreamPlayer extends Component {
     if (streamerIds.indexOf(uid) === -1) {
       this.setState(
         {
-          streamerIds: [...streamerIds, uid],
+          streamerIds: uid === this.props.user.id ? [uid, ...streamerIds] : [...streamerIds, uid],
         },
         () => {
           this.props.onChangeStreamers(this.state.streamerIds.length);
@@ -532,18 +526,12 @@ class StreamPlayer extends Component {
     const { channelName } = this.state;
     if (this.props.user.id === uid) {
       return (
-        <PluzoArView
-          style={[styles.flexFill, {backgroundColor: "rgba(0, 177, 255, 0.5)"}]}
-          startCapture={this.state.capturing}
-          externalVideo={this.state.externalVideo}
-          maskMode={this.props.maskMode}
-          frontCamera={this.state.frontCamera} />
-        // <RtcLocalView.SurfaceView
-        //   style={[styles.flexFill]}
-        //   channelId={channelName}
-        //   renderMode={VideoRenderMode.Hidden}
-        //   zOrderMediaOverlay={false}
-        // />
+        <RtcLocalView.SurfaceView
+          style={[styles.flexFill]}
+          channelId={channelName}
+          renderMode={VideoRenderMode.Hidden}
+          zOrderMediaOverlay={false}
+        />
       );
     } else {
       return (

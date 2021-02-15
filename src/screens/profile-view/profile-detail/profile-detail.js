@@ -1,10 +1,9 @@
 import React from "react";
 import { View } from "react-native";
-import { Image, Text } from "@components";
+import { Image, Text, Touchable } from "@components";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT, AppBadges } from "@config";
 import { Distance } from "@helpers";
-import moment from "moment";
 import Images from "@assets/Images";
 import styles from "./profile-detail.style";
 
@@ -65,10 +64,12 @@ const ProfileDetail: () => React$Node = props => {
         <Text style={styles.topBarName}>{birthday}</Text>
         <View style={styles.flexSpace} />
         <View style={styles.iconContainer}>
-          <Image
-            source={require("@assets/images/swipe-screen/info.png")}
-            style={styles.infoIcon}
-          />
+          <Touchable onPress={() => props.onInfoClicked && props.onInfoClicked()}>
+            <Image
+              source={require("@assets/images/swipe-screen/info.png")}
+              style={styles.infoIcon}
+            />
+          </Touchable>
           {!isOwner && (
             <LinearGradient
               colors={GRADIENT.BUTTON}

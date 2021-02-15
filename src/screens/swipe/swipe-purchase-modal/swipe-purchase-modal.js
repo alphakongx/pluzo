@@ -199,35 +199,38 @@ const SwipePurchaseModal: () => React$Node = props => {
                 }}
               />
             </View>
-            <Text style={styles.orText}>OR</Text>
-            <View style={styles.buttonContainer}>
-              <GradientButton
-                colors={["#FF7131", "#E0E552"]}
-                shadowColor={"#FF6F00"}
-                text={"Get Pluzo Plus"}
-                onPress={() => setVisiblePurchase(true)}
-              />
-              <AnimatableView
-                animation={{
-                  from: {
-                    ["translateY"]: -2.5,
-                  },
-                  to: {
-                    ["translateY"]: 2.5,
-                  },
-                }}
-                iterationCount={"infinite"}
-                direction="alternate"
-                duration={1500}
-                style={styles.plusMark}
-                pointerEvents={"box-none"}>
-                <Image
-                  source={Images.swipe.pluzoPlusMark}
-                  pointerEvents={"none"}
-                  style={styles.plusImage}
+            {props.user.premium === 0 &&
+            <>
+              <Text style={styles.orText}>OR</Text>
+              <View style={styles.buttonContainer}>
+                <GradientButton
+                  colors={["#FF7131", "#E0E552"]}
+                  shadowColor={"#FF6F00"}
+                  text={"Get Pluzo Plus"}
+                  onPress={() => setVisiblePurchase(true)}
                 />
-              </AnimatableView>
-            </View>
+                <AnimatableView
+                  animation={{
+                    from: {
+                      ["translateY"]: -2.5,
+                    },
+                    to: {
+                      ["translateY"]: 2.5,
+                    },
+                  }}
+                  iterationCount={"infinite"}
+                  direction="alternate"
+                  duration={1500}
+                  style={styles.plusMark}
+                  pointerEvents={"box-none"}>
+                  <Image
+                    source={Images.swipe.pluzoPlusMark}
+                    pointerEvents={"none"}
+                    style={styles.plusImage}
+                  />
+                </AnimatableView>
+              </View>
+            </>}
           </View>
         </LinearGradient>
         <PurchaseModal

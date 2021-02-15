@@ -159,6 +159,16 @@ class ProfileView extends React.Component {
     }
   };
 
+  onInfoClicked = () => {
+    const { user } = this.props.navigation
+      ? this.props.navigation.state.params
+      : this.props;
+    let images = user.images || [];
+    if (this.existBio(user)) {
+      this.setState({ imageIndex: images.length });
+    }    
+  }
+
   onImagePressed = e => {
     let index = this.state.imageIndex;
     const { user } = this.props.navigation
@@ -367,7 +377,7 @@ class ProfileView extends React.Component {
                       this.setState({ imageIndex: index });
                     }}
                   />
-                  <ProfileDetail user={user} imageIndex={imageIndex} />
+                  <ProfileDetail user={user} imageIndex={imageIndex} onInfoClicked={() => this.onInfoClicked()} />
                 </View>
               </View>
             </Touchable>

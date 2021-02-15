@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, SafeAreaView, ScrollView } from "react-native";
-import {} from "react-navigation";
+import { NavigationEvents } from "react-navigation";
 import {
   Screen,
   Image,
@@ -12,6 +12,7 @@ import * as Animatable from "react-native-animatable";
 import LinearGradient from "react-native-linear-gradient";
 import Swiper from "react-native-swiper";
 import EventBus from "eventing-bus";
+import moment from "moment";
 import { widthPercentageToDP as wp, getCurrentLocation } from "@helpers";
 import { GRADIENT } from "@config";
 import { StreamStatus } from "@constants";
@@ -36,6 +37,7 @@ class Live extends Component {
       livePosition: {},
       searchText: "",
     };
+    this.pageStartTime = 0;
   }
 
   componentDidMount() {
@@ -77,6 +79,24 @@ class Live extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.category !== this.state.category) {
       this.updateStreamList();
+    }
+  }
+
+  onWillFocus = (payload) => {
+    if (this.pageStartTime == 0) {
+      this.pageStartTime = moment().unix();
+    }
+  }
+
+  onWillBlur = (payload) => {
+    if (payload.lastState.key !== payload.state.key) {
+      const params = {
+        timeStart: this.pageStartTime,
+        timeEnd: moment().unix(),
+        page: "Live",
+      }
+      this.pageStartTime = 0;
+      this.props.requestPageTime(params, this.props.token);
     }
   }
 
@@ -282,6 +302,10 @@ class Live extends Component {
             </ScrollView>
             {this.renderNewButton()}
           </View>
+        
+          <NavigationEvents 
+            onWillFocus={(payload) => this.onWillFocus(payload)}
+            onWillBlur={(payload) => this.onWillBlur(payload)} />
         </SafeAreaView>
       </Screen>
     );

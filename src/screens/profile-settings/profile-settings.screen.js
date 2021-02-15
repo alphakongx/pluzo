@@ -8,6 +8,8 @@ import ActionSheet from "react-native-actionsheet";
 import EventBus from "eventing-bus";
 import { UserTypes } from "@redux/actions";
 import { SCREENS } from "@constants";
+import moment from "moment";
+import { NavigationEvents } from "react-navigation";
 
 import {
   Screen,
@@ -63,6 +65,7 @@ class ProfileSettings extends React.Component {
     };
     this.ActionSheet = React.createRef();
     this.rotateValue = new Animated.Value(0);
+    this.pageStartTime = 0;
   }
 
   componentDidMount() {
@@ -74,15 +77,6 @@ class ProfileSettings extends React.Component {
       UserTypes.UPDATE_USER_FAILURE,
       this.uploadingDone,
     );
-    this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
-      this.props.requestProfile(this.props.token);
-      if (Platform.OS === "ios") {
-        KeyboardManager.setEnable(true);
-        KeyboardManager.setKeyboardDistanceFromTextField(100);
-        KeyboardManager.setEnableAutoToolbar(false);
-        KeyboardManager.setShouldResignOnTouchOutside(true);
-      }
-    });
   }
 
   componentDidUpdate(prevProps) {
@@ -114,7 +108,32 @@ class ProfileSettings extends React.Component {
   componentWillUnmount() {
     this.updateSuccessAction();
     this.updateFailureAction();
-    this._unsubscribe;
+  }
+
+  onWillFocus = (payload) => {
+    if (this.pageStartTime == 0) {
+      this.pageStartTime = moment().unix();
+    }
+
+    this.props.requestProfile(this.props.token);
+    if (Platform.OS === "ios") {
+      KeyboardManager.setEnable(true);
+      KeyboardManager.setKeyboardDistanceFromTextField(100);
+      KeyboardManager.setEnableAutoToolbar(false);
+      KeyboardManager.setShouldResignOnTouchOutside(true);
+    }
+  }
+
+  onWillBlur = (payload) => {
+    if (payload.lastState.key !== payload.state.key) {
+      const params = {
+        timeStart: this.pageStartTime,
+        timeEnd: moment().unix(),
+        page: "Profile",
+      }
+      this.pageStartTime = 0;
+      this.props.requestPageTime(params, this.props.token);
+    }
   }
 
   uploadingDone = () => {
@@ -398,10 +417,10 @@ class ProfileSettings extends React.Component {
                     resizeMode={FastImage.resizeMode.cover} />
                   <FastImage 
                     source={Images.app.pluzoplusLogo}
-                    style={styles.premiumLogo} />
-                  <Text style={styles.premiumText}>
+                    style={this.props.user.premium === 1 ? styles.premiumLogoCenter : styles.premiumLogo} />
+                  {this.props.user.premium === 0 && <Text style={styles.premiumText}>
                     {"Exclusive features to enhance\nyour experience."}
-                  </Text>
+                  </Text>}
                   <AnimatableView
                     style={styles.premiumPlusView}
                     animation={plusAnimation}
@@ -543,6 +562,10 @@ class ProfileSettings extends React.Component {
           cancelButtonIndex={2}
           onPress={index => this.onSelectImage(index)}
         />
+        
+        <NavigationEvents 
+          onWillFocus={(payload) => this.onWillFocus(payload)}
+          onWillBlur={(payload) => this.onWillBlur(payload)} />
       </Screen>
     );
   }

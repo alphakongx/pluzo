@@ -24,6 +24,7 @@ import {
   userBlock,
   userUnblock,
   getBlockedUsers,
+  pageTime,
 } from "@redux/api";
 import moment from "moment";
 import { registrationSelector, userSelector } from "../selectors";
@@ -72,6 +73,9 @@ export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_BLOCK_USER, requestBlockUser);
   yield takeEvery(UserTypes.REQUEST_UNBLOCK_USER, requestUnblockUser);
   yield takeEvery(UserTypes.REQUEST_BLOCKED_USERS, requestBlockedUsers);
+
+  // analytics
+  yield takeEvery(UserTypes.REQUEST_PAGE_TIME, requestPageTime);
 }
 
 function* requestLogin(action) {
@@ -418,5 +422,21 @@ function* requestBlockedUsers(action) {
 
   } catch (error) {
     console.log("blocked list", error);
+  }
+}
+
+function* requestPageTime(action) {
+  try {
+    const { params, token } = action;
+
+    const requestParams = new FormData();
+    requestParams.append("page", params.page);
+    requestParams.append("during", params.timeEnd - params.timeStart);
+    requestParams.append("time_start", params.timeStart);
+    requestParams.append("time_end", params.timeEnd);
+
+    const res = yield call(pageTime, requestParams, token);
+  } catch (error) {
+    console.log("page time>>", error);
   }
 }

@@ -28,6 +28,17 @@ const shadowOptions = {
   offsetX: 0,
   offsetY: 0,
 };
+const shadowOptionsPremium = {
+  width: screenWidth - wp(40),
+  height: ((screenWidth - wp(40)) * 260) / 335,
+  color: "#FF0000",
+  opacity: 0.15,
+  _borderRadius: wp(15),
+  spread: 0,
+  blur: 30,
+  offsetX: 0,
+  offsetY: 0,
+};
 const maskAnimation = {
   from: {
     ["translateY"]: 0,
@@ -51,6 +62,7 @@ class PurchaseModal extends React.Component {
     this.state = {
       products: [],
       visibleSelect: false,
+      visibleAdvantage: false,
     };
   }
 
@@ -109,18 +121,19 @@ class PurchaseModal extends React.Component {
         swipeThreshold={100}
         useNativeDriver={false}
         propagateSwipe={true}
+        onModalWillShow={() => this.setState({visibleAdvantage: false})}
       >
         <View style={styles.container}>
           <View>
             <BoxShadow
-              setting={shadowOptions}
+              setting={this.props.user.premium === 0 ? shadowOptions : this.state.visibleAdvantage ? shadowOptions : shadowOptionsPremium}
             />
             <LinearGradient
               colors={["#1A023E", "#0C0518", "#110029"]}
               locations={[0, 0.65, 1]}
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
-              style={styles.mainBackground}>
+              style={this.props.user.premium === 0 ? styles.mainBackground : this.state.visibleAdvantage ? styles.mainBackground : styles.mainBackgroundPremium}>
               <AnimatableView
                 style={styles.maskContainer}
                 animation={maskAnimation}
@@ -137,10 +150,20 @@ class PurchaseModal extends React.Component {
                   <Text style={styles.descText}>Exclusive features to enhance{"\n"}your experience.</Text>
                 </View>
 
-                <View style={styles.detailContainer}>
+                {this.props.user.premium === 1 && !this.state.visibleAdvantage ? (
+                  <View style={styles.advantageButton}>
+                    <GradientButton
+                      text={"See your advantages"}
+                      textStyle={{color: "#0F0420"}}
+                      colors={GRADIENT.PURCHASE_BUTTON}
+                      shadowColor={"#FF6F00"}
+                      onPress={() => this.setState({visibleAdvantage: true})}
+                    />
+                  </View>
+                ) : (<View style={styles.detailContainer}>
                   <Text style={styles.includesText}>includes:</Text>
                   {this.renderDetails()}
-                </View>
+                </View>)}
                 
                 <Text style={styles.priceText}>
                   {this.props.user.premium === 0 ? "For $11.99/month" : ""}
@@ -152,11 +175,12 @@ class PurchaseModal extends React.Component {
           <View style={styles.buttonContainer}>
             <GradientButton
               text={this.props.user.premium === 1 ? "Purchased" : "Purchase"}
-              colors={GRADIENT.PURCHASE_BUTTON}
-              shadowColor={"#FF6F00"}
+              textStyle={this.props.user.premium === 1 ? {color: "#0F0420"} : {}}
+              colors={this.props.user.premium === 0 ? GRADIENT.PURCHASE_BUTTON : ["#00FF77", "#00FF77"]}
+              shadowColor={this.props.user.premium === 0 ? "#FF6F00" : "#00FFE5"}
               onPress={() => this.setState({visibleSelect: true})}
             />
-            <AnimatableView
+            {this.props.user.premium === 0 && <AnimatableView
               animation={plusAnimation}
               iterationCount={"infinite"}
               direction="alternate"
@@ -168,7 +192,7 @@ class PurchaseModal extends React.Component {
                 pointerEvents={"none"}
                 style={styles.plusImage}
               />
-            </AnimatableView>
+            </AnimatableView>}
           </View>
 
           <PurchaseSelectModal 

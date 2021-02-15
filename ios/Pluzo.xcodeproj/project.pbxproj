@@ -36,16 +36,12 @@
 		BE15870E252CF9B000FD8CBF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE15870D252CF9B000FD8CBF /* NotificationService.swift */; };
 		BE158712252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BE15870B252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BE5E40FD2526FBCE00EBA7F6 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5E40FC2526FBCE00EBA7F6 /* StoreKit.framework */; };
-		BE8D295325CDD66F00C5ED55 /* DeepAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE8D295225CDD66F00C5ED55 /* DeepAR.framework */; };
-		BE8D295425CDD66F00C5ED55 /* DeepAR.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BE8D295225CDD66F00C5ED55 /* DeepAR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BE941ABC2564B96200637EB3 /* ImageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE941ABB2564B96200637EB3 /* ImageDetector.swift */; };
 		BE941AC32564BA7100637EB3 /* ImageDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = BE941AC22564BA7100637EB3 /* ImageDetector.m */; };
 		BE97CC292565B0DB003AA2E8 /* NSFWDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = BE97CC282565B0DA003AA2E8 /* NSFWDetector.mlmodel */; settings = {ATTRIBUTES = (project_codegen, ); }; };
 		BE9B5D3425CB89AC00E036F9 /* RNEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9B5D3325CB89AC00E036F9 /* RNEventEmitter.swift */; };
 		BE9B5D3A25CB89D100E036F9 /* RNEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9B5D3925CB89D100E036F9 /* RNEventEmitter.m */; };
 		BE9B5D4C25CCDB0000E036F9 /* twistedFace in Resources */ = {isa = PBXBuildFile; fileRef = BE9B5D4B25CCDB0000E036F9 /* twistedFace */; };
-		BEB46D0725D3752E0051E12D /* RNTDeepAr.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB46D0625D3752E0051E12D /* RNTDeepAr.m */; };
-		BEB46D0E25D3783C0051E12D /* RNTDeepArViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB46D0D25D3783C0051E12D /* RNTDeepArViewManager.m */; };
 		BEB71D4C25C7193100D00FC9 /* PluzoArView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB71D4B25C7193100D00FC9 /* PluzoArView.m */; };
 		BEB71D6225C741EB00D00FC9 /* PluzoArView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71D6125C741EB00D00FC9 /* PluzoArView.swift */; };
 		BEB71D8E25C7F83600D00FC9 /* Mode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB71D8D25C7F83600D00FC9 /* Mode.swift */; };
@@ -110,17 +106,6 @@
 				BE158712252CF9B000FD8CBF /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BE8D295525CDD66F00C5ED55 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				BE8D295425CDD66F00C5ED55 /* DeepAR.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -194,10 +179,6 @@
 		BE9B5D3325CB89AC00E036F9 /* RNEventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RNEventEmitter.swift; path = Pluzo/PluzoArView/RNEventEmitter.swift; sourceTree = "<group>"; };
 		BE9B5D3925CB89D100E036F9 /* RNEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNEventEmitter.m; path = Pluzo/PluzoArView/RNEventEmitter.m; sourceTree = "<group>"; };
 		BE9B5D4B25CCDB0000E036F9 /* twistedFace */ = {isa = PBXFileReference; lastKnownFileType = file; path = twistedFace; sourceTree = "<group>"; };
-		BEB46D0525D3752E0051E12D /* RNTDeepAr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNTDeepAr.h; path = Pluzo/PluzoArView/RNTDeepAr.h; sourceTree = "<group>"; };
-		BEB46D0625D3752E0051E12D /* RNTDeepAr.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNTDeepAr.m; path = Pluzo/PluzoArView/RNTDeepAr.m; sourceTree = "<group>"; };
-		BEB46D0C25D3783C0051E12D /* RNTDeepArViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNTDeepArViewManager.h; path = Pluzo/PluzoArView/RNTDeepArViewManager.h; sourceTree = "<group>"; };
-		BEB46D0D25D3783C0051E12D /* RNTDeepArViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNTDeepArViewManager.m; path = Pluzo/PluzoArView/RNTDeepArViewManager.m; sourceTree = "<group>"; };
 		BEB71D4B25C7193100D00FC9 /* PluzoArView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PluzoArView.m; path = Pluzo/PluzoArView/PluzoArView.m; sourceTree = "<group>"; };
 		BEB71D6125C741EB00D00FC9 /* PluzoArView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PluzoArView.swift; path = Pluzo/PluzoArView/PluzoArView.swift; sourceTree = "<group>"; };
 		BEB71D8D25C7F83600D00FC9 /* Mode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Mode.swift; path = Pluzo/PluzoArView/Mode.swift; sourceTree = "<group>"; };
@@ -250,7 +231,6 @@
 			files = (
 				6F507E9DE48DC4CA9DDB4BFA /* libPods-Pluzo.a in Frameworks */,
 				BE5E40FD2526FBCE00EBA7F6 /* StoreKit.framework in Frameworks */,
-				BE8D295325CDD66F00C5ED55 /* DeepAR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,10 +425,6 @@
 				BEB71D8D25C7F83600D00FC9 /* Mode.swift */,
 				BE9B5D3325CB89AC00E036F9 /* RNEventEmitter.swift */,
 				BE9B5D3925CB89D100E036F9 /* RNEventEmitter.m */,
-				BEB46D0525D3752E0051E12D /* RNTDeepAr.h */,
-				BEB46D0625D3752E0051E12D /* RNTDeepAr.m */,
-				BEB46D0C25D3783C0051E12D /* RNTDeepArViewManager.h */,
-				BEB46D0D25D3783C0051E12D /* RNTDeepArViewManager.m */,
 			);
 			name = PluzoArView;
 			sourceTree = "<group>";
@@ -532,7 +508,6 @@
 				6D13385BF0BA36A005BF4330 /* [CP] Copy Pods Resources */,
 				B172E3A7A920256EB68DF295 /* [CP] Embed Pods Frameworks */,
 				BE158716252CF9B000FD8CBF /* Embed App Extensions */,
-				BE8D295525CDD66F00C5ED55 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1066,8 +1041,6 @@
 				BE941ABC2564B96200637EB3 /* ImageDetector.swift in Sources */,
 				BEB71D8E25C7F83600D00FC9 /* Mode.swift in Sources */,
 				BE9B5D3425CB89AC00E036F9 /* RNEventEmitter.swift in Sources */,
-				BEB46D0725D3752E0051E12D /* RNTDeepAr.m in Sources */,
-				BEB46D0E25D3783C0051E12D /* RNTDeepArViewManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1182,7 +1155,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Pluzo/Pluzo.entitlements;
 				COREML_CODEGEN_LANGUAGE = Swift;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = ST99247FHV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1220,7 +1193,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Pluzo/Pluzo.entitlements;
 				COREML_CODEGEN_LANGUAGE = Swift;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = ST99247FHV;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1486,8 +1459,9 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = ST99247FHV;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
@@ -1519,8 +1493,9 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = ST99247FHV;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;

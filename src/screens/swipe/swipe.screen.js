@@ -3,6 +3,8 @@ import { View } from "react-native";
 import { Screen, Image, Text, BoostConfirmModal } from "@components";
 import Swiper from "react-native-deck-swiper";
 import EventBus from "eventing-bus";
+import moment from "moment";
+import { NavigationEvents } from "react-navigation";
 import { CANCEL } from "redux-saga";
 import AsyncStorage from "@react-native-community/async-storage";
 import { API, getCurrentLocation, hasLocationPermission } from "@helpers";
@@ -61,14 +63,11 @@ class Swipe extends React.Component {
     this.swiper = React.createRef();
     this.cardIndex = -1;
     this.noUpdate = false;
+    this.pageStartTime = 0;
   }
 
   componentDidMount() {
     // this.props.loadCards(this.props.token);
-    this._unsubscribe = this.props.navigation.addListener("willFocus", async () => {
-      let hasPermission = await hasLocationPermission(true);
-      this.onUpdateData(hasPermission);
-    });
 
     this.reloadAction = EventBus.on(SwipeTypes.REQUEST_SET_SETTINGS_SUCCESS, () => {
       if (this.noUpdate === true) {
@@ -128,7 +127,6 @@ class Swipe extends React.Component {
     this.matchesAction();
     this.stateAction();
     this.cardUpdateAction();
-    this._unsubscribe;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -142,6 +140,26 @@ class Swipe extends React.Component {
     }
     if (prevProps.isLoadingCards === true && this.props.isLoadingCards === false) {
       this.setState({ labelType: LABEL_TYPES.NONE });
+    }
+  }
+
+  onWillFocus = async (payload) => {
+    if (this.pageStartTime == 0) {
+      this.pageStartTime = moment().unix();
+    }
+    let hasPermission = await hasLocationPermission(true);
+    this.onUpdateData(hasPermission);
+  }
+
+  onWillBlur = (payload) => {
+    if (payload.lastState.key !== payload.state.key) {
+      const params = {
+        timeStart: this.pageStartTime,
+        timeEnd: moment().unix(),
+        page: "Swipe",
+      }
+      this.pageStartTime = 0;
+      this.props.requestPageTime(params, this.props.token);
     }
   }
 
@@ -365,6 +383,9 @@ class Swipe extends React.Component {
       return (
         <Screen hasGradient style={styles.emptyContainer}>
           <NoUsers navigation={this.props.navigation} permission />
+          <NavigationEvents 
+            onWillFocus={(payload) => this.onWillFocus(payload)}
+            onWillBlur={(payload) => this.onWillBlur(payload)} />
         </Screen>
       )
     }
@@ -373,6 +394,9 @@ class Swipe extends React.Component {
       return (
         <Screen hasGradient style={styles.emptyContainer}>
           <NoUsers navigation={this.props.navigation} />
+          <NavigationEvents 
+            onWillFocus={(payload) => this.onWillFocus(payload)}
+            onWillBlur={(payload) => this.onWillBlur(payload)} />
         </Screen>
       );
     }
@@ -559,6 +583,10 @@ class Swipe extends React.Component {
               AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
             });
           }} />
+
+          <NavigationEvents 
+            onWillFocus={(payload) => this.onWillFocus(payload)}
+            onWillBlur={(payload) => this.onWillBlur(payload)} />
       </Screen>
     );
   }

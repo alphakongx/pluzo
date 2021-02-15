@@ -32,7 +32,7 @@ const StreamJoinModal: () => React$Node = props => {
     offsetY: 6,
   };
 
-  const message = props.askedByUser ? "asks you to join" : "asks you to join their live";
+  const message = props.askedByUser ? "asks you to join" : "invited you to join the live";
 
   return (
     <Modal

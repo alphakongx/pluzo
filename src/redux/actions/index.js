@@ -5,3 +5,4 @@ export * from "./chat.actions";
 export * from "./swipe.actions";
 export * from "./search.actions";
 export * from "./live.action";
+export * from "./app.actions";

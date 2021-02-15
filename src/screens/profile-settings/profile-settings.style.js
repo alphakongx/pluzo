@@ -155,6 +155,11 @@ export default StyleSheet.create({
     height: wp(50),
     marginTop: wp(27.4),
   },
+  premiumLogoCenter: {
+    width: wp(151),
+    height: wp(50),
+    marginTop: wp(45),
+  },
   premiumText: {
     color: "white",
     fontSize: wp(14),

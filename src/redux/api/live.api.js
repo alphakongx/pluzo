@@ -10,6 +10,7 @@ export function streamUpdate(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
+    silent: true,
   }).then(response => response);
 }
 
@@ -22,6 +23,7 @@ export function streamStart(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
+    silent: true,
   }).then(response => response);
 }
 
@@ -47,6 +49,7 @@ export function streamUserType(data, accessToken) {
       Authorization: "Bearer " + accessToken,
     },
     data,
+    silent: true,
   }).then(response => response);
 }
 

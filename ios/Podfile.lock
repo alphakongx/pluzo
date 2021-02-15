@@ -216,6 +216,8 @@ PODS:
     - React
   - react-native-keep-awake (1.0.4):
     - React
+  - react-native-netinfo (5.9.10):
+    - React-Core
   - react-native-onesignal (3.9.1):
     - OneSignal (= 2.15.2)
     - React (< 1.0.0, >= 0.13.0)
@@ -359,6 +361,7 @@ DEPENDENCIES:
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - "react-native-keep-awake (from `../node_modules/@sayem314/react-native-keep-awake`)"
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -448,6 +451,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-geolocation-service"
   react-native-keep-awake:
     :path: "../node_modules/@sayem314/react-native-keep-awake"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
   react-native-safe-area-context:
@@ -535,6 +540,7 @@ SPEC CHECKSUMS:
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-geolocation-service: 141e33bdb179bcba10b216ee13962611e21f2be4
   react-native-keep-awake: e63964d58c890de02bfb6519dedb7d90b5c782de
+  react-native-netinfo: 30fb89fa913c342be82a887b56e96be6d71201dd
   react-native-onesignal: ad2eaab1517951e50d19fa3eccd16d3048167181
   react-native-safe-area-context: 79fea126c6830c85f65947c223a5e3058a666937
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865

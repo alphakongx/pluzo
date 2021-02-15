@@ -19,6 +19,14 @@ export default StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.15)",
     overflow: "hidden",
   },
+  mainBackgroundPremium: {
+    width: screenWidth - wp(40),
+    height: ((screenWidth - wp(40)) * 260) / 335,
+    borderRadius: wp(22),
+    borderWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.15)",
+    overflow: "hidden",
+  },
 /// 637, 680
   maskContainer: {
     position: "absolute",
@@ -111,5 +119,10 @@ export default StyleSheet.create({
   plusImage: {
     width: "100%",
     height: "100%",
+  },
+
+  advantageButton: {
+    width: wp(230),
+    height: wp(35),
   },
 });

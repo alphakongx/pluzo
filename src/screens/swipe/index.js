@@ -21,6 +21,7 @@ const mapDispatchToProps = {
   runBoost: SwipeCreators.requestRunBoost,
   runRewinds: SwipeCreators.requestRunRewinds,
   updateUser: UserCreators.requestUpdateUser,
+  requestPageTime: UserCreators.requestPageTime,
   updateTutorialMode: SwipeCreators.updateTutorialMode,
   updateSettings: SwipeCreators.requestSetSettings,
   updateCards: SwipeCreators.requestCardsUpdate,
