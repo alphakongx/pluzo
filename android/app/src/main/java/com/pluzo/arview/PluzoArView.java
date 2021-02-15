@@ -24,7 +24,7 @@ public class PluzoArView extends FrameLayout implements AREventListener {
     private int maskMode = 0;
 
     private CameraGrabber cameraGrabber;
-    public static DeepAR deepAR;
+    private DeepAR deepAR;
     private GLSurfaceView surfaceView;
     private DeepARRenderer renderer;
 
@@ -103,17 +103,15 @@ public class PluzoArView extends FrameLayout implements AREventListener {
     }
 
     public void cleanData() {
-        if (deepAR != null) {
-            renderer.setCallInProgress(false);
-            cameraGrabber.setFrameReceiver(null);
-            cameraGrabber.stopPreview();
-            cameraGrabber.releaseCamera();
-            cameraGrabber = null;
-
+        if (surfaceView != null) {
             surfaceView.onPause();
-            surfaceView = null;
-//            deepAR.release();
-//            deepAR = null;
+        }
+        cameraGrabber.setFrameReceiver(null);
+        cameraGrabber.stopPreview();
+        cameraGrabber.releaseCamera();
+        cameraGrabber = null;
+        if (deepAR != null) {
+            deepAR.release();
         }
     }
 

@@ -248,6 +248,10 @@ const loadBlockedUsersSuccess = (state, action) => ({
   blockedUsers: action.data,
 });
 
+const requestPageTime = (state, action) => ({
+  ...state,
+});
+
 export const HANDLERS = {
   [UserTypes.REQUEST_LOGIN]: requestLogin,
   [UserTypes.LOGIN_SUCCESS]: loginSuccess,
@@ -325,6 +329,8 @@ export const HANDLERS = {
   [UserTypes.REQUEST_UNBLOCK_USER]: requestUnblockUser,
   [UserTypes.REQUEST_BLOCKED_USERS]: requestBlockedUsers,
   [UserTypes.LOAD_BLOCKED_USERS_SUCCESS]: loadBlockedUsersSuccess,
+
+  [UserTypes.REQUEST_PAGE_TIME]: requestPageTime,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

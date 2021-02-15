@@ -1,20 +1,21 @@
 import React from "react";
-import { StatusBar, Platform, AppState } from "react-native";
+import { StatusBar, Platform, AppState, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import KeyboardManager from "react-native-keyboard-manager";
 import AsyncStorage from "@react-native-community/async-storage";
+import NetInfo from "@react-native-community/netinfo";
 import FastImage from "react-native-fast-image";
 import EventBus from "eventing-bus";
 import OneSignal from "react-native-onesignal";
 import { connect } from "react-redux";
 import { AppContainer } from "../screens";
 import Loading from "../screens/loading";
-import { WS } from "@components";
+import { WS, NoConnectionAlert } from "@components";
 import { NavigationService, IapManager } from "@helpers";
 import { SCREENS, TUTORIAL } from "@constants";
 import { COLOR } from "@config";
-import { UserCreators, InboxCreators, LiveCreators } from "@redux/actions";
+import { UserCreators, InboxCreators, LiveCreators, AppCreators } from "@redux/actions";
 import { userOnline } from "@redux/api";
 
 if (Platform.OS === "ios") {
@@ -23,6 +24,10 @@ if (Platform.OS === "ios") {
   KeyboardManager.setEnableAutoToolbar(false);
   KeyboardManager.setShouldResignOnTouchOutside(true);
 }
+
+NetInfo.configure({
+  reachabilityUrl: 'https://api.pluzo.com/',
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -49,10 +54,14 @@ class App extends React.Component {
       console.log("Something went wrong", error);
     }
     AppState.addEventListener("change", this._handleAppStateChange);
+    this._netUnsubscribe = NetInfo.addEventListener(state => {
+      this.props.updateConnectionState(state.isConnected);
+    });
   }
 
   componentWillUnmount() {
     AppState.removeEventListener("change", this._handleAppStateChange);
+    this._netUnsubscribe();
   }
 
   componentDidUpdate(prevProps) {
@@ -271,6 +280,10 @@ class App extends React.Component {
           }}
           uriPrefix={"pluzo://"}
         />
+        {!this.props.isConnected &&
+        <View style={{position: "absolute", top: 0, left: 0, right: 0}}>
+          <NoConnectionAlert />
+        </View>}
         {this.isLogin() && (
           <WS
             url={"ws://3.134.208.235:27800?user=" + this.props.user.id}
@@ -295,10 +308,12 @@ function mapStateToProps(state) {
     loading: state.user.isLoadingProfile,
     chatUserId: state.chat.chatUserId,
     cards: state.swipe.cards,
+    isConnected: state.app.isConnected,
   };
 }
 
 const mapDispatchToProps = {
+  updateConnectionState: AppCreators.updateConnectionState,
   updatePushStatus: UserCreators.updatePushStatus,
   requestProfile: UserCreators.requestProfile,
   requestStreamList: LiveCreators.requestStreamList,

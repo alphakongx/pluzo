@@ -78,6 +78,9 @@ const { Types, Creators } = createActions({
   requestBlockedUsers: ["token"],
   loadBlockedUsersSuccess: ["data"],
 
+  // analytics events
+  requestPageTime: ["params", "token"],
+
   logout: null,
 });
 

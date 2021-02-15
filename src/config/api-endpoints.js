@@ -109,6 +109,9 @@ export const API_ENDPOINTS = {
 
   // payment
   ITEM_PAY: `${BASE_URL}/pay`,
+
+  // analytics
+  PAGE_TIME: `${BASE_URL}/page-time`,
 };
 
 export const SERVER = {

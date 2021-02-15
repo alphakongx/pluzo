@@ -14,8 +14,8 @@ const items = [
   { id: 1, icon: Images.app.icReverse, mark: false },
   { id: 2, icon: Images.app.icLive, mark: false },
   { id: 3, icon: Images.app.icMicLarge, mark: false },
-  { id: 4, icon: Images.app.icShare, mark: false },
-  { id: 5, icon: Images.app.icFilter, mark: true },
+  // { id: 4, icon: Images.app.icShare, mark: false },
+  // { id: 5, icon: Images.app.icFilter, mark: true },
 ];
 
 const StreamPlayerSetting: () => React$Node = props => {
@@ -33,7 +33,7 @@ const StreamPlayerSetting: () => React$Node = props => {
       setDisableButton(true);
       setTimeout(() => {
         setDisableButton(false);
-      }, 500);
+      }, 1000);
     } else if (itemId === 3) {
       props.setEnabledMic(!props.isEnabledMic);
     } else if (itemId === 4) {

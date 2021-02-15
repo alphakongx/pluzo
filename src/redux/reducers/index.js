@@ -8,8 +8,10 @@ import swipeReducer from "./swipe.reducer";
 import searchReducer from "./search.reducer";
 import chatReducer from "./chat.reducer";
 import liveReducer from "./live.reducer";
+import appReducer from "./app.reducer";
 
 const rootReducer = combineReducers({
+  app: appReducer,
   registration: regitrationReducer,
   user: userReducer,
   live: liveReducer,

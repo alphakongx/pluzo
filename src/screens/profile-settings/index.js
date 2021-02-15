@@ -17,6 +17,7 @@ const mapDispatchToProps = {
   requestProfile: UserCreators.requestProfile,
   updateUserImage: UserCreators.updateUserSuccess,
   reorderImages: UserCreators.requestReorderImages,
+  requestPageTime: UserCreators.requestPageTime,
 };
 
 export default connect(

@@ -316,3 +316,16 @@ export function userOnline(data, accessToken, type) {
     silent: true,
   }).then(response => response);
 }
+
+export function pageTime(data, accessToken) {
+  return API.request({
+    method: "post",
+    url: `${API_ENDPOINTS.PAGE_TIME}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + accessToken,
+    },
+    data,
+    silent: true,
+  }).then(response => response);
+}

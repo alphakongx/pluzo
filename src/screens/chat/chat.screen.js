@@ -39,6 +39,7 @@ class Chat extends React.Component {
       isOnline: false,
       openedChat: false,
       sentSystemAlert: false,
+      offlineMessages: [],
     };
     this.ActionSheet = React.createRef();
     this._appIsActive = true;
@@ -225,6 +226,10 @@ class Chat extends React.Component {
     if (prevState.isOnline !== this.state.isOnline) {
       this._pushCount = 0;
     }
+
+    if (prevProps.isConnected === false && this.props.isConnected === true) {
+      this.onSendOfflineMsgs();
+    }
   }
 
   checkingOnlineStatus = () => {
@@ -316,63 +321,91 @@ class Chat extends React.Component {
       type: data.mime,
     };
 
-    this.props.updateMessages(
-      [
-        {
-          _id: moment().unix(),
-          text: this.state.msgText,
-          image: data.path,
-          createdAt: new Date(),
-          user: {
-            _id: this.props.user.id,
-            name: this.props.user.name || this.props.user.username,
-            avatar: this.props.user.images[0].path,
+    if (this.props.isConnected) {
+      this.props.updateMessages(
+        [
+          {
+            _id: moment().unix(),
+            text: this.state.msgText,
+            image: data.path,
+            createdAt: new Date(),
+            user: {
+              _id: this.props.user.id,
+              name: this.props.user.name || this.props.user.username,
+              avatar: this.props.user.images[0].path,
+            },
+            message_info: {
+              sent: 1,
+              received: this.state.openedChat ? 1 : 0,
+            }
           },
-          message_info: {
-            sent: 1,
-            received: this.state.openedChat ? 1 : 0,
-          }
+        ].concat(this.props.messages),
+      );
+  
+      const { chatUser } = this.props;
+      const params = {
+        chatId: this.state.chatId,
+        text: this.state.msgText,
+        image: image,
+        sendTo: chatUser === 0 ? chatUser : chatUser.id || chatUser._id,
+      };
+      const { token } = this.props;
+      this.props.sendMessage(params, token);
+    } else {
+      this.setState({offlineMessages: [{
+        _id: moment().unix(),
+        text: this.state.msgText,
+        image: data.path,
+        imageInfo: data,
+        createdAt: new Date(),
+        user: {
+          _id: this.props.user.id,
+          name: this.props.user.name || this.props.user.username,
+          avatar: this.props.user.images[0].path,
         },
-      ].concat(this.props.messages),
-    );
-
-    const { chatUser } = this.props;
-    const params = {
-      chatId: this.state.chatId,
-      text: this.state.msgText,
-      image: image,
-      sendTo: chatUser === 0 ? chatUser : chatUser.id || chatUser._id,
-    };
-    const { token } = this.props;
-    this.props.sendMessage(params, token);
+        message_info: {
+          sent: 1,
+          received: this.state.openedChat ? 1 : 0,
+        }
+      }, ...this.state.offlineMessages]});
+    }
     this.setState({ msgText: "" });
   };
 
   onSend = (messages = []) => {
     if (messages[0].text === "") return;
-    messages[0].message_info = {sent: 1,received: this.state.openedChat ? 1 : 0,}
-    this.props.updateMessages([messages[0]].concat(this.props.messages));
+    if (this.props.isConnected) {
+      messages[0].message_info = {sent: 1,received: this.state.openedChat ? 1 : 0,}
+      this.props.updateMessages([messages[0]].concat(this.props.messages));
 
-    let sendPush = 1;
-    // if (!this.state.isOnline) {
-    //   if (this._pushCount === 0) {
-    //     sendPush = 1;
-    //     this._pushCount = 1;
-    //   } else {
-    //     sendPush = 2;
-    //   }
-    // }
-    const { chatUser } = this.props;
-    const params = {
-      chatId: this.state.chatId,
-      text: messages[0].text,
-      image: null,
-      sendTo: chatUser === 0 ? chatUser : chatUser.id || chatUser._id,
-      send_push: sendPush,
-    };
-    const { token } = this.props;
-    this.props.sendMessage(params, token);
+      let sendPush = 1;
+      const { chatUser } = this.props;
+      const params = {
+        chatId: this.state.chatId,
+        text: messages[0].text,
+        image: null,
+        sendTo: chatUser === 0 ? chatUser : chatUser.id || chatUser._id,
+        send_push: sendPush,
+      };
+      const { token } = this.props;
+      this.props.sendMessage(params, token); 
+    } else {
+      messages[0].message_info = {sent: 0,received: this.state.openedChat ? 1 : 0,}
+      this.setState({offlineMessages: [messages[0], ...this.state.offlineMessages]});
+    }
   };
+
+  onSendOfflineMsgs = () => {
+    let newMessages = this.state.offlineMessages;
+    for (msgIndex = 0; msgIndex < newMessages.length; msgIndex++) {
+      this.setState({offlineMessages: this.state.offlineMessages.filter((value, index) => index !== msgIndex)});
+      if (newMessages[msgIndex].imageInfo === undefined || newMessages[msgIndex].imageInfo === null) {
+        this.onSend([newMessages[msgIndex]]);
+      } else {
+        this.onUploadImage(newMessages[msgIndex].imageInfo);
+      }
+    }
+  }
 
   onDeleteFriend = () => {
     const { chatUser } = this.props;
@@ -456,7 +489,7 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { chatUser, loading, messages } = this.props;
+    const { chatUser, loading, messages } = this.props;console.log(this.state.offlineMessages);
     let isFirstMsg = messages.filter((message) => !message.system && (message.user._id || message.user.id) === this.props.user.id).length === 0;
     return (
       <Screen hasHeader style={styles.container}>
@@ -481,15 +514,16 @@ class Chat extends React.Component {
           ) : (
           <GiftedChat
             listViewProps={{ keyboardDismissMode: "on-drag" }}
-            messages={messages}
+            messages={[...this.state.offlineMessages, ...messages]}
             text={this.state.msgText}
             isKeyboardInternallyHandled={true}
             bottomOffset={this.props.insets.bottom}
-            minComposerHeight={Platform.OS === "ios" ? 33 : 20}
-            minInputToolbarHeight={Platform.OS === "ios" ? wp(57) : wp(45)}
+            minComposerHeight={Platform.OS === "ios" ? 33 : 40}
+            minInputToolbarHeight={Platform.OS === "ios" ? wp(62) : wp(66)}
             alwaysShowSend={true}
             containerStyle={{
-              right: { marginBottom: 0 }
+              right: { marginBottom: 0 },
+              left: { marginBottom: 0 },
             }}
             renderBubble={bubbleProps => (
               <MessageBubble

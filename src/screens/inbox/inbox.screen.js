@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { SafeAreaView, View } from "react-native";
 import { Screen, Image, Text, Touchable, NotificationModal } from "@components";
+import moment from "moment";
+import { NavigationEvents } from "react-navigation";
 import { SCREENS } from "@constants";
 import NewFriends from "./new-friends";
 import Messages from "./messages";
@@ -23,6 +25,25 @@ class Inbox extends Component {
       removeUser: null,
       visibleConfirmDelete: false,
     };
+    this.pageStartTime = 0;
+  }
+
+  onWillFocus = (payload) => {
+    if (this.pageStartTime == 0) {
+      this.pageStartTime = moment().unix();
+    }
+  }
+
+  onWillBlur = (payload) => {
+    if (payload.lastState.key !== payload.state.key) {
+      const params = {
+        timeStart: this.pageStartTime,
+        timeEnd: moment().unix(),
+        page: "Chat",
+      }
+      this.pageStartTime = 0;
+      this.props.requestPageTime(params, this.props.token);
+    }
   }
 
   onPendingRequest = () => {
@@ -137,6 +158,10 @@ class Inbox extends Component {
           onBack={() => this.setState({visibleConfirmDelete: false})}
           onConfirm={(userId, userName) => this.onDeleteChat(userId, userName)}
         />
+        
+        <NavigationEvents 
+          onWillFocus={(payload) => this.onWillFocus(payload)}
+          onWillBlur={(payload) => this.onWillBlur(payload)} />
       </Screen>
     );
   }

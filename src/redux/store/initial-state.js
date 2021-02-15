@@ -1,4 +1,7 @@
 export default {
+  app: {
+    isConnected: true,
+  },
   user: {
     token: "",
     session: null,

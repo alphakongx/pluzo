@@ -17,6 +17,7 @@ const mapDispatchToProps = {
   requestStreamList: LiveCreators.requestStreamList,
   updateUser: UserCreators.requestUpdateUser,
   updateStreamInfo: LiveCreators.updateStreamInfo,
+  requestPageTime: UserCreators.requestPageTime,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Live);

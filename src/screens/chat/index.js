@@ -13,6 +13,7 @@ function mapStateToProps(state, { navigation }) {
     chatUser: navigation.getParam("chatUser"),
     chatId: navigation.getParam("chatId"),
     pushEnabled: state.user.pushEnabled,
+    isConnected: state.app.isConnected,
   };
 }
 

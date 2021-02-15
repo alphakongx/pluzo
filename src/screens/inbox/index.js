@@ -1,6 +1,6 @@
 import Inbox from "./inbox.screen";
 import { connect } from "react-redux";
-import { InboxCreators } from "@redux/actions";
+import { InboxCreators, UserCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -13,6 +13,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   loadFriends: InboxCreators.requestFriends,
   requestChannels: InboxCreators.requestChannels,
+  requestPageTime: UserCreators.requestPageTime,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Inbox);

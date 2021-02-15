@@ -20,12 +20,15 @@ const MessageBubble: () => React$Node = props => {
         return null;
     }
     
-    if (currentMessage && nextMessage._id === undefined &&
-        (currentMessage.message_info.sent || currentMessage.message_info.received || currentMessage.pending)) {          
+    if (currentMessage && nextMessage._id === undefined) {          
       return (
         <View style={styles.tickContainer}>
-          <View style={[styles.tickView, currentMessage.message_info.received ? styles.tickViewReceived : styles.tickViewSent]}>
-            <FastImage source={Images.app.icCheck} style={styles.tick} />
+          <View style={[styles.tickView, currentMessage.message_info.sent === 0 ? styles.tickViewSent : currentMessage.message_info.received ? styles.tickViewReceived : styles.tickViewSent]}>
+            {currentMessage.message_info.sent === 0 ? (
+              <FastImage source={Images.app.icClock} style={styles.tickPedning} />
+            ) : (
+              <FastImage source={Images.app.icCheck} style={styles.tick} />
+            )}
           </View>
         </View>
       );
@@ -48,7 +51,7 @@ const MessageBubble: () => React$Node = props => {
       </View>
     )
   }
-if (hasImage && currentMessage.image.includes("https://")) console.log(currentMessage.image);
+
   return (
     <View style={[styles.container, hasImage && hasText ? {} : styles.containerMargin]}>
       {hasImage ? (
