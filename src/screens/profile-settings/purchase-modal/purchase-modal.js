@@ -55,6 +55,14 @@ const plusAnimation = {
     ["translateY"]: 2.5,
   },
 };
+const detailTextAnim = {
+  from: {
+    ["opacity"]: 0,
+  },
+  to: {
+    ["opacity"]: 1,
+  }
+}
 
 class PurchaseModal extends React.Component {
   constructor(props) {
@@ -160,10 +168,10 @@ class PurchaseModal extends React.Component {
                       onPress={() => this.setState({visibleAdvantage: true})}
                     />
                   </View>
-                ) : (<View style={styles.detailContainer}>
+                ) : (<AnimatableView style={styles.detailContainer} animation={detailTextAnim} duration={1500}>
                   <Text style={styles.includesText}>includes:</Text>
                   {this.renderDetails()}
-                </View>)}
+                </AnimatableView>)}
                 
                 <Text style={styles.priceText}>
                   {this.props.user.premium === 0 ? "For $11.99/month" : ""}

@@ -25,6 +25,7 @@ const resetEnabledSettings = (state, action) => ({
   boostEndTime: 0,
   maskMode: 0,
   readyDeepAr: true,
+  stream: null,
 });
 const updateMutedUsers = (state, action) => ({
   ...state,

@@ -17,6 +17,7 @@ class PendingRequestModal extends Component {
       visibleProfile: false,
       selectedUser: null,
     }
+    this.updateAction = null;
   }
 
   onDismissModal = () => {
@@ -26,7 +27,9 @@ class PendingRequestModal extends Component {
   };
 
   onLoadRequests = () => {
-    // this.props.loadRequests(this.props.token);
+    if (this.props.startLoading === true) {
+      this.props.loadRequests(this.props.token);
+    }
     this.updateAction = EventBus.on("Friend_add", () => {
       this.props.loadRequests(this.props.token);
     });

@@ -1,7 +1,7 @@
 import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
-  requestCards: ["token"],
+  requestCards: ["token", "delayTime"],
   requestCardsSuccess: ["swipeData"],
   requestCardsFail: null,
   requestCardsUpdate: ["swipeData", "removedIndex"],

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { View } from "react-native";
 import { BoxShadow, Text, Touchable } from "@components";
 import * as Animatable from "react-native-animatable";
+import Images from "@assets/Images";
 
 import styles, { shadowOptions } from "./matches-view.style";
 import FastImage from "react-native-fast-image";
@@ -9,7 +10,7 @@ import FastImage from "react-native-fast-image";
 const MatchesView: () => React$Node = props => {
   let matchImage =
     props.matchedUser === null
-      ? require("@assets/images/live-screen/user-temp3.png")
+      ? Images.app.userPlaceholder
       : { uri: props.matchedUser.images[0].path };
 
   const handleViewRef = ref => {

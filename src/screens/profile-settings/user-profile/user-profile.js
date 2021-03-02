@@ -14,7 +14,7 @@ class UserProfile extends React.Component {
   render() {
     const { user, loading } = this.props;
 
-    var userImage = require("@assets/images/live-screen/user-temp3.png");
+    var userImage = Images.app.userPlaceholder;
     var name = "no name";
     if (user !== null) {
       if (user.images.length > 0) {

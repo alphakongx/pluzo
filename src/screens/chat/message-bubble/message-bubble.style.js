@@ -11,6 +11,10 @@ export default StyleSheet.create({
   containerMargin: {
     marginBottom: wp(4),
   },
+  containerMarginLarge: {
+    marginTop: wp(8),
+    marginBottom: wp(4),
+  },
   textContainer: {
     borderRadius: wp(22),
     paddingTop: wp(8),
@@ -43,6 +47,13 @@ export default StyleSheet.create({
   urlText: {
     textDecorationLine: "underline",
     color: "blue",
+  },
+  timeText: {
+    textAlign: "right",
+    alignSelf: "stretch",
+    color: "red",
+    fontSize: wp(10),
+    marginLeft: wp(15),
   },
   imageText: {
     top: -wp(18),

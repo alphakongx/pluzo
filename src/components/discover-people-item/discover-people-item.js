@@ -16,7 +16,7 @@ const DiscoverPeopleItem: () => React$Node = props => {
   let picture =
     props.user.images !== null && props.user.images.length > 0
       ? props.user.images[0].path
-      : require("@assets/images/live-screen/user-temp3.png");
+      : Images.app.userPlaceholder;
   let isOnline = Format.isRecently(props.user.last_activity);
 
   return (

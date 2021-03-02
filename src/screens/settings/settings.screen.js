@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { View, FlatList, Alert } from "react-native";
-import { SafeAreaView } from "react-navigation";
+import { View, Alert, Linking, SafeAreaView, ScrollView } from "react-native";
 import { Touchable, Image, Text, DialogInput, TouchableSettingItem } from "@components";
 import RNIap from "react-native-iap";
 import { SCREENS } from "@constants";
 import { Notification, API } from "@helpers";
-import { API_ENDPOINTS } from "@config";
+import { API_ENDPOINTS, SERVER } from "@config";
 
 import Images from "@assets/Images";
 import Header from "./header";
@@ -106,6 +105,8 @@ class Settings extends Component {
       this.props.navigation.navigate(SCREENS.SWIPE_SETTINGS);
     } else if (itemId === "7") {
       this.props.navigation.navigate(SCREENS.HELP);
+    } else if (itemId === "8") {
+      Linking.openURL(SERVER.COMMUNITY);
     } else if (itemId === "9") {
       this.props.navigation.navigate(SCREENS.LEGAL, {});
     } else if (itemId === "11") {
@@ -120,55 +121,57 @@ class Settings extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <SafeAreaView style={styles.safeAreaContainer}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.safeAreaContainer}>
           <Header title={"Settings"} onBack={this.goBack} />
 
-          <FlatList
-            data={settingData}
-            keyExtractor={item => item.id}
-            renderItem={({ item: item, index }) => {
-              switch (item.type) {
-                case 0:
+          <ScrollView style={styles.safeAreaContainer}>
+            {settingData.map((item) => {
+              if (item.type === 0) {
+                return (
+                  <TouchableSettingItem
+                    key={`setting-item-${item.id}`}
+                    style={styles.itemContainer}
+                    text={item.name}
+                    icon
+                    iconUri={Images.settings[item.iconUri]}
+                    onPress={() => this.onItemPressed(item.id)}
+                  />
+                );
+              } else if (item.type === 1) {
+                if (item.name.toLowerCase() === "logout") {
                   return (
-                    <TouchableSettingItem
-                      style={styles.itemContainer}
-                      text={item.name}
-                      icon
-                      iconUri={Images.settings[item.iconUri]}
-                      onPress={() => this.onItemPressed(item.id)}
-                    />
+                    <Touchable
+                      key={`setting-item-${item.id}`}
+                      style={styles.itemContainer1}
+                      onPress={() => this.setState({ visibleLogout: true })}
+                    >
+                      <Image source={Images.settings[item.iconUri]} />
+                      <Text style={styles.logoutText}>{item.name}</Text>
+                    </Touchable>
                   );
-                case 1:
-                  if (item.name.toLowerCase() === "logout") {
-                    return (
-                      <Touchable
-                        style={styles.itemContainer1}
-                        onPress={() => this.setState({ visibleLogout: true })}
-                      >
-                        <Image source={Images.settings[item.iconUri]} />
-                        <Text style={styles.logoutText}>{item.name}</Text>
-                      </Touchable>
-                    );
-                  } else {
-                    return (
-                      <Touchable
-                        style={styles.itemContainer1}
-                        onPress={() => this.onItemPressed(item.id)}
-                      >
-                        <Image source={Images.settings[item.iconUri]} />
-                        <Text style={styles.deleteText}>{item.name}</Text>
-                      </Touchable>
-                    );
-                  }
-                case 2:
-                  return <View style={styles.emptyItemContainer} />;
-                case 3:
-                  return <View style={styles.separatorLine} />;
+                } else {
+                  return (
+                    <Touchable
+                      key={`setting-item-${item.id}`}
+                      style={styles.itemContainer1}
+                      onPress={() => this.onItemPressed(item.id)}
+                    >
+                      <Image source={Images.settings[item.iconUri]} />
+                      <Text style={styles.deleteText}>{item.name}</Text>
+                    </Touchable>
+                  );
+                }
+              } else if (item.type === 2) {
+                return <View key={`setting-item-${item.id}`} style={styles.emptyItemContainer} />;
+              } else if (item.type === 3) {
+                return <View key={`setting-item-${item.id}`} style={styles.separatorLine} />;
+              } else {
+                return null;
               }
-            }}
-          />
-        </SafeAreaView>
+            })}
+          </ScrollView>
+        </View>
         <DialogInput
           isDialogVisible={this.state.showDelete}
           title={"Delete your account?"}
@@ -187,7 +190,7 @@ class Settings extends Component {
           onCancel={() => this.setState({ visibleLogout: false })}
           onLogout={this.onLogout}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }

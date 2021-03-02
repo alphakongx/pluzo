@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { Screen, BackButton, Text, BoxShadow, GradientButton } from "@components";
+import EventBus from "eventing-bus";
+import { Screen, Text, BoxShadow, GradientButton } from "@components";
 import Modal from "react-native-modal";
 
 import styles from "./stream-join-modal.style";
@@ -9,6 +10,7 @@ import styles from "./stream-join-modal.style";
 const StreamJoinModal: () => React$Node = props => {
   const [width, setWidth] = useState(1);
   const [height, setHeight] = useState(1);
+  const { onBack } = props;
   let backShadowOpt = {
     width: width,
     height: height,
@@ -33,6 +35,16 @@ const StreamJoinModal: () => React$Node = props => {
   };
 
   const message = props.askedByUser ? "asks you to join" : "invited you to join the live";
+  
+  useEffect(() => {
+    const _closeAction = EventBus.on("Modal_Close", () => {
+      onBack();
+    });
+
+    return () => {
+      _closeAction();
+    }
+  }, [onBack]);
 
   return (
     <Modal
@@ -65,7 +77,7 @@ const StreamJoinModal: () => React$Node = props => {
           <BoxShadow setting={handShadowOpt} />
           <View style={styles.logoIconContainer}>
             <FastImage
-              source={{ uri: props.askedUser.images[0].path }}
+              source={props.askedUser ? { uri: props.askedUser.images[0].path } : ""}
               style={styles.logoIcon}
             />
           </View>

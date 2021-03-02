@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
-import { Screen, BackButton, Text, Image, BoxShadow, GradientButton } from "@components";
+import { Screen, Text, Image, BoxShadow, GradientButton } from "@components";
+import EventBus from "eventing-bus";
 import Modal from "react-native-modal";
 import Images from "@assets/Images";
 
@@ -9,6 +10,7 @@ import styles from "./stream-ask-modal.style";
 const StreamAskModal: () => React$Node = props => {
   const [width, setWidth] = useState(1);
   const [height, setHeight] = useState(1);
+  const { onBack } = props;
   let backShadowOpt = {
     width: width,
     height: height,
@@ -50,6 +52,16 @@ const StreamAskModal: () => React$Node = props => {
       props.requestUserAskJoin(streamParams.channelName, token);
     }
   };
+
+  useEffect(() => {
+    const _closeAction = EventBus.on("Modal_Close", () => {
+      onBack();
+    });
+
+    return () => {
+      _closeAction();
+    }
+  }, [onBack]);
 
   return (
     <Modal

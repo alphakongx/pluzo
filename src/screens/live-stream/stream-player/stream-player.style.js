@@ -88,4 +88,19 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+
+  pausedContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pausedIcon: {
+    width: wp(9),
+    height: wp(10),
+    marginBottom: wp(2),
+  },
+  pausedText: {
+    fontSize: wp(16),
+    fontWeight: "600",
+    color: "white",
+  }
 });

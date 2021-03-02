@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   contentContainer: {
-    flex: 1,
+    // flex: 1,
     paddingHorizontal: wp(37),
     paddingTop: (height / 100) * 18,
   },

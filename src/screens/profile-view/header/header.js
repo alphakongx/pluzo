@@ -18,9 +18,10 @@ const Header: () => React$Node = props => {
             <Text style={styles.headerTitle}>{user.name || user.username}</Text>
           </View>
           <View style={styles.reportButtonContainer}>
+            {!props.isOwner && 
             <Touchable style={styles.reportButtonTouchable} onPress={props.onReport}>
               <Image source={require("@assets/images/report.png")} />
-            </Touchable>
+            </Touchable>}
           </View>
         </View>
       </SafeAreaView>

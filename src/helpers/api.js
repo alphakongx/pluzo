@@ -40,8 +40,9 @@ export class API {
       })
       .catch(error => {
         clearTimeout(timeoutHandler);
-
+        console.log(error.response.data.message);
         if (options.silent === true) {
+          console.log(error.response.data.error);
           // throw error;
         } else if (error.message === "Network Error") {
           axios({
@@ -52,13 +53,13 @@ export class API {
               if (!options.silent && DEBUG)
                 Notification.alert(i18n.t(`alerts.failure.serverNotResponding`));
 
-              // throw error;
+              throw error;
             })
             .catch(err => {
               if (!options.silent && DEBUG) {
                 Notification.alert(i18n.t(`alerts.failure.checkInternetConnection`));
               }
-              // throw err;
+              throw err;
             });
         } else {
           if (error.response && error.response.status === 401) {
@@ -68,35 +69,6 @@ export class API {
               Notification.alert(error.response.data.message);
             }
           }
-          // if (
-          //   error.response &&
-          //   (error.response.status === 401 || error.response.status === 404)
-          // ) {
-          //   // EventBus.publish('logout');
-          //   global.store.dispatch({ type: "LOGOUT" });
-          //
-          //   const message =
-          //     error.response.data?.message || error.response.data?.status?.message;
-          //   if (!options.silent)
-          //     Notification.error(message, error?.response?.data?.status?.explanation);
-          // } else if (error.response && !options.silent) {
-          //   const message =
-          //     error.response.data?.status?.message || error.response.data?.message;
-          //   Notification.error(message, error.response.data?.status?.explanation);
-          // }
-          //
-          // const errorKeys = Object.keys(error);
-          //
-          // if (
-          //   errorKeys.length === 1 &&
-          //   errorKeys[0] === "message" &&
-          //   error.message === undefined
-          // ) {
-          //   if (!options.silent) {
-          //     // Notification.error(i18n.t('alerts.failure.request_timeout'));
-          //   }
-          // }
-
           throw error;
         }
         throw error;

@@ -107,6 +107,7 @@ const SignupImage: () => React$Node = props => {
                 onPress={() => onPressUpload(1)}>
                 {props.picture1 ? (
                   <Image
+                    key={`upload-image-1`}
                     source={{ uri: props.picture1.uri }}
                     style={styles.imageContainer}
                   />
@@ -121,6 +122,7 @@ const SignupImage: () => React$Node = props => {
                 onPress={() => onPressUpload(2)}>
                 {props.picture2 ? (
                   <Image
+                    key={`upload-image-2`}
                     source={{ uri: props.picture2.uri }}
                     style={styles.imageContainer}
                   />
@@ -135,6 +137,7 @@ const SignupImage: () => React$Node = props => {
                 onPress={() => onPressUpload(3)}>
                 {props.picture3 ? (
                   <Image
+                    key={`upload-image-3`}
                     source={{ uri: props.picture3.uri }}
                     style={styles.imageContainer}
                   />

@@ -21,6 +21,7 @@ export default StyleSheet.create({
     // borderWidth: wp(2),
     // borderColor: "white",
     backgroundColor: "rgba(255, 255, 255, 0.2)",
+    zIndex: 0,
   },
   inputField: FontHelper.font({
     flex: 1,
@@ -31,6 +32,7 @@ export default StyleSheet.create({
     marginLeft: wp(15),
     marginRight: wp(15),
     padding: 0,
+    zIndex: 99999,
   }),
   sendButtonContainer: {
     width: wp(35),

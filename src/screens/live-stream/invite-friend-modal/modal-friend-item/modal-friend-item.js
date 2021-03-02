@@ -3,14 +3,21 @@ import { View } from "react-native";
 import { Text, Touchable, GradientButton } from "@components";
 import FastImage from "react-native-fast-image";
 import { GRADIENT } from "@config";
+import Images from "@assets/Images";
 import styles from "./modal-friend-item.style";
 
 const ModalFriendItem: () => React$Node = props => {
   let picture =
     props.user.images !== null
       ? props.user.images[0].path
-      : require("@assets/images/live-screen/user-temp3.png");
+      : Images.app.userPlaceholder;
+  let isJoined = false;
   let isInvited = props.invitedFriends.includes(props.user.id);
+  let broadcasters = props.broadcasters.filter((value) => value._id === parseInt(props.user.id, 10));
+  let audiences = props.audiences.filter((value) => value._id === parseInt(props.user.id, 10));
+  if (broadcasters.length > 0 || audiences.length > 0) {
+    isJoined = true;
+  }
 
   return (
     <Touchable
@@ -35,8 +42,8 @@ const ModalFriendItem: () => React$Node = props => {
             colors={GRADIENT.BUTTON}
             containerStyle={styles.addButton}
             textStyle={styles.addButtonText}
-            disabled={isInvited}
-            text={isInvited ? "Invited" : "Invite"}
+            disabled={isInvited || isJoined}
+            text={isJoined ? "Joined" : isInvited ? "Invited" : "Invite"}
           />
         </View>
       </View>

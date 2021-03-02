@@ -53,6 +53,7 @@ class Live extends Component {
       if (jsonData === undefined) return;
       let data = JSON.parse(jsonData);
       if (this.props.channelName === data.stream.channel) {
+        this.props.updateStreamSuccess(data.stream);
         this.props.updateStreamInfo(data.stream.boost_end_time, parseInt(data.stream.invite_only, 10));
       }
     });
@@ -113,24 +114,15 @@ class Live extends Component {
 
   onNewStream = () => {
     const { user } = this.props;
-    if (this.props.streamStatus !== StreamStatus.NONE) {
-      EventBus.publish("APP_END_STREAM_ACTION");
-      setTimeout(() => {
-        let channelName = `${new Date().getTime()}-${user.id}`;
-        let params = {
-          channelName,
-          isBroadcaster: true,
-          isJoin: false,
-        };
-        EventBus.publish("NEW_STREAM_ACTION", params);
-      }, 200);
+    let channelName = `${new Date().getTime()}-${user.id}`;
+    let params = {
+      channelName,
+      isBroadcaster: true,
+      isJoin: false,
+    };
+    if (this.props.streamStatus !== null && this.props.streamStatus !== StreamStatus.NONE) {
+      EventBus.publish("APP_END_STREAM_ACTION", params);
     } else {
-      let channelName = `${new Date().getTime()}-${user.id}`;
-      let params = {
-        channelName,
-        isBroadcaster: true,
-        isJoin: false,
-      };
       EventBus.publish("NEW_STREAM_ACTION", params);
     }
   };
@@ -153,10 +145,7 @@ class Live extends Component {
       isJoin: true,
     };
     if (this.props.streamStatus !== StreamStatus.NONE) {
-      EventBus.publish("APP_END_STREAM_ACTION");
-      setTimeout(() => {
-        EventBus.publish("NEW_STREAM_ACTION", params);
-      }, 500);
+      EventBus.publish("APP_END_STREAM_ACTION", params);
     } else {
       EventBus.publish("NEW_STREAM_ACTION", params);
     }
@@ -164,7 +153,7 @@ class Live extends Component {
 
   renderStaticViews = () => {
     const { category, searchText } = this.state;
-    let streams = this.props.trendingStreams;
+    let streams = this.props.trendingStreams.filter(value => value.info.streamers_images.length > 0);
     if (category !== 0) {
       streams = this.props.trendingStreams.filter(
         stream => parseInt(stream.category, 10) === category
@@ -273,7 +262,7 @@ class Live extends Component {
 
   render() {
     const { category, searchText } = this.state;
-    let streams = this.props.allStreams;
+    let streams = this.props.allStreams.filter(value => value.info.streamers_images.length > 0);
     if (category !== 0) {
       streams = this.props.allStreams.filter(
         stream => parseInt(stream.category, 10) === this.state.category,

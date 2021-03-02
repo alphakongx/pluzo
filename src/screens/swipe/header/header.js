@@ -49,7 +49,7 @@ const Header: () => React$Node = props => {
       {strAddress !== "" &&
       <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
         <Image source={require("@assets/images/swipe-screen/location.png")} />
-        {addresses.length > 1 && <Text style={styles.topBarCity}>{addresses[0]},</Text>}
+        {(addresses.length > 1 && addresses[0].length > 0) && <Text style={styles.topBarCity}>{addresses[0]},</Text>}
         <Text style={styles.topBarLocation}>{addresses.length > 1 ? addresses[1] : addresses[0]}</Text>
       </View>}
       <View style={styles.badgeContainer}>

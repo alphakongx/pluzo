@@ -8,6 +8,7 @@ import LinearGradient from "react-native-linear-gradient";
 
 import styles from "./stream-cateogry-modal.style";
 import StreamEmojiView from "../stream-emoji-view";
+import EventBus from "eventing-bus";
 
 class StreamCategoryModal extends Component {
   constructor(props) {
@@ -15,6 +16,16 @@ class StreamCategoryModal extends Component {
     this.state = {
       category: parseInt(this.props.stream.category, 10) > 6 ? 0 : parseInt(this.props.stream.category, 10),
     };
+  }
+
+  componentDidMount() {
+    this._closeAction = EventBus.on("Modal_Close", () => {
+      this.props.onDismiss && this.props.onDismiss();
+    });
+  }
+
+  componentWillUnmount() {
+    this._closeAction();
   }
 
   onModalHide = () => {

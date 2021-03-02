@@ -143,6 +143,7 @@ class ResetPasswordCodeVerification extends React.Component {
             </View>
           </View>
 
+          <View style={{flex: 1}} />
           <View style={styles.footer}>
             <GradientButton
               loading={this.props.verificationInProgress}

@@ -14,6 +14,7 @@ class NoUsers extends React.Component {
     this.state = {
       visibleSetting: false,
       visibleGenderSetting: false,
+      disableButton: true,
     };
     this.progress = new Animated.Value(0);
   }
@@ -27,6 +28,10 @@ class NoUsers extends React.Component {
         useNativeDriver: true,
       }),
     ).start();
+
+    setTimeout(() => {
+      this.setState({disableButton: false});
+    }, 1000);
   }
 
   render() {
@@ -80,6 +85,7 @@ class NoUsers extends React.Component {
               <GradientButton
                 style={styles.settingButton}
                 text={permission ? "Show Settings" : "Discovery Settings"}
+                disabled={this.props.isLoadingCards}
                 onPress={() => {
                   if (permission) {
                     Linking.openSettings();
