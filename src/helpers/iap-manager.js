@@ -25,15 +25,15 @@ export const ItemSkus = Platform.select({
     "com.pluzo.app.pluzoplus",
     "com.pluzo.app.pluzoplus3",
     "com.pluzo.app.pluzoplus12",
-    "com.pluzo.app.boostOne",
-    "com.pluzo.app.boostFive",
-    "com.pluzo.app.boostTen",
-    "com.pluzo.app.superlikeOne",
-    "com.pluzo.app.superlikeFive",
-    "com.pluzo.app.superlikeTen",
-    "com.pluzo.app.rewindsOne",
-    "com.pluzo.app.rewindsFive",
-    "com.pluzo.app.rewindsTen",
+    "com.pluzo.app.boostone",
+    "com.pluzo.app.boostfive",
+    "com.pluzo.app.boostten",
+    "com.pluzo.app.superlikeone",
+    "com.pluzo.app.superlikefive",
+    "com.pluzo.app.superliketen",
+    "com.pluzo.app.rewindsone",
+    "com.pluzo.app.rewindsfive",
+    "com.pluzo.app.rewindsten",
   ],
 });
 
@@ -41,10 +41,18 @@ class IapManager extends Component {
   async componentDidMount() {
     try {
       await RNIap.initConnection();
-      await RNIap.clearProductsIOS();
-      await RNIap.clearTransactionIOS();
+      if (Platform.OS === "ios") {
+        await RNIap.clearProductsIOS();
+        await RNIap.clearTransactionIOS();
+      }
       await RNIap.flushFailedPurchasesCachedAsPendingAndroid();
       await RNIap.getProducts(ItemSkus);
+      if (Platform.OS === "android") {
+        await RNIap.getSubscriptions([
+          "com.pluzo.app.pluzoplus",
+          "com.pluzo.app.pluzoplus3",
+          "com.pluzo.app.pluzoplus12",]);
+      }
       
       this.purchaseUpdateSubscription = purchaseUpdatedListener(async purchase => {
         const receipt = purchase.transactionReceipt;

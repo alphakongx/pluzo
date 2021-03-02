@@ -90,7 +90,7 @@ class StreamUsers extends Component {
 
   componentWillUnmount() {
     this.props.setIsScrolling(false);
-    if (this.props.isBroadcaster === true && this.props.stream !== null) {
+    if (this.props.isBroadcaster === true && this.props.stream !== null && this.state.creator === this.props.user.id) {
       let stream = this.props.stream;
       stream.name = Format.cleanText(stream.name);
       this.props.streamUpdateSuccess(stream);
@@ -124,11 +124,17 @@ class StreamUsers extends Component {
         return;
       }
     }
-    this.props.requestStreamDisconnectBroad(
-      streamParams.channelName,
-      broadcaster._id,
-      this.props.token,
-    );
+    let userID = parseInt(broadcaster._id, 10);
+    this.setState({notificationData: {
+      text: `Do you want to remove\n${broadcaster.first_name} from streamer?`,
+      logoBackground: "#FF0036",
+      logoTintColor: "#0B0516",
+      buttonColors: ["#FF0036", "#FF0036"],
+      buttonText: "Okay",
+      buttonTextStyle: "#0B0516",
+      type: "rm-broadcaster",
+      userId: userID,
+    }, visibleNotification: true});
   };
 
   onAddToBroadcaster = audience => {
@@ -301,7 +307,7 @@ class StreamUsers extends Component {
           )}
           {isBroadcaster && isStreamer === false && (
             <Touchable
-              disabled={this.isSendRequest(user)}
+              disabled={this.props.askedUsers.filter((value) => value === user._id).length === 0 && this.isSendRequest(user)}
               onPress={() => {
                 if (this.props.askedUsers.filter((value) => value === user._id).length > 0) {
                   this.props.userAcceptJoin(this.props.streamParams.channelName, user._id, this.props.token);
@@ -311,14 +317,13 @@ class StreamUsers extends Component {
                 }
               }}
             >
-              {!this.isSendRequest(user) ? (
-                this.props.askedUsers.filter((value) => value === user._id).length > 0 ? (
-                  <View style={styles.streamAskedContainer}>
-                    <Image source={Images.live.icHand} style={styles.streamAskedIcon}  />
-                  </View>
-                ) : (
-                  <Image source={Images.live.broadcasterAdd} style={styles.streamRemoveIcon}  />
-                )
+              {this.props.askedUsers.filter((value) => value === user._id).length > 0 ? (
+                <View style={styles.streamAskedContainer}>
+                  <Image source={Images.live.icHand} style={styles.streamAskedIcon}  />
+                </View>
+              ) : 
+              !this.isSendRequest(user) ? (
+                <Image source={Images.live.broadcasterAdd} style={styles.streamRemoveIcon}  />
               ) : (
                 <Image source={Images.live.broadcasterWait} style={styles.streamRemoveIcon}  />
               )}
@@ -345,6 +350,10 @@ class StreamUsers extends Component {
 
   render() {
     const { broadcasters, audiences, isBroadcaster, stream } = this.props;
+    let isOwner = false;
+    if (this.props.stream) {
+      isOwner = this.state.creator === this.props.user.id;
+    }
 
     return (
       <Animated.View
@@ -369,7 +378,7 @@ class StreamUsers extends Component {
               >
                 <Image source={require("@assets/images/report.png")} />
               </Touchable>
-              {isBroadcaster && stream !== null ? (
+              {isBroadcaster && isOwner ? (
                 <Touchable
                   onPress={() => {
                     this.setState({ visibleCategories: true });
@@ -392,34 +401,52 @@ class StreamUsers extends Component {
                   )}
                 </Touchable>
               ) : (
-                <View style={styles.headerTitleContainer}>
-                  <Text style={styles.headerTitle}>{"Live"}</Text>
-                  <View style={styles.onlineIconContainer}>
+                stream ? (
+                  <View style={[styles.emojiButton]}>
+                    {parseInt(stream.category) === 0 ?
+                    (
+                      <Text style={styles.emptyCategoryText}>Category</Text>
+                    ): (
                     <LinearGradient
-                      colors={GRADIENT.FRIEND_ONLINE_ICON}
-                      from={{ x: 0, y: 0 }}
-                      to={{ x: 1, y: 0 }}
-                      style={styles.onlineIcon}
-                    />
+                      colors={Object.values(AppTags[stream.category].color)}
+                      start={{x: 1, y: 0}}
+                      end={{x: 0, y: 1}}
+                      style={styles.emojiCategoryContainer}>
+                      <Text style={[styles.itemText, {textShadowColor: AppTags[stream.category].shadowColor}]}>
+                        {AppTags[stream.category].name}
+                      </Text>
+                    </LinearGradient>
+                    )}
                   </View>
-                </View>
+                ) : (
+                  <View style={styles.headerTitleContainer}>
+                    <Text style={styles.headerTitle}>{"Live"}</Text>
+                    <View style={styles.onlineIconContainer}>
+                      <LinearGradient
+                        colors={GRADIENT.FRIEND_ONLINE_ICON}
+                        from={{ x: 0, y: 0 }}
+                        to={{ x: 1, y: 0 }}
+                        style={styles.onlineIcon}
+                      />
+                    </View>
+                  </View>
+                )                
               )}
             </View>
 
-            {isBroadcaster && stream !== null && (
-              <RNTextInput
-                value={this.state.streamName}
-                style={styles.streamTitle}
-                placeholder={"Set a title"}
-                placeholderTextColor={"#E8E6FF"}
-                onChangeText={text => this.onChangeTitle(text)}
-                onEndEditing={() => this.onChangeTitleUpdate()}
-                autoCorrect={false}
-                allowFontScaling={false}
-              />
-            )}
+            <RNTextInput
+              value={isOwner ? this.state.streamName : stream ? stream.name : ""}
+              style={styles.streamTitle}
+              placeholder={isOwner ? "Set a title" : "No Name"}
+              placeholderTextColor={"#E8E6FF"}
+              onChangeText={text => this.onChangeTitle(text)}
+              onEndEditing={() => this.onChangeTitleUpdate()}
+              autoCorrect={false}
+              allowFontScaling={false}
+              editable={isOwner}
+            />
 
-            {isBroadcaster && stream !== null && (
+            {isBroadcaster && isOwner && (
               <View style={styles.inviteOnlyContainer}>
                 <View>
                   <Text style={styles.inviteOnlyText}>Invite-Only</Text>
@@ -444,7 +471,7 @@ class StreamUsers extends Component {
                 />
               </View>
             )}
-            {isBroadcaster && <View style={styles.separator} />}
+            <View style={styles.separator} />
 
             <View style={styles.inviteButtonContainer}>
               <SolidButton
@@ -531,7 +558,7 @@ class StreamUsers extends Component {
             </View>}
           </SafeAreaView>
 
-          {stream !== null && (
+          {isOwner && (
             <StreamCategoryModal
               isVisible={this.state.visibleCategories}
               onDismiss={() => this.setState({ visibleCategories: false })}
@@ -558,12 +585,19 @@ class StreamUsers extends Component {
               } else if (this.state.notificationData.type === "ban") {
                 this.props.requestStreamBanUser(userID, this.props.stream.channel, this.props.token);
                 this.onSendSystemMsg(`${this.state.notificationData.userName} banned.`);
+              } else if (this.state.notificationData.type === "rm-broadcaster") {
+                this.props.requestStreamDisconnectBroad(
+                  this.props.streamParams.channelName,
+                  userID,
+                  this.props.token,
+                );
+                EventBus.publish("player_actions", "REMOVE_FROM_BROADCASTER", {userId: userID});
               } else {
                 if (this.state.notificationData.type === "unmute") {
                   EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: userID, mute: false});
                 } else {
                   EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: userID, mute: true});
-                }
+                }                
               }
             })} 
           />

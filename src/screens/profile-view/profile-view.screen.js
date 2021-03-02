@@ -321,6 +321,7 @@ class ProfileView extends React.Component {
         <Animated.View style={{ opacity: this.headerOpacity }} pointerEvents={"box-none"}>
           <Header
             user={user}
+            isOwner={(user.id || user._id) === this.props.owner.id}
             onBack={() => {
               this.onBack();
             }}

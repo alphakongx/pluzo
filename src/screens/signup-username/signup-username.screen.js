@@ -42,6 +42,9 @@ const SignupUsername: () => React$Node = props => {
   };
 
   const onChangedUsername = (username) => {
+    if (username !== "" && /^(?:[A-Za-z\d+]+)$/.test(username) === false) {
+      return;
+    }
     props.setUsername(username);
     setCheckingData(null);
 
@@ -63,8 +66,10 @@ const SignupUsername: () => React$Node = props => {
   }
 
   const navigateNext = () => {
-    KeyboardManager.setShouldResignOnTouchOutside(true);
-    KeyboardManager.resignFirstResponder();
+    if (Platform.OS === "ios") {
+      KeyboardManager.setShouldResignOnTouchOutside(true);
+      KeyboardManager.resignFirstResponder();
+    }
     props.navigation.navigate(SCREENS.SIGNUP_IMAGE, {});
   };
 

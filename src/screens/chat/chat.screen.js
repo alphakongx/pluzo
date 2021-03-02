@@ -489,7 +489,7 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { chatUser, loading, messages } = this.props;console.log(this.state.offlineMessages);
+    const { chatUser, loading, messages } = this.props;
     let isFirstMsg = messages.filter((message) => !message.system && (message.user._id || message.user.id) === this.props.user.id).length === 0;
     return (
       <Screen hasHeader style={styles.container}>
@@ -498,6 +498,7 @@ class Chat extends React.Component {
           onBack={() => this.props.navigation.goBack()}
           onProfileView={() => {
             if (chatUser === 0) return;
+            Keyboard.dismiss();
             this.props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: chatUser });
           }}
           onReport={() => this.setState({ visibleUserSetting: true })}
@@ -513,7 +514,7 @@ class Chat extends React.Component {
             />
           ) : (
           <GiftedChat
-            listViewProps={{ keyboardDismissMode: "on-drag" }}
+            listViewProps={Platform.OS === "ios" ? { keyboardDismissMode: "on-drag" } : { onScrollBeginDrag: Keyboard.dismiss }}
             messages={[...this.state.offlineMessages, ...messages]}
             text={this.state.msgText}
             isKeyboardInternallyHandled={true}

@@ -60,7 +60,7 @@ const StreamPlayerSetting: () => React$Node = props => {
       if (props.isEnabledMic) {
         text = `Mute\nmicrophone`;
       } else {
-        text = `Active\nmicrophone`;
+        text = `Activate\nmicrophone`;
         stateStyle = styles.buttonCircleRed;
       }
     } else if (item.id === 4) {

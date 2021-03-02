@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, delay } from "redux-saga/effects";
 import { SwipeCreators, SwipeTypes, UserCreators } from "../actions";
 import {
   getCards,
@@ -28,7 +28,8 @@ export function* watchSwipeRequests() {
 
 function* requestCards(action) {
   try {
-    const { token } = action;
+    const { token, delayTime } = action;
+    yield delay(delayTime);
 
     var response = yield call(getCards, token);
     let data = response.data.data.swipe.map(item => ({ uri: (item.images && item.images.length > 0) ? item.images[0].path : "" }));

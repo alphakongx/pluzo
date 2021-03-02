@@ -89,24 +89,22 @@ class PushNotification extends React.Component {
           }, 500);
         }
       } else if (data.action === "stream") {
-        EventBus.publish("APP_END_STREAM_ACTION");
+        let params = {
+          channelName: data.channel_id,
+          isBroadcaster: false,
+          isJoin: true,
+        };
         setTimeout(() => {
-          let params = {
-            channelName: data.channel_id,
-            isBroadcaster: false,
-            isJoin: true,
-          };
-          EventBus.publish("NEW_STREAM_ACTION", params);
+          EventBus.publish("APP_END_STREAM_ACTION", params);
         }, 1000);
       } else if (data.action === "stream_invite") {
-        EventBus.publish("APP_END_STREAM_ACTION");
-        setTimeout(() => {
-          let params = {
-            channelName: data.channel_id,
-            isBroadcaster: false,
-            isJoin: true,
-          };
-          EventBus.publish("NEW_STREAM_ACTION", params);
+        let params = {
+          channelName: data.channel_id,
+          isBroadcaster: false,
+          isJoin: true,
+        };
+        setTimeout(() => {          
+          EventBus.publish("APP_END_STREAM_ACTION", params);
         }, 1000);
       }
     }

@@ -6,10 +6,8 @@ import LinearGradient from "react-native-linear-gradient";
 import { GradientButton, Text, BackButton, BoxShadow, Touchable, Screen } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import * as Animatable from "react-native-animatable";
-import RNIap from "react-native-iap";
-import { GRADIENT } from "@config";
 import Images from "@assets/Images";
-import { widthPercentageToDP as wp, ItemSkus } from "@helpers";
+import { widthPercentageToDP as wp } from "@helpers";
 
 import styles, { screenWidth } from "./puchase-select-modal.style";
 

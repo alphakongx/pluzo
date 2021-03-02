@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Linking, View, ActivityIndicator, Image } from "react-native";
 import FastImage from "react-native-fast-image";
-import { Touchable } from "@components";
+import { Touchable, Text } from "@components";
 import styles from "./message-bubble.style.js";
 import Images from "@assets/Images";
 import ParsedText from 'react-native-parsed-text';
@@ -9,11 +9,12 @@ import MessageLiveItem from "./message-live-item.js";
 
 const MessageBubble: () => React$Node = props => {
   const [loading, setLoading] = useState(true);
-  const { currentMessage, user, nextMessage } = props;
+  const { currentMessage, user, nextMessage, previousMessage } = props;
   const isCurrentUser = currentMessage.user._id === user._id;
   const hasImage = currentMessage.image ? true : false;
   const hasText =
     currentMessage.text !== null && currentMessage.text !== "" ? true : false;
+  const largeSpacer = previousMessage && previousMessage.user && (currentMessage.user._id !== previousMessage.user._id);
 
   const renderTicks = () => {
     if (!isCurrentUser) {
@@ -43,7 +44,7 @@ const MessageBubble: () => React$Node = props => {
   if (currentMessage.type === "invite" || currentMessage.type === "close") {
     if (currentMessage.stream_info === null) return null;
     return (
-      <View style={[styles.container, styles.containerMargin]}>
+      <View style={[styles.container, largeSpacer ? styles.containerMarginLarge : styles.containerMargin]}>
         <MessageLiveItem
           currentMessage={currentMessage}
           isCurrentUser={isCurrentUser}
@@ -53,7 +54,7 @@ const MessageBubble: () => React$Node = props => {
   }
 
   return (
-    <View style={[styles.container, hasImage && hasText ? {} : styles.containerMargin]}>
+    <View style={[styles.container, hasImage && hasText ? {} : largeSpacer ? styles.containerMarginLarge : styles.containerMargin]}>
       {hasImage ? (
         <Touchable
           style={styles.imageContainer}
@@ -96,6 +97,7 @@ const MessageBubble: () => React$Node = props => {
             selectable
           >
             {currentMessage.text}
+            {/* <Text style={styles.timeText}>{"7:55"}</Text> */}
           </ParsedText>
         </View>
       )}

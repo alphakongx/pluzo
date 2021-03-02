@@ -67,8 +67,6 @@ export const API_ENDPOINTS = {
 
   // streaming
   STREAM_UPDATE: `${BASE_URL}/stream-update`,
-  STREAM_BAN_USER: `${BASE_URL}/stream-ban-user`,
-  STREAM_BAN_LIST: `${BASE_URL}/stream-ban-list`,
   STREAM_NEW_PEOPLE: `${BASE_URL}/stream-new-people`,
   STREAM_INVITE: `${BASE_URL}/stream-invite`,
 
@@ -117,4 +115,5 @@ export const API_ENDPOINTS = {
 export const SERVER = {
   PRIVACY: "https://www.pluzo.com/policy",
   TOS: "https://www.pluzo.com/tos",
+  COMMUNITY: "https://www.pluzo.com/community-guidelines"
 }

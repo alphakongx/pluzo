@@ -222,7 +222,7 @@ const SwipePurchaseModal: () => React$Node = props => {
                   direction="alternate"
                   duration={1500}
                   style={styles.plusMark}
-                  pointerEvents={"box-none"}>
+                  pointerEvents={"none"}>
                   <Image
                     source={Images.swipe.pluzoPlusMark}
                     pointerEvents={"none"}

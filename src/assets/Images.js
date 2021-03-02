@@ -44,6 +44,7 @@ const Images = {
     broadcasterAdd: require("@assets/images/live-screen/user-add.png"),
     broadcasterWait: require("@assets/images/live-screen/user-wait.png"),
     broadcasterRemove: require("@assets/images/live-screen/user-remove.png"),
+    icPaused: require("@assets/images/live-screen/pause.png"),
   },
   swipe: {
     boostLogo: require("@assets/images/swipe-screen/boost-logo.png"),

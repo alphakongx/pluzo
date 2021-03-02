@@ -14,7 +14,7 @@ import StreamStopModal from "./stream-stop-modal";
 import styles, { width, height } from "./home.style";
 import PushNotification from "./push-notification";
 import AsyncStorage from "@react-native-community/async-storage";
-import PendingRequestModal from "../inbox/pending-request-modal/pending-request-modal";
+import PendingRequestModal from "../inbox/pending-request-modal";
 
 const shadowOptions = {
   width: 130,
@@ -44,6 +44,7 @@ const Home = props => {
   const [originalPos, setOriginalPos] = useState({ x: 0, y: 0 });
   const [visibleStop, setVisibleStop] = useState(false);
   const [tutorialMode, setTutorialMode] = useState(false);
+  const [newStreamParams, setNewStreamParams] = useState(null);
 
   const maxDeltaY = height - (insets.bottom + insets.top + 100);
   const positionStyle = [
@@ -262,15 +263,12 @@ const Home = props => {
       if (streamParams.channelName === stream.channel) {
         return;
       }
-      EventBus.publish("APP_END_STREAM_ACTION");
-      setTimeout(() => {
-        let params = {
-          channelName: stream.channel,
-          isBroadcaster: false,
-          isJoin: true,
-        };
-        EventBus.publish("NEW_STREAM_ACTION", params);
-      }, 500);
+      let params = {
+        channelName: stream.channel,
+        isBroadcaster: false,
+        isJoin: true,
+      };
+      EventBus.publish("APP_END_STREAM_ACTION", params);
     } else {
       let params = {
         channelName: stream.channel,
@@ -282,7 +280,6 @@ const Home = props => {
   }
 
   useEffect(() => {
-    setStreamStatus(StreamStatus.NONE);
     const newStreamAction = EventBus.on("NEW_STREAM_ACTION", params => {
       initLiveUsers({ broadcasters: [], audience: [] });
       setStreamParams(params);
@@ -304,10 +301,24 @@ const Home = props => {
       updateChannelName(params.channelName);
       setVisibleStream(true);
     });
-    const endStreamAction = EventBus.on("APP_END_STREAM_ACTION", () => {
-      setVisibleStream(false);
-      setStreamStatus(StreamStatus.NONE);
-      updateChannelName(null);
+    const endStreamAction = EventBus.on("APP_END_STREAM_ACTION", (params) => {
+      if (params === null) {
+        setVisibleStream(false);
+        setStreamStatus(StreamStatus.NONE);
+        updateChannelName(null);
+      } else {
+        if (isBroadcaster === false) {
+          setVisibleStream(false);
+          setStreamStatus(StreamStatus.NONE);
+          updateChannelName(null);
+          setTimeout(() => {
+            EventBus.publish("NEW_STREAM_ACTION", params);
+          }, 600);
+        } else {
+          setNewStreamParams(params);
+          setVisibleStop(true);
+        }
+      }
     });
     const showRequestAction = EventBus.on("NEW_PENDING_REQUEST", () => {
       setVisiblePendingRequest(true);
@@ -317,9 +328,10 @@ const Home = props => {
       endStreamAction();
       showRequestAction();
     };
-  }, [initLiveUsers, setStreamStatus, updateMessages, updateChannelName]);
+  }, [initLiveUsers, setStreamStatus, updateMessages, updateChannelName, isBroadcaster]);
 
   useEffect(() => {
+    setStreamStatus(StreamStatus.NONE);
     AsyncStorage.getItem(TUTORIAL.MINIMIZED, (error, result) => {
       if (result === null || result === "0") {
         setTutorialMode(true);
@@ -445,6 +457,7 @@ const Home = props => {
             useNativeDriver: false,
           }).start(() => {
             setVisibleStop(false);
+            setNewStreamParams(null);
           });
           Animated.timing(_tutorialOpacity, {
             toValue: 1,
@@ -459,11 +472,18 @@ const Home = props => {
             setTutorialMode(false);
             AsyncStorage.setItem(TUTORIAL.MINIMIZED, "1");
           }
+          setTimeout(() => {
+            if (newStreamParams !== null) {
+              EventBus.publish("NEW_STREAM_ACTION", newStreamParams);
+              setNewStreamParams(null);
+            }
+          }, 400);
         }}
       />
       <PushNotification />
       <PendingRequestModal 
         isVisible={visiblePendingRequest}
+        startLoading={true}
         dismissModal={() => setVisiblePendingRequest(false)}/>
     </View>
   );

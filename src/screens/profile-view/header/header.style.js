@@ -40,6 +40,7 @@ export default StyleSheet.create({
   reportButtonContainer: {
     justifyContent: "center",
     paddingHorizontal: wp(10),
+    minWidth: wp(55),
   },
   reportButtonTouchable: {
     width: wp(35),

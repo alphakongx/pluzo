@@ -7,16 +7,17 @@ import Modal from "react-native-modal";
 import styles from "./gender-modal.style";
 
 const GenderModal: () => React$Node = props => {
+  const { onChange, onDismiss, gender, tutorial, ...rest } = props;
   const onChangeGender = value => {
-    props.onChange && props.onChange(value);
+    onChange && onChange(value);
   };
 
   return (
     <Modal
-      {...props}
+      {...rest}
       customBackdrop={
-        <Touchable style={styles.flexFill} onPress={() => props.onDismiss()}>
-          {props.tutorial ? (
+        <Touchable style={styles.flexFill} onPress={() => onDismiss()}>
+          {tutorial ? (
             <View style={styles.backdrop} />
           ) : (
             <BlurView
@@ -34,22 +35,22 @@ const GenderModal: () => React$Node = props => {
       backdropOpacity={1}
       useNativeDriver={false}
       propagateSwipe={true}
-      swipeDirection={props.tutorial ? [] : ["down"]}
-      onSwipeComplete={() => props.onDismiss()}
+      swipeDirection={tutorial ? [] : ["down"]}
+      onSwipeComplete={() => onDismiss()}
     >
       <Screen 
-        hasGradient={!props.tutorial}
+        hasGradient={!tutorial}
         containerStyle={{overflow: "hidden"}}
         style={styles.container}
         noFill>
-        {!props.tutorial &&<ModalHeader title={"Show me"} onDismiss={props.onDismiss} />}
-        {props.tutorial &&
+        {!tutorial &&<ModalHeader title={"Show me"} onDismiss={onDismiss} />}
+        {tutorial &&
         <Text style={styles.tutorialTitle}>{"Who do you\nwant to meet?"}</Text>}
         
-        {!props.tutorial && <View style={styles.spacer} />}
+        {!tutorial && <View style={styles.spacer} />}
 
         <View style={styles.buttonContainer}>
-          {props.gender === 1 ? (
+          {gender === 1 ? (
             <GradientButton onPress={() => onChangeGender(1)} text={"Male"} />
           ) : (
             <SolidButton onPress={() => onChangeGender(1)} text={"Male"} />
@@ -57,7 +58,7 @@ const GenderModal: () => React$Node = props => {
         </View>
 
         <View style={styles.buttonContainer}>
-          {props.gender === 2 ? (
+          {gender === 2 ? (
             <GradientButton onPress={() => onChangeGender(2)} text={"Female"} />
           ) : (
             <SolidButton onPress={() => onChangeGender(2)} text={"Female"} />
@@ -65,13 +66,13 @@ const GenderModal: () => React$Node = props => {
         </View>
 
         <View style={styles.buttonContainer}>
-          {props.gender === 0 ? (
+          {gender === 0 ? (
             <GradientButton onPress={() => onChangeGender(0)} text={"Everyone"} />
           ) : (
             <SolidButton onPress={() => onChangeGender(0)} text={"Everyone"} />
           )}
         </View>
-        {!props.tutorial && <View style={styles.spacer} />}
+        {!tutorial && <View style={styles.spacer} />}
         <View style={styles.spacer} />
       </Screen>
     </Modal>

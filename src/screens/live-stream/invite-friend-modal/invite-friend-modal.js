@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Platform,
@@ -9,6 +9,7 @@ import {
 import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
 import Modal from "react-native-modal";
+import EventBus from "eventing-bus";
 import { Screen, Touchable, Image, Text, SearchInput } from "@components";
 import ModalFriendItem from "./modal-friend-item";
 import { API } from "@helpers";
@@ -18,57 +19,47 @@ import Images from "@assets/Images";
 
 import styles from "./invite-friend-modal.style";
 
-class InviteFriendsModal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      invitedUsers: [],
-      newPeoples: [],
-      searchKeyword: "",
-    };
-  }
+const InviteFriendsModal: () => React$Node = props =>  {
+  const [invitedUsers, setInvitedUsers] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const { onDismiss } = props;
 
-  onModalShow = () => {
+  useEffect(() => {
+    const _closeAction = EventBus.on("Modal_Close", () => {
+      onDismiss && onDismiss();
+    });
+    return () => {
+      _closeAction();
+    }
+  }, [onDismiss]);
+
+  const onModalShow = () => {
     if (Platform.OS === "ios") {
       KeyboardManager.setEnable(true);
     }
-
-    API.request({
-      method: "post",
-      url: `${API_ENDPOINTS.STREAM_NEW_PEOPLE}`,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + this.props.token,
-      },
-      data: null,
-    }).then(response => {
-      this.setState({ newPeoples: response.data.data });
-    });
-
-    this.props.loadFriends(this.props.token);
+    props.loadFriends(props.token);
   };
 
-  onModalHide = () => {
-    if (Platform.OS === "ios" && this.props.keyboardDisable) {
+  const onModalHide = () => {
+    if (Platform.OS === "ios" && props.keyboardDisable) {
       KeyboardManager.setEnable(false);
     }
   };
 
-  onInvite = user => {
-    const { invitedUsers } = this.state;
+  const onInvite = user => {
     if (!invitedUsers.includes(user.id)) {
-      this.setState({ invitedUsers: [...invitedUsers, user.id] });
+      setInvitedUsers([...invitedUsers, user.id]);
     }
 
     let data = new FormData();
     data.append("user_id", user.id);
-    data.append("channel_id", this.props.stream.channel);
+    data.append("channel_id", props.stream.channel);
     API.request({
       method: "post",
       url: `${API_ENDPOINTS.STREAM_INVITE}`,
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + this.props.token,
+        Authorization: "Bearer " + props.token,
       },
       data,
     }).then(response => {
@@ -76,20 +67,20 @@ class InviteFriendsModal extends Component {
     });
   };
 
-  renderFriends = () => {
-    const { friends } = this.props;
+  const renderFriends = () => {
+    const { friends } = props;
     let filteredFriends = friends.filter((value) => value.id !== 0);
-    if (this.state.searchKeyword !== "") {
+    if (searchKeyword !== "") {
       filteredFriends = filteredFriends.filter(value =>
-        value.first_name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()),
+        value.first_name.toLowerCase().includes(searchKeyword.toLowerCase()),
       );
     }
     return filteredFriends.map((friend, index) => {
       return (
         <ModalFriendItem
           user={friend}
-          onInviteFriend={() => this.onInvite(friend)}
-          invitedFriends={this.state.invitedUsers}
+          onInviteFriend={() => onInvite(friend)}
+          invitedFriends={invitedUsers}
           key={`invite-item-${index}`}
         />
       );
@@ -102,7 +93,7 @@ class InviteFriendsModal extends Component {
         <Touchable
           style={styles.backButton}
           onPress={() => {
-            this.props.onDismiss && this.props.onDismiss();
+            onDismiss && onDismiss();
           }}
         >
           <Image source={Images.app.icBack} style={styles.backImage} />
@@ -113,13 +104,13 @@ class InviteFriendsModal extends Component {
               <Text style={styles.titleText}>Invite Friends</Text>
 
               <SearchInput
-                onSearch={txt => this.setState({ searchKeyword: txt })}
+                onSearch={txt => setSearchKeyword(txt)}
                 onRef={ref => {}}
                 containerStyle={styles.searchContainer}
               />
 
               <Text style={styles.subtitleText}>Friends</Text>
-              {this.renderFriends()}
+              {renderFriends()}
             </ScrollView>
           </SafeAreaView>
         </Screen>
@@ -127,46 +118,44 @@ class InviteFriendsModal extends Component {
     );
   };
 
-  render() {
-    return (
-      <Modal
-        {...this.props}
-        customBackdrop={
-          <Touchable
+  return (
+    <Modal
+      {...props}
+      customBackdrop={
+        <Touchable
+          style={styles.flexFill}
+          onPress={() => {
+            onDismiss && onDismiss();
+          }}
+        >
+          <BlurView
             style={styles.flexFill}
-            onPress={() => {
-              this.props.onDismiss && this.props.onDismiss();
-            }}
-          >
-            <BlurView
-              style={styles.flexFill}
-              blurType='dark'
-              blurAmount={10}
-              reducedTransparencyFallbackColor='#0B0516'
-            />
-          </Touchable>
-        }
-        backdropTransitionOutTiming={0}
-        backdropTransitionInTiming={0}
-        backdropOpacity={1}
-        useNativeDriver={false}
-        propagateSwipe={true}
-        swipeDirection={"down"}
-        onSwipeComplete={this.props.onDismiss}
-        onModalShow={this.onModalShow}
-        onModalWillHide={this.onModalHide}
-        style={styles.modalContainer}
-      >
-        {Platform.OS === "android" ? (
-          <KeyboardAvoidingView behavior={"height"} enabled>
-            {this.renderContent()}
-          </KeyboardAvoidingView>
-        ) : (
-          this.renderContent()
-        )}
-      </Modal>
-    );
-  }
+            blurType='dark'
+            blurAmount={10}
+            reducedTransparencyFallbackColor='#0B0516'
+          />
+        </Touchable>
+      }
+      backdropTransitionOutTiming={0}
+      backdropTransitionInTiming={0}
+      backdropOpacity={1}
+      useNativeDriver={false}
+      propagateSwipe={true}
+      swipeDirection={"down"}
+      onSwipeComplete={onDismiss}
+      onModalShow={onModalShow}
+      onModalWillHide={onModalHide}
+      style={styles.modalContainer}
+    >
+      {Platform.OS === "android" ? (
+        <KeyboardAvoidingView behavior={"height"} enabled>
+          {renderContent()}
+        </KeyboardAvoidingView>
+      ) : (
+        renderContent()
+      )}
+    </Modal>
+  );
 }
 
 export default InviteFriendsModal;

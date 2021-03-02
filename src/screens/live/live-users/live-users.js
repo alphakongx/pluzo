@@ -18,10 +18,7 @@ const LiveUsers: () => React$Node = props => {
     };
 
     if (props.streamStatus !== StreamStatus.NONE) {
-      EventBus.publish("APP_END_STREAM_ACTION");
-      setTimeout(() => {
-        EventBus.publish("NEW_STREAM_ACTION", params);
-      }, 500);
+      EventBus.publish("APP_END_STREAM_ACTION", params);
     } else {
       EventBus.publish("NEW_STREAM_ACTION", params);
     }

@@ -142,6 +142,7 @@ class Inbox extends Component {
 
         <PendingRequestModal
           isVisible={visiblePendingRequest}
+          startLoading={false}
           dismissModal={() => this.setState({ visiblePendingRequest: false })}
         />
         

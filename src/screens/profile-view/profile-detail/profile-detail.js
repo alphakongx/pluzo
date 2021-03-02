@@ -86,7 +86,7 @@ const ProfileDetail: () => React$Node = props => {
       {strAddress !== "" &&
       <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
         <Image source={require("@assets/images/swipe-screen/location.png")} />
-        {addresses.length > 1 && (
+        {(addresses.length > 1 && addresses[0].length > 0) && (
           <Text style={styles.topBarCity}>{addresses[0]},</Text>
         )}
         <Text style={styles.topBarLocation}>

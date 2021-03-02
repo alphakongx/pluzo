@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { Screen, Image, Text, BoostConfirmModal } from "@components";
+import * as Animatable from "react-native-animatable";
 import Swiper from "react-native-deck-swiper";
 import EventBus from "eventing-bus";
 import moment from "moment";
@@ -54,6 +55,7 @@ class Swipe extends React.Component {
       swipedCount: 0,
       isSwiping: false,
       enableRewinds: false,
+      readyRewinds: true,
       enableSuperLike: true,
       hasPermission: false,
       visibleGender: false,
@@ -62,20 +64,13 @@ class Swipe extends React.Component {
 
     this.swiper = React.createRef();
     this.cardIndex = -1;
-    this.noUpdate = false;
     this.pageStartTime = 0;
   }
 
   componentDidMount() {
-    // this.props.loadCards(this.props.token);
-
     this.reloadAction = EventBus.on(SwipeTypes.REQUEST_SET_SETTINGS_SUCCESS, () => {
-      if (this.noUpdate === true) {
-        this.noUpdate = false;
-      } else {
-        this.cardIndex = -1;
-        this.props.loadCards(this.props.token);
-      }
+      this.cardIndex = -1;
+      this.props.loadCards(this.props.token, 1);
     });
 
     this.matchesAction = EventBus.on("New_Matches", user => {
@@ -97,7 +92,7 @@ class Swipe extends React.Component {
         this.props.updateCards({swipe: this.props.cards.filter((value, index) => index !== nRemoveIndex)}, removeIndex);
       } else if(nRemoveIndex === (this.props.cards.length -1) && (this.cardIndex+1) === nRemoveIndex) {
         this.cardIndex = -1;
-        this.props.loadCards(this.props.token);
+        this.props.loadCards(this.props.token, 1);
       }
     });
     
@@ -109,7 +104,7 @@ class Swipe extends React.Component {
     });
     AsyncStorage.getItem(TUTORIAL.POINTER, (error, result) => {
       if (result === null || result === "0") {
-        this.setState({tutorialPointer: true}); 
+        // this.setState({tutorialPointer: true});
       }
     });
     AsyncStorage.getItem(TUTORIAL.SHOW_GENDER, (error, result) => {
@@ -174,7 +169,7 @@ class Swipe extends React.Component {
           this.props.updateUser(params, this.props.token);
           if (this.props.cards.length === 0) {
             this.cardIndex = -1;
-            this.props.loadCards(this.props.token);
+            this.props.loadCards(this.props.token, 1);
           }
         }
       });
@@ -202,6 +197,8 @@ class Swipe extends React.Component {
       if (!this.state.swipeLocked) {
         this.setState({ labelType: LABEL_TYPES.TOP });
         this.swiper.swipeTop(false);
+      } else {
+        this.props.addSuperLikeDone();
       }
     } else {
       this.props.addSuperLikeDone();
@@ -238,7 +235,7 @@ class Swipe extends React.Component {
     if (rewindsCount > 0) {
       this.setState({ labelType: LABEL_TYPES.REWIND }, () => {
         setTimeout(() => {
-          this.setState({ labelType: LABEL_TYPES.NONE });
+          this.setState({ labelType: LABEL_TYPES.NONE});
         }, 350);
       });
       this.setState({ enableRewinds: false });
@@ -250,22 +247,13 @@ class Swipe extends React.Component {
   };
 
   onSwiperRewind = () => {
-    this.setState({ swipeLocked: true });
+    this.setState({ swipeLocked: true, readyRewinds: false });
     this.swiper.swipeBack();
     this.cardIndex -= 1;
     this.onCheckingRewinds();
   }
 
-  onSwipedAllCards = () => {
-    this.setState({ labelType: LABEL_TYPES.NONE });
-    setTimeout(() => {
-      this.cardIndex = -1;
-      this.props.loadCards(this.props.token);
-    }, 300);
-  };
-
   onCheckingRewinds = () => {
-    this.setState({ labelType: LABEL_TYPES.NONE });
     if (this.cardIndex === this.props.cards.length - 1) {
       return;
     }
@@ -313,11 +301,11 @@ class Swipe extends React.Component {
       this.setState({tutorialSwipe: false});
     }
 
-    if (this.state.tutorialGender && this.state.swipedCount === 3 && (type === "left" || type === "right")) {
+    if (this.state.tutorialGender && this.state.swipedCount === 5 && (type === "left" || type === "right")) {
       if (this.props.cards.length >= (index + 1)) {
         this.setState({visibleGender: true});
       } else {
-        this.setState({swipedCount: 2});
+        this.setState({swipedCount: 4});
       }
     }
     
@@ -337,11 +325,20 @@ class Swipe extends React.Component {
         this.props.addSuperLikeDone();
       }
     }
-    this.cardIndex = index;
-    this.onCheckingRewinds();
+    this.setState({readyRewinds: true});
+    
+    if (cards && index === (cards.length - 1)) {
+      this.setState({ labelType: LABEL_TYPES.NONE });
+      this.cardIndex = -1;
+      this.props.loadCards(this.props.token, 300);
+    } else {
+      this.cardIndex = index;
+      this.onCheckingRewinds();
+    }
   };
 
   onSwiped = (index) => {
+    this.setState({ labelType: LABEL_TYPES.NONE });
     this.setState({ swipeLocked: false });
   }
 
@@ -419,6 +416,7 @@ class Swipe extends React.Component {
             ref={swiper => {
               this.swiper = swiper;
             }}
+            swipeAnimationDuration={200}
             horizontalThreshold={Math.floor(screenWidth / 8)}
             onSwipedLeft={index => this.onSwipedWithDirection(index, "left")}
             onSwipedRight={index => this.onSwipedWithDirection(index, "right")}
@@ -450,7 +448,6 @@ class Swipe extends React.Component {
                 />
               );
             }}
-            onSwipedAll={this.onSwipedAllCards}
             stackSize={2}
             stackSeparation={0}
             stackScale={0}
@@ -468,7 +465,10 @@ class Swipe extends React.Component {
           />
 
           {labelType !== LABEL_TYPES.NONE && (
-            <Image source={overlayIcon} style={styles.heartIcon} />
+            labelType === LABEL_TYPES.REWIND ? 
+            <Animatable.Image source={overlayIcon} style={styles.heartIcon}
+              animation={"rotate"} easing="ease-out" duration={300} /> : 
+            <Animatable.Image source={overlayIcon} style={styles.heartIcon} />
           )}
 
           <ActionButtonsView
@@ -477,7 +477,7 @@ class Swipe extends React.Component {
             onSuperLike={this.onSuperLikeClicked}
             onRocket={this.onRocketClicked}
             onReload={this.onRewindClicked}
-            isRewinds={this.state.enableRewinds}
+            isRewinds={this.state.enableRewinds && this.state.readyRewinds}
             isSuperLike={this.state.enableSuperLike}
           />
 
@@ -570,18 +570,33 @@ class Swipe extends React.Component {
           isSwipe={true} />
 
         <GenderModal
+          key={`swipe-gender-modal`}
           isVisible={this.state.visibleGender}
           tutorial
-          onDismiss={() => {}}
+          onDismiss={() => {
+            if (parseInt(this.props.settings.gender, 10) === 0) {
+              this.setState({visibleGender: false}, () => {
+                AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
+              });
+            } else {
+              this.setState({visibleGender: false}, () => {
+                this.props.updateSettings(this.props.token, {gender: 0});
+                AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
+              });
+            }
+          }}
           gender={-1}
           onChange={(value) => {
             if (parseInt(this.props.settings.gender, 10) === value) {
-              this.noUpdate = true;
+              this.setState({visibleGender: false}, () => {
+                AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
+              });
+            } else {
+              this.setState({visibleGender: false}, () => {
+                this.props.updateSettings(this.props.token, {gender: value});
+                AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
+              });
             }
-            this.setState({visibleGender: false}, () => {
-              this.props.updateSettings(this.props.token, {gender: value});
-              AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
-            });
           }} />
 
           <NavigationEvents 

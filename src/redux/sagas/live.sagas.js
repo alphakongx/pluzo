@@ -112,7 +112,8 @@ function* requestStreamJoin(action) {
     const requestParams = new FormData();
     requestParams.append("channel_id", channel_id);
 
-    yield call(streamJoin, requestParams, token);
+    const res = yield call(streamJoin, requestParams, token);
+    yield put(LiveCreators.streamUpdateSuccess(res.data.data.stream_info));
   } catch (error) {
     console.log("stream join >>>", error);
   }

@@ -6,8 +6,10 @@ import StreamPlayer from "./stream-player";
 import StreamOverlayView from "./stream-overlay-view";
 import ProfileView from "../profile-view";
 import StreamEndModal from "./stream-end-modal";
+import StreamAskModal from "./stream-ask-modal";
 import KeepAwake from "@sayem314/react-native-keep-awake";
 import { isStreamLive } from "@redux/api";
+import EventBus from "eventing-bus";
 
 import styles from "./live-stream.style";
 
@@ -20,6 +22,7 @@ class LiveStream extends Component {
       selectedUser: null,
       visibleProfile: false,
       visibleEnd: false,
+      visibleAskModal: false,
     };
   }
 
@@ -34,6 +37,14 @@ class LiveStream extends Component {
         }
       });
     }
+
+    this._closeAction = EventBus.on("Modal_Close", () => {
+      this.setState({ visibleProfile: false });
+    });
+  }
+
+  componentWillUnmount() {
+    this._closeAction();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -63,6 +74,7 @@ class LiveStream extends Component {
           onChangeStreamers={count => {
             this.setState({ streamerCount: count });
           }}
+          onShowAskModal={(value) => this.setState({visibleAskModal: value})}
           onShowProfile={user => this.onShowProfile(user)}
           minimized={minimized}
         />
@@ -76,6 +88,7 @@ class LiveStream extends Component {
             onLeaveRoom={this.props.onLeaveRoom}
             onMinimized={this.props.onMinimized}
             onShowProfile={user => this.onShowProfile(user)}
+            onShowAskModal={(value) => this.setState({visibleAskModal: value})}
           />
         ) : null}
 
@@ -93,6 +106,12 @@ class LiveStream extends Component {
         <StreamEndModal
           isVisible={this.state.visibleEnd}
           onLeaveRoom={this.props.onLeaveRoom}
+        />
+
+        <StreamAskModal
+          isVisible={this.state.visibleAskModal}
+          onBack={() => this.setState({visibleAskModal: false})}
+          streamParams={this.props.streamParams}
         />
       </View>
     );

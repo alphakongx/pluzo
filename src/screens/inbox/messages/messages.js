@@ -64,8 +64,29 @@ class Messages extends React.Component {
   }
 
   renderRowItem = (channel, index, rowMap) => {
+    moment.updateLocale('en', {
+      relativeTime : {
+          future: "in %s",
+          past:   "%s ago",
+          s  : '%ds',
+          ss : '%ds',
+          m:  "%dm",
+          mm: "%dm",
+          h:  "%dh",
+          hh: "%dh",
+          d:  "%dd",
+          dd: "%dd",
+          w:  "%dw",
+          ww: "%dw",
+          M:  "%dmo",
+          MM: "%dmo",
+          y:  "%dy",
+          yy: "%dy"
+      }
+    });
+
     let createdTime = channel.messages[0].created_at || channel.messages[0].createdAt;
-    let timeAgo = moment.unix(createdTime).fromNow(true);
+    let timeAgo = moment.unix(createdTime).fromNow(false);
     let partner = channel.partner_info;
     let image = require("@assets/images/app-icon.png");
     let name = "Pluzo Team";
@@ -130,7 +151,7 @@ class Messages extends React.Component {
                   numberOfLines={1}
                 >
                   {isMyMessage && "You: "}
-                  {channel.messages[0].type === "invite" && "invited you to the live"}
+                  {channel.messages[0].type === "invite" && "invited you to join their live!"}
                   {channel.messages[0].type === "close" && "The Live has ended."}
                   {channel.messages[0].type === "message" && channel.messages[0].image !== null && !isMyMessage && `${channel.messages[0].user.first_name} sent an image`}
                   {channel.messages[0].type === "message" && channel.messages[0].image !== null && isMyMessage && `You sent an image`}

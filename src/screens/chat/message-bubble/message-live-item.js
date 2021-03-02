@@ -27,7 +27,7 @@ const MessageLiveItem: () => React$Node = props => {
     offsetY: 3,
   };
 
-  if (currentMessage.type === "close") {
+  if (currentMessage.type === "close" || currentMessage.stream_info.count === 0) {
     return (
       <View style={styles.endContainer}>
         <Text style={styles.endText}>{"The Live has ended."}</Text>
@@ -64,10 +64,7 @@ const MessageLiveItem: () => React$Node = props => {
         isJoin: true,
       };
       if (props.streamStatus !== StreamStatus.NONE) {
-        EventBus.publish("APP_END_STREAM_ACTION");
-        setTimeout(() => {
-          EventBus.publish("NEW_STREAM_ACTION", params);
-        }, 500);
+        EventBus.publish("APP_END_STREAM_ACTION", params);
       } else {
         EventBus.publish("NEW_STREAM_ACTION", params);
       }

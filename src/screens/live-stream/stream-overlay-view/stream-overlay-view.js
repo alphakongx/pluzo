@@ -20,7 +20,6 @@ import StreamStart from "../stream-start";
 import StreamFilters from "../stream-filters";
 import StreamPlayerSetting from "../stream-player-setting";
 import StreamSpeakerView from "../stream-speaker-view";
-import StreamAskModal from "../stream-ask-modal";
 import BoostTimeModal from "../../swipe/boost-time-modal";
 import SwipePurchaseModal from "../../swipe/swipe-purchase-modal";
 
@@ -35,7 +34,6 @@ const StreamOverlayView: () => React$Node = props => {
   const [visibleInviteFriends, setVisibleInviteFriends] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [messageBoxHeight, setMessageBoxHeight] = useState("50%");
-  const [visibleAskModal, setVisibleAskModal] = useState(false);
   const [visibleRemainingBoost, setVisibleRemainingBoost] = useState(false);
   const [boosting, setBoosting] = useState(false);
   const boostInterval = useRef(null);
@@ -50,21 +48,6 @@ const StreamOverlayView: () => React$Node = props => {
     // call the api to create new stream
     props.setStreamStatus(StreamStatus.STARTED);
   };
-
-  useEffect(() => {
-    const userAcceptJoin = EventBus.on("player_actions", (action, jsonData) => {
-      if (action === "Stream_user_accept_join") {
-        if (jsonData === undefined) return;
-        let data = JSON.parse(jsonData);
-        if (data.user._id === userId) {
-          setVisibleAskModal(false);
-        }
-      }
-    });
-    return () => {
-      userAcceptJoin();
-    };
-  }, [userId]);
 
   useEffect(() => {
     AsyncStorage.getItem(TUTORIAL.USERS, (err, result) => {
@@ -209,7 +192,7 @@ const StreamOverlayView: () => React$Node = props => {
               streamParams={props.streamParams}
               keyboardHeight={keyboardHeight}
               onPlayerSetting={() => setShowPlayerSetting(true)}
-              onAskToJoin={() => setVisibleAskModal(true)}
+              onAskToJoin={() => props.onShowAskModal && props.onShowAskModal(true)}
               onShowProfile={props.onShowProfile}
               bottomPadding={keyboardHeight > 0 ? 5 : insets.bottom + 5}
             />
@@ -308,12 +291,6 @@ const StreamOverlayView: () => React$Node = props => {
             isVisible={visibleInviteFriends}
             keyboardDisable={true}
             onDismiss={() => setVisibleInviteFriends(false)}
-          />
-
-          <StreamAskModal
-            isVisible={visibleAskModal}
-            onBack={() => setVisibleAskModal(false)}
-            streamParams={props.streamParams}
           />
 
           <BoostTimeModal 

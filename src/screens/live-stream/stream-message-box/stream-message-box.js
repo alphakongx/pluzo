@@ -22,14 +22,27 @@ const StreamMessageBox: () => React$Node = props => {
   const[currentTime, setCurrentTime] = useState(new Date().getTime());
   const hideMessages = useRef();
   const { streamStatus, bottomPadding, messages } = props;
-  let showedMessages = messages.filter((value) => value.created_at > (currentTime - 10000));
+  let showedMessages = messages.filter((value) => value.created_at > (currentTime - 15000));
 
   useEffect(() => {
     if (Platform.OS === "ios") {
       KeyboardManager.setEnable(false);
       KeyboardManager.setShouldResignOnTouchOutside(false);
     }
+    hideMessages.current = setInterval(() => {
+      setCurrentTime(new Date().getTime());
+    }, 1000);
+    return () => {
+      if (Platform.OS === "ios") {
+        KeyboardManager.setEnable(true);
+        KeyboardManager.setShouldResignOnTouchOutside(true);
+      }
+      clearInterval(hideMessages.current);
+      hideMessages.current = null;
+    }
+  }, []);
 
+  useEffect(() => {
     let newMessageAction = EventBus.on("Stream_new_message", jsonData => {
       if (jsonData === undefined) return;
       const { channelName } = props.streamParams;
@@ -45,20 +58,11 @@ const StreamMessageBox: () => React$Node = props => {
         props.updateMessages([newMessage].concat(props.messages));
       }
     });
-    hideMessages.current = setInterval(() => {
-      setCurrentTime(new Date().getTime());
-    }, 1000);
 
     return () => {
-      if (Platform.OS === "ios") {
-        KeyboardManager.setEnable(true);
-        KeyboardManager.setShouldResignOnTouchOutside(true);
-      }
       newMessageAction();
-      clearInterval(hideMessages.current);
-      hideMessages.current = null;
     }
-  }, []);
+  }, [props.messages, props.streamParams, props.user]);
 
   const onSendMessage = (msg, msgType) => {
     let newMessage = {

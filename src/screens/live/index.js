@@ -17,6 +17,7 @@ const mapDispatchToProps = {
   requestStreamList: LiveCreators.requestStreamList,
   updateUser: UserCreators.requestUpdateUser,
   updateStreamInfo: LiveCreators.updateStreamInfo,
+  updateStreamSuccess: LiveCreators.streamUpdateSuccess,
   requestPageTime: UserCreators.requestPageTime,
 };
 
