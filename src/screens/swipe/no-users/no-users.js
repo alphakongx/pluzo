@@ -1,9 +1,8 @@
 import React from "react";
 import { View, Animated, Easing, SafeAreaView, Linking } from "react-native";
 import FastImage from "react-native-fast-image";
-import { Text, GradientButton, Touchable } from "@components";
+import { Text, GradientButton, Touchable, ModalBase as Modal } from "@components";
 import { BlurView } from "@react-native-community/blur";
-import Modal from "react-native-modal";
 
 import styles from "./no-users.style";
 import SwipeSettings from "../../settings/swipe-settings";
@@ -66,10 +65,10 @@ class NoUsers extends React.Component {
             )}
             {permission && 
             <>
-              <Text style={styles.permissionTitle}>Oops!</Text>
-              <Text style={styles.permissionDescription}>
+              {/*<Text style={styles.permissionTitle}>Oops!</Text>*/}
+              {/* <Text style={styles.permissionDescription}>
                 {"In order to use Pluzo you\nneed to enable your location."}
-              </Text>
+              </Text> */}
             </>}
           </View>
         </View>

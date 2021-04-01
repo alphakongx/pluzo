@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, FlatList } from "react-native";
-import { Text, Screen, BlurView, Touchable, NotificationModal } from "@components";
-import Modal from "react-native-modal";
+import { Text, Screen, BlurView, Touchable, NotificationModal, ModalBase as Modal } from "@components";
 import SearchPeopleItem from "../../search/search-people-item";
 import { API } from "@helpers";
 import { API_ENDPOINTS } from "@config";

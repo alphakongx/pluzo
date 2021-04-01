@@ -7,8 +7,8 @@ import {
   BoxShadow,
   GradientButton,
   SolidButton,
+  ModalBase as Modal
 } from "@components";
-import Modal from "react-native-modal";
 
 import styles from "./stream-stop-modal.style";
 

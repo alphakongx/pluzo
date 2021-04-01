@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import FastImage from "react-native-fast-image";
 import EventBus from "eventing-bus";
-import { Screen, Text, BoxShadow, GradientButton } from "@components";
-import Modal from "react-native-modal";
+import { Screen, Text, BoxShadow, GradientButton, ModalBase as Modal } from "@components";
 
 import styles from "./stream-join-modal.style";
 

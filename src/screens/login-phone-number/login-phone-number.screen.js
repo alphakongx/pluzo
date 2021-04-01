@@ -62,7 +62,7 @@ const LoginPhoneNumber: () => React$Node = props => {
             <View style={styles.phoneNumberContainer}>
               <TextInput
                 value={phoneNumber}
-                onChangeText={setPhoneNumber}
+                onChangeText={(txt) => setPhoneNumber(txt.replace(/[^0-9]/g, ''))}
                 placeholder={"Your phone number"}
                 keyboardType={"phone-pad"}
               />

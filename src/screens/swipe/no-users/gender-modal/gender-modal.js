@@ -1,8 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { ModalHeader, GradientButton, SolidButton, Screen, Touchable, Text } from "@components";
+import { ModalHeader, GradientButton, SolidButton, Screen, Touchable, Text, ModalBase as Modal } from "@components";
 import { BlurView } from "@react-native-community/blur";
-import Modal from "react-native-modal";
 
 import styles from "./gender-modal.style";
 

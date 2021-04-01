@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, SafeAreaView } from "react-native";
-import { BackButton, Screen, Text, StatesPicker, CountryCodePicker } from "@components";
-import Modal from "react-native-modal";
+import { BackButton, Screen, Text, StatesPicker, CountryCodePicker, ModalBase as Modal } from "@components";
 
 import styles from "./country-selection.style";
 

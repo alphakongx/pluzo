@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { View, TextInput, Platform, ActivityIndicator } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
-import Modal from "react-native-modal";
-import { Screen, Touchable, Image, Text, AppAlert } from "@components";
+import { Screen, Touchable, Image, Text, AppAlert, ModalBase as Modal } from "@components";
 import { report } from "@redux/api";
 
 import Images from "@assets/Images";
@@ -174,6 +173,7 @@ class ReportModal extends Component {
           </View>
           <AppAlert 
             isVisible={this.state.visibleAlert}
+            needUpdate={false}
             onDismiss={() => {
               this.onInit();
               this.props.onDismiss && this.props.onDismiss();

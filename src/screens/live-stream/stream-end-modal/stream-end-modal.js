@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Screen, Text, BoxShadow, GradientButton } from "@components";
-import Modal from "react-native-modal";
+import { Screen, Text, BoxShadow, GradientButton, ModalBase as Modal } from "@components";
 
 import styles from "./stream-end-modal.style";
 

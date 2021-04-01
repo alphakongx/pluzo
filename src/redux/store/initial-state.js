@@ -1,6 +1,10 @@
 export default {
   app: {
     isConnected: true,
+    visiblePurchase: false,
+    visiblePluzo: false,
+    pluzoType: "",
+    modalShowed: false,
   },
   user: {
     token: "",

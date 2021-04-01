@@ -1,6 +1,6 @@
 import LikeUsersScreen from "./like-users.screen";
 import { connect } from "react-redux";
-import { SwipeCreators } from "@redux/actions";
+import { SwipeCreators, AppCreators } from "@redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -14,6 +14,7 @@ const mapDispatchToProps = {
   addLike: SwipeCreators.addLike,
   addDisLike: SwipeCreators.addDisLike,
   runBoost: SwipeCreators.requestRunBoost,
+  showPurchase: AppCreators.showPurchase,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LikeUsersScreen);

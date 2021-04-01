@@ -29,7 +29,6 @@ import { GRADIENT } from "@config";
 import Header from "./header";
 import UserProfile from "./user-profile";
 import ProfileAmounts from "./profile-amounts";
-import PurchaseModal from "./purchase-modal";
 import ChooseBadgeModal from "./choose-badge-modal";
 import FriendsModal from "./friends-modal";
 import SwipePurchaseModal from "../swipe/swipe-purchase-modal";
@@ -50,7 +49,6 @@ class ProfileSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visiblePurchase: false,
       visibleChooseBadge: false,
       visibleBoost: false,
       visibleSuperlike: false,
@@ -436,7 +434,7 @@ class ProfileSettings extends React.Component {
                   text={this.props.user.premium === 1 ? "My Pluzo Plus" : "Get Pluzo Plus"}
                   colors={GRADIENT.PURCHASE_BUTTON}
                   shadowColor={"#FF6F00"}
-                  onPress={() => this.setState({ visiblePurchase: true })}
+                  onPress={() => this.props.showPurchase(true)}
                   // noButton={this.props.user.premium === 1}
                 />
               </View>
@@ -484,18 +482,13 @@ class ProfileSettings extends React.Component {
           </View>
         </ScrollView>
 
-        <PurchaseModal
-          isVisible={this.state.visiblePurchase}
-          onSwipeComplete={() => this.setState({ visiblePurchase: false })}
-        />
-
         <ChooseBadgeModal
           isVisible={this.state.visibleChooseBadge}
           dismissModal={() => this.setState({ visibleChooseBadge: false })}
           onPurchase={() => {
             this.setState({ visibleChooseBadge: false });
             setTimeout(() => {
-              this.setState({ visiblePurchase: true })
+              this.props.showPurchase(true);
             }, 400);
           }}
         />

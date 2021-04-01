@@ -7,7 +7,6 @@ import { getLikedUsers } from "@redux/api";
 import Images from "@assets/Images";
 import LikedUserItem from "./liked-user-item";
 import PluzoLikeSwiper from "./pluzo-like-swiper";
-import PurchaseModal from "../profile-settings/purchase-modal";
 import SwipePurchaseModal from "../swipe/swipe-purchase-modal";
 import BoostTimeModal from "../swipe/boost-time-modal";
 
@@ -18,7 +17,6 @@ class LikeUsersScreen extends Component {
     super(...arguments);
     this.state = {
       likedUsers: [],
-      visiblePurchase: false,
       scrollEnabled: true,
       visibleBoost: false,
       visibleRemainingBoost: false,
@@ -139,7 +137,7 @@ class LikeUsersScreen extends Component {
                         return (
                           <Touchable key={`like-users-${likedUser.user._id}`}
                             style={styles.itemContainer}
-                            onPress={() => this.setState({visiblePurchase: true})}>
+                            onPress={() => this.props.showPurchase(true)}>
                             <LikedUserItem likedUser={{user: likedUser.user}} />
                           </Touchable>
                         )
@@ -173,7 +171,7 @@ class LikeUsersScreen extends Component {
                 shadowColor={"#FF6F00"}
                 text={"Get Pluzo Plus"}
                 animImage={Images.swipe.pluzoPlusMark}
-                onPress={() => this.setState({visiblePurchase: true})}
+                onPress={() => this.props.showPurchase(true)}
               />
             </View>}
             {this.props.user.premium === 1 &&
@@ -190,11 +188,6 @@ class LikeUsersScreen extends Component {
               />
             </View>}
           </View>
-
-          <PurchaseModal
-            isVisible={this.state.visiblePurchase}
-            onSwipeComplete={() => this.setState({visiblePurchase: false})}
-          />
 
           <SwipePurchaseModal
             isVisible={this.state.visibleBoost}

@@ -1,9 +1,8 @@
 import React from "react";
 import { View } from "react-native";
-import Modal from "react-native-modal";
 import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
-import { GradientButton, Text, BackButton, BoxShadow, Touchable, Screen } from "@components";
+import { GradientButton, Text, BackButton, BoxShadow, Touchable, Screen, ModalBase as Modal } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import * as Animatable from "react-native-animatable";
 import Images from "@assets/Images";

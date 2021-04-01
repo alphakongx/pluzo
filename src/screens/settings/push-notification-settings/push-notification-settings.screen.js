@@ -21,17 +21,19 @@ class PushNotificationSettings extends Component {
       requestFriend: user_setting.push_friend_request === 1 ? true : false,
       live: user_setting.push_live === 1 ? true : false,
       message: user_setting.push_message === 1 ? true : false,
+      likes: user_setting.push_likes === 1 ? true : false,
     }
   }
 
   componentWillUnmount() {
-    const { newFriends, requestFriend, live, message } = this.state;
+    const { newFriends, requestFriend, live, message, likes } = this.state;
 
     const params = new FormData();
     params.append("push_new_friend", newFriends ? 1 : 0);
     params.append("push_friend_request", requestFriend ? 1 : 0);
     params.append("push_live", live ? 1 : 0);
     params.append("push_new_friend", message ? 1 : 0);
+    params.append("push_likes", likes ? 1 : 0);
     this.props.updateUser(params, this.props.token);
   }
 
@@ -40,7 +42,7 @@ class PushNotificationSettings extends Component {
   };
 
   render() {
-    const { newFriends, requestFriend, live, message } = this.state;
+    const { newFriends, requestFriend, live, message, likes } = this.state;
     
     return (
       <Screen
@@ -126,6 +128,29 @@ class PushNotificationSettings extends Component {
                 value={message}
                 onValueChange={val => {
                   this.setState({ message: val });
+                  ReactNativeHapticFeedback.trigger("impactLight", options);
+                }}
+                circleSize={20}
+                barHeight={24}
+                circleBorderWidth={0}
+                backgroundActive={"#617FFF"}
+                backgroundInactive={"#ABA7D5"}
+                circleActiveColor={"white"}
+                circleInActiveColor={"white"}
+                renderActiveText={false}
+                renderInActiveText={false}
+                switchBorderRadius={12}
+                switchWidthMultiplier={2.2}
+              />
+            </View>
+            <View style={styles.separator} />
+
+            <View style={[styles.flexRow, styles.itemPadding]}>
+              <Text style={styles.titleText}>Likes</Text>
+              <Switch
+                value={likes}
+                onValueChange={val => {
+                  this.setState({ likes: val });
                   ReactNativeHapticFeedback.trigger("impactLight", options);
                 }}
                 circleSize={20}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, Animated, PanResponder } from "react-native";
 import { HomeStack } from "../../navigation/home-navigator";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,6 +15,8 @@ import styles, { width, height } from "./home.style";
 import PushNotification from "./push-notification";
 import AsyncStorage from "@react-native-community/async-storage";
 import PendingRequestModal from "../inbox/pending-request-modal";
+import PluzoLearnModel from "./pluzo-learn-modal";
+import PurchaseModal from "../profile-settings/purchase-modal";
 
 const shadowOptions = {
   width: 130,
@@ -30,6 +32,7 @@ const shadowOptions = {
 
 const Home = props => {
   const insets = useSafeAreaInsets();
+  const appOpened = useRef(0);
   const { setStreamStatus, updateMessages, initLiveUsers, updateChannelName } = props;
   const [visiblePendingRequest, setVisiblePendingRequest] = useState(false);
   const [visibleStream, setVisibleStream] = useState(false);
@@ -339,6 +342,18 @@ const Home = props => {
     });
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = EventBus.on("AppState_Active", () => {
+      appOpened.current = appOpened.current + 1;
+      if (appOpened.current === 1 && props.user && props.user.premium === 0) {
+        props.showPluzo(true, "opened");
+      }
+    });
+    return () => {
+      unsubscribe();
+    }
+  }, [props.user, props.showPluzo]);
+
   return (
     <View style={styles.container}>
       <HomeStack navigation={props.navigation} />
@@ -485,6 +500,21 @@ const Home = props => {
         isVisible={visiblePendingRequest}
         startLoading={true}
         dismissModal={() => setVisiblePendingRequest(false)}/>
+      <PluzoLearnModel 
+        isVisible={props.visiblePluzo && !props.modalShowed}
+        onSwipeComplete={() => props.showPluzo(false, "")}
+        needUpdate={false}
+        onShowPurchase={() => {
+          props.showPluzo(false, "");
+          setTimeout(() => {
+            props.showPurchase(true);
+          }, 500);
+        }}
+      />
+      <PurchaseModal
+        isVisible={props.visiblePurchase}
+        onSwipeComplete={() => props.showPurchase(false)}
+      />
     </View>
   );
 };

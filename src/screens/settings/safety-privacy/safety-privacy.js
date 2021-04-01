@@ -33,7 +33,7 @@ const SafetyPrivacy: () => React$Node = props => {
     <Screen hasGradient style={styles.flexFill}>
       <SafeAreaView style={styles.flexFill}>
         <View style={styles.flexFill}>
-          <Header title={"Safety & Privacty"} onBack={props.navigation.goBack} />
+          <Header title={"Safety & Privacy"} onBack={props.navigation.goBack} />
 
           <Touchable onPress={() => props.navigation.navigate(SCREENS.BLOCKED_USERS)}>
             {renderItem("Blocked Users", props.blockedUsers.length, null)}

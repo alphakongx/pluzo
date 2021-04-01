@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, FlatList, ActivityIndicator } from "react-native";
-import { Screen, Text, BackButton, Touchable, Image } from "@components";
+import { Screen, Text, BackButton, Touchable, Image, ModalBase } from "@components";
 import FastImage from "react-native-fast-image";
 import { BlurView } from "@react-native-community/blur";
 import Modal from "react-native-modal";
@@ -52,7 +52,7 @@ class PendingRequestModal extends Component {
   render() {
     const { isLoadingPendingFriends, pendingFriends } = this.props;
     return (
-      <Modal
+      <ModalBase
         {...this.props}
         customBackdrop={
           <Touchable style={styles.flexFill} onPress={this.props.dismissModal}>
@@ -94,7 +94,7 @@ class PendingRequestModal extends Component {
                 keyExtractor={item => `pending-requests-${item._id}`}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 renderItem={({ item: item, index }) => (
-                  <Touchable key={`pending-requests-${item._id}`}
+                  <Touchable
                     onPress={() => {
                       this.setState({selectedUser: item, visibleProfile: true});
                     }}>
@@ -142,7 +142,7 @@ class PendingRequestModal extends Component {
             </View>
           </Modal>
         </Screen>
-      </Modal>
+      </ModalBase>
     );
   }
 }

@@ -33,3 +33,4 @@ export * from "./gesture-recognizer";
 export * from "./animated-dots";
 export * from "./image-zoom-viewer";
 export * from "./pluzo-ar-view";
+export * from "./modal-base";

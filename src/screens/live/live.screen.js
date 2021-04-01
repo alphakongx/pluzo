@@ -36,6 +36,7 @@ class Live extends Component {
       category: 0,
       livePosition: {},
       searchText: "",
+      clickedNew: false,
     };
     this.pageStartTime = 0;
   }
@@ -113,6 +114,11 @@ class Live extends Component {
   };
 
   onNewStream = () => {
+    this.setState({ clickedNew: true }, () => {
+      setTimeout(() => {
+        this.setState({ clickedNew: false });
+      }, 500);
+    })
     const { user } = this.props;
     let channelName = `${new Date().getTime()}-${user.id}`;
     let params = {
@@ -226,7 +232,7 @@ class Live extends Component {
     return (
       <Touchable
         style={styles.favContainer}
-        disabled={this.props.streamStatus === StreamStatus.STARTED}
+        disabled={this.props.streamStatus === StreamStatus.STARTED || this.state.clickedNew}
         onPress={this.onNewStream}
       >
         <BoxShadow
@@ -242,7 +248,7 @@ class Live extends Component {
             offsetY: 0,
           }}
         />
-        {this.props.streamStatus === StreamStatus.STARTED ? (
+        {(this.props.streamStatus === StreamStatus.STARTED || this.state.clickedNew) ? (
           <View style={[styles.plusFav, styles.favGray]}>
             <Image source={Images.app.icPlus} />
           </View>

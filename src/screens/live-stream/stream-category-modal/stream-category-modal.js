@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { View, SafeAreaView } from "react-native";
 import { BlurView } from "@react-native-community/blur";
-import Modal from "react-native-modal";
-import { Touchable, Text } from "@components";
+import { Touchable, Text, ModalBase as Modal } from "@components";
 import { AppTags } from "@config";
 import LinearGradient from "react-native-linear-gradient";
 

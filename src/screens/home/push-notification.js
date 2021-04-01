@@ -106,16 +106,22 @@ class PushNotification extends React.Component {
         setTimeout(() => {          
           EventBus.publish("APP_END_STREAM_ACTION", params);
         }, 1000);
+      } else if (data.action === "likes") {
+        setTimeout(() => {
+          NavigationService.navigate(SCREENS.LIKE_USERS);
+        }, 500);
       }
     }
   }
 
   onIds(device) {
-    AsyncStorage.setItem("PUSH_TOKEN", device.userId, err => {
-      if (err === null) {
-        EventBus.publish("UPDATE_PUSH_TOKEN");
-      }
-    });
+    if (device && device.userId !== null && device.userId !== undefined) {
+      AsyncStorage.setItem("PUSH_TOKEN", device.userId, err => {
+        if (err === null) {
+          EventBus.publish("UPDATE_PUSH_TOKEN");
+        }
+      });
+    }
   }
 
   render() {
