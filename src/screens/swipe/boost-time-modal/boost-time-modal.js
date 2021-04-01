@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View } from "react-native";
-import { Screen, Text, Image, BoxShadow, GradientButton, AnimatedButton } from "@components";
-import Modal from "react-native-modal";
+import { Screen, Text, Image, BoxShadow, GradientButton, AnimatedButton, ModalBase as Modal } from "@components";
 import moment from "moment";
 import Images from "@assets/Images";
 

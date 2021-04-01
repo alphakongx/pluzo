@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View } from "react-native";
-import Modal from "react-native-modal";
+import { ModalBase as Modal } from "@components";
 import { StreamStatus } from "@constants";
 import StreamPlayer from "./stream-player";
 import StreamOverlayView from "./stream-overlay-view";

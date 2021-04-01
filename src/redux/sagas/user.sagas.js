@@ -120,7 +120,6 @@ function* requestRegistration(action) {
     }
 
     const response = yield call(register, params);
-
     yield put(UserCreators.registrationSuccess(response.data.data));
   } catch (error) {
     yield put(UserCreators.registrationFailure());

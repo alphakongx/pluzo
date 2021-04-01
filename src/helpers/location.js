@@ -15,7 +15,7 @@ const hasLocationPermissionIOS = async (noalert) => {
   }
 
   if (status === "denied" && !noalert) {
-    Notification.alert("Location permission denied");
+    // Notification.alert("Location permission denied");
   }
 
   if (status === "disabled" && !noalert) {

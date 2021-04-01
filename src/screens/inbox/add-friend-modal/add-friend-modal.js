@@ -8,6 +8,7 @@ import {
   GradientButton,
   TextInput,
   DiscoverPeopleItem,
+  ModalBase
 } from "@components";
 import KeyboardManager from "react-native-keyboard-manager";
 import { BlurView } from "@react-native-community/blur";
@@ -116,7 +117,7 @@ class AddFriendModal extends Component {
     const { isAddingFriend } = this.props;
 
     return (
-      <Modal
+      <ModalBase
         {...this.props}
         customBackdrop={
           <Touchable style={styles.flexFill} onPress={this.onBack}>
@@ -192,7 +193,7 @@ class AddFriendModal extends Component {
                   return (
                     <DiscoverPeopleItem
                       user={item}
-                      key={`new-people-${item.phone}`}
+                      key={`new-people-${item.id}`}
                       onAddPeople={() => this.onAddFriend(item)}
                       disabled={addingNewFriend || delayAdding}
                       onShowProfile={() => this.setState({selectedUser: item, visibleProfile: true})}
@@ -213,7 +214,7 @@ class AddFriendModal extends Component {
             </View>
           </Modal>
         </Screen>
-      </Modal>
+      </ModalBase>
     );
   }
 }

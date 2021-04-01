@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Screen, Text, BoxShadow, GradientButton, Touchable } from "@components";
+import { Screen, Text, BoxShadow, GradientButton, Touchable, ModalBase as Modal } from "@components";
 import * as Animatable from "react-native-animatable";
 import { BlurView } from "@react-native-community/blur";
 import FastImage from "react-native-fast-image";
-import Modal from "react-native-modal";
 import { GRADIENT } from "@config";
 import { AppBadges } from "@config";
 import Images from "@assets/Images";

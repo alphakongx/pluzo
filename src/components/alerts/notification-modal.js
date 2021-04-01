@@ -5,7 +5,7 @@ import { Text } from "../text";
 import { Image } from "../image";
 import { BoxShadow } from "../shadow";
 import { GradientButton } from "../button";
-import Modal from "react-native-modal";
+import { ModalBase as Modal } from "../modal-base";
 import Images from "@assets/Images";
 
 import styles from "./notification-modal.style";

@@ -18,6 +18,8 @@ const ProfileDetail: () => React$Node = props => {
     longitude,
     badges,
     age,
+    hide_location,
+    hide_city,
   } = props.user;
   const { location, imageIndex } = props;
 
@@ -36,16 +38,22 @@ const ProfileDetail: () => React$Node = props => {
   }
   let isOwner = true; //props.owner.id === (props.user.id || props.user._id);
   let strAddress = (address !== null && address !== "null") ? address : "";
-  if (city !== null && state !== null) {
-    strAddress = `${city}, ${state}`;
+  if (hide_location === 1) {
+    strAddress = "";
   } else {
-    if (city === null && state === null) {
-      strAddress = strAddress;
-    } else {
-      if (city === null) {
-        strAddress = `${state}, ${strAddress}`;
+    if (hide_city === 0) {
+      if (city !== null && state !== null) {
+        strAddress = `${city}, ${state}`;
       } else {
-        strAddress = `${city}, ${strAddress}`;
+        if (city === null && state === null) {
+          strAddress = strAddress;
+        } else {
+          if (city === null) {
+            strAddress = `${state}, ${strAddress}`;
+          } else {
+            strAddress = `${city}, ${strAddress}`;
+          }
+        }
       }
     }
   }

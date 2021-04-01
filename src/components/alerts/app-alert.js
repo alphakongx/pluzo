@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import Modal from "react-native-modal";
+// import Modal from "react-native-modal";
+import { ModalBase as Modal } from "../modal-base";
 import { BoxShadow } from "../shadow";
 import { Text } from "../text";
 import { GradientButton } from "../button";

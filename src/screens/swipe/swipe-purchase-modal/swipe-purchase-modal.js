@@ -8,8 +8,8 @@ import {
   Touchable,
   SolidButton,
   GradientButton,
+  ModalBase as Modal
 } from "@components";
-import Modal from "react-native-modal";
 import moment from "moment";
 import RNIap from "react-native-iap";
 import * as Animatable from "react-native-animatable";
@@ -235,6 +235,7 @@ const SwipePurchaseModal: () => React$Node = props => {
         </LinearGradient>
         <PurchaseModal
           isVisible={visiblePurchase}
+          needUpdate={false}
           onSwipeComplete={() => setVisiblePurchase(false)}
         />
       </View>

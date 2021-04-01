@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Dimensions, ActivityIndicator, SafeAreaView } from "react-native";
 import { Screen, Image, Text, Touchable } from "@components";
-import moment from "moment";
 import { Switch } from "react-native-switch";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import Images from "@assets/Images";

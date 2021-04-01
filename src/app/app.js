@@ -36,6 +36,7 @@ class App extends React.Component {
       firstLoading: true,
       appState: AppState.currentState,
     };
+    this.openedTime = 0;
   }
 
   async componentDidMount() {
@@ -57,11 +58,19 @@ class App extends React.Component {
     this._netUnsubscribe = NetInfo.addEventListener(state => {
       this.props.updateConnectionState(state.isConnected);
     });
+    this._openedUnsubscribe = EventBus.on("AppState_Active", () => {
+      this._countAppTime();
+    });
+    this._countAppTime();
   }
 
   componentWillUnmount() {
     AppState.removeEventListener("change", this._handleAppStateChange);
     this._netUnsubscribe();
+    this._openedUnsubscribe();
+    if (this._opendInterval) {
+      clearInterval(this._opendInterval);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -72,6 +81,21 @@ class App extends React.Component {
         }, 1500);
       }
     }
+  }
+
+  _countAppTime = () => {
+    this.openedTime = 0;
+    if (this._opendInterval) {
+      clearInterval(this._opendInterval);
+      this._opendInterval = null;
+    }
+    this._opendInterval = setInterval(() => {
+      this.openedTime += 1;
+      if (this.openedTime === 420 && this.props.user && this.props.user.premium === 0) {
+        this.props.showPluzo(true, "");
+        this.openedTime = 0;
+      }
+    }, 1000);
   }
 
   _handleAppStateChange = nextAppState => {
@@ -158,7 +182,6 @@ class App extends React.Component {
         let newProfile = objData.user;
         newProfile.id = parseInt(newProfile._id, 10);
         this.props.updateProfile(newProfile);
-        // console.log("user>>>", newProfile);
       }
       EventBus.publish("player_actions", "User_update", objData);
     } else if (data.action === "Friends") {
@@ -286,10 +309,10 @@ class App extends React.Component {
         </View>}
         {this.isLogin() && (
           <WS
-            url={"ws://3.134.208.235:27800?user=" + this.props.user.id}
+            url={"ws://3.18.139.193:27801?user=" + this.props.user.id}
             onMessage={this.onMessage}
             onOpen={() => console.log("Opened socket")}
-            onError={() => console.log("Error socket")}
+            onError={(error) => console.log(error)}
             onClose={() => console.log("Closed socket")}
             reconnect
             isActive={this.state.appState}
@@ -322,6 +345,7 @@ const mapDispatchToProps = {
   updateUser: UserCreators.requestUpdateUser,
   updateFriends: InboxCreators.requestFriendsSuccess,
   loadPendingRequests: InboxCreators.requestPendingFriends,
+  showPluzo: AppCreators.showPluzo,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

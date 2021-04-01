@@ -8,9 +8,9 @@ import {
   Touchable,
   AutoDragSortableView,
   AnimatedButton,
+  ModalBase as Modal
 } from "@components";
 import { BlurView } from "@react-native-community/blur";
-import Modal from "react-native-modal";
 import { GRADIENT } from "@config";
 
 import Images from "@assets/Images";

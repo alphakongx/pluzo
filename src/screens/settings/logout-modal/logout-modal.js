@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Screen, Touchable, BlurView, Text, Image, BoxShadow } from "@components";
-import Modal from "react-native-modal";
+import { Screen, Touchable, BlurView, Text, Image, BoxShadow, ModalBase as Modal } from "@components";
 import Images from "@assets/Images";
 import styles from "./logout-modal.style";
 

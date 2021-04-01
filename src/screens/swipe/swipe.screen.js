@@ -167,12 +167,17 @@ class Swipe extends React.Component {
           params.append("latitude", position.coords.latitude);
           params.append("longitude", position.coords.longitude);
           this.props.updateUser(params, this.props.token);
-          if (this.props.cards.length === 0) {
-            this.cardIndex = -1;
-            this.props.loadCards(this.props.token, 1);
-          }
+        }
+        if (this.props.cards.length === 0) {
+          this.cardIndex = -1;
+          this.props.loadCards(this.props.token, 1);
         }
       });
+    } else {
+      if (this.props.cards.length === 0) {
+        this.cardIndex = -1;
+        this.props.loadCards(this.props.token, 1);
+      }
     }
   }
 
@@ -308,6 +313,14 @@ class Swipe extends React.Component {
         this.setState({swipedCount: 4});
       }
     }
+
+    if (this.props.user.premium === 0 && this.state.swipedCount === 9) {
+      if (this.props.cards.length >= (index + 1)) {
+        this.props.showPluzo(true, "swipe");
+      } else {
+        this.setState({swipedCount: 8});
+      }
+    }
     
     if (type === "left") {
       // dislike
@@ -376,16 +389,16 @@ class Swipe extends React.Component {
     const { isLoadingCards, cards } = this.props;
     const { labelType, tutorialPointer, swipedCount, hasPermission } = this.state;
 
-    if (hasPermission === false) {
-      return (
-        <Screen hasGradient style={styles.emptyContainer}>
-          <NoUsers navigation={this.props.navigation} permission />
-          <NavigationEvents 
-            onWillFocus={(payload) => this.onWillFocus(payload)}
-            onWillBlur={(payload) => this.onWillBlur(payload)} />
-        </Screen>
-      )
-    }
+    // if (hasPermission === false) {
+    //   return (
+    //     <Screen hasGradient style={styles.emptyContainer}>
+    //       <NoUsers navigation={this.props.navigation} permission />
+    //       <NavigationEvents 
+    //         onWillFocus={(payload) => this.onWillFocus(payload)}
+    //         onWillBlur={(payload) => this.onWillBlur(payload)} />
+    //     </Screen>
+    //   )
+    // }
 
     if (isLoadingCards || cards === null || cards === undefined || cards.length === 0) {
       return (

@@ -138,12 +138,12 @@ const StreamOverlayView: () => React$Node = props => {
         />
       ) : (
         <SafeAreaView style={styles.container} pointerEvents={"box-none"}>
-          {(messageBoxHeight === 300 || showFilters) && (
+          {(messageBoxHeight === 300 || showPlayerSetting) && (
             <TouchableOpacity
               style={styles.absolute}
               onPress={() => {
-                if (showFilters) {
-                  setShowFilters(false);
+                if (showPlayerSetting) {
+                  setShowPlayerSetting(false);
                 } else {
                   Keyboard.dismiss()
                 }
@@ -153,8 +153,8 @@ const StreamOverlayView: () => React$Node = props => {
           {props.streamerCount > 0 && (
             <TouchableOpacity style={[styles.broadcasterContainer, { top: insets.top + wp(50) }]}
               onPress={() => {
-                if (showFilters) {
-                  setShowFilters(false);
+                if (showPlayerSetting) {
+                  setShowPlayerSetting(false);
                 } else {
                   Keyboard.dismiss()
                 }
@@ -178,7 +178,7 @@ const StreamOverlayView: () => React$Node = props => {
             </TouchableOpacity>
           )}
 
-          {!showFilters &&
+          {!showPlayerSetting &&
           <View
             style={[
               styles.messageBox,

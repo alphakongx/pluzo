@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
 import {
-  Modal,
   Platform,
   TouchableOpacity,
   View,
   Image,
   KeyboardAvoidingView,
 } from "react-native";
+import { ModalBase as Modal } from "../modal-base";
 import { BlurView } from "../blur-view";
 import { Screen } from "../screen";
 import { Text } from "../text";
@@ -86,10 +86,12 @@ class DialogInput extends PureComponent {
     
     return (
       <Modal
-        animationType={animationType}
-        transparent={true}
-        visible={this.props.isDialogVisible}
-        onRequestClose={this.handleOnRequestClose}
+        animationIn={"fadeIn"}
+        animationOut={"fadeOut"}
+        backdropOpacity={0}
+        style={{margin: 0}}
+        isVisible={this.props.isDialogVisible}
+        onModalHide={this.handleOnRequestClose}
       >
         <KeyboardAvoidingView style={[styles.container, { ...modalStyleProps }]}>
           <TouchableOpacity

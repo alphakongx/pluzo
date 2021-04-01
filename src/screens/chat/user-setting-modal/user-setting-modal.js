@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { View, SafeAreaView } from "react-native";
 import { BlurView } from "@react-native-community/blur";
-import Modal from "react-native-modal";
-import { Screen, Touchable, SolidButton, Text } from "@components";
+import { Screen, Touchable, SolidButton, Text, ModalBase as Modal } from "@components";
 
 import styles from "./user-setting-modal.style";
 

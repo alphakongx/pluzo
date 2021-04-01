@@ -8,23 +8,29 @@ import Images from "@assets/Images";
 import styles from "./header.style";
 
 const Header: () => React$Node = props => {
-  var { first_name, birthday, age, address, state, city, badges, bio } = props.item;
+  var { first_name, birthday, age, address, state, city, badges, bio, hide_location, hide_city } = props.item;
 
   if (first_name === null || first_name === "") {
     first_name = "No Name";
   }
   birthday = age; //moment().diff(moment.unix(birthday), "years");
   let strAddress = (address !== null && address !== "null") ? address : "";
-  if (city !== null && state !== null) {
-    strAddress = `${city}, ${state}`;
+  if (hide_location === 1) {
+    strAddress = "";
   } else {
-    if (city === null && state === null) {
-      strAddress = strAddress;
-    } else {
-      if (city === null) {
-        strAddress = `${state}, ${strAddress}`;
+    if (hide_city === 0) {
+      if (city !== null && state !== null) {
+        strAddress = `${city}, ${state}`;
       } else {
-        strAddress = `${city}, ${strAddress}`;
+        if (city === null && state === null) {
+          strAddress = strAddress;
+        } else {
+          if (city === null) {
+            strAddress = `${state}, ${strAddress}`;
+          } else {
+            strAddress = `${city}, ${strAddress}`;
+          }
+        }
       }
     }
   }

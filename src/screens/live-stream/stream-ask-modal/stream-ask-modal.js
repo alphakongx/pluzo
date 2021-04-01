@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
-import { Screen, Text, Image, BoxShadow, GradientButton } from "@components";
+import { Screen, Text, Image, BoxShadow, GradientButton, ModalBase as Modal } from "@components";
 import EventBus from "eventing-bus";
-import Modal from "react-native-modal";
 import Images from "@assets/Images";
 
 import styles from "./stream-ask-modal.style";

@@ -41,22 +41,22 @@ class SignupCodeVerification extends Component {
         .catch(p => console.log(p));
     }
 
-    // let lastTime = 0;
-    // try {
-    //   lastTime = await AsyncStorage.getItem(TUTORIAL.SMS_LAST_TIME);
-    // } catch (error) {
-    //   lastTime = 0;
-    // }
-    // if (lastTime === 0 || lastTime === null) {
-    //   this.resendCode();
-    // } else {
-    //   let passTime = moment().diff(moment.unix(lastTime), "seconds");
-    //   if (passTime < 60) {
-    //     this.startCountDown(60 - passTime);
-    //   } else {
-    //     this.resendCode();
-    //   }
-    // }
+    let lastTime = 0;
+    try {
+      lastTime = await AsyncStorage.getItem(TUTORIAL.SMS_LAST_TIME);
+    } catch (error) {
+      lastTime = 0;
+    }
+    if (lastTime === 0 || lastTime === null) {
+      this.resendCode();
+    } else {
+      let passTime = moment().diff(moment.unix(lastTime), "seconds");
+      if (passTime < 60) {
+        this.startCountDown(60 - passTime);
+      } else {
+        this.resendCode();
+      }
+    }
   }
 
   componentWillUnmount() {

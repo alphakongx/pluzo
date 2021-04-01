@@ -7,8 +7,8 @@ import {
   Touchable,
   BackButton,
   TextInput,
+  ModalBase as Modal
 } from "@components";
-import Modal from "react-native-modal";
 import { changePassword } from "@redux/api";
 import { Notification } from "@helpers";
 

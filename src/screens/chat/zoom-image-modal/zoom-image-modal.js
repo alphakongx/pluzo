@@ -1,7 +1,6 @@
 import React from "react";
 import { View, ActivityIndicator } from "react-native";
-import { Touchable, Image, ImageZoomViewer } from "@components";
-import Modal from "react-native-modal";
+import { Touchable, Image, ImageZoomViewer, ModalBase as Modal } from "@components";
 import Images from "@assets/Images";
 
 import styles from "./zoom-image-modal.style";

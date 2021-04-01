@@ -8,9 +8,8 @@ import {
 } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
-import Modal from "react-native-modal";
 import EventBus from "eventing-bus";
-import { Screen, Touchable, Image, Text, SearchInput } from "@components";
+import { Screen, Touchable, Image, Text, SearchInput, ModalBase as Modal } from "@components";
 import ModalFriendItem from "./modal-friend-item";
 import { API } from "@helpers";
 import { API_ENDPOINTS } from "@config";

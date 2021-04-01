@@ -9,8 +9,8 @@ import {
   TextInput,
   Text,
   CountryCodePicker,
+  ModalBase as Modal
 } from "@components";
-import Modal from "react-native-modal";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import { Validator } from "@helpers";
@@ -83,7 +83,7 @@ const UpdatePhoneModal: () => React$Node = props => {
           <View style={styles.phoneNumberContainer}>
             <TextInput
               value={phoneNumber}
-              onChangeText={setPhoneNumber}
+              onChangeText={(txt) => setPhoneNumber(txt.replace(/[^0-9]/g, ''))}
               placeholder={"New Phone Number"}
               keyboardType={"phone-pad"}
             />

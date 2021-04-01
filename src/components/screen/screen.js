@@ -1,6 +1,6 @@
 import React from "react";
-import { ImageBackground, View } from "react-native";
-import { SafeAreaView } from "react-navigation";
+import { ImageBackground, View, SafeAreaView } from "react-native";
+// import { SafeAreaView } from "react-navigation";
 import LinearGradient from "react-native-linear-gradient";
 import { GRADIENT } from "@config";
 import styles from "./screen.style";

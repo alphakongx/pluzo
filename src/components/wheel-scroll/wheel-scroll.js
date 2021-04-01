@@ -97,6 +97,7 @@ export default class ScrollPicker extends React.Component {
             onScrollEndDrag={this.onScrollEndDrag}
             onScroll={this.onScroll}
             style={styles.scrollContainer}
+            scrollEventThrottle={16}
           >
             {header}
             {this.props.dataSource.map(this.renderItem.bind(this))}

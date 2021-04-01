@@ -1,9 +1,8 @@
 import React from "react";
 import { View } from "react-native";
-import Modal from "react-native-modal";
 import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
-import { GradientButton, Text, BackButton, BoxShadow, Touchable, Image } from "@components";
+import { GradientButton, Text, BackButton, BoxShadow, Touchable, Image, ModalBase as Modal } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import * as Animatable from "react-native-animatable";
 import RNIap from "react-native-iap";
@@ -205,6 +204,7 @@ class PurchaseModal extends React.Component {
 
           <PurchaseSelectModal 
             isVisible={this.state.visibleSelect}
+            needUpdate={false}
             purchasedMonths={totalMonth}
             onSwipeComplete={() => this.setState({visibleSelect: false})}
             onConfirm={(index) => {

@@ -261,19 +261,26 @@ class ProfileView extends React.Component {
       data,
     })
       .then(response => {
-        let res = response.data.data;
-        this.setState({
-          friend: res.friend_info.friend,
-          updating: false,
-          rejecting: false,
-        });
+        let res = response.data.data; console.log(res);
         if (type === "accept" || type === "reject") {
+          this.setState({
+            friend: 4,
+            updating: false,
+            rejecting: false,
+          });
+
           const { pendingFriends } = this.props;
           let requests = pendingFriends.filter(value => value._id !== userId);
           this.props.updatePendings(requests);
+        } else {
+          this.setState({
+            friend: res.friend_info.friend,
+            updating: false,
+            rejecting: false,
+          });
         }
       })
-      .catch(err => {
+      .catch(err => {console.log(err);
         this.setState({ updating: false, rejecting: false });
       });
   };
@@ -476,12 +483,14 @@ class ProfileView extends React.Component {
 
         <ReportModal
           isVisible={visibleReport}
+          needUpdate={this.props.user ? false : true}
           userId={(user.id || user._id)}
           onDismiss={() => this.setState({ visibleReport: false })}
         />
         
         <ConfirmModal
           isVisible={this.state.visibleConfirmBlock}
+          needUpdate={this.props.user ? false : true}
           user={user}
           onDismiss={() => this.setState({ visibleConfirmBlock: false })}
           onConfirm={() => {
@@ -496,6 +505,7 @@ class ProfileView extends React.Component {
         
         <NotificationModal
           isVisible={visibleConfirmDelete}
+          needUpdate={this.props.user ? false : true}
           onBack={() => this.setState({visibleConfirmDelete: false})}
           onConfirm={(userId, userName) => {
             this.setState({visibleConfirmDelete: false});
