@@ -16,7 +16,7 @@ import {
   IconButton,
   BoxShadow,
   GestureRecognizer,
-  NotificationModal
+  NotificationModal,
 } from "@components";
 import EventBus from "eventing-bus";
 import moment from "moment";
@@ -81,7 +81,7 @@ class StreamUsers extends Component {
       AsyncStorage.getItem(TUTORIAL.KICK_BAN2, (err, result) => {
         if (result === null || result === "0") {
           if (this.props.stream && this.state.creator === this.props.user.id) {
-            this.setState({visibleTutorial: true});
+            this.setState({ visibleTutorial: true });
           }
         }
       });
@@ -90,7 +90,11 @@ class StreamUsers extends Component {
 
   componentWillUnmount() {
     this.props.setIsScrolling(false);
-    if (this.props.isBroadcaster === true && this.props.stream !== null && this.state.creator === this.props.user.id) {
+    if (
+      this.props.isBroadcaster === true &&
+      this.props.stream !== null &&
+      this.state.creator === this.props.user.id
+    ) {
       let stream = this.props.stream;
       stream.name = Format.cleanText(stream.name);
       this.props.streamUpdateSuccess(stream);
@@ -125,16 +129,19 @@ class StreamUsers extends Component {
       }
     }
     let userID = parseInt(broadcaster._id, 10);
-    this.setState({notificationData: {
-      text: `Do you want to remove\n${broadcaster.first_name} from streamer?`,
-      logoBackground: "#FF0036",
-      logoTintColor: "#0B0516",
-      buttonColors: ["#FF0036", "#FF0036"],
-      buttonText: "Okay",
-      buttonTextStyle: "#0B0516",
-      type: "rm-broadcaster",
-      userId: userID,
-    }, visibleNotification: true});
+    this.setState({
+      notificationData: {
+        text: `Do you want to remove\n${broadcaster.first_name} from streamer?`,
+        logoBackground: "#FF0036",
+        logoTintColor: "#0B0516",
+        buttonColors: ["#FF0036", "#FF0036"],
+        buttonText: "Okay",
+        buttonTextStyle: "#0B0516",
+        type: "rm-broadcaster",
+        userId: userID,
+      },
+      visibleNotification: true,
+    });
   };
 
   onAddToBroadcaster = audience => {
@@ -184,49 +191,60 @@ class StreamUsers extends Component {
   onMute = (index, user, isMuted) => {
     this.swipeRefs[index].closeRow();
     let userID = parseInt(user._id, 10);
-    this.setState({notificationData: {
-      text: `Are you sure you want to ${isMuted ? "unmute" : "mute"} ${user.first_name}`,
-      logoBackground: "#312446",
-      logoTintColor: "white",
-      buttonColors: ["#312446", "#312446"],
-      buttonText: "Okay",
-      buttonTextStyle: "white",
-      type: isMuted ? "unmute" : "mute",
-      userId: userID,
-    }, visibleNotification: true});
+    this.setState({
+      notificationData: {
+        text: `Are you sure you want to ${isMuted ? "unmute" : "mute"} ${
+          user.first_name
+        }`,
+        logoBackground: "#312446",
+        logoTintColor: "white",
+        buttonColors: ["#312446", "#312446"],
+        buttonText: "Okay",
+        buttonTextStyle: "white",
+        type: isMuted ? "unmute" : "mute",
+        userId: userID,
+      },
+      visibleNotification: true,
+    });
   };
 
   onKick = (index, user) => {
     this.swipeRefs[index].closeRow();
-    this.setState({notificationData: {
-      text: `Are you sure you want to kick ${user.first_name}`,
-      logoBackground: "#312446",
-      logoTintColor: "white",
-      buttonColors: ["#312446", "#312446"],
-      buttonText: "Okay",
-      buttonTextStyle: "white",
-      type: "kick",
-      userId: user._id,
-      userName: user.first_name,
-    }, visibleNotification: true});
+    this.setState({
+      notificationData: {
+        text: `Are you sure you want to kick ${user.first_name}`,
+        logoBackground: "#312446",
+        logoTintColor: "white",
+        buttonColors: ["#312446", "#312446"],
+        buttonText: "Okay",
+        buttonTextStyle: "white",
+        type: "kick",
+        userId: user._id,
+        userName: user.first_name,
+      },
+      visibleNotification: true,
+    });
   };
 
   onBan = (index, user) => {
     this.swipeRefs[index].closeRow();
-    this.setState({notificationData: {
-      text: `Are you sure you want to ban ${user.first_name}`,
-      logoBackground: "#FF0036",
-      logoTintColor: "#0B0516",
-      buttonColors: ["#FF0036", "#FF0036"],
-      buttonText: "Okay",
-      buttonTextStyle: "#0B0516",
-      type: "ban",
-      userId: user._id,
-      userName: user.first_name,
-    }, visibleNotification: true});
+    this.setState({
+      notificationData: {
+        text: `Are you sure you want to ban ${user.first_name}`,
+        logoBackground: "#FF0036",
+        logoTintColor: "#0B0516",
+        buttonColors: ["#FF0036", "#FF0036"],
+        buttonText: "Okay",
+        buttonTextStyle: "#0B0516",
+        type: "ban",
+        userId: user._id,
+        userName: user.first_name,
+      },
+      visibleNotification: true,
+    });
   };
 
-  onSendSystemMsg = (msg) => {
+  onSendSystemMsg = msg => {
     let newMessage = {
       id: `${moment().unix()}.${moment().millisecond()}`,
       user: this.props.user,
@@ -245,25 +263,25 @@ class StreamUsers extends Component {
     }
     let userID = parseInt(user._id, 10);
     let isMuted = false;
-    if (this.props.remoteMutedUsers.filter((value) => value === userID).length > 0) {
+    if (this.props.remoteMutedUsers.filter(value => value === userID).length > 0) {
       isMuted = true;
     }
 
     return (
       <SwipeRow
-        ref={ref => this.swipeRefs[index] = ref}
+        ref={ref => (this.swipeRefs[index] = ref)}
         disableRightSwipe
         disableLeftSwipe={this.props.stream === null || isOwner}
         rightOpenValue={-wp(180)}
         stopRightSwipe={-wp(180)}
         closeOnRowPress={true}
-        onRowOpen={(value) => {
+        onRowOpen={value => {
           if (this.openedIndex !== null) {
             this.swipeRefs[this.openedIndex].closeRow();
           }
           this.openedIndex = index;
           if (this.state.visibleTutorial === true) {
-            this.setState({visibleTutorial: false});
+            this.setState({ visibleTutorial: false });
             AsyncStorage.setItem(TUTORIAL.KICK_BAN2, "1");
           }
         }}
@@ -271,15 +289,24 @@ class StreamUsers extends Component {
           if (index === this.openedIndex) {
             this.openedIndex = null;
           }
-        }}>
-        <GestureRecognizer style={styles.transparentContainer}
-          onSwipeRight={() => this.swipeRefs[index].closeRow()}>
-          <Touchable style={styles.transparentButton}
-            onPress={() => this.onMute(index, user)}/>
-          <Touchable style={styles.transparentButton}
-            onPress={() => this.onKick(index, user)}/>
-          <Touchable style={styles.transparentButton}
-            onPress={() => this.onBan(index, user)}/>
+        }}
+      >
+        <GestureRecognizer
+          style={styles.transparentContainer}
+          onSwipeRight={() => this.swipeRefs[index].closeRow()}
+        >
+          <Touchable
+            style={styles.transparentButton}
+            onPress={() => this.onMute(index, user)}
+          />
+          <Touchable
+            style={styles.transparentButton}
+            onPress={() => this.onKick(index, user)}
+          />
+          <Touchable
+            style={styles.transparentButton}
+            onPress={() => this.onBan(index, user)}
+          />
         </GestureRecognizer>
         <View style={styles.swipeItemContainer}>
           <View style={styles.flexFill}>
@@ -291,62 +318,79 @@ class StreamUsers extends Component {
                   <Image
                     key={`profile-badge-${badge}`}
                     style={styles.badgeImage}
-                    source={Images.badges[AppBadges[badge-1].id]}
+                    source={Images.badges[AppBadges[badge - 1].id]}
                   />
                 );
               })}
             </View>
-            <Text style={styles.usernameText}>
-              {user.name || user.username}
-            </Text>
+            <Text style={styles.usernameText}>{user.name || user.username}</Text>
           </View>
           {isBroadcaster && this.state.creator !== user._id && isStreamer === true && (
             <Touchable onPress={() => this.onRemoveBroadcaster(user)}>
-              <Image source={Images.live.broadcasterRemove} style={styles.streamRemoveIcon} />
+              <Image
+                source={Images.live.broadcasterRemove}
+                style={styles.streamRemoveIcon}
+              />
             </Touchable>
           )}
           {isBroadcaster && isStreamer === false && (
             <Touchable
-              disabled={this.props.askedUsers.filter((value) => value === user._id).length === 0 && this.isSendRequest(user)}
+              disabled={
+                this.props.askedUsers.filter(value => value === user._id).length === 0 &&
+                this.isSendRequest(user)
+              }
               onPress={() => {
-                if (this.props.askedUsers.filter((value) => value === user._id).length > 0) {
-                  this.props.userAcceptJoin(this.props.streamParams.channelName, user._id, this.props.token);
-                  this.props.updateAskedUsers(this.props.askedUsers.filter((value) => value !== user._id));
+                if (
+                  this.props.askedUsers.filter(value => value === user._id).length > 0
+                ) {
+                  this.props.userAcceptJoin(
+                    this.props.streamParams.channelName,
+                    user._id,
+                    this.props.token,
+                  );
+                  this.props.updateAskedUsers(
+                    this.props.askedUsers.filter(value => value !== user._id),
+                  );
                 } else {
                   this.onAddToBroadcaster(user);
                 }
               }}
             >
-              {this.props.askedUsers.filter((value) => value === user._id).length > 0 ? (
+              {this.props.askedUsers.filter(value => value === user._id).length > 0 ? (
                 <View style={styles.streamAskedContainer}>
-                  <Image source={Images.live.icHand} style={styles.streamAskedIcon}  />
+                  <Image source={Images.live.icHand} style={styles.streamAskedIcon} />
                 </View>
-              ) : 
-              !this.isSendRequest(user) ? (
-                <Image source={Images.live.broadcasterAdd} style={styles.streamRemoveIcon}  />
+              ) : !this.isSendRequest(user) ? (
+                <Image
+                  source={Images.live.broadcasterAdd}
+                  style={styles.streamRemoveIcon}
+                />
               ) : (
-                <Image source={Images.live.broadcasterWait} style={styles.streamRemoveIcon}  />
+                <Image
+                  source={Images.live.broadcasterWait}
+                  style={styles.streamRemoveIcon}
+                />
               )}
             </Touchable>
           )}
           <View style={styles.kickBanContainer}>
-            <Touchable style={styles.muteButton}
-              onPress={() => this.onMute(index, user, isMuted)}>
+            <Touchable
+              style={styles.muteButton}
+              onPress={() => this.onMute(index, user, isMuted)}
+            >
               <Text style={styles.muteButtonText}>{isMuted ? "Unmute" : "Mute"}</Text>
             </Touchable>
-            <Touchable style={styles.kickButton}
-              onPress={() => this.onKick(index, user)}>
+            <Touchable style={styles.kickButton} onPress={() => this.onKick(index, user)}>
               <Text style={styles.muteButtonText}>Kick</Text>
             </Touchable>
-            <Touchable style={styles.banButton}
-              onPress={() => this.onBan(index, user)}>
+            <Touchable style={styles.banButton} onPress={() => this.onBan(index, user)}>
               <Text style={styles.banButtonText}>Ban</Text>
             </Touchable>
           </View>
         </View>
       </SwipeRow>
-    )
-  }
+    );
+  };
 
   render() {
     const { broadcasters, audiences, isBroadcaster, stream } = this.props;
@@ -385,52 +429,60 @@ class StreamUsers extends Component {
                   }}
                   style={[styles.emojiButton]}
                 >
-                  {parseInt(stream.category) === 0 ?
-                  (
+                  {parseInt(stream.category) === 0 ? (
                     <Text style={styles.emptyCategoryText}>Category</Text>
-                  ): (
-                  <LinearGradient
-                    colors={Object.values(AppTags[stream.category].color)}
-                    start={{x: 1, y: 0}}
-                    end={{x: 0, y: 1}}
-                    style={styles.emojiCategoryContainer}>
-                    <Text style={[styles.itemText, {textShadowColor: AppTags[stream.category].shadowColor}]}>
-                      {AppTags[stream.category].name}
-                    </Text>
-                  </LinearGradient>
-                  )}
-                </Touchable>
-              ) : (
-                stream ? (
-                  <View style={[styles.emojiButton]}>
-                    {parseInt(stream.category) === 0 ?
-                    (
-                      <Text style={styles.emptyCategoryText}>Category</Text>
-                    ): (
+                  ) : (
                     <LinearGradient
                       colors={Object.values(AppTags[stream.category].color)}
-                      start={{x: 1, y: 0}}
-                      end={{x: 0, y: 1}}
-                      style={styles.emojiCategoryContainer}>
-                      <Text style={[styles.itemText, {textShadowColor: AppTags[stream.category].shadowColor}]}>
+                      start={{ x: 1, y: 0 }}
+                      end={{ x: 0, y: 1 }}
+                      style={styles.emojiCategoryContainer}
+                    >
+                      <Text
+                        style={[
+                          styles.itemText,
+                          { textShadowColor: AppTags[stream.category].shadowColor },
+                        ]}
+                      >
                         {AppTags[stream.category].name}
                       </Text>
                     </LinearGradient>
-                    )}
+                  )}
+                </Touchable>
+              ) : stream ? (
+                <View style={[styles.emojiButton]}>
+                  {parseInt(stream.category) === 0 ? (
+                    <Text style={styles.emptyCategoryText}>Category</Text>
+                  ) : (
+                    <LinearGradient
+                      colors={Object.values(AppTags[stream.category].color)}
+                      start={{ x: 1, y: 0 }}
+                      end={{ x: 0, y: 1 }}
+                      style={styles.emojiCategoryContainer}
+                    >
+                      <Text
+                        style={[
+                          styles.itemText,
+                          { textShadowColor: AppTags[stream.category].shadowColor },
+                        ]}
+                      >
+                        {AppTags[stream.category].name}
+                      </Text>
+                    </LinearGradient>
+                  )}
+                </View>
+              ) : (
+                <View style={styles.headerTitleContainer}>
+                  <Text style={styles.headerTitle}>{"Live"}</Text>
+                  <View style={styles.onlineIconContainer}>
+                    <LinearGradient
+                      colors={GRADIENT.FRIEND_ONLINE_ICON}
+                      from={{ x: 0, y: 0 }}
+                      to={{ x: 1, y: 0 }}
+                      style={styles.onlineIcon}
+                    />
                   </View>
-                ) : (
-                  <View style={styles.headerTitleContainer}>
-                    <Text style={styles.headerTitle}>{"Live"}</Text>
-                    <View style={styles.onlineIconContainer}>
-                      <LinearGradient
-                        colors={GRADIENT.FRIEND_ONLINE_ICON}
-                        from={{ x: 0, y: 0 }}
-                        to={{ x: 1, y: 0 }}
-                        style={styles.onlineIcon}
-                      />
-                    </View>
-                  </View>
-                )                
+                </View>
               )}
             </View>
 
@@ -480,7 +532,10 @@ class StreamUsers extends Component {
               />
             </View>
 
-            <ScrollView style={styles.scrollView} onLayout={(e) => this.setState({tutorialTop: e.nativeEvent.layout.y})}>
+            <ScrollView
+              style={styles.scrollView}
+              onLayout={e => this.setState({ tutorialTop: e.nativeEvent.layout.y })}
+            >
               {/** stream users */}
               <View style={styles.flexRow}>
                 <View style={styles.streamerMark} />
@@ -490,19 +545,22 @@ class StreamUsers extends Component {
               </View>
               {broadcasters.map((user, index) => {
                 return (
-                  <View key={`stream-${index}`} style={styles.userContainer}
-                    onLayout={(e) => {
+                  <View
+                    key={`stream-${index}`}
+                    style={styles.userContainer}
+                    onLayout={e => {
                       if (index === 0) {
-                        this.setState({tutorialPadding: e.nativeEvent.layout.y});
+                        this.setState({ tutorialPadding: e.nativeEvent.layout.y });
                       }
-                    }}>
+                    }}
+                  >
                     <StreamUserIcon
                       user={user}
                       onImagePress={() => this.props.onShowProfile(user)}
                     />
                     <View style={styles.broadcasterContainer}>
                       {this.renderBroadCasterRow(index, user, isBroadcaster, true)}
-                    </View>                    
+                    </View>
                   </View>
                 );
               })}
@@ -512,10 +570,15 @@ class StreamUsers extends Component {
                 <Image source={Images.live.icEye} />
                 <Text style={styles.streamerText}>{`${audiences.length} Viewer`}</Text>
               </View>
-              {this.props.askedUsers.length > 0 &&
-              <View><View style={styles.askedContainer}>
-                <Text style={styles.askedUserText}>{`${this.props.askedUsers.length} people wants to stream`}</Text>
-              </View></View>}
+              {this.props.askedUsers.length > 0 && (
+                <View>
+                  <View style={styles.askedContainer}>
+                    <Text
+                      style={styles.askedUserText}
+                    >{`${this.props.askedUsers.length} people wants to stream`}</Text>
+                  </View>
+                </View>
+              )}
               {audiences.map((user, index) => {
                 return (
                   <View key={`viewer-${index}`} style={styles.userContainer}>
@@ -525,37 +588,43 @@ class StreamUsers extends Component {
                       onImagePress={() => this.props.onShowProfile(user)}
                     />
                     <View style={styles.broadcasterContainer}>
-                      {this.renderBroadCasterRow(broadcasters.length + index, user, isBroadcaster, false)}
+                      {this.renderBroadCasterRow(
+                        broadcasters.length + index,
+                        user,
+                        isBroadcaster,
+                        false,
+                      )}
                     </View>
                   </View>
                 );
               })}
             </ScrollView>
 
-            {this.props.inviteOnly === 0 &&
-            <View style={styles.boostContainer}>
-              <BoxShadow
-                setting={{
-                  width: wp(60),
-                  height: wp(60),
-                  color: "#6E00FF",
-                  opacity: 0.6,
-                  _borderRadius: wp(30),
-                  spread: 0,
-                  blur: 10,
-                  offsetX: 0,
-                  offsetY: 0,
-                }}
-              />
-              <IconButton
-                backColor={"#D491FF"}
-                icon={Images.app.icRocket}
-                iconWidth={27}
-                iconHeight={27}
-                onPress={this.props.onBoost}
-                disabled={this.props.isBoosting}
-              />
-            </View>}
+            {this.props.inviteOnly === 0 && (
+              <View style={styles.boostContainer}>
+                <BoxShadow
+                  setting={{
+                    width: wp(60),
+                    height: wp(60),
+                    color: "#6E00FF",
+                    opacity: 0.6,
+                    _borderRadius: wp(30),
+                    spread: 0,
+                    blur: 10,
+                    offsetX: 0,
+                    offsetY: 0,
+                  }}
+                />
+                <IconButton
+                  backColor={"#D491FF"}
+                  icon={Images.app.icRocket}
+                  iconWidth={27}
+                  iconHeight={27}
+                  onPress={this.props.onBoost}
+                  disabled={this.props.isBoosting}
+                />
+              </View>
+            )}
           </SafeAreaView>
 
           {isOwner && (
@@ -565,7 +634,7 @@ class StreamUsers extends Component {
             />
           )}
 
-          <NotificationModal 
+          <NotificationModal
             isVisible={this.state.visibleNotification}
             title={this.state.notificationData.text}
             message={""}
@@ -575,46 +644,72 @@ class StreamUsers extends Component {
             buttonColors={this.state.notificationData.buttonColors}
             buttonText={this.state.notificationData.buttonText}
             buttonTextStyle={this.state.notificationData.buttonTextStyle}
-            buttonContainerStyle={{marginTop: 32}}
-            onBack={() => this.setState({visibleNotification: false})}
-            onConfirm={(a, b) => this.setState({visibleNotification: false}, () => {
-              let userID = this.state.notificationData.userId;
-              if (this.state.notificationData.type === "kick") {
-                this.props.requestStreamKickUser(userID, this.props.stream.channel, this.props.token);
-                this.onSendSystemMsg(`${this.state.notificationData.userName} kicked out.`);
-              } else if (this.state.notificationData.type === "ban") {
-                this.props.requestStreamBanUser(userID, this.props.stream.channel, this.props.token);
-                this.onSendSystemMsg(`${this.state.notificationData.userName} banned.`);
-              } else if (this.state.notificationData.type === "rm-broadcaster") {
-                this.props.requestStreamDisconnectBroad(
-                  this.props.streamParams.channelName,
-                  userID,
-                  this.props.token,
-                );
-                EventBus.publish("player_actions", "REMOVE_FROM_BROADCASTER", {userId: userID});
-              } else {
-                if (this.state.notificationData.type === "unmute") {
-                  EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: userID, mute: false});
+            buttonContainerStyle={{ marginTop: 32 }}
+            onBack={() => this.setState({ visibleNotification: false })}
+            onConfirm={(a, b) =>
+              this.setState({ visibleNotification: false }, () => {
+                let userID = this.state.notificationData.userId;
+                if (this.state.notificationData.type === "kick") {
+                  this.props.requestStreamKickUser(
+                    userID,
+                    this.props.stream.channel,
+                    this.props.token,
+                  );
+                  this.onSendSystemMsg(
+                    `${this.state.notificationData.userName} kicked out.`,
+                  );
+                } else if (this.state.notificationData.type === "ban") {
+                  this.props.requestStreamBanUser(
+                    userID,
+                    this.props.stream.channel,
+                    this.props.token,
+                  );
+                  this.onSendSystemMsg(`${this.state.notificationData.userName} banned.`);
+                } else if (this.state.notificationData.type === "rm-broadcaster") {
+                  this.props.requestStreamDisconnectBroad(
+                    this.props.streamParams.channelName,
+                    userID,
+                    this.props.token,
+                  );
+                  EventBus.publish("player_actions", "REMOVE_FROM_BROADCASTER", {
+                    userId: userID,
+                  });
                 } else {
-                  EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: userID, mute: true});
-                }                
-              }
-            })} 
+                  if (this.state.notificationData.type === "unmute") {
+                    EventBus.publish("player_actions", "REMOTE_USER_MUTE", {
+                      userId: userID,
+                      mute: false,
+                    });
+                  } else {
+                    EventBus.publish("player_actions", "REMOTE_USER_MUTE", {
+                      userId: userID,
+                      mute: true,
+                    });
+                  }
+                }
+              })
+            }
           />
         </Screen>
-        {this.state.visibleTutorial && broadcasters.length > 1 &&
-        <View style={[
-          styles.tutorialContainer,
-          {
-            top: this.state.tutorialTop 
-                + this.state.tutorialPadding 
-                + this.props.insets.top 
-                + ((parseInt(broadcasters[0]._id, 10) === this.props.user.id) ? wp(70) : wp(10)),
-          }
-        ]}>
-          <Text style={styles.tutorialText}>Swipe left to mute/kick/ban</Text>
-          <Image source={Images.app.icRight} style={styles.tutorialIcon} />
-        </View>}
+        {this.state.visibleTutorial && broadcasters.length > 1 && (
+          <View
+            style={[
+              styles.tutorialContainer,
+              {
+                top:
+                  this.state.tutorialTop +
+                  this.state.tutorialPadding +
+                  this.props.insets.top +
+                  (parseInt(broadcasters[0]._id, 10) === this.props.user.id
+                    ? wp(70)
+                    : wp(10)),
+              },
+            ]}
+          >
+            <Text style={styles.tutorialText}>Swipe left to mute/kick/ban</Text>
+            <Image source={Images.app.icRight} style={styles.tutorialIcon} />
+          </View>
+        )}
       </Animated.View>
     );
   }

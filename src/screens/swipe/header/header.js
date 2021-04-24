@@ -8,13 +8,24 @@ import Images from "@assets/Images";
 import styles from "./header.style";
 
 const Header: () => React$Node = props => {
-  var { first_name, birthday, age, address, state, city, badges, bio, hide_location, hide_city } = props.item;
+  var {
+    first_name,
+    birthday,
+    age,
+    address,
+    state,
+    city,
+    badges,
+    bio,
+    hide_location,
+    hide_city,
+  } = props.item;
 
   if (first_name === null || first_name === "") {
     first_name = "No Name";
   }
   birthday = age; //moment().diff(moment.unix(birthday), "years");
-  let strAddress = (address !== null && address !== "null") ? address : "";
+  let strAddress = address !== null && address !== "null" ? address : "";
   if (hide_location === 1) {
     strAddress = "";
   } else {
@@ -52,12 +63,17 @@ const Header: () => React$Node = props => {
           <Image source={require("@assets/images/report.png")} />
         </Touchable>
       </View>
-      {strAddress !== "" &&
-      <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
-        <Image source={require("@assets/images/swipe-screen/location.png")} />
-        {(addresses.length > 1 && addresses[0].length > 0) && <Text style={styles.topBarCity}>{addresses[0]},</Text>}
-        <Text style={styles.topBarLocation}>{addresses.length > 1 ? addresses[1] : addresses[0]}</Text>
-      </View>}
+      {strAddress !== "" && (
+        <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
+          <Image source={require("@assets/images/swipe-screen/location.png")} />
+          {addresses.length > 1 && addresses[0].length > 0 && (
+            <Text style={styles.topBarCity}>{addresses[0]},</Text>
+          )}
+          <Text style={styles.topBarLocation}>
+            {addresses.length > 1 ? addresses[1] : addresses[0]}
+          </Text>
+        </View>
+      )}
       <View style={styles.badgeContainer}>
         {badges.map(badge => {
           if (badge > AppBadges.length) return null;
@@ -65,7 +81,7 @@ const Header: () => React$Node = props => {
             <Image
               key={`badge-${badge}`}
               style={styles.badgeIcon}
-              source={Images.badges[AppBadges[badge-1].id]}
+              source={Images.badges[AppBadges[badge - 1].id]}
             />
           );
         })}

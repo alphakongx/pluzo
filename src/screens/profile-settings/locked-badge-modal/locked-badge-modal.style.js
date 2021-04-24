@@ -26,7 +26,7 @@ export default StyleSheet.create({
     textAlign: "center",
     marginTop: wp(60),
   },
-  
+
   badgesContainer: {
     flexDirection: "row",
     marginTop: wp(8),

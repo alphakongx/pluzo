@@ -120,7 +120,7 @@ export default StyleSheet.create({
     backgroundColor: "#0B0516",
     opacity: 0.5,
     position: "absolute",
-    left: 0, 
+    left: 0,
     right: 0,
     top: wp(5),
     bottom: -wp(300),

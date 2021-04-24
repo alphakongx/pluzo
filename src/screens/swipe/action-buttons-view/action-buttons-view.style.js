@@ -50,7 +50,7 @@ export default StyleSheet.create({
     fontWeight: "bold",
     textShadowColor: "#6E00FF",
     textShadowRadius: 15,
-    textShadowOffset: {width: 0, height: 0},
+    textShadowOffset: { width: 0, height: 0 },
   },
   boostRocketView1: {
     position: "absolute",

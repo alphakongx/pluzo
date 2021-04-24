@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
-import { Screen, Text, Image, BoxShadow, GradientButton, ModalBase as Modal } from "@components";
+import {
+  Screen,
+  Text,
+  Image,
+  BoxShadow,
+  GradientButton,
+  ModalBase as Modal,
+} from "@components";
 import EventBus from "eventing-bus";
 import Images from "@assets/Images";
 
@@ -59,7 +66,7 @@ const StreamAskModal: () => React$Node = props => {
 
     return () => {
       _closeAction();
-    }
+    };
   }, [onBack]);
 
   return (

@@ -6,7 +6,15 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { Screen, Image, BackButton, Text, Touchable, BorderButton, NotificationModal } from "@components";
+import {
+  Screen,
+  Image,
+  BackButton,
+  Text,
+  Touchable,
+  BorderButton,
+  NotificationModal,
+} from "@components";
 import RNMasonryScroll from "react-native-masonry-scrollview";
 import LiveItem from "../live/live-item";
 import EventBus from "eventing-bus";
@@ -48,7 +56,9 @@ class SearchScreen extends Component {
 
     this.streamStoppedAction = EventBus.on("player_actions", (action, channelName) => {
       if (action === "StreamStopped") {
-        this.props.updateSearchLive(this.props.live.filter((value) => value.channel !== channelName));
+        this.props.updateSearchLive(
+          this.props.live.filter(value => value.channel !== channelName),
+        );
       }
     });
   }
@@ -78,7 +88,7 @@ class SearchScreen extends Component {
       let userId = this.removeUser.id || this.removeUser._id;
 
       let data = new FormData();
-      data.append("username", this.removeUser.username || user.name);
+      data.append("username", this.removeUser.username);
       data.append("user_target_id", userId);
 
       let url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
@@ -92,14 +102,16 @@ class SearchScreen extends Component {
         },
         data,
       });
-      this.setState({deletedUsers: [...this.state.deletedUsers, userId]});
+      this.setState({ deletedUsers: [...this.state.deletedUsers, userId] });
     }
-  }
+  };
 
   onJoinStream = channelName => {
     let names = channelName.split("-");
-    if (names.length > 1 && parseInt(names[1], 10) === this.props.user.id ||
-      this.props.channelName === channelName) {
+    if (
+      (names.length > 1 && parseInt(names[1], 10) === this.props.user.id) ||
+      this.props.channelName === channelName
+    ) {
       return;
     }
     let params = {
@@ -117,7 +129,9 @@ class SearchScreen extends Component {
   render() {
     const { currentFilter } = this.state;
     const { isSearching, friends, chat, people, live } = this.props;
-    let realFriends = friends.filter((value) => !this.state.deletedUsers.includes((value.id || value._id)));
+    let realFriends = friends.filter(
+      value => !this.state.deletedUsers.includes(value.id || value._id),
+    );
     return (
       <Screen hasGradient style={styles.container}>
         <SafeAreaView style={styles.contentContainer}>
@@ -182,11 +196,15 @@ class SearchScreen extends Component {
                       return;
                     }
                     return (
-                      <SearchPeopleItem friend item={item} key={`friend-${index}`}
+                      <SearchPeopleItem
+                        friend
+                        item={item}
+                        key={`friend-${index}`}
                         onRemoveFriend={() => {
                           this.removeUser = item;
-                          this.setState({visibleConfirmDelete: true});
-                        }} />
+                          this.setState({ visibleConfirmDelete: true });
+                        }}
+                      />
                     );
                   })}
                   {realFriends.length > 2 && currentFilter === 1 && (
@@ -263,9 +281,9 @@ class SearchScreen extends Component {
                           }}
                           key={`live-search-${index}`}
                         >
-                          <LiveItem item={item}/>
+                          <LiveItem item={item} />
                         </Touchable>
-                      )
+                      );
                     })}
                   </RNMasonryScroll>
                   {live.length > 2 && currentFilter === 1 && (
@@ -285,9 +303,9 @@ class SearchScreen extends Component {
         </SafeAreaView>
         <NotificationModal
           isVisible={this.state.visibleConfirmDelete}
-          onBack={() => this.setState({visibleConfirmDelete: false})}
+          onBack={() => this.setState({ visibleConfirmDelete: false })}
           onConfirm={(userId, userName) => {
-            this.setState({visibleConfirmDelete: false});
+            this.setState({ visibleConfirmDelete: false });
             this.onDeleteUser();
           }}
         />

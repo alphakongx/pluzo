@@ -1,7 +1,14 @@
 import React from "react";
 import { View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { GradientButton, Text, BoxShadow, Touchable, Image, ModalBase as Modal } from "@components";
+import {
+  GradientButton,
+  Text,
+  BoxShadow,
+  Touchable,
+  Image,
+  ModalBase as Modal,
+} from "@components";
 import { BlurView } from "@react-native-community/blur";
 import * as Animatable from "react-native-animatable";
 import RNIap from "react-native-iap";
@@ -64,14 +71,18 @@ class PurchaseModal extends React.Component {
         swipeThreshold={100}
         useNativeDriver={false}
         propagateSwipe={true}
-        onModalWillShow={() => this.setState({visibleAdvantage: false})}
+        onModalWillShow={() => this.setState({ visibleAdvantage: false })}
       >
         <View style={styles.container}>
-          {this.props.pluzoType === "swipe" && 
-          <Text style={styles.questionText}>{"Want to see who likes your profile?"}</Text>}
-          {this.props.pluzoType === "opened" && 
-          <Text style={styles.questionText}>{"Unlock exclusive badges and more!"}</Text>}
-          
+          {this.props.pluzoType === "swipe" && (
+            <Text style={styles.questionText}>
+              {"Want to see who likes your profile?"}
+            </Text>
+          )}
+          {this.props.pluzoType === "opened" && (
+            <Text style={styles.questionText}>{"Unlock exclusive badges and more!"}</Text>
+          )}
+
           <View>
             <BoxShadow
               setting={{
@@ -87,27 +98,40 @@ class PurchaseModal extends React.Component {
               }}
             />
             <View style={styles.premiumView}>
-              <FastImage 
+              <FastImage
                 source={Images.app.pluzoplusMask1}
                 style={styles.premiumMask1}
-                resizeMode={FastImage.resizeMode.cover} />
-              <FastImage 
+                resizeMode={FastImage.resizeMode.cover}
+              />
+              <FastImage
                 source={Images.app.pluzoplusMask2}
                 style={styles.premiumMask2}
-                resizeMode={FastImage.resizeMode.cover} />
-              <FastImage 
+                resizeMode={FastImage.resizeMode.cover}
+              />
+              <FastImage
                 source={Images.app.pluzoplusLogo}
-                style={this.props.user.premium === 1 ? styles.premiumLogoCenter : styles.premiumLogo} />
-              {this.props.user.premium === 0 && <Text style={styles.premiumText}>
-                {"Exclusive features to enhance\nyour experience."}
-              </Text>}
+                style={
+                  this.props.user.premium === 1
+                    ? styles.premiumLogoCenter
+                    : styles.premiumLogo
+                }
+              />
+              {this.props.user.premium === 0 && (
+                <Text style={styles.premiumText}>
+                  {"Exclusive features to enhance\nyour experience."}
+                </Text>
+              )}
               <AnimatableView
                 style={styles.premiumPlusView}
                 animation={plusAnimation}
                 iterationCount={"infinite"}
-                direction="alternate"
-                duration={4000}>
-                <Image source={Images.app.pluzoplusPlus} style={styles.premiumPlusImage} />
+                direction='alternate'
+                duration={4000}
+              >
+                <Image
+                  source={Images.app.pluzoplusPlus}
+                  style={styles.premiumPlusImage}
+                />
               </AnimatableView>
             </View>
           </View>

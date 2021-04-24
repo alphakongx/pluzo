@@ -20,10 +20,12 @@ const DiscoverPeopleItem: () => React$Node = props => {
   let isOnline = Format.isRecently(props.user.last_activity);
 
   return (
-    <Touchable style={styles.peopleContainer}
+    <Touchable
+      style={styles.peopleContainer}
       onPress={() => {
         props.onShowProfile && props.onShowProfile();
-      }}>
+      }}
+    >
       <FastImage
         source={typeof picture === "string" ? { uri: picture } : picture}
         style={styles.peoplePicture}
@@ -46,7 +48,7 @@ const DiscoverPeopleItem: () => React$Node = props => {
           colors={GRADIENT.BUTTON}
           start={{ x: 1, y: 0 }}
           end={{ x: 0, y: 0 }}
-          style={[styles.peopleAdd, props.disabled ? {opacity: 0.5} : {opacity: 1}]}
+          style={[styles.peopleAdd, props.disabled ? { opacity: 0.5 } : { opacity: 1 }]}
         >
           <Image source={Images.app.icPlus} style={styles.plusIcon} />
         </LinearGradient>

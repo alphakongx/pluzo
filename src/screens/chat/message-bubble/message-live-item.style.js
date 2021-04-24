@@ -53,5 +53,4 @@ export default StyleSheet.create({
     fontSize: wp(11),
     color: "white",
   },
-
 });

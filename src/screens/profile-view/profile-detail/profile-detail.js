@@ -26,7 +26,7 @@ const ProfileDetail: () => React$Node = props => {
   if (first_name === null || first_name === "") {
     first_name = "No Name";
   }
-  birthday = age;//moment().diff(moment.unix(birthday), "years");
+  birthday = age; //moment().diff(moment.unix(birthday), "years");
   var distance = " - ";
   if (latitude !== null && longitude !== null && location !== null) {
     distance = Distance.getDistance(
@@ -37,7 +37,7 @@ const ProfileDetail: () => React$Node = props => {
     );
   }
   let isOwner = true; //props.owner.id === (props.user.id || props.user._id);
-  let strAddress = (address !== null && address !== "null") ? address : "";
+  let strAddress = address !== null && address !== "null" ? address : "";
   if (hide_location === 1) {
     strAddress = "";
   } else {
@@ -91,16 +91,17 @@ const ProfileDetail: () => React$Node = props => {
           )}
         </View>
       </View>
-      {strAddress !== "" &&
-      <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
-        <Image source={require("@assets/images/swipe-screen/location.png")} />
-        {(addresses.length > 1 && addresses[0].length > 0) && (
-          <Text style={styles.topBarCity}>{addresses[0]},</Text>
-        )}
-        <Text style={styles.topBarLocation}>
-          {addresses.length > 1 ? addresses[1] : addresses[0]}
-        </Text>
-      </View>}
+      {strAddress !== "" && (
+        <View style={[styles.topActionRow, styles.topRowMarginSmall]}>
+          <Image source={require("@assets/images/swipe-screen/location.png")} />
+          {addresses.length > 1 && addresses[0].length > 0 && (
+            <Text style={styles.topBarCity}>{addresses[0]},</Text>
+          )}
+          <Text style={styles.topBarLocation}>
+            {addresses.length > 1 ? addresses[1] : addresses[0]}
+          </Text>
+        </View>
+      )}
       <View style={styles.badgeContainer}>
         {badges.map(badge => {
           if (badge > AppBadges.length) return null;
@@ -108,7 +109,7 @@ const ProfileDetail: () => React$Node = props => {
             <Image
               key={`badge-${badge}`}
               style={styles.badgeIcon}
-              source={Images.badges[AppBadges[badge-1].id]}
+              source={Images.badges[AppBadges[badge - 1].id]}
             />
           );
         })}

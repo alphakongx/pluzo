@@ -84,9 +84,15 @@ class OrderImages extends React.Component {
 
   onDeleteImage = imageId => {
     if (this.props.user.images.length === 1) return;
-    Notification.confirmAlert("Delete", "Do you want to delete this image?", "OK", "Cancel", () => {
-      this.props.deleteImage(imageId, this.props.token);
-    });
+    Notification.confirmAlert(
+      "Delete",
+      "Do you want to delete this image?",
+      "OK",
+      "Cancel",
+      () => {
+        this.props.deleteImage(imageId, this.props.token);
+      },
+    );
   };
 
   onDragStart = () => {

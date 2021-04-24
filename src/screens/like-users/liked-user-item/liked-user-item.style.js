@@ -14,7 +14,7 @@ export default StyleSheet.create({
       ios: {
         borderRadius: wp(22),
         overflow: "hidden",
-      }
+      },
     }),
     marginHorizontal: wp(7),
   },
@@ -28,8 +28,8 @@ export default StyleSheet.create({
       ios: {
         width: "100%",
         height: "100%",
-      }
-    })
+      },
+    }),
   },
 
   badgesContainer: {

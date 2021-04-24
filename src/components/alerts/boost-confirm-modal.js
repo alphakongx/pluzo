@@ -25,7 +25,7 @@ const BoostConfirmModal: () => React$Node = props => {
     offsetY: 6,
   };
 
-  const {...rest } = props;
+  const { ...rest } = props;
 
   return (
     <Modal
@@ -47,23 +47,18 @@ const BoostConfirmModal: () => React$Node = props => {
       >
         <BoxShadow setting={backShadowOpt} />
         <Screen hasGradient style={styles.modalContainer}>
-          <Text style={styles.titleText}>
-            {props.title}
-          </Text>
-          <Text style={styles.messageText}>
-            {props.content}
-          </Text>
+          <Text style={styles.titleText}>{props.title}</Text>
+          <Text style={styles.messageText}>{props.content}</Text>
           <View style={styles.buttonContainer}>
-            <AnimatedButton
-              text={"Boost now"}
-              onPress={props.onBoost} />
+            <AnimatedButton text={"Boost now"} onPress={props.onBoost} />
           </View>
           <View style={[styles.closeButton]}>
             <GradientButton
               colors={["#312446", "#312446"]}
               noShadow
               text={"Close"}
-              onPress={props.onBack}/>
+              onPress={props.onBack}
+            />
           </View>
         </Screen>
         <View style={styles.logoContainer}>

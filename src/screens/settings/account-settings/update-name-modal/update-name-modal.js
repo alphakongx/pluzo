@@ -7,7 +7,7 @@ import {
   Touchable,
   BackButton,
   TextInput,
-  ModalBase as Modal
+  ModalBase as Modal,
 } from "@components";
 
 import styles from "./update-name-modal.style";

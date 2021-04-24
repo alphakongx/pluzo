@@ -1,8 +1,22 @@
 import React from "react";
-import { Platform, View, Keyboard, ActivityIndicator, FlatList, Linking } from "react-native";
+import {
+  Platform,
+  View,
+  Keyboard,
+  ActivityIndicator,
+  FlatList,
+  Linking,
+} from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import ActionSheet from "react-native-actionsheet";
-import { Screen, Touchable, Text, Image, ConfirmModal, NotificationModal } from "@components";
+import {
+  Screen,
+  Touchable,
+  Text,
+  Image,
+  ConfirmModal,
+  NotificationModal,
+} from "@components";
 import { SCREENS } from "@constants";
 import { GiftedChat, SystemMessage } from "react-native-gifted-chat";
 import KeyboardManager from "react-native-keyboard-manager";
@@ -62,59 +76,59 @@ class Chat extends React.Component {
 
     this.friendRemoveAction = EventBus.on("Need_Close_Chat", () => {
       this.props.navigation.goBack();
-    })
+    });
 
-    this.lastSeenAction = EventBus.on("Last_seen", (jsonData) => {
+    this.lastSeenAction = EventBus.on("Last_seen", jsonData => {
       let data = JSON.parse(jsonData);
       const { chatUser } = this.props;
 
-      if (chatUser !== 0 && data.user === parseInt((chatUser.id || chatUser._id), 10)) {
-        this.setState({lastSeenTime: parseInt(data.time, 10)});
+      if (chatUser !== 0 && data.user === parseInt(chatUser.id || chatUser._id, 10)) {
+        this.setState({ lastSeenTime: parseInt(data.time, 10) });
         this.props.updateMessagesState();
       }
     });
 
-    this.openChatAction = EventBus.on("Open_chat", (jsonData) => {
+    this.openChatAction = EventBus.on("Open_chat", jsonData => {
       let data = JSON.parse(jsonData);
       const { chatUser } = this.props;
 
-      if (chatUser !== 0 && data.user === parseInt((chatUser.id || chatUser._id), 10)) {
-        this.setState({openedChat: true});
+      if (chatUser !== 0 && data.user === parseInt(chatUser.id || chatUser._id, 10)) {
+        this.setState({ openedChat: true });
         this.props.requestOpenChat(this.state.chatId, this.props.token);
         this.props.updateMessagesState();
       }
     });
 
-    this.closeChatAction = EventBus.on("Close_chat", (jsonData) => {
+    this.closeChatAction = EventBus.on("Close_chat", jsonData => {
       let data = JSON.parse(jsonData);
       const { chatUser } = this.props;
 
-      if (chatUser !== 0 && data.user === parseInt((chatUser.id || chatUser._id), 10)) {
-        this.setState({openedChat: false});
+      if (chatUser !== 0 && data.user === parseInt(chatUser.id || chatUser._id, 10)) {
+        this.setState({ openedChat: false });
       }
     });
 
-    this.onlineAction = EventBus.on("User_online", (jsonData) => {
+    this.onlineAction = EventBus.on("User_online", jsonData => {
       let data = JSON.parse(jsonData);
       const { chatUser } = this.props;
 
-      let chatUserId = parseInt((chatUser.id || chatUser._id), 10);
-      let onlineUsers = data.user.filter((value) => value.id === chatUserId);
+      let chatUserId = parseInt(chatUser.id || chatUser._id, 10);
+      let onlineUsers = data.user.filter(value => value.id === chatUserId);
 
       if (chatUser !== 0 && onlineUsers.length > 0) {
-        this.setState({isOnline: true});
+        this.setState({ isOnline: true });
       }
     });
 
-    this.offlineAction = EventBus.on("User_offline", (jsonData) => {
+    this.offlineAction = EventBus.on("User_offline", jsonData => {
       let data = JSON.parse(jsonData);
       const { chatUser } = this.props;
 
-      let chatUserId = parseInt((chatUser.id || chatUser._id), 10);
-      let offlineUsers = data.user.filter((value) => value.id === chatUserId);
+      let chatUserId = parseInt(chatUser.id || chatUser._id, 10);
+      let offlineUsers = data.user.filter(value => value.id === chatUserId);
 
       if (chatUser !== 0 && offlineUsers.length > 0) {
-        this.setState({isOnline: false, lastSeenTime: offlineUsers[0].last_activity});
+        this.setState({ isOnline: false, lastSeenTime: offlineUsers[0].last_activity });
       }
     });
 
@@ -127,18 +141,21 @@ class Chat extends React.Component {
         if (arrData[0].user === 0) {
           if (chatUser !== 0) return;
         } else {
-          if (parseInt(arrData[0].user._id, 10) !== parseInt((chatUser.id || chatUser._id), 10)) {
+          if (
+            parseInt(arrData[0].user._id, 10) !==
+            parseInt(chatUser.id || chatUser._id, 10)
+          ) {
             return;
           }
         }
-        this.setState({chatId: arrData[0].chat_id});
+        this.setState({ chatId: arrData[0].chat_id });
         this.checkingOnlineStatus();
       } else {
         if (parseInt(arrData[0].chat_id, 10) !== parseInt(this.state.chatId, 10)) {
           return;
         }
       }
-      
+
       if (arrData[0].user === 0) {
         arrData[0].user = {
           _id: 0,
@@ -192,8 +209,8 @@ class Chat extends React.Component {
       userId = parseInt(chatUser.id || chatUser._id, 10);
       this.props.requestMessages(chatId, chatUser.id || chatUser._id, token);
     }
-    this.props.readFlag(chatUser === 0 ? 0 : (chatUser.id || chatUser._id), token);
-    
+    this.props.readFlag(chatUser === 0 ? 0 : chatUser.id || chatUser._id, token);
+
     if (allMessages[`${this.props.user.id}-${userId}`]) {
       this.props.updateMessages(allMessages[`${this.props.user.id}-${userId}`]);
     }
@@ -217,8 +234,14 @@ class Chat extends React.Component {
 
     this.props.requestCloseChat(this.state.chatId, this.props.token);
     if (this.props.chatUser !== null) {
-      let userId = this.props.chatUser === 0 ? 0 : parseInt((this.props.chatUser.id || this.props.chatUser._id), 10);
-      this.props.updateAllMessages(`${this.props.user.id}-${userId}`, this.props.messages);
+      let userId =
+        this.props.chatUser === 0
+          ? 0
+          : parseInt(this.props.chatUser.id || this.props.chatUser._id, 10);
+      this.props.updateAllMessages(
+        `${this.props.user.id}-${userId}`,
+        this.props.messages,
+      );
     }
   }
 
@@ -236,7 +259,7 @@ class Chat extends React.Component {
     const { chatUser } = this.props;
     if (chatUser === 0) return;
     let params = new FormData();
-    params.append("user_id", (chatUser.id || chatUser._id));
+    params.append("user_id", chatUser.id || chatUser._id);
     API.request({
       method: "post",
       url: `${API_ENDPOINTS.CHECK_USER_STATUS}`,
@@ -245,18 +268,20 @@ class Chat extends React.Component {
         Authorization: "Bearer " + this.props.token,
       },
       data: params,
-    }).then(response => {
-      let data = response.data.data;
-      if (data.online === 1) {
-        this.setState({isOnline: true});
-      } 
-      // if (this.state.lastSeenTime === null) {
-      //   this.setState({lastSeenTime: data.last_activity});
-      // }
-    }).catch(e => {
-      console.log(e);
-    });
-  }
+    })
+      .then(response => {
+        let data = response.data.data;
+        if (data.online === 1) {
+          this.setState({ isOnline: true });
+        }
+        // if (this.state.lastSeenTime === null) {
+        //   this.setState({lastSeenTime: data.last_activity});
+        // }
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
 
   onAddAttachment = () => {
     const { messages, chatUser } = this.props;
@@ -281,7 +306,7 @@ class Chat extends React.Component {
             },
           ].concat(this.props.messages),
         );
-        this.setState({sentSystemAlert: true});
+        this.setState({ sentSystemAlert: true });
       }
       return;
     }
@@ -297,8 +322,23 @@ class Chat extends React.Component {
       height: 395,
       compressImageQuality: 0.7,
       cropping: false,
-      mediaType: 'photo',
-      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'LongExposure'],
+      mediaType: "photo",
+      smartAlbums: [
+        "PhotoStream",
+        "Generic",
+        "Panoramas",
+        "Favorites",
+        "Timelapses",
+        "AllHidden",
+        "RecentlyAdded",
+        "Bursts",
+        "UserLibrary",
+        "SelfPortraits",
+        "Screenshots",
+        "DepthEffect",
+        "LivePhotos",
+        "LongExposure",
+      ],
     };
 
     if (index === 0) {
@@ -337,11 +377,11 @@ class Chat extends React.Component {
             message_info: {
               sent: 1,
               received: this.state.openedChat ? 1 : 0,
-            }
+            },
           },
         ].concat(this.props.messages),
       );
-  
+
       const { chatUser } = this.props;
       const params = {
         chatId: this.state.chatId,
@@ -352,22 +392,27 @@ class Chat extends React.Component {
       const { token } = this.props;
       this.props.sendMessage(params, token);
     } else {
-      this.setState({offlineMessages: [{
-        _id: moment().unix(),
-        text: this.state.msgText,
-        image: data.path,
-        imageInfo: data,
-        createdAt: new Date(),
-        user: {
-          _id: this.props.user.id,
-          name: this.props.user.name || this.props.user.username,
-          avatar: this.props.user.images[0].path,
-        },
-        message_info: {
-          sent: 1,
-          received: this.state.openedChat ? 1 : 0,
-        }
-      }, ...this.state.offlineMessages]});
+      this.setState({
+        offlineMessages: [
+          {
+            _id: moment().unix(),
+            text: this.state.msgText,
+            image: data.path,
+            imageInfo: data,
+            createdAt: new Date(),
+            user: {
+              _id: this.props.user.id,
+              name: this.props.user.name || this.props.user.username,
+              avatar: this.props.user.images[0].path,
+            },
+            message_info: {
+              sent: 1,
+              received: this.state.openedChat ? 1 : 0,
+            },
+          },
+          ...this.state.offlineMessages,
+        ],
+      });
     }
     this.setState({ msgText: "" });
   };
@@ -375,7 +420,7 @@ class Chat extends React.Component {
   onSend = (messages = []) => {
     if (messages[0].text === "") return;
     if (this.props.isConnected) {
-      messages[0].message_info = {sent: 1,received: this.state.openedChat ? 1 : 0,}
+      messages[0].message_info = { sent: 1, received: this.state.openedChat ? 1 : 0 };
       this.props.updateMessages([messages[0]].concat(this.props.messages));
 
       let sendPush = 1;
@@ -388,31 +433,38 @@ class Chat extends React.Component {
         send_push: sendPush,
       };
       const { token } = this.props;
-      this.props.sendMessage(params, token); 
+      this.props.sendMessage(params, token);
     } else {
-      messages[0].message_info = {sent: 0,received: this.state.openedChat ? 1 : 0,}
-      this.setState({offlineMessages: [messages[0], ...this.state.offlineMessages]});
+      messages[0].message_info = { sent: 0, received: this.state.openedChat ? 1 : 0 };
+      this.setState({ offlineMessages: [messages[0], ...this.state.offlineMessages] });
     }
   };
 
   onSendOfflineMsgs = () => {
     let newMessages = this.state.offlineMessages;
-    for (msgIndex = 0; msgIndex < newMessages.length; msgIndex++) {
-      this.setState({offlineMessages: this.state.offlineMessages.filter((value, index) => index !== msgIndex)});
-      if (newMessages[msgIndex].imageInfo === undefined || newMessages[msgIndex].imageInfo === null) {
+    for (let msgIndex = 0; msgIndex < newMessages.length; msgIndex++) {
+      this.setState({
+        offlineMessages: this.state.offlineMessages.filter(
+          (value, index) => index !== msgIndex,
+        ),
+      });
+      if (
+        newMessages[msgIndex].imageInfo === undefined ||
+        newMessages[msgIndex].imageInfo === null
+      ) {
         this.onSend([newMessages[msgIndex]]);
       } else {
         this.onUploadImage(newMessages[msgIndex].imageInfo);
       }
     }
-  }
+  };
 
   onDeleteFriend = () => {
     const { chatUser } = this.props;
 
     let data = new FormData();
     data.append("username", chatUser.username);
-    data.append("user_target_id", (chatUser.id || chatUser._id));
+    data.append("user_target_id", chatUser.id || chatUser._id);
     let url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
 
     API.request({
@@ -424,25 +476,34 @@ class Chat extends React.Component {
       },
       data,
     });
-    this.setState({visibleConfirmDelete: false});
-  }
+    this.setState({ visibleConfirmDelete: false });
+  };
 
   renderNotification = () => {
-    let fullname = this.props.chatUser === 0 ? "Pluzo Team" : this.props.chatUser.first_name;
+    let fullname =
+      this.props.chatUser === 0 ? "Pluzo Team" : this.props.chatUser.first_name;
     if (Platform.OS === "ios" && this.props.pushEnabled === false) {
       return (
-        <Touchable style={styles.notifyContainer}
+        <Touchable
+          style={styles.notifyContainer}
           onPress={() => {
-            Notification.confirmAlert("Get notified?", `Would you like to know when ${fullname} answer your message?`,
-              "Open Settings", "Not now", async () => {
+            Notification.confirmAlert(
+              "Get notified?",
+              `Would you like to know when ${fullname} answer your message?`,
+              "Open Settings",
+              "Not now",
+              async () => {
                 await Linking.openSettings();
-              });
-          }}>
+              },
+            );
+          }}
+        >
           <LinearGradient
             colors={["#02FFF3", "#617FFF"]}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-            style={styles.notifySubContainer}>
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.notifySubContainer}
+          >
             <Image source={Images.app.icNotify} style={styles.notifyIcon} />
             <View>
               <Text style={styles.notifyTitle}>{`See when ${fullname} replies.`}</Text>
@@ -450,10 +511,10 @@ class Chat extends React.Component {
             </View>
           </LinearGradient>
         </Touchable>
-      )
+      );
     }
     return null;
-  }
+  };
 
   renderFooterView = () => {
     return (
@@ -463,34 +524,41 @@ class Chat extends React.Component {
         data={["Hello!", "Hey!", "Hey, how are you?", "Hi :)"]}
         contentContainerStyle={styles.firstMessagesContentContainer}
         keyExtractor={(item, index) => `first-${index}`}
-        renderItem={({item: item, index}) => {
+        renderItem={({ item: item, index }) => {
           return (
             <Touchable
               onPress={() => {
-                this.onSend([{
-                  _id: moment().unix(),
-                  text: item,
-                  image: null,
-                  createdAt: new Date(),
-                  user: {
-                    _id: this.props.user.id,
-                    name: this.props.user.name || this.props.user.username,
-                    avatar: this.props.user.images[0].path,
+                this.onSend([
+                  {
+                    _id: moment().unix(),
+                    text: item,
+                    image: null,
+                    createdAt: new Date(),
+                    user: {
+                      _id: this.props.user.id,
+                      name: this.props.user.name || this.props.user.username,
+                      avatar: this.props.user.images[0].path,
+                    },
                   },
-                }]);
+                ]);
               }}
-              style={styles.firstMessage}>
+              style={styles.firstMessage}
+            >
               <Text style={styles.firstMessageText}>{item}</Text>
             </Touchable>
-          )
-        }}>
-      </FlatList>
-    )
-  }
+          );
+        }}
+      />
+    );
+  };
 
   render() {
     const { chatUser, loading, messages } = this.props;
-    let isFirstMsg = messages.filter((message) => !message.system && (message.user._id || message.user.id) === this.props.user.id).length === 0;
+    let isFirstMsg =
+      messages.filter(
+        message =>
+          !message.system && (message.user._id || message.user.id) === this.props.user.id,
+      ).length === 0;
     return (
       <Screen hasHeader style={styles.container}>
         <Header
@@ -513,62 +581,79 @@ class Chat extends React.Component {
               style={styles.loadingIndicator}
             />
           ) : (
-          <GiftedChat
-            listViewProps={Platform.OS === "ios" ? { keyboardDismissMode: "on-drag" } : { onScrollBeginDrag: Keyboard.dismiss }}
-            messages={[...this.state.offlineMessages, ...messages]}
-            text={this.state.msgText}
-            isKeyboardInternallyHandled={true}
-            bottomOffset={this.props.insets.bottom}
-            minComposerHeight={Platform.OS === "ios" ? 33 : 40}
-            minInputToolbarHeight={Platform.OS === "ios" ? wp(62) : wp(66)}
-            alwaysShowSend={true}
-            containerStyle={{
-              right: { marginBottom: 0 },
-              left: { marginBottom: 0 },
-            }}
-            renderBubble={bubbleProps => (
-              <MessageBubble
-                {...bubbleProps}
-                onLongPress={this._onOpenActionSheet}
-                onPress={this._openAttachment}
-                onFullImage={image => {
-                  this.setState({ zoomImage: image, visibleZoomImage: true });
-                }}
-              />
-            )}
-            renderAvatar={avatarProps => {
-              return <Avatar {...avatarProps} onPress={() => {
-                this.props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: chatUser });
-              }} />;
-            }}
-            renderInputToolbar={props => {
-              this.onSendNew = props.onSend;
-              return <InputToolbar {...props} disableComposer={loading} onAttachment={this.onAddAttachment}
-                onSendMessage={() => {
-                  props.onSend({ text: this.state.msgText }, true);
-                }} />;
-            }}
-            renderTime={props => {
-              return <View />;
-            }}
-            renderSystemMessage={props => {
-              return <SystemMessage {...props} containerStyle={styles.systemMessage} />;
-            }}
-            renderChatEmpty={() => {
-              return <EmptyView user={chatUser} navigation={this.props.navigation} />;
-            }}
-            renderFooter={() => {
-              if (isFirstMsg === false || chatUser === 0) {
-                return null;
+            <GiftedChat
+              listViewProps={
+                Platform.OS === "ios"
+                  ? { keyboardDismissMode: "on-drag" }
+                  : { onScrollBeginDrag: Keyboard.dismiss }
               }
-              return this.renderFooterView();
-            }}
-            user={{
-              _id: this.props.user.id,
-            }}
-            onSend={msgs => this.onSend(msgs)}
-            onInputTextChanged={msgText => this.setState({ msgText: msgText })}
-          />
+              messages={[...this.state.offlineMessages, ...messages]}
+              text={this.state.msgText}
+              isKeyboardInternallyHandled={true}
+              bottomOffset={this.props.insets.bottom}
+              minComposerHeight={Platform.OS === "ios" ? 33 : 40}
+              minInputToolbarHeight={Platform.OS === "ios" ? wp(62) : wp(66)}
+              alwaysShowSend={true}
+              containerStyle={{
+                right: { marginBottom: 0 },
+                left: { marginBottom: 0 },
+              }}
+              renderBubble={bubbleProps => (
+                <MessageBubble
+                  {...bubbleProps}
+                  onLongPress={this._onOpenActionSheet}
+                  onPress={this._openAttachment}
+                  onFullImage={image => {
+                    this.setState({ zoomImage: image, visibleZoomImage: true });
+                  }}
+                />
+              )}
+              renderAvatar={avatarProps => {
+                return (
+                  <Avatar
+                    {...avatarProps}
+                    onPress={() => {
+                      this.props.navigation.navigate(SCREENS.PROFILE_VIEW, {
+                        user: chatUser,
+                      });
+                    }}
+                  />
+                );
+              }}
+              renderInputToolbar={props => {
+                this.onSendNew = props.onSend;
+                return (
+                  <InputToolbar
+                    {...props}
+                    disableComposer={loading}
+                    onAttachment={this.onAddAttachment}
+                    onSendMessage={() => {
+                      props.onSend({ text: this.state.msgText }, true);
+                    }}
+                  />
+                );
+              }}
+              renderTime={props => {
+                return <View />;
+              }}
+              renderSystemMessage={props => {
+                return <SystemMessage {...props} containerStyle={styles.systemMessage} />;
+              }}
+              renderChatEmpty={() => {
+                return <EmptyView user={chatUser} navigation={this.props.navigation} />;
+              }}
+              renderFooter={() => {
+                if (isFirstMsg === false || chatUser === 0) {
+                  return null;
+                }
+                return this.renderFooterView();
+              }}
+              user={{
+                _id: this.props.user.id,
+              }}
+              onSend={msgs => this.onSend(msgs)}
+              onInputTextChanged={msgText => this.setState({ msgText: msgText })}
+            />
           )}
           {this.renderNotification()}
         </View>
@@ -585,43 +670,44 @@ class Chat extends React.Component {
           onDismiss={() => this.setState({ visibleUserSetting: false })}
           onReport={() => {
             setTimeout(() => {
-              this.setState({visibleReport: true});
+              this.setState({ visibleReport: true });
             }, 400);
           }}
           onBlock={() => {
             setTimeout(() => {
-              this.setState({visibleConfirmBlock: true});
+              this.setState({ visibleConfirmBlock: true });
             }, 400);
           }}
           onUnfriend={() => {
             setTimeout(() => {
-              this.setState({visibleConfirmDelete: true});
+              this.setState({ visibleConfirmDelete: true });
             }, 400);
           }}
         />
         <ReportModal
           isVisible={this.state.visibleReport}
           keyboardDisable={true}
-          userId={(chatUser.id || chatUser._id)}
+          userId={chatUser.id || chatUser._id}
           onDismiss={() => this.setState({ visibleReport: false })}
         />
-        <ConfirmModal 
+        <ConfirmModal
           isVisible={this.state.visibleConfirmBlock}
           user={chatUser}
           onDismiss={() => this.setState({ visibleConfirmBlock: false })}
           onConfirm={() => {
-            this.props.blockUser((chatUser.id || chatUser._id), this.props.token);
+            this.props.blockUser(chatUser.id || chatUser._id, this.props.token);
             this.setState({ visibleConfirmBlock: false }, () => {
               setTimeout(() => {
                 this.props.navigation.goBack();
               }, 1000);
             });
-          }}/>
+          }}
+        />
         <NotificationModal
           isVisible={this.state.visibleConfirmDelete}
-          onBack={() => this.setState({visibleConfirmDelete: false})}
+          onBack={() => this.setState({ visibleConfirmDelete: false })}
           onConfirm={(userId, userName) => {
-            this.setState({visibleConfirmDelete: false});
+            this.setState({ visibleConfirmDelete: false });
             this.onDeleteFriend();
           }}
         />

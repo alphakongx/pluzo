@@ -12,25 +12,28 @@ export const countries = require("./countries.json");
 
 const CountryCodePicker: () => React$Node = props => {
   const {
-    spacerStyle=styles.spacer,
-    arrowIcon=false,
+    spacerStyle = styles.spacer,
+    arrowIcon = false,
     allCountries = false,
     currentLocation = false,
   } = props;
   let arrCountries = [...countries];
   if (allCountries) {
-    arrCountries = [{
-      name: "Worldwide",
-      iso2: "worldwide",
-      dialCode: "",
-      priority: 0,
-      areaCodes: null,
-    }, ...countries];
+    arrCountries = [
+      {
+        name: "Worldwide",
+        iso2: "worldwide",
+        dialCode: "",
+        priority: 0,
+        areaCodes: null,
+      },
+      ...countries,
+    ];
   }
 
   let initialCountry = props.country;
   if (props.country.iso2 === "") {
-    initialCountry = arrCountries.filter((value) => value.name === props.country.name)[0]
+    initialCountry = arrCountries.filter(value => value.name === props.country.name)[0];
   }
   const [showPicker, setShowPicker] = useState(false);
   const [country, setCountry] = useState(initialCountry);
@@ -57,19 +60,30 @@ const CountryCodePicker: () => React$Node = props => {
           setShowPicker(!showPicker);
         }}
       >
-        {country.iso2 === "worldwide" && currentLocation &&
-        <Text style={styles.currentLocationText1}>Current Location</Text>}
-        {country.iso2 !== "worldwide" && currentLocation &&
+        {country.iso2 === "worldwide" && currentLocation && (
+          <Text style={styles.currentLocationText1}>Current Location</Text>
+        )}
+        {country.iso2 !== "worldwide" && currentLocation && (
           <Image
             source={Images.flags[flagName]}
-            style={[styles.flag, props.flagStyle, flagName === "worldwide" && styles.flagWorld]}
-          />}
-        {!currentLocation &&
-        <Image
-          source={Images.flags[flagName]}
-          style={[styles.flag, props.flagStyle, flagName === "worldwide" && styles.flagWorld]}
-        />}
-        {arrowIcon && <View style={styles.arrowDown}/>}
+            style={[
+              styles.flag,
+              props.flagStyle,
+              flagName === "worldwide" && styles.flagWorld,
+            ]}
+          />
+        )}
+        {!currentLocation && (
+          <Image
+            source={Images.flags[flagName]}
+            style={[
+              styles.flag,
+              props.flagStyle,
+              flagName === "worldwide" && styles.flagWorld,
+            ]}
+          />
+        )}
+        {arrowIcon && <View style={styles.arrowDown} />}
       </Touchable>
       {showPicker && (
         <Animated.View
@@ -105,12 +119,29 @@ const CountryCodePicker: () => React$Node = props => {
                     props.noFirst && props.onChange && props.onChange(item);
                   }}
                 >
-                  {item.iso2 === "worldwide" && currentLocation &&
-                  <Text style={styles.currentLocationText}>Current Location</Text>}
-                  {item.iso2 !== "worldwide" && currentLocation &&
-                  <Image source={Images.flags[item.iso2]} style={[styles.flag, props.flagStyle, item.iso2 === "worldwide" && styles.flagWorld]} />}
-                  {!currentLocation &&
-                  <Image source={Images.flags[item.iso2]} style={[styles.flag, props.flagStyle, item.iso2 === "worldwide" && styles.flagWorld]} />}
+                  {item.iso2 === "worldwide" && currentLocation && (
+                    <Text style={styles.currentLocationText}>Current Location</Text>
+                  )}
+                  {item.iso2 !== "worldwide" && currentLocation && (
+                    <Image
+                      source={Images.flags[item.iso2]}
+                      style={[
+                        styles.flag,
+                        props.flagStyle,
+                        item.iso2 === "worldwide" && styles.flagWorld,
+                      ]}
+                    />
+                  )}
+                  {!currentLocation && (
+                    <Image
+                      source={Images.flags[item.iso2]}
+                      style={[
+                        styles.flag,
+                        props.flagStyle,
+                        item.iso2 === "worldwide" && styles.flagWorld,
+                      ]}
+                    />
+                  )}
                 </Touchable>
               );
             })}

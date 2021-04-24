@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  TextInput as RNTextInput,
-  ScrollView,
-  Dimensions,
-} from "react-native";
+import { View, TextInput as RNTextInput, ScrollView, Dimensions } from "react-native";
 import { Touchable, Image, GradientButton, AnimatedDots } from "@components";
 import Images from "@assets/Images";
 
@@ -62,17 +57,23 @@ class StreamMessageInput extends Component {
               this.onSend();
             }}
           />
-          {this.state.message !== "" &&
-          <View style={[styles.sendButtonContainer, isKeyboardShown && styles.noMarginRight]}>
-            <GradientButton
-              containerStyle={styles.sendButton}
-              icon={Images.app.icBackUp}
-              iconStyle={styles.sendButtonIcon}
-              onPress={() => {
-                this.onSend();
-              }}
-            />
-          </View>}
+          {this.state.message !== "" && (
+            <View
+              style={[
+                styles.sendButtonContainer,
+                isKeyboardShown && styles.noMarginRight,
+              ]}
+            >
+              <GradientButton
+                containerStyle={styles.sendButton}
+                icon={Images.app.icBackUp}
+                iconStyle={styles.sendButtonIcon}
+                onPress={() => {
+                  this.onSend();
+                }}
+              />
+            </View>
+          )}
         </ScrollView>
         {!isKeyboardShown && isBroadcaster && (
           <Touchable
@@ -91,8 +92,7 @@ class StreamMessageInput extends Component {
             style={styles.handButton}
           >
             <Image source={Images.live.icHand} style={styles.handIcon} />
-            {this.props.isAskedJoin &&
-            <AnimatedDots style={{marginTop: 4.5}} />}
+            {this.props.isAskedJoin && <AnimatedDots style={{ marginTop: 4.5 }} />}
           </Touchable>
         )}
       </View>

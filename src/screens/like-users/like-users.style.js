@@ -45,8 +45,8 @@ export default StyleSheet.create({
     ...Platform.select({
       android: {
         minHeight: height,
-      }
-    })
+      },
+    }),
   },
   itemContainer: {
     width: width / 2 - wp(4),
@@ -65,12 +65,12 @@ export default StyleSheet.create({
   overlayDislike: {
     zIndex: 99999,
     marginTop: parseInt((((width - wp(34)) / 2) * wp(240)) / wp(170), 10) / 2 - 40,
-    marginLeft: (width) / 4 - 40,
+    marginLeft: width / 4 - 40,
   },
   overlayLike: {
     zIndex: 99999,
     marginTop: parseInt((((width - wp(34)) / 2) * wp(240)) / wp(170), 10) / 2 - 40,
-    marginLeft: (width) / 4 - 40,
+    marginLeft: width / 4 - 40,
   },
 
   emptyContainer: {

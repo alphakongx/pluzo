@@ -30,12 +30,13 @@ const NotificationModal: () => React$Node = props => {
     message = "Do you really want to remove that friend?",
     buttonText = "Remove friend",
     buttonColors = ["#FF0036", "#FF0036"],
-    buttonTextStyle = {color: "white"},
+    buttonTextStyle = { color: "white" },
     buttonContainerStyle = {},
     logoBackground = "#FF0036",
     logoIcon = Images.app.icCross,
     logoTintColor = "black",
-    ...rest } = props;
+    ...rest
+  } = props;
 
   const onConfirm = () => {
     const { token } = props;
@@ -63,22 +64,27 @@ const NotificationModal: () => React$Node = props => {
         <BoxShadow setting={backShadowOpt} />
         <Screen hasGradient style={styles.modalContainer}>
           <Text style={styles.titleText}>{title}</Text>
-          {message !== "" &&
-          <Text style={styles.messageText} numberOfLines={2}>
-            {message}
-          </Text>}
+          {message !== "" && (
+            <Text style={styles.messageText} numberOfLines={2}>
+              {message}
+            </Text>
+          )}
           <View style={[styles.buttonContainer, buttonContainerStyle]}>
-            <GradientButton 
+            <GradientButton
               colors={buttonColors}
               noShadow
-              onPress={() => onConfirm()} 
+              onPress={() => onConfirm()}
               text={buttonText}
-              textStyle={buttonTextStyle} />
+              textStyle={buttonTextStyle}
+            />
           </View>
         </Screen>
         <View style={styles.logoContainer}>
-          <View style={[styles.logoIconContainer, {backgroundColor: logoBackground}]}>
-            <Image source={logoIcon} style={[styles.logoIcon, {tintColor: logoTintColor}]} />
+          <View style={[styles.logoIconContainer, { backgroundColor: logoBackground }]}>
+            <Image
+              source={logoIcon}
+              style={[styles.logoIcon, { tintColor: logoTintColor }]}
+            />
           </View>
         </View>
       </View>

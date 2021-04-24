@@ -61,7 +61,7 @@ class WS extends React.Component {
       this.reconnect
         ? this._handleWebSocketSetup()
         : this.props.onClose && this.props.onClose();
-    }
+    };
     this.setState({ ws });
   };
 }

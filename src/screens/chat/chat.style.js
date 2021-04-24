@@ -16,9 +16,7 @@ export default StyleSheet.create({
     marginBottom: wp(15),
   },
 
-  firstMessagesContainer: {
-
-  },
+  firstMessagesContainer: {},
   firstMessagesContentContainer: {
     paddingHorizontal: wp(20),
     paddingVertical: wp(9),

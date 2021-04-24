@@ -1,6 +1,13 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { ChatCreators, ChatTypes } from "../actions";
-import { getCurrentChat, getChatUser, sendMsg, readMsg, closeChat, openedChat } from "@redux/api";
+import {
+  getCurrentChat,
+  getChatUser,
+  sendMsg,
+  readMsg,
+  closeChat,
+  openedChat,
+} from "@redux/api";
 import moment from "moment";
 import EventBus from "eventing-bus";
 
@@ -31,7 +38,7 @@ function* requestCurrentChat(action) {
         params = new FormData();
         params.append("chat_id", chat_id);
         response = yield call(getCurrentChat, params, token);
-        
+
         let result = [];
         response.data.data.messages.forEach(message => {
           message.createdAt = moment.unix(message.createdAt).toDate();
@@ -46,7 +53,10 @@ function* requestCurrentChat(action) {
         });
 
         if (typeof response.data.data.partner_info === "object") {
-          EventBus.publish("Last_seen", `{"user": ${chatUserId}, "chat_id": ${chat_id}, "time": ${response.data.data.partner_info.last_activity}}`);
+          EventBus.publish(
+            "Last_seen",
+            `{"user": ${chatUserId}, "chat_id": ${chat_id}, "time": ${response.data.data.partner_info.last_activity}}`,
+          );
         }
         yield put(ChatCreators.getCurrentChatSuccess(result));
       }
@@ -54,7 +64,7 @@ function* requestCurrentChat(action) {
       const params = new FormData();
       params.append("chat_id", chatId);
       const response = yield call(getCurrentChat, params, token);
-      
+
       let result = [];
       response.data.data.messages.forEach(message => {
         message.createdAt = moment.unix(message.createdAt).toDate();
@@ -69,7 +79,10 @@ function* requestCurrentChat(action) {
       });
 
       if (typeof response.data.data.partner_info === "object") {
-        EventBus.publish("Last_seen", `{"user": ${chatUserId}, "chat_id": ${chatId}, "time": ${response.data.data.partner_info.last_activity}}`);
+        EventBus.publish(
+          "Last_seen",
+          `{"user": ${chatUserId}, "chat_id": ${chatId}, "time": ${response.data.data.partner_info.last_activity}}`,
+        );
       }
       yield put(ChatCreators.getCurrentChatSuccess(result));
     }
@@ -128,7 +141,7 @@ function* requestOpenChat(action) {
 
     const requestParams = new FormData();
     requestParams.append("chat_id", chat_id);
-    
+
     yield call(openedChat, requestParams, token);
   } catch (error) {
     console.log("close chat >>", error);
@@ -141,7 +154,7 @@ function* requestCloseChat(action) {
 
     const requestParams = new FormData();
     requestParams.append("chat_id", chat_id);
-    
+
     yield call(closeChat, requestParams, token);
   } catch (error) {
     console.log("close chat >>", error);

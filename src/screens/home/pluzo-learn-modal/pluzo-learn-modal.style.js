@@ -17,7 +17,7 @@ export default StyleSheet.create({
     color: "white",
     marginBottom: wp(20),
   },
-  
+
   premiumView: {
     width: screenWidth - wp(40),
     height: ((screenWidth - wp(40)) * 169) / 336,
@@ -64,9 +64,7 @@ export default StyleSheet.create({
     // left: wp(23.4),
     bottom: wp(30),
   },
-  premiumPlusImage: {
-    
-  },
+  premiumPlusImage: {},
   buttonContainer: {
     width: screenWidth - wp(100),
     marginTop: -wp(25),

@@ -4,22 +4,21 @@ import { connect } from "react-redux";
 import { AppCreators } from "@redux/actions";
 
 const ModalBase: () => React$Node = props => {
-
-  const { onModalShow, onModalHide, needUpdate=true, ...rest } = props;
+  const { onModalShow, onModalHide, needUpdate = true, ...rest } = props;
 
   const modalShow = () => {
     if (needUpdate === true) {
       props.updateModalShowed(true);
     }
     onModalShow && onModalShow();
-  }
+  };
 
   const modalHide = () => {
     if (needUpdate === true) {
       props.updateModalShowed(false);
     }
     onModalHide && onModalHide();
-  }
+  };
 
   return <Modal {...rest} onModalShow={modalShow} onModalHide={modalHide} />;
 };

@@ -2,7 +2,7 @@ import { Linking, PermissionsAndroid, Platform, ToastAndroid } from "react-nativ
 import Geolocation from "react-native-geolocation-service";
 import { Notification } from "./notification";
 
-const hasLocationPermissionIOS = async (noalert) => {
+const hasLocationPermissionIOS = async noalert => {
   const openSetting = () => {
     Linking.openSettings().catch(() => {
       Notification.alert("Unable to open settings");
@@ -32,7 +32,7 @@ const hasLocationPermissionIOS = async (noalert) => {
   return false;
 };
 
-export const hasLocationPermission = async (noalert) => {
+export const hasLocationPermission = async noalert => {
   if (Platform.OS === "ios") {
     const hasPermission = await hasLocationPermissionIOS(noalert);
     return hasPermission;
@@ -82,8 +82,7 @@ export const getLocationUpdates = async callback => {
     position => {
       callback(position);
     },
-    error => {
-    },
+    error => {},
     {
       enableHighAccuracy: true,
       distanceFilter: 100,

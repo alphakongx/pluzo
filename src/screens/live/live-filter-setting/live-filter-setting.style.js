@@ -87,7 +87,7 @@ export default StyleSheet.create({
   },
 
   locationContainer: {
-    flexDirection: "column-reverse"
+    flexDirection: "column-reverse",
   },
   locationRow: {
     flexDirection: "row",

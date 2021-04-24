@@ -4,7 +4,7 @@ import FastImage from "react-native-fast-image";
 import { Touchable, Text } from "@components";
 import styles from "./message-bubble.style.js";
 import Images from "@assets/Images";
-import ParsedText from 'react-native-parsed-text';
+import ParsedText from "react-native-parsed-text";
 import MessageLiveItem from "./message-live-item.js";
 
 const MessageBubble: () => React$Node = props => {
@@ -14,17 +14,29 @@ const MessageBubble: () => React$Node = props => {
   const hasImage = currentMessage.image ? true : false;
   const hasText =
     currentMessage.text !== null && currentMessage.text !== "" ? true : false;
-  const largeSpacer = previousMessage && previousMessage.user && (currentMessage.user._id !== previousMessage.user._id);
+  const largeSpacer =
+    previousMessage &&
+    previousMessage.user &&
+    currentMessage.user._id !== previousMessage.user._id;
 
   const renderTicks = () => {
     if (!isCurrentUser) {
-        return null;
+      return null;
     }
-    
-    if (currentMessage && nextMessage._id === undefined) {          
+
+    if (currentMessage && nextMessage._id === undefined) {
       return (
         <View style={styles.tickContainer}>
-          <View style={[styles.tickView, currentMessage.message_info.sent === 0 ? styles.tickViewSent : currentMessage.message_info.received ? styles.tickViewReceived : styles.tickViewSent]}>
+          <View
+            style={[
+              styles.tickView,
+              currentMessage.message_info.sent === 0
+                ? styles.tickViewSent
+                : currentMessage.message_info.received
+                ? styles.tickViewReceived
+                : styles.tickViewSent,
+            ]}
+          >
             {currentMessage.message_info.sent === 0 ? (
               <FastImage source={Images.app.icClock} style={styles.tickPedning} />
             ) : (
@@ -35,30 +47,46 @@ const MessageBubble: () => React$Node = props => {
       );
     }
     return null;
-  }
+  };
 
-  const handleUrlPress = (url) => {
+  const handleUrlPress = url => {
     Linking.openURL(url);
-  }
+  };
 
   if (currentMessage.type === "invite" || currentMessage.type === "close") {
     if (currentMessage.stream_info === null) return null;
     return (
-      <View style={[styles.container, largeSpacer ? styles.containerMarginLarge : styles.containerMargin]}>
+      <View
+        style={[
+          styles.container,
+          largeSpacer ? styles.containerMarginLarge : styles.containerMargin,
+        ]}
+      >
         <MessageLiveItem
           currentMessage={currentMessage}
           isCurrentUser={isCurrentUser}
-          currentUser={user} />
+          currentUser={user}
+        />
       </View>
-    )
+    );
   }
 
   return (
-    <View style={[styles.container, hasImage && hasText ? {} : largeSpacer ? styles.containerMarginLarge : styles.containerMargin]}>
+    <View
+      style={[
+        styles.container,
+        hasImage && hasText
+          ? {}
+          : largeSpacer
+          ? styles.containerMarginLarge
+          : styles.containerMargin,
+      ]}
+    >
       {hasImage ? (
         <Touchable
           style={styles.imageContainer}
-          onPress={() => props.onFullImage(currentMessage.image)}>
+          onPress={() => props.onFullImage(currentMessage.image)}
+        >
           <FastImage
             source={{ uri: currentMessage.image }}
             style={[
@@ -66,13 +94,17 @@ const MessageBubble: () => React$Node = props => {
               hasText ? styles.imageTextRound : styles.imageFullRound,
             ]}
             // resizeMode={FastImage.resizeMode.cover}
-            onLoad={(e) => {
+            onLoad={e => {
               setLoading(false);
             }}
           />
-          {loading && 
-            <ActivityIndicator size={"large"} style={styles.loadingIndicator} color={"white"} />
-          }
+          {loading && (
+            <ActivityIndicator
+              size={"large"}
+              style={styles.loadingIndicator}
+              color={"white"}
+            />
+          )}
         </Touchable>
       ) : null}
       {currentMessage.text !== null && currentMessage.text !== "" && (
@@ -90,9 +122,7 @@ const MessageBubble: () => React$Node = props => {
               styles.text,
               isCurrentUser ? styles.currentUserText : styles.otherUserText,
             ]}
-            parse={[
-              {type: "url", style: styles.urlText, onPress: handleUrlPress}
-            ]}
+            parse={[{ type: "url", style: styles.urlText, onPress: handleUrlPress }]}
             allowFontScaling={false}
             selectable
           >

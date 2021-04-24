@@ -8,7 +8,7 @@ import {
   GradientButton,
   TextInput,
   DiscoverPeopleItem,
-  ModalBase
+  ModalBase,
 } from "@components";
 import KeyboardManager from "react-native-keyboard-manager";
 import { BlurView } from "@react-native-community/blur";
@@ -147,9 +147,10 @@ class AddFriendModal extends Component {
             <Touchable onPress={this.props.pendingRequest}>
               <View style={styles.requestContainer}>
                 <Text style={styles.requestText}>Pending Requests</Text>
-                <PendingRequestCountView 
+                <PendingRequestCountView
                   style={styles.pendingCount}
-                  textStyle={styles.pendingCountText} />
+                  textStyle={styles.pendingCountText}
+                />
               </View>
             </Touchable>
           </View>
@@ -196,7 +197,9 @@ class AddFriendModal extends Component {
                       key={`new-people-${item.id}`}
                       onAddPeople={() => this.onAddFriend(item)}
                       disabled={addingNewFriend || delayAdding}
-                      onShowProfile={() => this.setState({selectedUser: item, visibleProfile: true})}
+                      onShowProfile={() =>
+                        this.setState({ selectedUser: item, visibleProfile: true })
+                      }
                     />
                   );
                 })}
@@ -208,7 +211,9 @@ class AddFriendModal extends Component {
               {this.state.selectedUser && (
                 <ProfileView
                   user={this.state.selectedUser}
-                  goBack={() => this.setState({ visibleProfile: false, selectedUser: null })}
+                  goBack={() =>
+                    this.setState({ visibleProfile: false, selectedUser: null })
+                  }
                 />
               )}
             </View>

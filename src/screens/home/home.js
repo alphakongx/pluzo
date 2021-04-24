@@ -123,7 +123,7 @@ const Home = props => {
         Animated.timing(_tutorialOpacity, {
           toValue: 0,
           duration: 50,
-          useNativeDriver: false
+          useNativeDriver: false,
         }).start();
         if (isLeaveArea(gestureState)) {
           Animated.timing(_opacity, {
@@ -182,7 +182,7 @@ const Home = props => {
             Animated.timing(_tutorialOpacity, {
               toValue: 1,
               duration: 50,
-              useNativeDriver: false
+              useNativeDriver: false,
             }).start();
           }
         }
@@ -261,7 +261,7 @@ const Home = props => {
     props.updateNotification(null);
   };
 
-  const onJoinLive = (stream) => {
+  const onJoinLive = stream => {
     if (props.streamStatus !== StreamStatus.NONE) {
       if (streamParams.channelName === stream.channel) {
         return;
@@ -280,7 +280,7 @@ const Home = props => {
       };
       EventBus.publish("NEW_STREAM_ACTION", params);
     }
-  }
+  };
 
   useEffect(() => {
     const newStreamAction = EventBus.on("NEW_STREAM_ACTION", params => {
@@ -289,7 +289,8 @@ const Home = props => {
       setMinimized(false);
       let systemMsg = {
         id: "1",
-        message: "Please make sure you follow the community guidelines. No bullying, hate speech, nudity or violence.\nPlease report any users violating the rules.",
+        message:
+          "Please make sure you follow the community guidelines. No bullying, hate speech, nudity or violence.\nPlease report any users violating the rules.",
         type: "system",
         created_at: new Date().getTime(),
       };
@@ -304,7 +305,7 @@ const Home = props => {
       updateChannelName(params.channelName);
       setVisibleStream(true);
     });
-    const endStreamAction = EventBus.on("APP_END_STREAM_ACTION", (params) => {
+    const endStreamAction = EventBus.on("APP_END_STREAM_ACTION", params => {
       if (params === null) {
         setVisibleStream(false);
         setStreamStatus(StreamStatus.NONE);
@@ -351,24 +352,33 @@ const Home = props => {
     });
     return () => {
       unsubscribe();
-    }
+    };
   }, [props.user, props.showPluzo]);
 
   return (
     <View style={styles.container}>
       <HomeStack navigation={props.navigation} />
-      {visibleStream && streamParams.channelName !== null && minimized && tutorialMode && 
-      <Animated.View 
-        style={[styles.tutorialContainer, tutorialStyle[position], 
-          {opacity: _tutorialOpacity, transform: [{ translateX: _panXY.x }, { translateY: _panXY.y }]}]}>
-        <LinearGradient
-          colors={GRADIENT.BUTTON}
-          start={{x: 1, y: 0}}
-          end={{x: 0, y: 0}}
-          style={styles.tutorialView}>
-          <Text style={styles.tutorialText}>Swipe away to close</Text>
-        </LinearGradient>
-      </Animated.View>}
+      {visibleStream && streamParams.channelName !== null && minimized && tutorialMode && (
+        <Animated.View
+          style={[
+            styles.tutorialContainer,
+            tutorialStyle[position],
+            {
+              opacity: _tutorialOpacity,
+              transform: [{ translateX: _panXY.x }, { translateY: _panXY.y }],
+            },
+          ]}
+        >
+          <LinearGradient
+            colors={GRADIENT.BUTTON}
+            start={{ x: 1, y: 0 }}
+            end={{ x: 0, y: 0 }}
+            style={styles.tutorialView}
+          >
+            <Text style={styles.tutorialText}>Swipe away to close</Text>
+          </LinearGradient>
+        </Animated.View>
+      )}
       {visibleStream && streamParams.channelName !== null ? (
         <Animated.View
           style={[
@@ -391,7 +401,7 @@ const Home = props => {
               setOriginalPos({ x: e.nativeEvent.layout.x, y: e.nativeEvent.layout.y });
             }
           }}
-        >          
+        >
           {minimized && <BoxShadow setting={shadowOptions} />}
           <View style={[styles.floatingContainer, minimized ? styles.border : {}]}>
             <LiveStream
@@ -400,7 +410,7 @@ const Home = props => {
               minimized={minimized}
               onMinimized={minimizedView}
               onLeaveRoom={() => onLeaveRoom()}
-              onChangedRole={(value) => setBroadcaster(value)}
+              onChangedRole={value => setBroadcaster(value)}
             />
           </View>
         </Animated.View>
@@ -411,29 +421,38 @@ const Home = props => {
           enableMoveUp={true}
           maxMoveUp={100}
           onSwipeUp={state => onHideNotification()}
-          config={{directionalOffsetThreshold: 10}}
+          config={{ directionalOffsetThreshold: 10 }}
         >
-          <Touchable onPress={() => {
-            if (props.notification.type === "livestream" || props.notification.type === "livefriend") {
-              props.notification.stream && onJoinLive(props.notification.stream);
-            } else if (props.notification.type === "chat") {
-              if (NavigationService.getCurrentRoute(null) === "CHAT") {
-                NavigationService.popToTop();
+          <Touchable
+            onPress={() => {
+              if (
+                props.notification.type === "livestream" ||
+                props.notification.type === "livefriend"
+              ) {
+                props.notification.stream && onJoinLive(props.notification.stream);
+              } else if (props.notification.type === "chat") {
+                if (NavigationService.getCurrentRoute(null) === "CHAT") {
+                  NavigationService.popToTop();
+                }
+                setTimeout(() => {
+                  props.navigation.navigate(SCREENS.CHAT, {
+                    chatId: props.notification.chatId,
+                    chatUser: props.notification.user,
+                  });
+                }, 500);
+              } else if (props.notification.type === "friend-match") {
+                if (NavigationService.getCurrentRoute(null) === "CHAT") {
+                  NavigationService.popToTop();
+                }
+                setTimeout(() => {
+                  props.navigation.navigate(SCREENS.CHAT, {
+                    chatUser: props.notification.user,
+                  });
+                }, 500);
               }
-              setTimeout(() => {
-                props.navigation.navigate(SCREENS.CHAT, { 
-                  chatId: props.notification.chatId, chatUser: props.notification.user });
-              }, 500);
-            } else if (props.notification.type === "friend-match") {
-              if (NavigationService.getCurrentRoute(null) === "CHAT") {
-                NavigationService.popToTop();
-              }
-              setTimeout(() => {
-                props.navigation.navigate(SCREENS.CHAT, { chatUser: props.notification.user });
-              }, 500);
-            }
-            onHideNotification();
-          }}>
+              onHideNotification();
+            }}
+          >
             <BannerAlert
               notification={props.notification}
               hideNotification={onHideNotification}
@@ -496,11 +515,12 @@ const Home = props => {
         }}
       />
       <PushNotification />
-      <PendingRequestModal 
+      <PendingRequestModal
         isVisible={visiblePendingRequest}
         startLoading={true}
-        dismissModal={() => setVisiblePendingRequest(false)}/>
-      <PluzoLearnModel 
+        dismissModal={() => setVisiblePendingRequest(false)}
+      />
+      <PluzoLearnModel
         isVisible={props.visiblePluzo && !props.modalShowed}
         onSwipeComplete={() => props.showPluzo(false, "")}
         needUpdate={false}

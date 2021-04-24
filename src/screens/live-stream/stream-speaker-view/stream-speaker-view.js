@@ -28,13 +28,15 @@ const StreamSpeakerView: () => React$Node = props => {
   }
   let isLarge = props.large;
   let isMuted = false;
-  if (props.remoteMutedUsers.filter((value) => value === broadcasterId).length > 0) {
+  if (props.remoteMutedUsers.filter(value => value === broadcasterId).length > 0) {
     isMuted = true;
   }
 
   const onMute = () => {
     setNotificationData({
-      text: `Are you sure you want to ${isMuted ? "unmute" : "mute"} ${props.broadcaster.first_name}`,
+      text: `Are you sure you want to ${isMuted ? "unmute" : "mute"} ${
+        props.broadcaster.first_name
+      }`,
       logoBackground: "#312446",
       logoTintColor: "white",
       buttonColors: ["#312446", "#312446"],
@@ -71,7 +73,7 @@ const StreamSpeakerView: () => React$Node = props => {
     setVisibleNotification(true);
   };
 
-  const onSendSystemMsg = (msg) => {
+  const onSendSystemMsg = msg => {
     let newMessage = {
       id: `${moment().unix()}.${moment().millisecond()}`,
       user: props.user,
@@ -85,7 +87,12 @@ const StreamSpeakerView: () => React$Node = props => {
 
   useEffect(() => {
     const updateSpeakerAction = EventBus.on("NEW_SPEAKERS", speakers => {
-      if (props.mutedUsers.includes(parseInt(props.broadcaster._id, 10) || parseInt(props.broadcaster.id, 10))) return;
+      if (
+        props.mutedUsers.includes(
+          parseInt(props.broadcaster._id, 10) || parseInt(props.broadcaster.id, 10),
+        )
+      )
+        return;
       let users = speakers.filter(speaker => speaker.uid === broadcasterId);
       if (volumeView !== null && users.length > 0) {
         let maxValue = isLarge ? 0.3 : 0.2;
@@ -117,30 +124,44 @@ const StreamSpeakerView: () => React$Node = props => {
         gestureIsClickThreshold: 5,
       }}
       onSwipeLeft={() => props.isGesture && setExpandView(true)}
-      onSwipeRight={() => props.isGesture && setExpandView(false)}>
+      onSwipeRight={() => props.isGesture && setExpandView(false)}
+    >
       <View style={props.style}>
-        {expandView &&
-        <View style={styles.expandContainer}>
-          <Animatable.View style={styles.expandContentContainer}
-            animation={"slideInRight"}
-            duration={300}
-            delay={0}>
-            <Touchable style={styles.muteButton} onPress={() => onMute()}>
-              <Text style={[styles.expandButtonText, isMuted && styles.expandButtonTextLong]}>{isMuted ? "Unmute" : "Mute"}</Text>
-            </Touchable>
-            <Touchable style={styles.kickButton} onPress={() => onKick()}>
-              <Text style={styles.expandButtonText}>Kick</Text>
-            </Touchable>
-            <Touchable style={styles.banButton} onPress={() => onBan()}>
-              <Text style={[styles.expandButtonTextBlack]}>Ban</Text>
-            </Touchable>
-          </Animatable.View>
-        </View>}
-        {!props.mutedUsers.includes(parseInt(props.broadcaster._id, 10) || parseInt(props.broadcaster.id, 10)) &&
-        <Animatable.View
-          style={isLarge ? styles.volumeContainer1 : styles.volumeContainer}
-          ref={ref => (volumeView = ref)}
-        />}
+        {expandView && (
+          <View style={styles.expandContainer}>
+            <Animatable.View
+              style={styles.expandContentContainer}
+              animation={"slideInRight"}
+              duration={300}
+              delay={0}
+            >
+              <Touchable style={styles.muteButton} onPress={() => onMute()}>
+                <Text
+                  style={[
+                    styles.expandButtonText,
+                    isMuted && styles.expandButtonTextLong,
+                  ]}
+                >
+                  {isMuted ? "Unmute" : "Mute"}
+                </Text>
+              </Touchable>
+              <Touchable style={styles.kickButton} onPress={() => onKick()}>
+                <Text style={styles.expandButtonText}>Kick</Text>
+              </Touchable>
+              <Touchable style={styles.banButton} onPress={() => onBan()}>
+                <Text style={[styles.expandButtonTextBlack]}>Ban</Text>
+              </Touchable>
+            </Animatable.View>
+          </View>
+        )}
+        {!props.mutedUsers.includes(
+          parseInt(props.broadcaster._id, 10) || parseInt(props.broadcaster.id, 10),
+        ) && (
+          <Animatable.View
+            style={isLarge ? styles.volumeContainer1 : styles.volumeContainer}
+            ref={ref => (volumeView = ref)}
+          />
+        )}
         <StreamUserIcon
           user={props.broadcaster}
           style={props.imageStyle}
@@ -156,8 +177,8 @@ const StreamSpeakerView: () => React$Node = props => {
               : null
           }
         />
-        
-        <NotificationModal 
+
+        <NotificationModal
           isVisible={visibleNotification}
           title={notificationData.text}
           message={""}
@@ -167,24 +188,38 @@ const StreamSpeakerView: () => React$Node = props => {
           buttonColors={notificationData.buttonColors}
           buttonText={notificationData.buttonText}
           buttonTextStyle={notificationData.buttonTextStyle}
-          buttonContainerStyle={{marginTop: 32}}
+          buttonContainerStyle={{ marginTop: 32 }}
           onBack={() => setVisibleNotification(false)}
           onConfirm={(a, b) => {
             setVisibleNotification(false);
             if (notificationData.type === "kick") {
-              props.requestStreamKickUser(broadcasterId, props.stream.channel, props.token);
+              props.requestStreamKickUser(
+                broadcasterId,
+                props.stream.channel,
+                props.token,
+              );
               onSendSystemMsg(`${props.broadcaster.first_name} kicked out.`);
             } else if (notificationData.type === "ban") {
-              props.requestStreamBanUser(broadcasterId, props.stream.channel, props.token);
+              props.requestStreamBanUser(
+                broadcasterId,
+                props.stream.channel,
+                props.token,
+              );
               onSendSystemMsg(`${props.broadcaster.first_name} banned.`);
             } else {
               if (isMuted) {
-                EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: broadcasterId, mute: false});
+                EventBus.publish("player_actions", "REMOTE_USER_MUTE", {
+                  userId: broadcasterId,
+                  mute: false,
+                });
               } else {
-                EventBus.publish("player_actions", "REMOTE_USER_MUTE", {userId: broadcasterId, mute: true});
+                EventBus.publish("player_actions", "REMOTE_USER_MUTE", {
+                  userId: broadcasterId,
+                  mute: true,
+                });
               }
             }
-          }} 
+          }}
         />
       </View>
     </GestureRecognizer>

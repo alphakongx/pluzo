@@ -53,7 +53,7 @@ const BannerAlert: () => React$Node = props => {
   useEffect(() => {
     return () => {
       clearTimeout(hideTimeout.current);
-    }
+    };
   }, []);
 
   return (
@@ -67,26 +67,39 @@ const BannerAlert: () => React$Node = props => {
           }}
         >
           <FastImage
-            source={props.notification.user === 0 ? 
-              require("@assets/images/app-icon.png") : 
-              { uri: props.notification.user.images[0].path }}
-            style={[styles.userImage, props.notification.user !== 0 && styles.greenBorder]}
+            source={
+              props.notification.user === 0
+                ? require("@assets/images/app-icon.png")
+                : { uri: props.notification.user.images[0].path }
+            }
+            style={[
+              styles.userImage,
+              props.notification.user !== 0 && styles.greenBorder,
+            ]}
           />
 
           <View style={styles.textContainer}>
             <View style={styles.flexRow}>
-              <Text style={styles.userName}>{props.notification.user === 0 ? "Pluzo Team" : props.notification.user.first_name}</Text>
-              {props.notification.user !== 0 && props.notification.user.badges.map(badge => {
-                if (badge > AppBadges.length) return null;
-                return (
-                  <View
-                    key={`profile-badge-${badge}`}
-                    style={styles.badgeIconContainer}
-                  >
-                    <FastImage source={Images.badges[AppBadges[badge-1].id]} style={styles.badgeIcon} />
-                  </View>
-                );
-              })}
+              <Text style={styles.userName}>
+                {props.notification.user === 0
+                  ? "Pluzo Team"
+                  : props.notification.user.first_name}
+              </Text>
+              {props.notification.user !== 0 &&
+                props.notification.user.badges.map(badge => {
+                  if (badge > AppBadges.length) return null;
+                  return (
+                    <View
+                      key={`profile-badge-${badge}`}
+                      style={styles.badgeIconContainer}
+                    >
+                      <FastImage
+                        source={Images.badges[AppBadges[badge - 1].id]}
+                        style={styles.badgeIcon}
+                      />
+                    </View>
+                  );
+                })}
             </View>
             <Text style={styles.textChat} numberOfLines={1} ellipsizeMode={"tail"}>
               {props.notification.type === "friend" && "added you as a friend"}
@@ -95,12 +108,15 @@ const BannerAlert: () => React$Node = props => {
               {props.notification.type === "chat" && props.notification.message === null
                 ? "sent an image"
                 : props.notification.message}
-              {props.notification.type === "friend-match" && `${props.notification.user.first_name} is now your friend! 👏`}
-              {props.notification.type === "livefriend" && `${props.notification.user.first_name} started a live video. Watch it before it ends!`}
+              {props.notification.type === "friend-match" &&
+                `${props.notification.user.first_name} is now your friend! 👏`}
+              {props.notification.type === "livefriend" &&
+                `${props.notification.user.first_name} started a live video. Watch it before it ends!`}
             </Text>
           </View>
 
-          {(props.notification.type === "friend" || props.notification.type === "livestream") && (
+          {(props.notification.type === "friend" ||
+            props.notification.type === "livestream") && (
             <View style={styles.circleButton}>
               <IconButton
                 backColor={"#ABA7D5"}
@@ -117,7 +133,8 @@ const BannerAlert: () => React$Node = props => {
               />
             </View>
           )}
-          {(props.notification.type === "friend" || props.notification.type === "livestream") && (
+          {(props.notification.type === "friend" ||
+            props.notification.type === "livestream") && (
             <View style={styles.circleButton}>
               <IconButton
                 backColor={"#00FF77"}

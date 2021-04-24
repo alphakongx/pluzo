@@ -11,9 +11,7 @@ const SafetyPrivacy: () => React$Node = props => {
   const { getBlockedUsers, token } = props;
 
   useEffect(() => {
-
     getBlockedUsers(token);
-
   }, [getBlockedUsers, token]);
 
   const renderItem = (title, text, hint) => {
@@ -39,11 +37,15 @@ const SafetyPrivacy: () => React$Node = props => {
             {renderItem("Blocked Users", props.blockedUsers.length, null)}
           </Touchable>
           <View style={styles.seperator} />
-          <Touchable onPress={() => props.navigation.navigate(SCREENS.LOCATION_PERMISSION)}>
+          <Touchable
+            onPress={() => props.navigation.navigate(SCREENS.LOCATION_PERMISSION)}
+          >
             {renderItem("Location", "", "Manage the access to your location data")}
           </Touchable>
           <View style={styles.emptyRow} />
-          <Touchable onPress={() => props.navigation.navigate(SCREENS.CAMERA_MIC_PERMISSION)}>
+          <Touchable
+            onPress={() => props.navigation.navigate(SCREENS.CAMERA_MIC_PERMISSION)}
+          >
             {renderItem("Camera and microphone", "", null)}
           </Touchable>
           <View style={styles.seperator} />

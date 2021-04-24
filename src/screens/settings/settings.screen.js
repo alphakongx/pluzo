@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Alert, Linking, SafeAreaView, ScrollView } from "react-native";
+import { View, Alert, Linking, SafeAreaView, ScrollView, Platform } from "react-native";
 import { Touchable, Image, Text, DialogInput, TouchableSettingItem } from "@components";
 import RNIap from "react-native-iap";
 import { SCREENS } from "@constants";
@@ -53,46 +53,48 @@ class Settings extends Component {
 
       purchases.forEach(purchase => {
         switch (purchase.productId) {
-        case 'com.pluzo.app.pluzoplus':
-        case 'com.pluzo.app.pluzoplus3':
-        case 'com.pluzo.app.pluzoplus12':
-          let params = new FormData();
-          let serviceId = 10;
-          let amount = 11.99;
-          if (purchase.productId === 'com.pluzo.app.pluzoplus3') {
-            serviceId = 11;
-            amount = 9.99;
-          } else if (purchase.productId === 'com.pluzo.app.pluzoplus12') {
-            serviceId = 12;
-            amount = 7.99;
-          }
-          params.append("service_id", serviceId);
-          params.append("receipt", purchase.transactionReceipt);
-          params.append("transaction_id", purchase.transactionId);
-          params.append("amount", amount);
-          params.append("payment_method", Platform.OS === "ios" ? "apple" : "google");
-          API.request({
-            method: "post",
-            url: `${API_ENDPOINTS.ITEM_PAY}`,
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + this.props.token,
-            },
-            data: params,
-            silent: true,
-          }).then(async response => {
-            this.props.updateUser(response.data.data.user);
-          }).catch(e => {
-            console.log(e);
-          });
-          Alert.alert('Restore Successful', 'You successfully restored');
-          break
+          case "com.pluzo.app.pluzoplus":
+          case "com.pluzo.app.pluzoplus3":
+          case "com.pluzo.app.pluzoplus12":
+            let params = new FormData();
+            let serviceId = 10;
+            let amount = 11.99;
+            if (purchase.productId === "com.pluzo.app.pluzoplus3") {
+              serviceId = 11;
+              amount = 9.99;
+            } else if (purchase.productId === "com.pluzo.app.pluzoplus12") {
+              serviceId = 12;
+              amount = 7.99;
+            }
+            params.append("service_id", serviceId);
+            params.append("receipt", purchase.transactionReceipt);
+            params.append("transaction_id", purchase.transactionId);
+            params.append("amount", amount);
+            params.append("payment_method", Platform.OS === "ios" ? "apple" : "google");
+            API.request({
+              method: "post",
+              url: `${API_ENDPOINTS.ITEM_PAY}`,
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: "Bearer " + this.props.token,
+              },
+              data: params,
+              silent: true,
+            })
+              .then(async response => {
+                this.props.updateUser(response.data.data.user);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+            Alert.alert("Restore Successful", "You successfully restored");
+            break;
         }
-      })
-    } catch(err) {
+      });
+    } catch (err) {
       console.warn(err);
     }
-  }
+  };
 
   onItemPressed = itemId => {
     if (itemId === "1") {
@@ -126,7 +128,7 @@ class Settings extends Component {
           <Header title={"Settings"} onBack={this.goBack} />
 
           <ScrollView style={styles.safeAreaContainer}>
-            {settingData.map((item) => {
+            {settingData.map(item => {
               if (item.type === 0) {
                 return (
                   <TouchableSettingItem
@@ -163,9 +165,16 @@ class Settings extends Component {
                   );
                 }
               } else if (item.type === 2) {
-                return <View key={`setting-item-${item.id}`} style={styles.emptyItemContainer} />;
+                return (
+                  <View
+                    key={`setting-item-${item.id}`}
+                    style={styles.emptyItemContainer}
+                  />
+                );
               } else if (item.type === 3) {
-                return <View key={`setting-item-${item.id}`} style={styles.separatorLine} />;
+                return (
+                  <View key={`setting-item-${item.id}`} style={styles.separatorLine} />
+                );
               } else {
                 return null;
               }

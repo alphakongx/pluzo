@@ -33,7 +33,7 @@ class LiveStream extends Component {
       requestParams.append("channel_id", this.props.streamParams.channelName);
       isStreamLive(requestParams, this.props.token).then(response => {
         if (response.data.data === false) {
-          this.setState({visibleEnd: true});
+          this.setState({ visibleEnd: true });
         }
       });
     }
@@ -74,7 +74,7 @@ class LiveStream extends Component {
           onChangeStreamers={count => {
             this.setState({ streamerCount: count });
           }}
-          onShowAskModal={(value) => this.setState({visibleAskModal: value})}
+          onShowAskModal={value => this.setState({ visibleAskModal: value })}
           onShowProfile={user => this.onShowProfile(user)}
           minimized={minimized}
         />
@@ -88,7 +88,7 @@ class LiveStream extends Component {
             onLeaveRoom={this.props.onLeaveRoom}
             onMinimized={this.props.onMinimized}
             onShowProfile={user => this.onShowProfile(user)}
-            onShowAskModal={(value) => this.setState({visibleAskModal: value})}
+            onShowAskModal={value => this.setState({ visibleAskModal: value })}
           />
         ) : null}
 
@@ -110,7 +110,7 @@ class LiveStream extends Component {
 
         <StreamAskModal
           isVisible={this.state.visibleAskModal}
-          onBack={() => this.setState({visibleAskModal: false})}
+          onBack={() => this.setState({ visibleAskModal: false })}
           streamParams={this.props.streamParams}
         />
       </View>

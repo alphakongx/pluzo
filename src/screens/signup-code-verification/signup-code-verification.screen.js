@@ -87,7 +87,7 @@ class SignupCodeVerification extends Component {
     this.props.requestPhoneVerificationSendCode(phoneNumber);
   };
 
-  startCountDown = (seconds) => {
+  startCountDown = seconds => {
     this.setState({
       countdownTime: moment().add(seconds, "seconds").unix(),
       canResend: false,
@@ -125,7 +125,7 @@ class SignupCodeVerification extends Component {
                 style={styles.codeContentContainer}
                 pinCount={4}
                 autoFocusOnLoad
-                onCodeChanged={c => this.setState({ code: c})}
+                onCodeChanged={c => this.setState({ code: c })}
                 onCodeFilled={c => this.setState({ code: c })}
               />
             </View>
@@ -156,7 +156,7 @@ class SignupCodeVerification extends Component {
               ) : null}
             </View>
           </View>
-          <View style={{flex: 1}} />
+          <View style={{ flex: 1 }} />
           <View style={styles.footer}>
             <GradientButton
               loading={verificationInProgress}

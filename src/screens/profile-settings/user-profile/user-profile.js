@@ -47,7 +47,7 @@ class UserProfile extends React.Component {
                 <FastImage
                   key={`profile-badge-${badge}`}
                   style={styles.badgeImage}
-                  source={Images.badges[AppBadges[badge-1].id]}
+                  source={Images.badges[AppBadges[badge - 1].id]}
                 />
               );
             })}
@@ -55,7 +55,11 @@ class UserProfile extends React.Component {
           <Text style={styles.usernameText}>{user !== null ? user.username : ""}</Text>
           <Touchable onPress={() => this.props.onFriends()}>
             <UserCount
-              count={this.props.friends.length > 0 ? this.props.friends.length : parseInt(user.friends, 10)}
+              count={
+                this.props.friends.length > 0
+                  ? this.props.friends.length
+                  : parseInt(user.friends, 10)
+              }
               style={styles.friendsContainer}
               iconStyle={styles.friendsIconImage}
               textStyle={styles.friendsCountText}

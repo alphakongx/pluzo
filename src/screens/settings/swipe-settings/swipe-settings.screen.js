@@ -78,8 +78,8 @@ class SwipeSettings extends Component {
       settings.age_from = this.state.minAge;
       settings.age_to = this.state.maxAge;
       settings.global = this.state.aroundWorld === true ? 1 : 0;
-      settings.hide = this.state.hideMe === true ? 1 : 0,
-      settings.gender = this.state.gender;
+      (settings.hide = this.state.hideMe === true ? 1 : 0),
+        (settings.gender = this.state.gender);
       settings.country = this.state.country;
       settings.state = this.state.state;
       settings.current_location = this.state.current_location;
@@ -126,7 +126,7 @@ class SwipeSettings extends Component {
     const { distance, minAge, maxAge, aroundWorld, hideMe, gender } = this.state;
     const { state, city, address, age } = this.props.user;
     let birthday = age; //moment().diff(moment.unix(this.props.user.birthday), "years");
-    let strAddress = (address !== null && address !== "null") ? address : "";
+    let strAddress = address !== null && address !== "null" ? address : "";
     if (city !== null && state !== null) {
       strAddress = `${city}, ${state}`;
     } else {
@@ -172,30 +172,30 @@ class SwipeSettings extends Component {
           <View>
             <Header title={"Discovery"} onBack={this.goBack} />
 
-            <Touchable style={[styles.flexRow, styles.itemPadding]}
+            <Touchable
+              style={[styles.flexRow, styles.itemPadding]}
               onPress={() => {
                 if (this.props.user.premium === 1) {
-                  this.setState({visibleLocation: true});
+                  this.setState({ visibleLocation: true });
                 } else {
-                  this.setState({visiblePurchase: true});
+                  this.setState({ visiblePurchase: true });
                 }
-              }}>
+              }}
+            >
               <Text style={styles.titleText}>Location</Text>
               <View>
                 <Text style={styles.valueText}>My Current Location</Text>
-                {
-                  this.state.current_location === 1 ? (
-                    <Text style={styles.subValueText}>
-                      {strAddress}
-                    </Text>
-                  ) : (
-                    <Text style={styles.subValueText}>
-                      {this.state.country === "United States" ? 
-                        `${this.state.state}, ${this.state.country}` : 
-                        this.state.country === null ? "United States" : `${this.state.country}`}
-                    </Text>
-                  )
-                }
+                {this.state.current_location === 1 ? (
+                  <Text style={styles.subValueText}>{strAddress}</Text>
+                ) : (
+                  <Text style={styles.subValueText}>
+                    {this.state.country === "United States"
+                      ? `${this.state.state}, ${this.state.country}`
+                      : this.state.country === null
+                      ? "United States"
+                      : `${this.state.country}`}
+                  </Text>
+                )}
               </View>
               <Image source={Images.app.icRight} style={styles.arrowRight} />
             </Touchable>
@@ -320,10 +320,14 @@ class SwipeSettings extends Component {
         />
         <CountrySelection
           isVisible={this.state.visibleLocation}
-          locationData={{state: this.state.state, country: this.state.country, current: this.state.current_location}}
-          goBack={() => this.setState({visibleLocation: false})}
-          onUpdatedLocation = {(states, country, current) => {
-            this.setState({current_location: current, state: states, country: country});
+          locationData={{
+            state: this.state.state,
+            country: this.state.country,
+            current: this.state.current_location,
+          }}
+          goBack={() => this.setState({ visibleLocation: false })}
+          onUpdatedLocation={(states, country, current) => {
+            this.setState({ current_location: current, state: states, country: country });
             if (current === 1) {
               getCurrentLocation(position => {
                 if (position) {
@@ -334,8 +338,9 @@ class SwipeSettings extends Component {
                 }
               });
             }
-          }} />
-          
+          }}
+        />
+
         <PurchaseModal
           isVisible={this.state.visiblePurchase}
           onSwipeComplete={() => this.setState({ visiblePurchase: false })}

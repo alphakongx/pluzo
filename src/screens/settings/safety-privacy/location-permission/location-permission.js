@@ -3,7 +3,13 @@ import { Platform, SafeAreaView, View } from "react-native";
 import { Screen, Text, Image, Touchable } from "@components";
 import { Switch } from "react-native-switch";
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
-import { request, checkMultiple, PERMISSIONS, RESULTS, openSettings} from 'react-native-permissions';
+import {
+  request,
+  checkMultiple,
+  PERMISSIONS,
+  RESULTS,
+  openSettings,
+} from "react-native-permissions";
 import Images from "@assets/Images";
 
 import Header from "../../header";
@@ -16,7 +22,9 @@ const options = {
 
 const LocationPermissionScreen: () => React$Node = props => {
   const [locationEnabled, setLocationEnabled] = useState(null);
-  const [hideLocation, setHideLocation] = useState(props.user.hide_location === 0 ? false : true);
+  const [hideLocation, setHideLocation] = useState(
+    props.user.hide_location === 0 ? false : true,
+  );
   const [hideCity, setHideCity] = useState(props.user.hide_city === 0 ? false : true);
   const { updateUser, token } = props;
 
@@ -26,7 +34,7 @@ const LocationPermissionScreen: () => React$Node = props => {
       params.append("hide_location", hideLocation ? 1 : 0);
       params.append("hide_city", hideCity ? 1 : 0);
       updateUser(params, token);
-    }
+    };
   }, [updateUser, token, hideLocation, hideCity]);
 
   useEffect(() => {
@@ -34,25 +42,27 @@ const LocationPermissionScreen: () => React$Node = props => {
     if (Platform.OS === "android") {
       arrPermissions = [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
     }
-    checkMultiple(arrPermissions).then((statuses) => {
-      if (Platform.OS === "ios") {
-        if (statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED) {
-          setLocationEnabled("Enabled");
-        } else if (statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.BLOCKED) {
-          setLocationEnabled("Disabled");
+    checkMultiple(arrPermissions)
+      .then(statuses => {
+        if (Platform.OS === "ios") {
+          if (statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED) {
+            setLocationEnabled("Enabled");
+          } else if (statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.BLOCKED) {
+            setLocationEnabled("Disabled");
+          } else {
+            setLocationEnabled("Not Requested");
+          }
         } else {
-          setLocationEnabled("Not Requested");
+          if (statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED) {
+            setLocationEnabled("Enabled");
+          } else {
+            setLocationEnabled("Disabled");
+          }
         }
-      } else {
-        if (statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED) {
-          setLocationEnabled("Enabled");
-        } else {
-          setLocationEnabled("Disabled");
-        }
-      }      
-    }).catch(e => {
-      console.log("Error on checking location", e);
-    });
+      })
+      .catch(e => {
+        console.log("Error on checking location", e);
+      });
   }, []);
 
   const renderItem = (title, text, hint) => {
@@ -74,19 +84,25 @@ const LocationPermissionScreen: () => React$Node = props => {
         <View style={styles.flexFill}>
           <Header title={"Location"} onBack={props.navigation.goBack} />
 
-          <Touchable onPress={() => {
-            if (locationEnabled === "Not Requested") {
-              request(Platform.OS === "ios" ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
-                if (result === RESULTS.GRANTED) {
-                  setLocationEnabled("Enabled");
-                } else {
-                  setLocationEnabled("Disabled");
-                }
-              });
-            } else {
-              openSettings().catch(() => console.warn('cannot open settings'));
-            }
-          }}>
+          <Touchable
+            onPress={() => {
+              if (locationEnabled === "Not Requested") {
+                request(
+                  Platform.OS === "ios"
+                    ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
+                    : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+                ).then(result => {
+                  if (result === RESULTS.GRANTED) {
+                    setLocationEnabled("Enabled");
+                  } else {
+                    setLocationEnabled("Disabled");
+                  }
+                });
+              } else {
+                openSettings().catch(() => console.warn("cannot open settings"));
+              }
+            }}
+          >
             {renderItem("Manage location access", locationEnabled, null)}
           </Touchable>
           <View style={styles.seperator} />

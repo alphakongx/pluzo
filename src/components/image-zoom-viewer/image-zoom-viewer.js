@@ -12,8 +12,8 @@ const ImageZoomViewer: () => React$Node = props => {
 
   return (
     <ImageZoom
-      cropWidth={ screenWidth }
-      cropHeight={ screenHeight }
+      cropWidth={screenWidth}
+      cropHeight={screenHeight}
       imageWidth={width}
       imageHeight={height}
       enableDoubleClickZoom={true}
@@ -22,11 +22,10 @@ const ImageZoomViewer: () => React$Node = props => {
       swipeDownThreshold={20}
       onSwipeDown={() => props.onSwipeDown && props.onSwipeDown()}
     >
-      
       <FastImage
         source={props.imageUrl}
-        style={{width: width, height: height}}
-        onLoad={(event) => {
+        style={{ width: width, height: height }}
+        onLoad={event => {
           let imageWidth = event.nativeEvent.width;
           let imageHeight = event.nativeEvent.height;
 
@@ -35,7 +34,7 @@ const ImageZoomViewer: () => React$Node = props => {
             imageWidth *= widthPixel;
             imageHeight *= widthPixel;
           }
-    
+
           if (imageHeight > screenHeight) {
             const HeightPixel = screenHeight / imageHeight;
             imageWidth *= HeightPixel;
@@ -45,9 +44,8 @@ const ImageZoomViewer: () => React$Node = props => {
           setHeight(imageHeight);
         }}
       />
-
     </ImageZoom>
-  )
+  );
 };
 
 export default ImageZoomViewer;

@@ -13,7 +13,14 @@ import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import { GRADIENT } from "@config";
-import { CardProgressBar, Touchable, BoxShadow, IconButton, ConfirmModal, NotificationModal } from "@components";
+import {
+  CardProgressBar,
+  Touchable,
+  BoxShadow,
+  IconButton,
+  ConfirmModal,
+  NotificationModal,
+} from "@components";
 import Images from "@assets/Images";
 import { initialWindowMetrics } from "react-native-safe-area-context";
 
@@ -166,8 +173,8 @@ class ProfileView extends React.Component {
     let images = user.images || [];
     if (this.existBio(user)) {
       this.setState({ imageIndex: images.length });
-    }    
-  }
+    }
+  };
 
   onImagePressed = e => {
     let index = this.state.imageIndex;
@@ -236,7 +243,7 @@ class ProfileView extends React.Component {
     if (type === "add") {
       url = `${API_ENDPOINTS.ADD_FRIEND_USERNAME}`;
     } else if (type === "remove") {
-      this.setState({visibleConfirmDelete: true});
+      this.setState({ visibleConfirmDelete: true });
       return;
     } else if (type === "delete") {
       url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
@@ -261,7 +268,8 @@ class ProfileView extends React.Component {
       data,
     })
       .then(response => {
-        let res = response.data.data; console.log(res);
+        let res = response.data.data;
+        console.log(res);
         if (type === "accept" || type === "reject") {
           this.setState({
             friend: 4,
@@ -280,7 +288,8 @@ class ProfileView extends React.Component {
           });
         }
       })
-      .catch(err => {console.log(err);
+      .catch(err => {
+        console.log(err);
         this.setState({ updating: false, rejecting: false });
       });
   };
@@ -289,7 +298,13 @@ class ProfileView extends React.Component {
     const { user } = this.props.navigation
       ? this.props.navigation.state.params
       : this.props;
-    const { imageIndex, imageWidth, imageHeight, visibleReport, visibleConfirmDelete } = this.state;
+    const {
+      imageIndex,
+      imageWidth,
+      imageHeight,
+      visibleReport,
+      visibleConfirmDelete,
+    } = this.state;
     let images = user.images || [];
     let [translateY] = [this.pan.y];
 
@@ -385,7 +400,11 @@ class ProfileView extends React.Component {
                       this.setState({ imageIndex: index });
                     }}
                   />
-                  <ProfileDetail user={user} imageIndex={imageIndex} onInfoClicked={() => this.onInfoClicked()} />
+                  <ProfileDetail
+                    user={user}
+                    imageIndex={imageIndex}
+                    onInfoClicked={() => this.onInfoClicked()}
+                  />
                 </View>
               </View>
             </Touchable>
@@ -466,17 +485,17 @@ class ProfileView extends React.Component {
           onDismiss={() => this.setState({ visibleUserSetting: false })}
           onReport={() => {
             setTimeout(() => {
-              this.setState({visibleReport: true});
+              this.setState({ visibleReport: true });
             }, 400);
           }}
           onBlock={() => {
             setTimeout(() => {
-              this.setState({visibleConfirmBlock: true});
+              this.setState({ visibleConfirmBlock: true });
             }, 400);
           }}
           onUnfriend={() => {
             setTimeout(() => {
-              this.setState({visibleConfirmDelete: true});
+              this.setState({ visibleConfirmDelete: true });
             }, 400);
           }}
         />
@@ -484,17 +503,17 @@ class ProfileView extends React.Component {
         <ReportModal
           isVisible={visibleReport}
           needUpdate={this.props.user ? false : true}
-          userId={(user.id || user._id)}
+          userId={user.id || user._id}
           onDismiss={() => this.setState({ visibleReport: false })}
         />
-        
+
         <ConfirmModal
           isVisible={this.state.visibleConfirmBlock}
           needUpdate={this.props.user ? false : true}
           user={user}
           onDismiss={() => this.setState({ visibleConfirmBlock: false })}
           onConfirm={() => {
-            this.props.blockUser((user.id || user._id), this.props.token);
+            this.props.blockUser(user.id || user._id, this.props.token);
             this.setState({ visibleConfirmBlock: false }, () => {
               setTimeout(() => {
                 this.props.navigation.goBack();
@@ -502,13 +521,13 @@ class ProfileView extends React.Component {
             });
           }}
         />
-        
+
         <NotificationModal
           isVisible={visibleConfirmDelete}
           needUpdate={this.props.user ? false : true}
-          onBack={() => this.setState({visibleConfirmDelete: false})}
+          onBack={() => this.setState({ visibleConfirmDelete: false })}
           onConfirm={(userId, userName) => {
-            this.setState({visibleConfirmDelete: false});
+            this.setState({ visibleConfirmDelete: false });
             this.onUpdateFriend("delete");
           }}
         />

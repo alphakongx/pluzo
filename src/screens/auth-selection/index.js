@@ -6,8 +6,7 @@ function mapStateToProps(state) {
   return {};
 }
 
-const mapDispatchToProps = {
-};
+const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,

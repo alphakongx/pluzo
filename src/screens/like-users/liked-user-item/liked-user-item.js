@@ -19,15 +19,15 @@ const LikedUserItem: () => React$Node = props => {
     return (
       <View style={styles.blurContainer}>
         {Platform.OS === "android" ? (
-          <View style={styles.blurView}/>
+          <View style={styles.blurView} />
         ) : (
-          <BlurView blurType={"light"} blurAmount={15}/>
+          <BlurView blurType={"light"} blurAmount={15} />
         )}
         <View style={styles.blurWhiteView} />
         <View style={styles.blurGreenView} />
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <View style={[styles.container]}>
@@ -43,7 +43,7 @@ const LikedUserItem: () => React$Node = props => {
           style={styles.userImage}
           borderRadius={22}
         />
-      )}      
+      )}
 
       <View style={styles.badgesContainer}>
         {likedUser.badges.map(badge => {
@@ -52,7 +52,8 @@ const LikedUserItem: () => React$Node = props => {
             <FastImage
               key={`profile-badge-${badge}`}
               style={styles.badgeIcon}
-              source={Images.badges[AppBadges[badge-1].id]} />
+              source={Images.badges[AppBadges[badge - 1].id]}
+            />
           );
         })}
       </View>

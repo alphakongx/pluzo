@@ -64,7 +64,7 @@ class ResetPasswordCodeVerification extends React.Component {
     }
   }
 
-  resetCountdown = (seconds) => {
+  resetCountdown = seconds => {
     this.setState({
       canResend: false,
       countdownTime: moment().add(seconds, "seconds").unix(),
@@ -143,7 +143,7 @@ class ResetPasswordCodeVerification extends React.Component {
             </View>
           </View>
 
-          <View style={{flex: 1}} />
+          <View style={{ flex: 1 }} />
           <View style={styles.footer}>
             <GradientButton
               loading={this.props.verificationInProgress}

@@ -15,7 +15,6 @@ class Validator {
   }
 
   static async getSmsLastTime() {
-
     try {
       let lastTime = await AsyncStorage.getItem(TUTORIAL.SMS_LAST_TIME);
       if (lastTime === null) {
@@ -26,7 +25,6 @@ class Validator {
     } catch (error) {
       return 0;
     }
-    
   }
 }
 

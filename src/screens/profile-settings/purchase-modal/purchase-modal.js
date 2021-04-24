@@ -2,7 +2,15 @@ import React from "react";
 import { View } from "react-native";
 import FastImage from "react-native-fast-image";
 import LinearGradient from "react-native-linear-gradient";
-import { GradientButton, Text, BackButton, BoxShadow, Touchable, Image, ModalBase as Modal } from "@components";
+import {
+  GradientButton,
+  Text,
+  BackButton,
+  BoxShadow,
+  Touchable,
+  Image,
+  ModalBase as Modal,
+} from "@components";
 import { BlurView } from "@react-native-community/blur";
 import * as Animatable from "react-native-animatable";
 import RNIap from "react-native-iap";
@@ -60,8 +68,8 @@ const detailTextAnim = {
   },
   to: {
     ["opacity"]: 1,
-  }
-}
+  },
+};
 
 class PurchaseModal extends React.Component {
   constructor(props) {
@@ -100,9 +108,9 @@ class PurchaseModal extends React.Component {
           <Image source={Images.app.pluzoplusTick} style={styles.tickIcon} />
           <Text style={styles.detailText}>{detail}</Text>
         </View>
-      )
-    })
-  }
+      );
+    });
+  };
 
   render() {
     let totalMonth = 0;
@@ -128,90 +136,124 @@ class PurchaseModal extends React.Component {
         swipeThreshold={100}
         useNativeDriver={false}
         propagateSwipe={true}
-        onModalWillShow={() => this.setState({visibleAdvantage: false})}
+        onModalWillShow={() => this.setState({ visibleAdvantage: false })}
       >
         <View style={styles.container}>
           <View>
             <BoxShadow
-              setting={this.props.user.premium === 0 ? shadowOptions : this.state.visibleAdvantage ? shadowOptions : shadowOptionsPremium}
+              setting={
+                this.props.user.premium === 0
+                  ? shadowOptions
+                  : this.state.visibleAdvantage
+                  ? shadowOptions
+                  : shadowOptionsPremium
+              }
             />
             <LinearGradient
               colors={["#1A023E", "#0C0518", "#110029"]}
               locations={[0, 0.65, 1]}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              style={this.props.user.premium === 0 ? styles.mainBackground : this.state.visibleAdvantage ? styles.mainBackground : styles.mainBackgroundPremium}>
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={
+                this.props.user.premium === 0
+                  ? styles.mainBackground
+                  : this.state.visibleAdvantage
+                  ? styles.mainBackground
+                  : styles.mainBackgroundPremium
+              }
+            >
               <AnimatableView
                 style={styles.maskContainer}
                 animation={maskAnimation}
                 iterationCount={"infinite"}
-                direction="alternate"
-                duration={8000}>
-                <FastImage source={Images.app.pluzoplusMask} style={styles.pluzoplusMask} />
+                direction='alternate'
+                duration={8000}
+              >
+                <FastImage
+                  source={Images.app.pluzoplusMask}
+                  style={styles.pluzoplusMask}
+                />
               </AnimatableView>
 
               <BackButton onPress={this.props.onSwipeComplete} />
               <View style={styles.contentContainer} pointerEvents={"box-none"}>
                 <View style={styles.logoContainer} pointerEvents={"box-none"}>
-                  <FastImage source={Images.app.pluzoplusLogo} style={styles.pluzoplusLogo} />
-                  <Text style={styles.descText}>Exclusive features to enhance{"\n"}your experience.</Text>
+                  <FastImage
+                    source={Images.app.pluzoplusLogo}
+                    style={styles.pluzoplusLogo}
+                  />
+                  <Text style={styles.descText}>
+                    Exclusive features to enhance{"\n"}your experience.
+                  </Text>
                 </View>
 
                 {this.props.user.premium === 1 && !this.state.visibleAdvantage ? (
                   <View style={styles.advantageButton}>
                     <GradientButton
                       text={"See your advantages"}
-                      textStyle={{color: "#0F0420"}}
+                      textStyle={{ color: "#0F0420" }}
                       colors={GRADIENT.PURCHASE_BUTTON}
                       shadowColor={"#FF6F00"}
-                      onPress={() => this.setState({visibleAdvantage: true})}
+                      onPress={() => this.setState({ visibleAdvantage: true })}
                     />
                   </View>
-                ) : (<AnimatableView style={styles.detailContainer} animation={detailTextAnim} duration={1500}>
-                  <Text style={styles.includesText}>includes:</Text>
-                  {this.renderDetails()}
-                </AnimatableView>)}
-                
+                ) : (
+                  <AnimatableView
+                    style={styles.detailContainer}
+                    animation={detailTextAnim}
+                    duration={1500}
+                  >
+                    <Text style={styles.includesText}>includes:</Text>
+                    {this.renderDetails()}
+                  </AnimatableView>
+                )}
+
                 <Text style={styles.priceText}>
                   {this.props.user.premium === 0 ? "For $11.99/month" : ""}
                 </Text>
               </View>
-
             </LinearGradient>
           </View>
           <View style={styles.buttonContainer}>
             <GradientButton
               text={this.props.user.premium === 1 ? "Purchased" : "Purchase"}
-              textStyle={this.props.user.premium === 1 ? {color: "#0F0420"} : {}}
-              colors={this.props.user.premium === 0 ? GRADIENT.PURCHASE_BUTTON : ["#00FF77", "#00FF77"]}
+              textStyle={this.props.user.premium === 1 ? { color: "#0F0420" } : {}}
+              colors={
+                this.props.user.premium === 0
+                  ? GRADIENT.PURCHASE_BUTTON
+                  : ["#00FF77", "#00FF77"]
+              }
               shadowColor={this.props.user.premium === 0 ? "#FF6F00" : "#00FFE5"}
-              onPress={() => this.setState({visibleSelect: true})}
+              onPress={() => this.setState({ visibleSelect: true })}
             />
-            {this.props.user.premium === 0 && <AnimatableView
-              animation={plusAnimation}
-              iterationCount={"infinite"}
-              direction="alternate"
-              duration={1500}
-              style={styles.plusContainer}
-              pointerEvents={"none"}>
-              <Image
-                source={Images.swipe.pluzoPlusMark}
+            {this.props.user.premium === 0 && (
+              <AnimatableView
+                animation={plusAnimation}
+                iterationCount={"infinite"}
+                direction='alternate'
+                duration={1500}
+                style={styles.plusContainer}
                 pointerEvents={"none"}
-                style={styles.plusImage}
-              />
-            </AnimatableView>}
+              >
+                <Image
+                  source={Images.swipe.pluzoPlusMark}
+                  pointerEvents={"none"}
+                  style={styles.plusImage}
+                />
+              </AnimatableView>
+            )}
           </View>
 
-          <PurchaseSelectModal 
+          <PurchaseSelectModal
             isVisible={this.state.visibleSelect}
             needUpdate={false}
             purchasedMonths={totalMonth}
-            onSwipeComplete={() => this.setState({visibleSelect: false})}
-            onConfirm={(index) => {
-              this.setState({visibleSelect: false});
+            onSwipeComplete={() => this.setState({ visibleSelect: false })}
+            onConfirm={index => {
+              this.setState({ visibleSelect: false });
               this.onPurchase(ItemSkus[index]);
             }}
-            />
+          />
         </View>
       </Modal>
     );

@@ -8,7 +8,7 @@ import {
   Touchable,
   AutoDragSortableView,
   AnimatedButton,
-  ModalBase as Modal
+  ModalBase as Modal,
 } from "@components";
 import { BlurView } from "@react-native-community/blur";
 import { GRADIENT } from "@config";
@@ -33,7 +33,7 @@ class ChooseBadgeModal extends Component {
     let arrBadges = [];
     let badges = this.props.user.badges.map(badge => ({
       id: badge,
-      icon: allBadgesList[badge-1].icon,
+      icon: allBadgesList[badge - 1].icon,
     }));
     allBadgesList.forEach((value, index) => {
       let sameBadges = badges.filter(
@@ -52,7 +52,7 @@ class ChooseBadgeModal extends Component {
   onModalHide = () => {
     const params = new FormData();
     const { badges } = this.state;
-    
+
     badges.forEach(badge => {
       params.append("badges[]", badge.id);
     });
@@ -97,9 +97,7 @@ class ChooseBadgeModal extends Component {
               >
                 <View
                   style={
-                    badge.selected
-                      ? styles.badgeSelectedWrapper
-                      : styles.badgeWrapper
+                    badge.selected ? styles.badgeSelectedWrapper : styles.badgeWrapper
                   }
                 >
                   <Image style={styles.badgeImage} source={Images.badges[badge.id]} />
@@ -109,13 +107,13 @@ class ChooseBadgeModal extends Component {
           );
         })}
       </View>
-    )
-  }
+    );
+  };
 
   renderFreeBadges = () => {
     const { arrBadges } = this.state;
-    let freeBadges = arrBadges.filter((value) => value.id < 7);
-    let plusBadges = arrBadges.filter((value) => value.id > 6);
+    let freeBadges = arrBadges.filter(value => value.id < 7);
+    let plusBadges = arrBadges.filter(value => value.id > 6);
     return (
       <View>
         <Text style={styles.badgeText}>{"Your Badges"}</Text>
@@ -130,9 +128,7 @@ class ChooseBadgeModal extends Component {
                 >
                   <View
                     style={
-                      badge.selected
-                        ? styles.badgeSelectedWrapper
-                        : styles.badgeWrapper
+                      badge.selected ? styles.badgeSelectedWrapper : styles.badgeWrapper
                     }
                   >
                     <Image style={styles.badgeImage} source={Images.badges[badge.id]} />
@@ -150,9 +146,7 @@ class ChooseBadgeModal extends Component {
               <View style={styles.allBadgeItem} key={index}>
                 <View
                   style={
-                    badge.selected
-                      ? styles.badgeSelectedWrapper
-                      : styles.badgeWrapper
+                    badge.selected ? styles.badgeSelectedWrapper : styles.badgeWrapper
                   }
                 >
                   <Image style={styles.badgeImage} source={Images.badges[badge.id]} />
@@ -163,8 +157,8 @@ class ChooseBadgeModal extends Component {
           <View style={styles.badgePlusMask} />
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   render() {
     const { badges } = this.state;
@@ -216,7 +210,7 @@ class ChooseBadgeModal extends Component {
               onDataChange={data => {
                 this.setState({ badges: data });
               }}
-              keyExtractor={(item, index) => (typeof item === "object") ? item.id : 0}
+              keyExtractor={(item, index) => (typeof item === "object" ? item.id : 0)}
               renderItem={(item, index) => {
                 return (
                   <View
@@ -225,8 +219,9 @@ class ChooseBadgeModal extends Component {
                       this.state.dragIndex === index ? styles.badgeActive : {},
                     ]}
                   >
-                    {(typeof item === "object") &&
-                    <Image style={styles.badgeImage} source={Images.badges[item.id]} />}
+                    {typeof item === "object" && (
+                      <Image style={styles.badgeImage} source={Images.badges[item.id]} />
+                    )}
                   </View>
                 );
               }}
@@ -240,23 +235,22 @@ class ChooseBadgeModal extends Component {
           <View style={styles.separatorLine} />
 
           <ScrollView style={styles.allBadgeScroll}>
-            {this.props.user.premium === 1 ? (
-              this.renderAllBadges()
-            ) : (
-              this.renderFreeBadges()
-            )}
+            {this.props.user.premium === 1
+              ? this.renderAllBadges()
+              : this.renderFreeBadges()}
           </ScrollView>
-          {this.props.user.premium === 0 &&
-          <View style={styles.buttonContainer}>
-            <AnimatedButton
-              text={"Get Pluzo Plus"}
-              colors={GRADIENT.PURCHASE_BUTTON}
-              shadowColor={"#FF6F00"}
-              animImage={Images.swipe.pluzoPlusMark}
-              animCotainerStyle={styles.plusContainer}
-              onPress={() => this.props.onPurchase()}
-            />
-          </View>}
+          {this.props.user.premium === 0 && (
+            <View style={styles.buttonContainer}>
+              <AnimatedButton
+                text={"Get Pluzo Plus"}
+                colors={GRADIENT.PURCHASE_BUTTON}
+                shadowColor={"#FF6F00"}
+                animImage={Images.swipe.pluzoPlusMark}
+                animCotainerStyle={styles.plusContainer}
+                onPress={() => this.props.onPurchase()}
+              />
+            </View>
+          )}
         </Screen>
       </Modal>
     );

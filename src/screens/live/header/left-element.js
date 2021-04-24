@@ -20,7 +20,7 @@ const LeftElement: () => React$Node = props => {
         <View style={styles.searchContainer}>
           <SearchInput
             autoFocus
-            onSearch={(text) => {
+            onSearch={text => {
               props.onSearch(text);
             }}
             onRef={ref => {}}

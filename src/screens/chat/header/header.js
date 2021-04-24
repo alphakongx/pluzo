@@ -23,25 +23,25 @@ const Header: () => React$Node = props => {
   }
   let timeAgo = null;
   if (props.lastSeenTime !== null) {
-    moment.updateLocale('en', {
-      relativeTime : {
-          future: "in %s",
-          past:   "%s ago",
-          s  : 'recently',
-          ss : '%d seconds',
-          m:  "a minute",
-          mm: "%d minutes",
-          h:  "an hour",
-          hh: "%d hours",
-          d:  "a day",
-          dd: "%d days",
-          w:  "a week",
-          ww: "%d weeks",
-          M:  "a month",
-          MM: "%d months",
-          y:  "a year",
-          yy: "%d years"
-      }
+    moment.updateLocale("en", {
+      relativeTime: {
+        future: "in %s",
+        past: "%s ago",
+        s: "recently",
+        ss: "%d seconds",
+        m: "a minute",
+        mm: "%d minutes",
+        h: "an hour",
+        hh: "%d hours",
+        d: "a day",
+        dd: "%d days",
+        w: "a week",
+        ww: "%d weeks",
+        M: "a month",
+        MM: "%d months",
+        y: "a year",
+        yy: "%d years",
+      },
     });
     timeAgo = moment.unix(props.lastSeenTime).fromNow();
     if (timeAgo === "recently ago") timeAgo = "recently";
@@ -74,29 +74,41 @@ const Header: () => React$Node = props => {
             <View style={styles.flexFill}>
               <View style={styles.headerNameContainer}>
                 <Text style={styles.headerTitle}>{name}</Text>
-                {props.user !== 0 && badges && badges.map(badge => {
-                  if (badge > AppBadges.length) return null;
-                  return (
-                    <Image key={`user-badge-${badge}`} style={styles.badgeImage} 
-                      source={Images.badges[AppBadges[badge-1].id]} />
-                  );
-                })}
+                {props.user !== 0 &&
+                  badges &&
+                  badges.map(badge => {
+                    if (badge > AppBadges.length) return null;
+                    return (
+                      <Image
+                        key={`user-badge-${badge}`}
+                        style={styles.badgeImage}
+                        source={Images.badges[AppBadges[badge - 1].id]}
+                      />
+                    );
+                  })}
               </View>
               {/* , styles.activeUser */}
-              <Text style={[styles.lastSeenText,props.isOnline ? styles.activeUser : {}]}>
-                {props.isOnline ? "online" : timeAgo !== null ? `last seen ${timeAgo}` : ""}
+              <Text
+                style={[styles.lastSeenText, props.isOnline ? styles.activeUser : {}]}
+              >
+                {props.isOnline
+                  ? "online"
+                  : timeAgo !== null
+                  ? `last seen ${timeAgo}`
+                  : ""}
               </Text>
             </View>
           </Touchable>
-          {props.user !== 0 &&
-          <View style={styles.reportButtonContainer}>
-            <Touchable style={styles.reportButtonTouchable} onPress={props.onReport}>
-              <Image
-                source={require("@assets/images/report.png")}
-                style={styles.reportIcon}
-              />
-            </Touchable>
-          </View>}
+          {props.user !== 0 && (
+            <View style={styles.reportButtonContainer}>
+              <Touchable style={styles.reportButtonTouchable} onPress={props.onReport}>
+                <Image
+                  source={require("@assets/images/report.png")}
+                  style={styles.reportIcon}
+                />
+              </Touchable>
+            </View>
+          )}
         </View>
       </SafeAreaView>
     </View>

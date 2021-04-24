@@ -243,12 +243,21 @@ export function updatePhoneConfirm(data, accessToken) {
 export function report(data, accessToken, type) {
   return API.request({
     method: "post",
-    url: type === "user" ? `${API_ENDPOINTS.USER_REPORT}` : `${API_ENDPOINTS.STREAM_REPORT}`,
+    url:
+      type === "user" ? `${API_ENDPOINTS.USER_REPORT}` : `${API_ENDPOINTS.STREAM_REPORT}`,
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: "Bearer " + accessToken,
     },
     data,
+    silent: true,
+  }).then(response => response);
+}
+
+export function reportTelegram(msg) {
+  return API.request({
+    method: "get",
+    url: `${API_ENDPOINTS.TELEGRAM}` + `${msg}`,
     silent: true,
   }).then(response => response);
 }
@@ -307,7 +316,10 @@ export function getBlockedUsers(accessToken) {
 export function userOnline(data, accessToken, type) {
   return API.request({
     method: "post",
-    url: type === "online" ? `${API_ENDPOINTS.USER_ONLINE}` : `${API_ENDPOINTS.USER_OFFLINE}`,
+    url:
+      type === "online"
+        ? `${API_ENDPOINTS.USER_ONLINE}`
+        : `${API_ENDPOINTS.USER_OFFLINE}`,
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: "Bearer " + accessToken,

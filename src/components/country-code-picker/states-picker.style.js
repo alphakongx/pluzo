@@ -62,8 +62,8 @@ export default StyleSheet.create({
     borderBottomWidth: 0,
     borderLeftWidth: wp(4),
     borderTopColor: "#0B0516",
-    borderRightColor: 'transparent',
-    borderBottomColor: 'transparent',
-    borderLeftColor: 'transparent',
-},
+    borderRightColor: "transparent",
+    borderBottomColor: "transparent",
+    borderLeftColor: "transparent",
+  },
 });

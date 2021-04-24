@@ -81,7 +81,7 @@ class ProfileDetails extends React.Component {
                 <Image
                   key={`badge-${badge}`}
                   style={styles.badgeIcon}
-                  source={Images.badges[AppBadges[badge-1].id]}
+                  source={Images.badges[AppBadges[badge - 1].id]}
                 />
               );
             })}

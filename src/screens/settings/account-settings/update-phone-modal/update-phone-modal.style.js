@@ -24,7 +24,6 @@ export default StyleSheet.create({
   phoneContainer: {
     flexDirection: "row",
     marginHorizontal: wp(18),
-    
   },
   phoneLabel: {
     fontFamily: "OpenSans",

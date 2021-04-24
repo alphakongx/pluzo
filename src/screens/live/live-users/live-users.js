@@ -33,9 +33,12 @@ const LiveUsers: () => React$Node = props => {
       renderItem={({ item: item, index }) => {
         if (item.user.id === props.user.id) {
           return (
-            <Touchable style={styles.itemContainer} onPress={() => {
-              props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: props.user });
-            }}>
+            <Touchable
+              style={styles.itemContainer}
+              onPress={() => {
+                props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: props.user });
+              }}
+            >
               <View>
                 {/* <BoxShadow
                   setting={{

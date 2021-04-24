@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import { View, SafeAreaView, ScrollView } from "react-native";
 import { NavigationEvents } from "react-navigation";
-import {
-  Screen,
-  Image,
-  Touchable,
-  BoxShadow,
-} from "@components";
+import { Screen, Image, Touchable, BoxShadow } from "@components";
 import RNMasonryScroll from "react-native-masonry-scrollview";
 import * as Animatable from "react-native-animatable";
 import LinearGradient from "react-native-linear-gradient";
@@ -48,14 +43,17 @@ class Live extends Component {
       LiveTypes.STREAM_LIST_SUCCESS,
       this.updateStreamList,
     );
-    this.updateActionStreams = EventBus.on("Start_update", (jsonData) => {
+    this.updateActionStreams = EventBus.on("Start_update", jsonData => {
       this.props.requestStreamList(this.props.token);
 
       if (jsonData === undefined) return;
       let data = JSON.parse(jsonData);
       if (this.props.channelName === data.stream.channel) {
         this.props.updateStreamSuccess(data.stream);
-        this.props.updateStreamInfo(data.stream.boost_end_time, parseInt(data.stream.invite_only, 10));
+        this.props.updateStreamInfo(
+          data.stream.boost_end_time,
+          parseInt(data.stream.invite_only, 10),
+        );
       }
     });
     this._unsubscribe = this.props.navigation.addListener("willFocus", () => {
@@ -84,23 +82,23 @@ class Live extends Component {
     }
   }
 
-  onWillFocus = (payload) => {
+  onWillFocus = payload => {
     if (this.pageStartTime == 0) {
       this.pageStartTime = moment().unix();
     }
-  }
+  };
 
-  onWillBlur = (payload) => {
+  onWillBlur = payload => {
     if (payload.lastState.key !== payload.state.key) {
       const params = {
         timeStart: this.pageStartTime,
         timeEnd: moment().unix(),
         page: "Live",
-      }
+      };
       this.pageStartTime = 0;
       this.props.requestPageTime(params, this.props.token);
     }
-  }
+  };
 
   updateStreamList = () => {
     setTimeout(() => {
@@ -118,7 +116,7 @@ class Live extends Component {
       setTimeout(() => {
         this.setState({ clickedNew: false });
       }, 500);
-    })
+    });
     const { user } = this.props;
     let channelName = `${new Date().getTime()}-${user.id}`;
     let params = {
@@ -126,7 +124,10 @@ class Live extends Component {
       isBroadcaster: true,
       isJoin: false,
     };
-    if (this.props.streamStatus !== null && this.props.streamStatus !== StreamStatus.NONE) {
+    if (
+      this.props.streamStatus !== null &&
+      this.props.streamStatus !== StreamStatus.NONE
+    ) {
       EventBus.publish("APP_END_STREAM_ACTION", params);
     } else {
       EventBus.publish("NEW_STREAM_ACTION", params);
@@ -136,12 +137,17 @@ class Live extends Component {
   onJoinStream = channelItem => {
     let channelName = channelItem.channel;
     let names = channelName.split("-");
-    if (names.length > 1 && parseInt(names[1], 10) === this.props.user.id ||
-      this.props.channelName === channelName) {
+    if (
+      (names.length > 1 && parseInt(names[1], 10) === this.props.user.id) ||
+      this.props.channelName === channelName
+    ) {
       return;
     }
-    
-    if (channelItem.ban_list.filter((value) => value.user_id === this.props.user.id).length > 0) {
+
+    if (
+      channelItem.ban_list.filter(value => value.user_id === this.props.user.id).length >
+      0
+    ) {
       return;
     }
 
@@ -159,21 +165,26 @@ class Live extends Component {
 
   renderStaticViews = () => {
     const { category, searchText } = this.state;
-    let streams = this.props.trendingStreams.filter(value => value.info.streamers_images.length > 0);
+    let streams = this.props.trendingStreams.filter(
+      value => value.info.streamers_images.length > 0,
+    );
     if (category !== 0) {
       streams = this.props.trendingStreams.filter(
-        stream => parseInt(stream.category, 10) === category
+        stream => parseInt(stream.category, 10) === category,
       );
     }
     if (searchText !== "") {
       streams = this.props.trendingStreams.filter(
-        stream => stream.name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) > -1
+        stream =>
+          stream.name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) > -1,
       );
     }
     return (
       <View>
-        <Header navigation={this.props.navigation}
-          onSearch={(text) => this.setState({searchText: text})} />
+        <Header
+          navigation={this.props.navigation}
+          onSearch={text => this.setState({ searchText: text })}
+        />
         <View style={styles.separator} />
         <LiveTags onChangeCategory={value => this.setState({ category: value })} />
 
@@ -222,7 +233,7 @@ class Live extends Component {
             this.onJoinStream(item);
           }}
         >
-          <LiveItem item={item}/>
+          <LiveItem item={item} />
         </Touchable>
       </AnimatableView>
     );
@@ -232,7 +243,9 @@ class Live extends Component {
     return (
       <Touchable
         style={styles.favContainer}
-        disabled={this.props.streamStatus === StreamStatus.STARTED || this.state.clickedNew}
+        disabled={
+          this.props.streamStatus === StreamStatus.STARTED || this.state.clickedNew
+        }
         onPress={this.onNewStream}
       >
         <BoxShadow
@@ -248,7 +261,7 @@ class Live extends Component {
             offsetY: 0,
           }}
         />
-        {(this.props.streamStatus === StreamStatus.STARTED || this.state.clickedNew) ? (
+        {this.props.streamStatus === StreamStatus.STARTED || this.state.clickedNew ? (
           <View style={[styles.plusFav, styles.favGray]}>
             <Image source={Images.app.icPlus} />
           </View>
@@ -268,7 +281,9 @@ class Live extends Component {
 
   render() {
     const { category, searchText } = this.state;
-    let streams = this.props.allStreams.filter(value => value.info.streamers_images.length > 0);
+    let streams = this.props.allStreams.filter(
+      value => value.info.streamers_images.length > 0,
+    );
     if (category !== 0) {
       streams = this.props.allStreams.filter(
         stream => parseInt(stream.category, 10) === this.state.category,
@@ -276,7 +291,8 @@ class Live extends Component {
     }
     if (searchText !== "") {
       streams = this.props.allStreams.filter(
-        stream => stream.name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) > -1,
+        stream =>
+          stream.name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) > -1,
       );
     }
     return (
@@ -297,10 +313,11 @@ class Live extends Component {
             </ScrollView>
             {this.renderNewButton()}
           </View>
-        
-          <NavigationEvents 
-            onWillFocus={(payload) => this.onWillFocus(payload)}
-            onWillBlur={(payload) => this.onWillBlur(payload)} />
+
+          <NavigationEvents
+            onWillFocus={payload => this.onWillFocus(payload)}
+            onWillBlur={payload => this.onWillBlur(payload)}
+          />
         </SafeAreaView>
       </Screen>
     );

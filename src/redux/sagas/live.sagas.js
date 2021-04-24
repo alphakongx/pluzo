@@ -22,7 +22,7 @@ import {
   streamKickUser,
   streamBanList,
   getLiveSettings,
-  setLiveSettings
+  setLiveSettings,
 } from "@redux/api";
 
 export function* watchLiveRequests() {
@@ -340,7 +340,7 @@ function* requestSetSettings(action) {
   try {
     const { token, data } = action;
     const requestParams = new FormData();
-    
+
     requestParams.append("filter", data.filter);
     requestParams.append("country", data.country);
     requestParams.append("state", data.state === null ? "Alabama" : data.state);

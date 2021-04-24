@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Platform, SafeAreaView, View } from "react-native";
 import { Screen, Text, Image, Touchable } from "@components";
-import { request, checkMultiple, PERMISSIONS, RESULTS, openSettings} from 'react-native-permissions';
+import {
+  request,
+  checkMultiple,
+  PERMISSIONS,
+  RESULTS,
+  openSettings,
+} from "react-native-permissions";
 import Images from "@assets/Images";
 
 import Header from "../../header";
@@ -16,38 +22,39 @@ const CameraMicPermissionScreen: () => React$Node = props => {
     if (Platform.OS === "android") {
       arrPermissions = [PERMISSIONS.ANDROID.CAMERA, PERMISSIONS.ANDROID.RECORD_AUDIO];
     }
-    checkMultiple(arrPermissions).then((statuses) => {
-      if (Platform.OS === "ios") {
-        if (statuses[PERMISSIONS.IOS.CAMERA] === RESULTS.GRANTED) {
-          setCameraEnabled("Enabled");
-        } else if (statuses[PERMISSIONS.IOS.CAMERA] === RESULTS.BLOCKED) {
-          setCameraEnabled("Disabled");
+    checkMultiple(arrPermissions)
+      .then(statuses => {
+        if (Platform.OS === "ios") {
+          if (statuses[PERMISSIONS.IOS.CAMERA] === RESULTS.GRANTED) {
+            setCameraEnabled("Enabled");
+          } else if (statuses[PERMISSIONS.IOS.CAMERA] === RESULTS.BLOCKED) {
+            setCameraEnabled("Disabled");
+          } else {
+            setCameraEnabled("Not Requested");
+          }
+          if (statuses[PERMISSIONS.IOS.MICROPHONE] === RESULTS.GRANTED) {
+            setMicEnabled("Enabled");
+          } else if (statuses[PERMISSIONS.IOS.MICROPHONE] === RESULTS.BLOCKED) {
+            setMicEnabled("Disabled");
+          } else {
+            setMicEnabled("Not Requested");
+          }
         } else {
-          setCameraEnabled("Not Requested");
+          if (statuses[PERMISSIONS.ANDROID.CAMERA] === RESULTS.GRANTED) {
+            setCameraEnabled("Enabled");
+          } else {
+            setCameraEnabled("Disabled");
+          }
+          if (statuses[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.GRANTED) {
+            setMicEnabled("Enabled");
+          } else {
+            setMicEnabled("Disabled");
+          }
         }
-        if (statuses[PERMISSIONS.IOS.MICROPHONE] === RESULTS.GRANTED) {
-          setMicEnabled("Enabled");
-        } else if (statuses[PERMISSIONS.IOS.MICROPHONE] === RESULTS.BLOCKED) {
-          setMicEnabled("Disabled");
-        } else {
-          setMicEnabled("Not Requested");
-        }
-      } else {
-        if (statuses[PERMISSIONS.ANDROID.CAMERA] === RESULTS.GRANTED) {
-          setCameraEnabled("Enabled");
-        } else {
-          setCameraEnabled("Disabled");
-        }
-        if (statuses[PERMISSIONS.ANDROID.RECORD_AUDIO] === RESULTS.GRANTED) {
-          setMicEnabled("Enabled");
-        } else {
-          setMicEnabled("Disabled");
-        }
-      }
-      
-    }).catch(e => {
-      console.log("Error on checking camera", e);
-    });
+      })
+      .catch(e => {
+        console.log("Error on checking camera", e);
+      });
   }, []);
 
   const renderItem = (title, text, hint) => {
@@ -69,35 +76,47 @@ const CameraMicPermissionScreen: () => React$Node = props => {
         <View style={styles.flexFill}>
           <Header title={"Camera and microphone"} onBack={props.navigation.goBack} />
 
-          <Touchable onPress={() => {
-            if (cameraEnabled === "Not Requested") {
-              request(Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA).then((result) => {
-                if (result === RESULTS.GRANTED) {
-                  setCameraEnabled("Enabled");
-                } else {
-                  setCameraEnabled("Disabled");
-                }
-              });
-            } else {
-              openSettings().catch(() => console.warn('cannot open settings'));
-            }
-          }}>
+          <Touchable
+            onPress={() => {
+              if (cameraEnabled === "Not Requested") {
+                request(
+                  Platform.OS === "ios"
+                    ? PERMISSIONS.IOS.CAMERA
+                    : PERMISSIONS.ANDROID.CAMERA,
+                ).then(result => {
+                  if (result === RESULTS.GRANTED) {
+                    setCameraEnabled("Enabled");
+                  } else {
+                    setCameraEnabled("Disabled");
+                  }
+                });
+              } else {
+                openSettings().catch(() => console.warn("cannot open settings"));
+              }
+            }}
+          >
             {renderItem("Manage camera access", cameraEnabled, null)}
           </Touchable>
           <View style={styles.seperator} />
-          <Touchable onPress={() => {
-            if (micEnabled === "Not Requested") {
-              request(Platform.OS === "ios" ? PERMISSIONS.IOS.MICROPHONE : PERMISSIONS.ANDROID.RECORD_AUDIO).then((result) => {
-                if (result === RESULTS.GRANTED) {
-                  setMicEnabled("Enabled");
-                } else {
-                  setMicEnabled("Disabled");
-                }
-              });
-            } else {
-              openSettings().catch(() => console.warn('cannot open settings'));
-            }
-          }}>
+          <Touchable
+            onPress={() => {
+              if (micEnabled === "Not Requested") {
+                request(
+                  Platform.OS === "ios"
+                    ? PERMISSIONS.IOS.MICROPHONE
+                    : PERMISSIONS.ANDROID.RECORD_AUDIO,
+                ).then(result => {
+                  if (result === RESULTS.GRANTED) {
+                    setMicEnabled("Enabled");
+                  } else {
+                    setMicEnabled("Disabled");
+                  }
+                });
+              } else {
+                openSettings().catch(() => console.warn("cannot open settings"));
+              }
+            }}
+          >
             {renderItem("Manage microphone access", micEnabled, null)}
           </Touchable>
         </View>

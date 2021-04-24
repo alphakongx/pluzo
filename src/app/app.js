@@ -25,8 +25,12 @@ if (Platform.OS === "ios") {
   KeyboardManager.setShouldResignOnTouchOutside(true);
 }
 
+// NetInfo.configure({
+//   reachabilityUrl: 'http://10.0.2.2/api/web/index.php',
+// });
+
 NetInfo.configure({
-  reachabilityUrl: 'https://api.pluzo.com/',
+  reachabilityUrl: "https://api.pluzo.com/",
 });
 
 class App extends React.Component {
@@ -96,20 +100,27 @@ class App extends React.Component {
         this.openedTime = 0;
       }
     }, 1000);
-  }
+  };
 
   _handleAppStateChange = nextAppState => {
-    if (this.state.appState.match(/inactive|background|unknown/) && nextAppState === "active") {
-      OneSignal.getPermissionSubscriptionState((status) => {
+    if (
+      this.state.appState.match(/inactive|background|unknown/) &&
+      nextAppState === "active"
+    ) {
+      OneSignal.getPermissionSubscriptionState(status => {
         this.props.updatePushStatus(status.notificationsEnabled);
       });
-      this.props.token && userOnline(null, this.props.token, "online").catch(e => console.log(e));
+      this.props.token &&
+        userOnline(null, this.props.token, "online").catch(e => console.log(e));
       if (!this.state.firstLoading) {
         this.props.token && this.props.requestProfile(this.props.token);
         EventBus.publish("AppState_Active");
       }
     } else if (this.state.appState.match(/inactive/) && nextAppState === "background") {
-      this.props.token && userOnline(null, this.props.token, "offline").then(res => console.log("offline")).catch(e => console.log(e));
+      this.props.token &&
+        userOnline(null, this.props.token, "offline")
+          .then(res => console.log("offline"))
+          .catch(e => console.log(e));
       EventBus.publish("AppState_InActive");
     }
     this.setState({ appState: nextAppState });
@@ -125,7 +136,7 @@ class App extends React.Component {
       TUTORIAL.POINTER,
       TUTORIAL.SHOW_GENDER,
     ]);
-  }
+  };
 
   isLogin = () => {
     const { user, token } = this.props;
@@ -193,10 +204,16 @@ class App extends React.Component {
       if (data.user === this.props.user.id) {
         EventBus.publish("NEW_MSG", data.data);
         let objData = JSON.parse(data.data);
-        if (objData[0].type === "message" && parseInt(this.props.chatUserId, 10) !== objData[0].user._id) {
+        if (
+          objData[0].type === "message" &&
+          parseInt(this.props.chatUserId, 10) !== objData[0].user._id
+        ) {
           this.props.updateNotification({
             type: "chat",
-            message: objData[0].image !== null ? `${objData[0].user.first_name} sent an image` : objData[0].text,
+            message:
+              objData[0].image !== null
+                ? `${objData[0].user.first_name} sent an image`
+                : objData[0].text,
             user: objData[0].user,
             chatId: objData[0].chat_id,
           });
@@ -205,7 +222,10 @@ class App extends React.Component {
     } else if (data.action === "Start_stream") {
       this.props.requestStreamList(this.props.token);
       let objData = JSON.parse(data.data);
-      if (objData.friends.filter((value) => parseInt(value.id, 10) === this.props.user.id).length > 0) {
+      if (
+        objData.friends.filter(value => parseInt(value.id, 10) === this.props.user.id)
+          .length > 0
+      ) {
         this.props.updateNotification({
           type: "livefriend",
           stream: objData.stream,
@@ -239,33 +259,49 @@ class App extends React.Component {
       }
     } else if (data.action === "Friend_remove") {
       let userData = JSON.parse(data.data);
-      if (userData.host._id === this.props.user.id || 
-        userData.user_target_id._id === this.props.user.id) {
+      if (
+        userData.host._id === this.props.user.id ||
+        userData.user_target_id._id === this.props.user.id
+      ) {
         EventBus.publish("Need_Update_Friends");
-        if (parseInt(this.props.chatUserId, 10) === parseInt(userData.host._id, 10) || 
-          parseInt(this.props.chatUserId, 10) === parseInt(userData.user_target_id._id, 10)) {
+        if (
+          parseInt(this.props.chatUserId, 10) === parseInt(userData.host._id, 10) ||
+          parseInt(this.props.chatUserId, 10) ===
+            parseInt(userData.user_target_id._id, 10)
+        ) {
           EventBus.publish("Need_Close_Chat");
         }
       }
     } else if (data.action === "Friend_overlap") {
       let userData = JSON.parse(data.data);
-      if (userData.host._id === this.props.user.id || userData.user_target_id._id === this.props.user.id) {
+      if (
+        userData.host._id === this.props.user.id ||
+        userData.user_target_id._id === this.props.user.id
+      ) {
         EventBus.publish("Need_Update_Friends");
         this.props.requestProfile(this.props.token);
         this.props.updateNotification({
           type: "friend-match",
-          user: userData.host._id === this.props.user.id ? userData.user_target_id : userData.host,
+          user:
+            userData.host._id === this.props.user.id
+              ? userData.user_target_id
+              : userData.host,
         });
-        let compareId = userData.host._id === this.props.user.id ? userData.user_target_id._id : userData.host._id;
+        let compareId =
+          userData.host._id === this.props.user.id
+            ? userData.user_target_id._id
+            : userData.host._id;
         if (this.props.cards) {
-          let tmpIndex = this.props.cards.findIndex((value) => value.id === parseInt(compareId, 10));
+          let tmpIndex = this.props.cards.findIndex(
+            value => value.id === parseInt(compareId, 10),
+          );
           if (tmpIndex !== -1) {
             EventBus.publish("Need_Update_Cards", tmpIndex);
           }
         }
       }
     } else if (
-      data.action === "Stream_join_user" || 
+      data.action === "Stream_join_user" ||
       data.action === "Stream_disconnect_user" ||
       data.action === "Stream_ask_join" ||
       data.action === "Stream_refused_join" ||
@@ -276,7 +312,8 @@ class App extends React.Component {
       data.action === "Stream_user_refused_join" ||
       data.action === "Update_badges" ||
       data.action === "Stream_user_kick" ||
-      data.action === "Stream_user_ban") {
+      data.action === "Stream_user_ban"
+    ) {
       EventBus.publish("player_actions", data.action, data.data);
     } else {
       EventBus.publish(data.action, data.data);
@@ -303,16 +340,17 @@ class App extends React.Component {
           }}
           uriPrefix={"pluzo://"}
         />
-        {!this.props.isConnected &&
-        <View style={{position: "absolute", top: 0, left: 0, right: 0}}>
-          <NoConnectionAlert />
-        </View>}
+        {!this.props.isConnected && (
+          <View style={{ position: "absolute", top: 0, left: 0, right: 0 }}>
+            <NoConnectionAlert />
+          </View>
+        )}
         {this.isLogin() && (
           <WS
             url={"ws://3.18.139.193:27801?user=" + this.props.user.id}
             onMessage={this.onMessage}
             onOpen={() => console.log("Opened socket")}
-            onError={(error) => console.log(error)}
+            onError={error => console.log(error)}
             onClose={() => console.log("Closed socket")}
             reconnect
             isActive={this.state.appState}

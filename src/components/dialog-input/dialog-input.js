@@ -83,13 +83,13 @@ class DialogInput extends PureComponent {
     };
     const { keyboardSpacing, height } = this.state;
     let realSpacing = (screenHeight - height) / 2;
-    
+
     return (
       <Modal
         animationIn={"fadeIn"}
         animationOut={"fadeOut"}
         backdropOpacity={0}
-        style={{margin: 0}}
+        style={{ margin: 0 }}
         isVisible={this.props.isDialogVisible}
         onModalHide={this.handleOnRequestClose}
       >
@@ -107,7 +107,11 @@ class DialogInput extends PureComponent {
                   height: e.nativeEvent.layout.height,
                 });
               }}
-              style={(realSpacing - keyboardSpacing) < 10 ? {marginBottom: keyboardSpacing - realSpacing + 30} : {}}
+              style={
+                realSpacing - keyboardSpacing < 10
+                  ? { marginBottom: keyboardSpacing - realSpacing + 30 }
+                  : {}
+              }
             >
               <BoxShadow setting={shadowOption} />
               <Screen
@@ -187,12 +191,12 @@ class DialogInput extends PureComponent {
             </View>
           </TouchableOpacity>
           <KeyboardListener
-            onWillShow={(e) => this.setState({ keyboardSpacing: e.endCoordinates.height })}
-            onWillHide={(e) => {
+            onWillShow={e => this.setState({ keyboardSpacing: e.endCoordinates.height })}
+            onWillHide={e => {
               this.setState({ keyboardSpacing: 0 });
             }}
-            onDidShow={(e) => this.setState({ keyboardSpacing: e.endCoordinates.height })}
-            onDidHide={(e) => {
+            onDidShow={e => this.setState({ keyboardSpacing: e.endCoordinates.height })}
+            onDidHide={e => {
               this.setState({ keyboardSpacing: 0 });
             }}
           />

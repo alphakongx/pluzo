@@ -7,25 +7,29 @@ import Header from "../header";
 import styles from "./blocked-users.style";
 
 const BlockedUsersScreen: () => React$Node = props => {
-
   const { token } = props;
 
-  const onUnblockUser = (blockedUser) => {
+  const onUnblockUser = blockedUser => {
     props.userUnblock(blockedUser._id, token);
-    let newData = props.blockedUsers.filter((value) => value.user_target_id._id !== blockedUser._id);
+    let newData = props.blockedUsers.filter(
+      value => value.user_target_id._id !== blockedUser._id,
+    );
     props.updateBlockedUsers(newData);
-  }
+  };
 
-  const renderItem = (blockedUser) => {
+  const renderItem = blockedUser => {
     return (
       <View style={styles.itemContainer}>
-        <Image source={{uri: blockedUser.images[0].path}} style={styles.itemImage} resiz/>
+        <Image
+          source={{ uri: blockedUser.images[0].path }}
+          style={styles.itemImage}
+          resiz
+        />
         <View style={styles.flexFill}>
           <Text style={styles.itemName}>{blockedUser.first_name}</Text>
           <Text style={styles.itemSubName}>{blockedUser.username}</Text>
         </View>
-        <Touchable style={styles.itemButton}
-          onPress={() => onUnblockUser(blockedUser)}>
+        <Touchable style={styles.itemButton} onPress={() => onUnblockUser(blockedUser)}>
           <Text style={styles.itemButtonText}>Unblock</Text>
         </Touchable>
       </View>
@@ -46,7 +50,6 @@ const BlockedUsersScreen: () => React$Node = props => {
               return renderItem(item.user_target_id);
             }}
           />
-          
         </View>
       </SafeAreaView>
     </Screen>

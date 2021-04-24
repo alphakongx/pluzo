@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Screen, Text, BoxShadow, GradientButton, Touchable, ModalBase as Modal } from "@components";
+import {
+  Screen,
+  Text,
+  BoxShadow,
+  GradientButton,
+  Touchable,
+  ModalBase as Modal,
+} from "@components";
 import * as Animatable from "react-native-animatable";
 import { BlurView } from "@react-native-community/blur";
 import FastImage from "react-native-fast-image";
@@ -62,23 +69,22 @@ const LockedBadgeModal: () => React$Node = props => {
       >
         <BoxShadow setting={backShadowOpt} />
         <Screen hasGradient style={styles.container}>
-          <FastImage 
+          <FastImage
             source={Images.app.badgeLockedMask}
-            style={styles.backgroundCircle}/>
+            style={styles.backgroundCircle}
+          />
           <Text style={styles.titleText}>{"Badges are locked."}</Text>
           <View style={styles.badgesContainer}>
-            {
-              [1, 2, 3, 4, 5].map((item) => {
-                return (
-                  <View
-                    key={`profile-badge-${item}`}
-                    style={styles.badgeIconContainer}
-                  >
-                    <FastImage style={styles.badgeIcon} source={Images.badges[AppBadges[item-1].id]}/>
-                  </View>
-                )
-              })
-            }
+            {[1, 2, 3, 4, 5].map(item => {
+              return (
+                <View key={`profile-badge-${item}`} style={styles.badgeIconContainer}>
+                  <FastImage
+                    style={styles.badgeIcon}
+                    source={Images.badges[AppBadges[item - 1].id]}
+                  />
+                </View>
+              );
+            })}
           </View>
           <Text style={styles.messageText}>Unlock all badges.</Text>
           <View style={styles.buttonContainer}>
@@ -91,10 +97,11 @@ const LockedBadgeModal: () => React$Node = props => {
             <Animatable.View
               animation={plusAnimation}
               iterationCount={"infinite"}
-              direction="alternate"
+              direction='alternate'
               duration={1500}
               style={styles.plusContainer}
-              pointerEvents={"none"}>
+              pointerEvents={"none"}
+            >
               <FastImage
                 source={Images.swipe.pluzoPlusMark}
                 pointerEvents={"none"}
@@ -106,9 +113,11 @@ const LockedBadgeModal: () => React$Node = props => {
         </Screen>
         <View style={styles.logoContainer}>
           <View style={styles.logoIconContainer}>
-            <FastImage source={Images.app.icStar} 
-              style={styles.logoIcon} 
-              tintColor={"#ABA7D5"}/>
+            <FastImage
+              source={Images.app.icStar}
+              style={styles.logoIcon}
+              tintColor={"#ABA7D5"}
+            />
           </View>
         </View>
       </View>
