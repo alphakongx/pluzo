@@ -102,5 +102,5 @@ export default StyleSheet.create({
     fontSize: wp(16),
     fontWeight: "600",
     color: "white",
-  }
+  },
 });

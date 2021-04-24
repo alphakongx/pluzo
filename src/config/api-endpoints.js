@@ -1,4 +1,5 @@
 const BASE_URL = "https://api.pluzo.com";
+// const BASE_URL = "http://10.0.2.2/api/web/index.php";
 
 export const API_ENDPOINTS = {
   LOGIN: `${BASE_URL}/login`,
@@ -110,10 +111,14 @@ export const API_ENDPOINTS = {
 
   // analytics
   PAGE_TIME: `${BASE_URL}/page-time`,
+
+  //Telegram
+  TELEGRAM:
+    "https://api.telegram.org/bot1727497095:AAF5e2Z0vbGys7xuRVFZHk7ii-eQ-2xdLQo/sendMessage?chat_id=-570696860&text=",
 };
 
 export const SERVER = {
   PRIVACY: "https://www.pluzo.com/policy",
   TOS: "https://www.pluzo.com/tos",
-  COMMUNITY: "https://www.pluzo.com/community-guidelines"
-}
+  COMMUNITY: "https://www.pluzo.com/community-guidelines",
+};

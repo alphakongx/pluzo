@@ -8,7 +8,6 @@ import Images from "@assets/Images";
 import styles from "./stream-emoji-view.style";
 
 const StreamEmojiView: () => React$Node = props => {
-
   const data = [];
   Object.values(AppTags).forEach(value => {
     data.push(value);
@@ -32,22 +31,27 @@ const StreamEmojiView: () => React$Node = props => {
               >
                 <LinearGradient
                   colors={Object.values(item.color)}
-                  start={{x: 1, y: 0}}
-                  end={{x: 0, y: 1}}
-                  style={styles.itemColorView}>
-                  <Text style={[styles.itemText, {textShadowColor: item.shadowColor}]}>{item.name}</Text>
-                  {item.icon && 
-                  <Image
-                    source={Images.live[item.icon]} 
-                    style={[
-                      item.id === 1 ? styles.itemImage1 : styles.itemImage,
-                      item.id === 3 && { top: 3 },
-                      ]} />}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.itemColorView}
+                >
+                  <Text style={[styles.itemText, { textShadowColor: item.shadowColor }]}>
+                    {item.name}
+                  </Text>
+                  {item.icon && (
+                    <Image
+                      source={Images.live[item.icon]}
+                      style={[
+                        item.id === 1 ? styles.itemImage1 : styles.itemImage,
+                        item.id === 3 && { top: 3 },
+                      ]}
+                    />
+                  )}
                 </LinearGradient>
               </Touchable>
             );
           })}
-        </View>     
+        </View>
       </Screen>
     </View>
   );

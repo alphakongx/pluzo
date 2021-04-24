@@ -28,23 +28,23 @@ class Inbox extends Component {
     this.pageStartTime = 0;
   }
 
-  onWillFocus = (payload) => {
+  onWillFocus = payload => {
     if (this.pageStartTime == 0) {
       this.pageStartTime = moment().unix();
     }
-  }
+  };
 
-  onWillBlur = (payload) => {
+  onWillBlur = payload => {
     if (payload.lastState.key !== payload.state.key) {
       const params = {
         timeStart: this.pageStartTime,
         timeEnd: moment().unix(),
         page: "Chat",
-      }
+      };
       this.pageStartTime = 0;
       this.props.requestPageTime(params, this.props.token);
     }
-  }
+  };
 
   onPendingRequest = () => {
     this.setState({ visibleAddFriend: false }, () => {
@@ -78,14 +78,21 @@ class Inbox extends Component {
         Authorization: "Bearer " + this.props.token,
       },
       data,
-    }).then((res) => {
+    }).then(res => {
       this.props.requestChannels(this.props.token);
     });
-    this.setState({visibleConfirmDelete: false, removeUser: null});
-  }
+    this.setState({ visibleConfirmDelete: false, removeUser: null });
+  };
 
   render() {
-    const { reportUser, visibleReport, visibleAddFriend, visiblePendingRequest, visibleConfirmDelete, removeUser } = this.state;
+    const {
+      reportUser,
+      visibleReport,
+      visibleAddFriend,
+      visiblePendingRequest,
+      visibleConfirmDelete,
+      removeUser,
+    } = this.state;
     return (
       <Screen hasGradient style={styles.container}>
         <SafeAreaView style={styles.safeAreaContainer}>
@@ -112,22 +119,19 @@ class Inbox extends Component {
               </View>
             </View>
             <View style={styles.contentContainer}>
-              <NewFriends
-                navigation={this.props.navigation}
-              />
-              <View
-                style={[
-                  styles.separator,
-                  styles.marginTopZero,
-                ]}
-              />
+              <NewFriends navigation={this.props.navigation} />
+              <View style={[styles.separator, styles.marginTopZero]} />
               <Messages
                 navigation={this.props.navigation}
                 onPressItem={(chatId, chatUser) => {
                   this.props.navigation.navigate(SCREENS.CHAT, { chatId, chatUser });
                 }}
-                onReport={(user) => this.setState({reportUser: user, visibleReport: true})}
-                onRemove={(user) => this.setState({removeUser: user, visibleConfirmDelete: true})}
+                onReport={user =>
+                  this.setState({ reportUser: user, visibleReport: true })
+                }
+                onRemove={user =>
+                  this.setState({ removeUser: user, visibleConfirmDelete: true })
+                }
               />
             </View>
           </View>
@@ -145,24 +149,25 @@ class Inbox extends Component {
           startLoading={false}
           dismissModal={() => this.setState({ visiblePendingRequest: false })}
         />
-        
+
         <ReportModal
           isVisible={visibleReport && reportUser !== null}
-          userId={reportUser ? (reportUser.id || reportUser._id) : null}
+          userId={reportUser ? reportUser.id || reportUser._id : null}
           onDismiss={() => this.setState({ visibleReport: false })}
         />
 
         <NotificationModal
           isVisible={visibleConfirmDelete && removeUser !== null}
-          userId={removeUser ? (removeUser.id || removeUser._id) : null}
-          userName={removeUser ? (removeUser.name || removeUser.username) : null}
-          onBack={() => this.setState({visibleConfirmDelete: false})}
+          userId={removeUser ? removeUser.id || removeUser._id : null}
+          userName={removeUser ? removeUser.name || removeUser.username : null}
+          onBack={() => this.setState({ visibleConfirmDelete: false })}
           onConfirm={(userId, userName) => this.onDeleteChat(userId, userName)}
         />
-        
-        <NavigationEvents 
-          onWillFocus={(payload) => this.onWillFocus(payload)}
-          onWillBlur={(payload) => this.onWillBlur(payload)} />
+
+        <NavigationEvents
+          onWillFocus={payload => this.onWillFocus(payload)}
+          onWillBlur={payload => this.onWillBlur(payload)}
+        />
       </Screen>
     );
   }

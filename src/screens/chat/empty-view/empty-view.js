@@ -20,10 +20,12 @@ const EmptyView: () => React$Node = props => {
   }
 
   return (
-    <Touchable style={styles.container}
+    <Touchable
+      style={styles.container}
       onPress={() => {
         props.navigation.navigate(SCREENS.PROFILE_VIEW, { user: props.user });
-      }}>
+      }}
+    >
       <FastImage
         style={styles.userImage}
         source={typeof picture === "string" ? { uri: picture } : picture}

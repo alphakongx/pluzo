@@ -32,8 +32,10 @@ function* requestCards(action) {
     yield delay(delayTime);
 
     var response = yield call(getCards, token);
-    let data = response.data.data.swipe.map(item => ({ uri: (item.images && item.images.length > 0) ? item.images[0].path : "" }));
-    FastImage.preload(data.filter((value) => value.uri !== ""));
+    let data = response.data.data.swipe.map(item => ({
+      uri: item.images && item.images.length > 0 ? item.images[0].path : "",
+    }));
+    FastImage.preload(data.filter(value => value.uri !== ""));
 
     yield put(SwipeCreators.requestCardsSuccess(response.data.data));
   } catch (error) {
@@ -49,7 +51,7 @@ function* addLike(action) {
     params.append("user_target_id", userId);
     params.append("is_like", "1");
     const response = yield call(sendLike, params, token);
-    
+
     let lastLikeData = response.data.data.last_like_data;
     if (lastLikeData.like_match === 1 && showMatches === true) {
       EventBus.publish("New_Matches", lastLikeData.user_target_id);
@@ -169,7 +171,7 @@ function* requestRunBoost(action) {
       params.append("channel_id", channelName);
     }
     const response = yield call(runBoost, params, token);
-    
+
     yield put(UserCreators.updateUserSuccess(response.data.data.user));
     yield put(SwipeCreators.runBoostSuccess());
   } catch (error) {
@@ -185,7 +187,7 @@ function* requestRunRewinds(action) {
     params.append("user_target_id", userId);
 
     const response = yield call(runRewinds, params, token);
-    
+
     yield put(UserCreators.updateUserSuccess(response.data.data.user));
     yield put(SwipeCreators.runRewindsSuccess());
   } catch (error) {

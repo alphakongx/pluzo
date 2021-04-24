@@ -14,7 +14,7 @@ import { TUTORIAL } from "@constants";
 import { SwipeTypes } from "@redux/actions";
 import Images from "@assets/Images";
 
-import styles, {width as screenWidth} from "./swipe.style";
+import styles, { width as screenWidth } from "./swipe.style";
 
 import ReportModal from "../report-modal";
 import ActionButtonsView from "./action-buttons-view";
@@ -84,22 +84,28 @@ class Swipe extends React.Component {
       }
     });
 
-    this.cardUpdateAction = EventBus.on("Need_Update_Cards", (removeIndex) => {
+    this.cardUpdateAction = EventBus.on("Need_Update_Cards", removeIndex => {
       let nRemoveIndex = parseInt(removeIndex, 10);
       if (nRemoveIndex <= this.cardIndex) {
         this.cardIndex -= 1;
         this.swiper && this.swiper.jumpToCardIndex(this.cardIndex + 1);
-        this.props.updateCards({swipe: this.props.cards.filter((value, index) => index !== nRemoveIndex)}, removeIndex);
-      } else if(nRemoveIndex === (this.props.cards.length -1) && (this.cardIndex+1) === nRemoveIndex) {
+        this.props.updateCards(
+          { swipe: this.props.cards.filter((value, index) => index !== nRemoveIndex) },
+          removeIndex,
+        );
+      } else if (
+        nRemoveIndex === this.props.cards.length - 1 &&
+        this.cardIndex + 1 === nRemoveIndex
+      ) {
         this.cardIndex = -1;
         this.props.loadCards(this.props.token, 1);
       }
     });
-    
+
     // checking tutorial mode
     AsyncStorage.getItem(TUTORIAL.SWIPE, (error, result) => {
       if (result === null || result === "0") {
-        this.setState({tutorialSwipe: true});
+        this.setState({ tutorialSwipe: true });
       }
     });
     AsyncStorage.getItem(TUTORIAL.POINTER, (error, result) => {
@@ -109,7 +115,7 @@ class Swipe extends React.Component {
     });
     AsyncStorage.getItem(TUTORIAL.SHOW_GENDER, (error, result) => {
       if (result === null || result === "0") {
-        this.setState({tutorialGender: true}); 
+        this.setState({ tutorialGender: true });
       }
     });
 
@@ -125,8 +131,10 @@ class Swipe extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.isSwiping !== this.state.isSwiping || 
-      prevState.tutorialSwipe !== this.state.tutorialSwipe) {
+    if (
+      prevState.isSwiping !== this.state.isSwiping ||
+      prevState.tutorialSwipe !== this.state.tutorialSwipe
+    ) {
       if (this.state.tutorialSwipe && !this.state.isSwiping) {
         this.props.updateTutorialMode(true);
       } else {
@@ -138,28 +146,28 @@ class Swipe extends React.Component {
     }
   }
 
-  onWillFocus = async (payload) => {
+  onWillFocus = async payload => {
     if (this.pageStartTime == 0) {
       this.pageStartTime = moment().unix();
     }
     let hasPermission = await hasLocationPermission(true);
     this.onUpdateData(hasPermission);
-  }
+  };
 
-  onWillBlur = (payload) => {
+  onWillBlur = payload => {
     if (payload.lastState.key !== payload.state.key) {
       const params = {
         timeStart: this.pageStartTime,
         timeEnd: moment().unix(),
         page: "Swipe",
-      }
+      };
       this.pageStartTime = 0;
       this.props.requestPageTime(params, this.props.token);
     }
-  }
+  };
 
-  onUpdateData = (hasPermission) => {
-    this.setState({hasPermission});
+  onUpdateData = hasPermission => {
+    this.setState({ hasPermission });
     if (hasPermission) {
       getCurrentLocation(position => {
         if (position) {
@@ -179,7 +187,7 @@ class Swipe extends React.Component {
         this.props.loadCards(this.props.token, 1);
       }
     }
-  }
+  };
 
   onLikeClicked = () => {
     if (!this.state.swipeLocked) {
@@ -213,7 +221,7 @@ class Swipe extends React.Component {
 
   onRocketClicked = (boosting, confirm = false) => {
     if (boosting) {
-      this.setState({visibleRemainingBoost: true});
+      this.setState({ visibleRemainingBoost: true });
       return;
     }
     const { user, token } = this.props;
@@ -240,7 +248,7 @@ class Swipe extends React.Component {
     if (rewindsCount > 0) {
       this.setState({ labelType: LABEL_TYPES.REWIND }, () => {
         setTimeout(() => {
-          this.setState({ labelType: LABEL_TYPES.NONE});
+          this.setState({ labelType: LABEL_TYPES.NONE });
         }, 350);
       });
       this.setState({ enableRewinds: false });
@@ -256,14 +264,14 @@ class Swipe extends React.Component {
     this.swiper.swipeBack();
     this.cardIndex -= 1;
     this.onCheckingRewinds();
-  }
+  };
 
   onCheckingRewinds = () => {
     if (this.cardIndex === this.props.cards.length - 1) {
       return;
     }
     if (this.props.isRewinding) this.rewindsChecking[CANCEL]();
-    
+
     this.setState({ enableRewinds: false });
     if (this.cardIndex === -1) {
       return;
@@ -303,33 +311,37 @@ class Swipe extends React.Component {
 
     if (this.state.tutorialSwipe && (type === "left" || type === "right")) {
       AsyncStorage.setItem(TUTORIAL.SWIPE, "1");
-      this.setState({tutorialSwipe: false});
+      this.setState({ tutorialSwipe: false });
     }
 
-    if (this.state.tutorialGender && this.state.swipedCount === 5 && (type === "left" || type === "right")) {
-      if (this.props.cards.length >= (index + 1)) {
-        this.setState({visibleGender: true});
+    if (
+      this.state.tutorialGender &&
+      this.state.swipedCount === 5 &&
+      (type === "left" || type === "right")
+    ) {
+      if (this.props.cards.length >= index + 1) {
+        this.setState({ visibleGender: true });
       } else {
-        this.setState({swipedCount: 4});
+        this.setState({ swipedCount: 4 });
       }
     }
 
     if (this.props.user.premium === 0 && this.state.swipedCount === 9) {
-      if (this.props.cards.length >= (index + 1)) {
+      if (this.props.cards.length >= index + 1) {
         this.props.showPluzo(true, "swipe");
       } else {
-        this.setState({swipedCount: 8});
+        this.setState({ swipedCount: 8 });
       }
     }
-    
+
     if (type === "left") {
       // dislike
       this.props.addDisLike(token, cards[index].id);
-      this.setState({swipedCount: (this.state.swipedCount + 1)});
+      this.setState({ swipedCount: this.state.swipedCount + 1 });
     } else if (type === "right") {
       // like
       this.props.addLike(token, cards[index].id, true);
-      this.setState({swipedCount: (this.state.swipedCount + 1)});
+      this.setState({ swipedCount: this.state.swipedCount + 1 });
     } else {
       // super like
       if (cards && cards[index]) {
@@ -338,9 +350,9 @@ class Swipe extends React.Component {
         this.props.addSuperLikeDone();
       }
     }
-    this.setState({readyRewinds: true});
-    
-    if (cards && index === (cards.length - 1)) {
+    this.setState({ readyRewinds: true });
+
+    if (cards && index === cards.length - 1) {
       this.setState({ labelType: LABEL_TYPES.NONE });
       this.cardIndex = -1;
       this.props.loadCards(this.props.token, 300);
@@ -350,10 +362,10 @@ class Swipe extends React.Component {
     }
   };
 
-  onSwiped = (index) => {
+  onSwiped = index => {
     this.setState({ labelType: LABEL_TYPES.NONE });
     this.setState({ swipeLocked: false });
-  }
+  };
 
   onSwiping = (animatedValueX, animatedValueY) => {
     let isSwipingLeft, isSwipingRight, isSwipingTop, isSwipingBottom;
@@ -393,7 +405,7 @@ class Swipe extends React.Component {
     //   return (
     //     <Screen hasGradient style={styles.emptyContainer}>
     //       <NoUsers navigation={this.props.navigation} permission />
-    //       <NavigationEvents 
+    //       <NavigationEvents
     //         onWillFocus={(payload) => this.onWillFocus(payload)}
     //         onWillBlur={(payload) => this.onWillBlur(payload)} />
     //     </Screen>
@@ -404,9 +416,10 @@ class Swipe extends React.Component {
       return (
         <Screen hasGradient style={styles.emptyContainer}>
           <NoUsers navigation={this.props.navigation} />
-          <NavigationEvents 
-            onWillFocus={(payload) => this.onWillFocus(payload)}
-            onWillBlur={(payload) => this.onWillBlur(payload)} />
+          <NavigationEvents
+            onWillFocus={payload => this.onWillFocus(payload)}
+            onWillBlur={payload => this.onWillBlur(payload)}
+          />
         </Screen>
       );
     }
@@ -452,11 +465,17 @@ class Swipe extends React.Component {
                   onLike={this.onLikeClicked}
                   onDisLike={this.onDisLikeClicked}
                   onSuperLike={this.onSuperLikeClicked}
-                  onReport={(userId) => this.setState({ reportId: userId, visibleReport: true })}
-                  onClickedCard={(tutorialPointer && swipedCount === 3) ? () => {
-                    AsyncStorage.setItem(TUTORIAL.POINTER, "1");
-                    this.setState({tutorialPointer: false});
-                  } : null}
+                  onReport={userId =>
+                    this.setState({ reportId: userId, visibleReport: true })
+                  }
+                  onClickedCard={
+                    tutorialPointer && swipedCount === 3
+                      ? () => {
+                          AsyncStorage.setItem(TUTORIAL.POINTER, "1");
+                          this.setState({ tutorialPointer: false });
+                        }
+                      : null
+                  }
                   index={index}
                 />
               );
@@ -470,19 +489,25 @@ class Swipe extends React.Component {
             swipeBackCard
             showSecondCard={true}
             dragStart={() => {
-              this.setState({isSwiping: true});
+              this.setState({ isSwiping: true });
             }}
             dragEnd={() => {
               this.setState({ labelType: LABEL_TYPES.NONE, isSwiping: false });
             }}
           />
 
-          {labelType !== LABEL_TYPES.NONE && (
-            labelType === LABEL_TYPES.REWIND ? 
-            <Animatable.Image source={overlayIcon} style={styles.heartIcon}
-              animation={"rotate"} easing="ease-out" duration={300} /> : 
-            <Animatable.Image source={overlayIcon} style={styles.heartIcon} />
-          )}
+          {labelType !== LABEL_TYPES.NONE &&
+            (labelType === LABEL_TYPES.REWIND ? (
+              <Animatable.Image
+                source={overlayIcon}
+                style={styles.heartIcon}
+                animation={"rotate"}
+                easing='ease-out'
+                duration={300}
+              />
+            ) : (
+              <Animatable.Image source={overlayIcon} style={styles.heartIcon} />
+            ))}
 
           <ActionButtonsView
             onLike={this.onLikeClicked}
@@ -503,19 +528,21 @@ class Swipe extends React.Component {
             </View>
           )}
 
-          {(tutorialPointer && swipedCount === 3 && this.props.cards.length >= (this.cardIndex+1)) && 
-          <View style={styles.tutorialContainer} pointerEvents={"none"}>
-            <View style={styles.tutorialPointerLeft}>
-              <Image source={Images.tutorial.icPointer} />
-              <Text style={styles.tutorialText}>Previous Photo</Text>
-            </View>
-            <View style={styles.tutorialSeperator}/>
-            <View style={styles.tutorialPointerRight}>
-              <Image source={Images.tutorial.icPointer} />
-              <Text style={styles.tutorialText}>Next Photo</Text>
-            </View>
-          </View>}
-
+          {tutorialPointer &&
+            swipedCount === 3 &&
+            this.props.cards.length >= this.cardIndex + 1 && (
+              <View style={styles.tutorialContainer} pointerEvents={"none"}>
+                <View style={styles.tutorialPointerLeft}>
+                  <Image source={Images.tutorial.icPointer} />
+                  <Text style={styles.tutorialText}>Previous Photo</Text>
+                </View>
+                <View style={styles.tutorialSeperator} />
+                <View style={styles.tutorialPointerRight}>
+                  <Image source={Images.tutorial.icPointer} />
+                  <Text style={styles.tutorialText}>Next Photo</Text>
+                </View>
+              </View>
+            )}
         </View>
         <SwipePurchaseModal
           isVisible={this.state.visibleBoost}
@@ -559,28 +586,29 @@ class Swipe extends React.Component {
           userId={this.state.reportId}
           onDismiss={() => this.setState({ visibleReport: false })}
         />
-        
+
         <BoostConfirmModal
           isVisible={this.state.visibleBoostConfirm}
           title={"Boost your profile"}
           content={"Keep swiping for the best results."}
-          onBack={() => this.setState({visibleBoostConfirm: false})}
+          onBack={() => this.setState({ visibleBoostConfirm: false })}
           onBoost={() => {
-            this.setState({visibleBoostConfirm: false});
+            this.setState({ visibleBoostConfirm: false });
             this.onRocketClicked(false, false);
-          }} 
+          }}
         />
 
-        <BoostTimeModal 
+        <BoostTimeModal
           isVisible={this.state.visibleRemainingBoost}
-          onBack={() => this.setState({visibleRemainingBoost: false})}
-          onBoost={(boosting) => {
-            this.setState({visibleRemainingBoost: false});
+          onBack={() => this.setState({ visibleRemainingBoost: false })}
+          onBoost={boosting => {
+            this.setState({ visibleRemainingBoost: false });
             setTimeout(() => {
               this.onRocketClicked(false, false);
             }, 500);
           }}
-          isSwipe={true} />
+          isSwipe={true}
+        />
 
         <GenderModal
           key={`swipe-gender-modal`}
@@ -588,33 +616,35 @@ class Swipe extends React.Component {
           tutorial
           onDismiss={() => {
             if (parseInt(this.props.settings.gender, 10) === 0) {
-              this.setState({visibleGender: false}, () => {
+              this.setState({ visibleGender: false }, () => {
                 AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
               });
             } else {
-              this.setState({visibleGender: false}, () => {
-                this.props.updateSettings(this.props.token, {gender: 0});
+              this.setState({ visibleGender: false }, () => {
+                this.props.updateSettings(this.props.token, { gender: 0 });
                 AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
               });
             }
           }}
           gender={-1}
-          onChange={(value) => {
+          onChange={value => {
             if (parseInt(this.props.settings.gender, 10) === value) {
-              this.setState({visibleGender: false}, () => {
+              this.setState({ visibleGender: false }, () => {
                 AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
               });
             } else {
-              this.setState({visibleGender: false}, () => {
-                this.props.updateSettings(this.props.token, {gender: value});
+              this.setState({ visibleGender: false }, () => {
+                this.props.updateSettings(this.props.token, { gender: value });
                 AsyncStorage.setItem(TUTORIAL.SHOW_GENDER, "1");
               });
             }
-          }} />
+          }}
+        />
 
-          <NavigationEvents 
-            onWillFocus={(payload) => this.onWillFocus(payload)}
-            onWillBlur={(payload) => this.onWillBlur(payload)} />
+        <NavigationEvents
+          onWillFocus={payload => this.onWillFocus(payload)}
+          onWillBlur={payload => this.onWillBlur(payload)}
+        />
       </Screen>
     );
   }

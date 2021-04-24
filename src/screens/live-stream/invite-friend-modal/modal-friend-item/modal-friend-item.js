@@ -8,13 +8,15 @@ import styles from "./modal-friend-item.style";
 
 const ModalFriendItem: () => React$Node = props => {
   let picture =
-    props.user.images !== null
-      ? props.user.images[0].path
-      : Images.app.userPlaceholder;
+    props.user.images !== null ? props.user.images[0].path : Images.app.userPlaceholder;
   let isJoined = false;
   let isInvited = props.invitedFriends.includes(props.user.id);
-  let broadcasters = props.broadcasters.filter((value) => value._id === parseInt(props.user.id, 10));
-  let audiences = props.audiences.filter((value) => value._id === parseInt(props.user.id, 10));
+  let broadcasters = props.broadcasters.filter(
+    value => value._id === parseInt(props.user.id, 10),
+  );
+  let audiences = props.audiences.filter(
+    value => value._id === parseInt(props.user.id, 10),
+  );
   if (broadcasters.length > 0 || audiences.length > 0) {
     isJoined = true;
   }

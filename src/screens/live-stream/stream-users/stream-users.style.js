@@ -66,20 +66,6 @@ export default StyleSheet.create({
     fontWeight: "600",
     fontSize: wp(12),
   },
-  emojiButton: {
-    width: wp(77),
-    height: wp(35),
-    borderRadius: wp(20),
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-  },
-  emptyCategoryText: {
-    color: "#E8E6FF",
-    fontWeight: "600",
-    fontSize: wp(12),
-  },
   emojiCategoryContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
@@ -161,10 +147,10 @@ export default StyleSheet.create({
     marginBottom: wp(5),
     alignItems: "center",
   },
-  
+
   broadcasterContainer: {
-    flex: 1, 
-    height: wp(60), 
+    flex: 1,
+    height: wp(60),
     overflow: "hidden",
     marginLeft: wp(10),
   },
@@ -308,6 +294,5 @@ export default StyleSheet.create({
   streamAskedIcon: {
     width: wp(16),
     height: wp(16),
-    
   },
 });

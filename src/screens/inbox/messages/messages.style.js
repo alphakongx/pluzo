@@ -141,5 +141,5 @@ export default StyleSheet.create({
   },
   backRemoveContainer: {
     flex: 1,
-  }
+  },
 });

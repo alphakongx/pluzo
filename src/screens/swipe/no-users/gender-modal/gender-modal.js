@@ -1,6 +1,14 @@
 import React from "react";
 import { View } from "react-native";
-import { ModalHeader, GradientButton, SolidButton, Screen, Touchable, Text, ModalBase as Modal } from "@components";
+import {
+  ModalHeader,
+  GradientButton,
+  SolidButton,
+  Screen,
+  Touchable,
+  Text,
+  ModalBase as Modal,
+} from "@components";
 import { BlurView } from "@react-native-community/blur";
 
 import styles from "./gender-modal.style";
@@ -37,15 +45,17 @@ const GenderModal: () => React$Node = props => {
       swipeDirection={tutorial ? [] : ["down"]}
       onSwipeComplete={() => onDismiss()}
     >
-      <Screen 
+      <Screen
         hasGradient={!tutorial}
-        containerStyle={{overflow: "hidden"}}
+        containerStyle={{ overflow: "hidden" }}
         style={styles.container}
-        noFill>
-        {!tutorial &&<ModalHeader title={"Show me"} onDismiss={onDismiss} />}
-        {tutorial &&
-        <Text style={styles.tutorialTitle}>{"Who do you\nwant to meet?"}</Text>}
-        
+        noFill
+      >
+        {!tutorial && <ModalHeader title={"Show me"} onDismiss={onDismiss} />}
+        {tutorial && (
+          <Text style={styles.tutorialTitle}>{"Who do you\nwant to meet?"}</Text>
+        )}
+
         {!tutorial && <View style={styles.spacer} />}
 
         <View style={styles.buttonContainer}>

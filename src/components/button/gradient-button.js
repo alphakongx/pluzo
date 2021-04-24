@@ -23,7 +23,7 @@ class GradientButton extends Component {
     var {
       text,
       disabled,
-      disabledButton=true,
+      disabledButton = true,
       loading,
       colors,
       containerStyle,
@@ -59,7 +59,7 @@ class GradientButton extends Component {
           style={[
             styles.container,
             containerStyle,
-            (disabled && disabledButton) ? styles.buttonDisabled : {},
+            disabled && disabledButton ? styles.buttonDisabled : {},
           ]}
           onLayout={e => {
             const { layout } = e.nativeEvent;
@@ -76,16 +76,17 @@ class GradientButton extends Component {
           ) : (
             <Fragment>
               {icon && <Image source={icon} style={iconStyle} />}
-              {text && text !== "" &&
+              {text && text !== "" && (
                 <Text
                   style={[
                     styles.buttonText,
                     textStyle,
-                    (disabled && disabledButton) ? styles.buttonTextDisabled : {},
+                    disabled && disabledButton ? styles.buttonTextDisabled : {},
                   ]}
                 >
                   {text}
-                </Text>}
+                </Text>
+              )}
             </Fragment>
           )}
         </LinearGradient>

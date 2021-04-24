@@ -8,7 +8,7 @@ import {
   Touchable,
   SolidButton,
   GradientButton,
-  ModalBase as Modal
+  ModalBase as Modal,
 } from "@components";
 import moment from "moment";
 import RNIap from "react-native-iap";
@@ -45,9 +45,13 @@ const SwipePurchaseModal: () => React$Node = props => {
   let boostResetDate = 30;
   let superlikesResetDate = 1;
   if (props.user.premium === 1 && props.user.premium_info) {
-    let duration = moment.unix(props.user.premium_info.boost_reset_date).diff(moment(), "days");
+    let duration = moment
+      .unix(props.user.premium_info.boost_reset_date)
+      .diff(moment(), "days");
     boostResetDate = duration.toFixed(0);
-    duration = moment.unix(props.user.premium_info.super_like_reset_date).diff(moment(), "hours");
+    duration = moment
+      .unix(props.user.premium_info.super_like_reset_date)
+      .diff(moment(), "hours");
     superlikesResetDate = duration.toFixed(0);
   }
 
@@ -112,8 +116,9 @@ const SwipePurchaseModal: () => React$Node = props => {
                   },
                 }}
                 iterationCount={"infinite"}
-                direction="alternate"
-                duration={3000}>
+                direction='alternate'
+                duration={3000}
+              >
                 <Image
                   source={Images.swipe.boostTextLogo}
                   style={styles.uptoLogo}
@@ -132,8 +137,9 @@ const SwipePurchaseModal: () => React$Node = props => {
                   },
                 }}
                 iterationCount={"infinite"}
-                direction="alternate"
-                duration={2000}>
+                direction='alternate'
+                duration={2000}
+              >
                 <Image
                   source={props.mainLogo}
                   style={styles.mainLogo}
@@ -147,16 +153,32 @@ const SwipePurchaseModal: () => React$Node = props => {
               />
             </View>
             <Text style={styles.titleText} pointerEvents={"none"}>
-              {props.text.toLowerCase() === "boost" && (parseInt(props.user.advanced.boosts, 10) === 0 ? "Out of" : props.user.advanced.boosts)}
-              {props.text.toLowerCase() === "super like" && (parseInt(props.user.advanced.super_likes, 10) === 0 ? "Out of" : props.user.advanced.super_likes)}
-              {props.text.toLowerCase() === "rewind" && (parseInt(props.user.advanced.rewinds, 10) === 0 ? "Out of" : props.user.advanced.rewinds)}
+              {props.text.toLowerCase() === "boost" &&
+                (parseInt(props.user.advanced.boosts, 10) === 0
+                  ? "Out of"
+                  : props.user.advanced.boosts)}
+              {props.text.toLowerCase() === "super like" &&
+                (parseInt(props.user.advanced.super_likes, 10) === 0
+                  ? "Out of"
+                  : props.user.advanced.super_likes)}
+              {props.text.toLowerCase() === "rewind" &&
+                (parseInt(props.user.advanced.rewinds, 10) === 0
+                  ? "Out of"
+                  : props.user.advanced.rewinds)}
               &nbsp;{props.text}s!
             </Text>
-            {props.user.premium === 1 &&
-            <Text style={styles.subText} pointerEvents={"none"}>
-              {props.text.toLowerCase() === "boost" && `${props.user.premium === 1 ? boostResetDate : "30"} days until your next free ${props.text}.`}
-              {props.text.toLowerCase() === "super like" && `${props.user.premium === 1 ? superlikesResetDate : "24"} hours until your next free ${props.text}.`}
-            </Text>}
+            {props.user.premium === 1 && (
+              <Text style={styles.subText} pointerEvents={"none"}>
+                {props.text.toLowerCase() === "boost" &&
+                  `${
+                    props.user.premium === 1 ? boostResetDate : "30"
+                  } days until your next free ${props.text}.`}
+                {props.text.toLowerCase() === "super like" &&
+                  `${
+                    props.user.premium === 1 ? superlikesResetDate : "24"
+                  } hours until your next free ${props.text}.`}
+              </Text>
+            )}
 
             <View style={styles.pricesContainer}>
               <PriceBoxView
@@ -199,38 +221,40 @@ const SwipePurchaseModal: () => React$Node = props => {
                 }}
               />
             </View>
-            {props.user.premium === 0 &&
-            <>
-              <Text style={styles.orText}>OR</Text>
-              <View style={styles.buttonContainer}>
-                <GradientButton
-                  colors={["#FF7131", "#E0E552"]}
-                  shadowColor={"#FF6F00"}
-                  text={"Get Pluzo Plus"}
-                  onPress={() => setVisiblePurchase(true)}
-                />
-                <AnimatableView
-                  animation={{
-                    from: {
-                      ["translateY"]: -2.5,
-                    },
-                    to: {
-                      ["translateY"]: 2.5,
-                    },
-                  }}
-                  iterationCount={"infinite"}
-                  direction="alternate"
-                  duration={1500}
-                  style={styles.plusMark}
-                  pointerEvents={"none"}>
-                  <Image
-                    source={Images.swipe.pluzoPlusMark}
-                    pointerEvents={"none"}
-                    style={styles.plusImage}
+            {props.user.premium === 0 && (
+              <>
+                <Text style={styles.orText}>OR</Text>
+                <View style={styles.buttonContainer}>
+                  <GradientButton
+                    colors={["#FF7131", "#E0E552"]}
+                    shadowColor={"#FF6F00"}
+                    text={"Get Pluzo Plus"}
+                    onPress={() => setVisiblePurchase(true)}
                   />
-                </AnimatableView>
-              </View>
-            </>}
+                  <AnimatableView
+                    animation={{
+                      from: {
+                        ["translateY"]: -2.5,
+                      },
+                      to: {
+                        ["translateY"]: 2.5,
+                      },
+                    }}
+                    iterationCount={"infinite"}
+                    direction='alternate'
+                    duration={1500}
+                    style={styles.plusMark}
+                    pointerEvents={"none"}
+                  >
+                    <Image
+                      source={Images.swipe.pluzoPlusMark}
+                      pointerEvents={"none"}
+                      style={styles.plusImage}
+                    />
+                  </AnimatableView>
+                </View>
+              </>
+            )}
           </View>
         </LinearGradient>
         <PurchaseModal

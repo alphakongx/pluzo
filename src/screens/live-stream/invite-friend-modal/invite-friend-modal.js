@@ -9,7 +9,14 @@ import {
 import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
 import EventBus from "eventing-bus";
-import { Screen, Touchable, Image, Text, SearchInput, ModalBase as Modal } from "@components";
+import {
+  Screen,
+  Touchable,
+  Image,
+  Text,
+  SearchInput,
+  ModalBase as Modal,
+} from "@components";
 import ModalFriendItem from "./modal-friend-item";
 import { API } from "@helpers";
 import { API_ENDPOINTS } from "@config";
@@ -18,7 +25,7 @@ import Images from "@assets/Images";
 
 import styles from "./invite-friend-modal.style";
 
-const InviteFriendsModal: () => React$Node = props =>  {
+const InviteFriendsModal: () => React$Node = props => {
   const [invitedUsers, setInvitedUsers] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const { onDismiss } = props;
@@ -29,7 +36,7 @@ const InviteFriendsModal: () => React$Node = props =>  {
     });
     return () => {
       _closeAction();
-    }
+    };
   }, [onDismiss]);
 
   const onModalShow = () => {
@@ -68,7 +75,7 @@ const InviteFriendsModal: () => React$Node = props =>  {
 
   const renderFriends = () => {
     const { friends } = props;
-    let filteredFriends = friends.filter((value) => value.id !== 0);
+    let filteredFriends = friends.filter(value => value.id !== 0);
     if (searchKeyword !== "") {
       filteredFriends = filteredFriends.filter(value =>
         value.first_name.toLowerCase().includes(searchKeyword.toLowerCase()),
@@ -86,7 +93,7 @@ const InviteFriendsModal: () => React$Node = props =>  {
     });
   };
 
-  renderContent = () => {
+  const renderContent = () => {
     return (
       <View style={styles.container}>
         <Touchable
@@ -155,6 +162,6 @@ const InviteFriendsModal: () => React$Node = props =>  {
       )}
     </Modal>
   );
-}
+};
 
 export default InviteFriendsModal;

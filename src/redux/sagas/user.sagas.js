@@ -1,8 +1,5 @@
 import { call, put, takeEvery, select, take } from "redux-saga/effects";
-import {
-  UserCreators,
-  UserTypes,
-} from "../actions";
+import { UserCreators, UserTypes } from "../actions";
 import {
   login,
   phoneLoginSendCode,
@@ -67,7 +64,10 @@ export function* watchUserRequests() {
   yield takeEvery(UserTypes.REQUEST_DELETE_ACCOUNT, requestDeleteAccount);
 
   yield takeEvery(UserTypes.REQUEST_UPDATE_PHONE_SEND_CODE, requestUpdatePhoneSendCode);
-  yield takeEvery(UserTypes.REQUEST_UPDATE_PHONE_CONFIRM_CODE, requestUpdatePhoneConfirmCode);
+  yield takeEvery(
+    UserTypes.REQUEST_UPDATE_PHONE_CONFIRM_CODE,
+    requestUpdatePhoneConfirmCode,
+  );
 
   // block users
   yield takeEvery(UserTypes.REQUEST_BLOCK_USER, requestBlockUser);
@@ -362,7 +362,7 @@ function* requestUpdatePhoneSendCode(action) {
     params.append("android", Platform.OS === "android" ? 1 : 0);
 
     const res = yield call(updatePhoneSend, params, token);
-    
+
     yield put(UserCreators.updatePhoneSendCodeSuccess());
   } catch (error) {
     yield put(UserCreators.updatePhoneSendCodeFail());
@@ -375,9 +375,9 @@ function* requestUpdatePhoneConfirmCode(action) {
 
     const params = new FormData();
     params.append("code", code);
-    
+
     const res = yield call(updatePhoneConfirm, params, token);
-    
+
     yield put(UserCreators.updatePhoneConfirmCodeSuccess());
     yield put(UserCreators.loadProfileSuccess(res.data.data));
   } catch (error) {
@@ -391,7 +391,7 @@ function* requestBlockUser(action) {
 
     const params = new FormData();
     params.append("user_target_id", user_id);
-    
+
     yield call(userBlock, params, token);
   } catch (error) {
     console.log("block user", error);
@@ -404,7 +404,7 @@ function* requestUnblockUser(action) {
 
     const params = new FormData();
     params.append("user_target_id", user_id);
-    
+
     yield call(userUnblock, params, token);
   } catch (error) {
     console.log("unblock user", error);
@@ -414,11 +414,10 @@ function* requestUnblockUser(action) {
 function* requestBlockedUsers(action) {
   try {
     const { token } = action;
-    
-    const res = yield call(getBlockedUsers, token);
-    
-    yield put(UserCreators.loadBlockedUsersSuccess(res.data.data));
 
+    const res = yield call(getBlockedUsers, token);
+
+    yield put(UserCreators.loadBlockedUsersSuccess(res.data.data));
   } catch (error) {
     console.log("blocked list", error);
   }

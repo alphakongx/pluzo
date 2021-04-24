@@ -11,13 +11,13 @@ const AnimatableView = createAnimatableComponent(View);
 
 const AnimatedButton: () => React$Node = props => {
   const {
-    colors=["#9C3DE2", "#D491FF"],
-    shadowColor="#6E00FF",
-    text="Boost me",
+    colors = ["#9C3DE2", "#D491FF"],
+    shadowColor = "#6E00FF",
+    text = "Boost me",
     icon,
-    animImage=Images.app.boostBubbles,
-    animCotainerStyle=styles.animContainer,
-    loading=false
+    animImage = Images.app.boostBubbles,
+    animCotainerStyle = styles.animContainer,
+    loading = false,
   } = props;
 
   return (
@@ -34,22 +34,19 @@ const AnimatedButton: () => React$Node = props => {
       />
       <AnimatableView
         animation={{
-          from: {["translateY"]: -2.5},
-          to: {["translateY"]: 2.5}
+          from: { ["translateY"]: -2.5 },
+          to: { ["translateY"]: 2.5 },
         }}
         iterationCount={"infinite"}
-        direction="alternate"
+        direction='alternate'
         duration={1500}
         style={animCotainerStyle}
-        pointerEvents={"none"}>
-        <Image
-          source={animImage}
-          pointerEvents={"none"}
-          style={styles.animImage}
-        />
+        pointerEvents={"none"}
+      >
+        <Image source={animImage} pointerEvents={"none"} style={styles.animImage} />
       </AnimatableView>
     </View>
   );
-}
+};
 
 export default AnimatedButton;

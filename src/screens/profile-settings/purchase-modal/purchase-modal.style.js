@@ -10,7 +10,7 @@ export default StyleSheet.create({
   container: {
     alignItems: "center",
   },
-  
+
   mainBackground: {
     width: screenWidth - wp(40),
     height: ((screenWidth - wp(40)) * 480) / 335,
@@ -27,7 +27,7 @@ export default StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.15)",
     overflow: "hidden",
   },
-/// 637, 680
+  /// 637, 680
   maskContainer: {
     position: "absolute",
     left: -wp(162),

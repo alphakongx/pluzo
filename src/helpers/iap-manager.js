@@ -51,9 +51,10 @@ class IapManager extends Component {
         await RNIap.getSubscriptions([
           "com.pluzo.app.pluzoplus",
           "com.pluzo.app.pluzoplus3",
-          "com.pluzo.app.pluzoplus12",]);
+          "com.pluzo.app.pluzoplus12",
+        ]);
       }
-      
+
       this.purchaseUpdateSubscription = purchaseUpdatedListener(async purchase => {
         const receipt = purchase.transactionReceipt;
         if (receipt) {
@@ -61,7 +62,7 @@ class IapManager extends Component {
           RNIap.finishTransaction(purchase, true);
         }
       });
-  
+
       this.purchaseErrorSubscription = purchaseErrorListener(error => {
         console.log("purchaseErrorListener", error);
       });
@@ -106,7 +107,7 @@ class IapManager extends Component {
     } else {
       amount = 19.99;
     }
-    params.append("service_id", serviceId < 3 ? (serviceId + 10) : (serviceId-2));
+    params.append("service_id", serviceId < 3 ? serviceId + 10 : serviceId - 2);
     params.append("transaction_id", purchase.transactionId);
     params.append("amount", amount);
     params.append("payment_method", Platform.OS === "ios" ? "apple" : "google");

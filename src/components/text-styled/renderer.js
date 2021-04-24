@@ -38,6 +38,6 @@ export const renderStyledText = (children, textStyles, textProps) => {
   verifyTextStyles(mixedText, styles, defaultStyles);
 
   const textElements = renderMixedText(mixedText, styles);
-  textProps.allowFontScaling=false;
+  textProps.allowFontScaling = false;
   return React.createElement(Text, textProps, ...textElements);
 };

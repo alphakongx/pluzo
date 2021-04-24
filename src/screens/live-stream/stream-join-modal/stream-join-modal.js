@@ -34,7 +34,7 @@ const StreamJoinModal: () => React$Node = props => {
   };
 
   const message = props.askedByUser ? "asks you to join" : "invited you to join the live";
-  
+
   useEffect(() => {
     const _closeAction = EventBus.on("Modal_Close", () => {
       onBack();
@@ -42,7 +42,7 @@ const StreamJoinModal: () => React$Node = props => {
 
     return () => {
       _closeAction();
-    }
+    };
   }, [onBack]);
 
   return (

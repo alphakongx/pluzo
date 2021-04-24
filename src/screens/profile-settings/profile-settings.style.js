@@ -172,9 +172,7 @@ export default StyleSheet.create({
     // left: wp(23.4),
     bottom: wp(30),
   },
-  premiumPlusImage: {
-    
-  },
+  premiumPlusImage: {},
   buttonContainer: {
     width: width - wp(100),
     marginTop: -wp(25),

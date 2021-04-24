@@ -51,7 +51,7 @@ export default StyleSheet.create({
     width: wp(15),
     height: wp(15),
     marginLeft: wp(15),
-    marginVertical:wp(5),
+    marginVertical: wp(5),
   },
   distanceContainer: {
     height: wp(24),

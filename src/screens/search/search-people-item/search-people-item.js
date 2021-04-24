@@ -45,8 +45,9 @@ const SearchPeopleItem: () => React$Node = props => {
         <View style={styles.imageContainer}>
           <FastImage
             source={
-              id === 0 ? require("@assets/images/app-icon.png") :
-              peoplePicture === null
+              id === 0
+                ? require("@assets/images/app-icon.png")
+                : peoplePicture === null
                 ? require("@assets/images/message-image.png")
                 : { uri: peoplePicture }
             }
@@ -60,16 +61,17 @@ const SearchPeopleItem: () => React$Node = props => {
           <Text style={styles.preview}>{username}</Text>
         </View>
         <View style={styles.timeContainer}>
-          {id !== 0 && props.friend &&
-          <View style={styles.removeFriendButton}>
-            <IconButton
-              backColor={"#FF0036"}
-              icon={Images.app.icCross}
-              iconWidth={12}
-              iconHeight={12}
-              onPress={() => props.onRemoveFriend && props.onRemoveFriend()}
-            />
-          </View>}
+          {id !== 0 && props.friend && (
+            <View style={styles.removeFriendButton}>
+              <IconButton
+                backColor={"#FF0036"}
+                icon={Images.app.icCross}
+                iconWidth={12}
+                iconHeight={12}
+                onPress={() => props.onRemoveFriend && props.onRemoveFriend()}
+              />
+            </View>
+          )}
           {props.friend ? (
             <GradientButton
               containerStyle={styles.addButton}
@@ -79,7 +81,9 @@ const SearchPeopleItem: () => React$Node = props => {
                 if (props.onChat) {
                   props.onChat();
                 }
-                NavigationService.navigate(SCREENS.CHAT, { chatUser: id === 0 ? 0 : props.item });
+                NavigationService.navigate(SCREENS.CHAT, {
+                  chatUser: id === 0 ? 0 : props.item,
+                });
               }}
             />
           ) : isFriend === true ? (

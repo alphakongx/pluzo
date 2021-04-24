@@ -39,7 +39,7 @@ const NoConnectionAlert: () => React$Node = props => {
     }).start();
     return () => {
       clearTimeout(hideTimeout.current);
-    }
+    };
   }, []);
 
   return (
@@ -60,9 +60,8 @@ const NoConnectionAlert: () => React$Node = props => {
           />
           <Text style={styles.contentText}>
             {"No connection. We are trying to reconnect."}
-          </Text>          
+          </Text>
           <AnimatedDots style={styles.dots} />
-
         </LinearGradient>
       </Animated.View>
     </SafeAreaView>

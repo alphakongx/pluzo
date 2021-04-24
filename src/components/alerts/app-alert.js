@@ -26,37 +26,35 @@ const AppAlert: () => React$Node = props => {
 
   return (
     <Modal
-        isVisible={props.isVisible}
-        animationIn="zoomIn"
-        animationOut="zoomOut"
-        backdropTransitionOutTiming={0}
-        backdropTransitionInTiming={0}
-        useNativeDriver={false}
-        propagateSwipe={true}
-        style={styles.modalContainer}
-        swipeDirection={"down"}
-        onSwipeComplete={props.onDismiss}
-        swipeThreshold={30}
-      >
+      isVisible={props.isVisible}
+      animationIn='zoomIn'
+      animationOut='zoomOut'
+      backdropTransitionOutTiming={0}
+      backdropTransitionInTiming={0}
+      useNativeDriver={false}
+      propagateSwipe={true}
+      style={styles.modalContainer}
+      swipeDirection={"down"}
+      onSwipeComplete={props.onDismiss}
+      swipeThreshold={30}
+    >
       <View
-        onLayout={(e) => {
+        onLayout={e => {
           setContentWidth(e.nativeEvent.layout.width);
           setContentHeight(e.nativeEvent.layout.height);
-      }}>
+        }}
+      >
         <BoxShadow setting={shadowOption} />
-        <Screen hasGradient style={styles.container} >
-          <Text style={styles.titleText}>
-            {props.title}
-          </Text>
-          <Text style={styles.contentText}>
-            {props.content}
-          </Text>
+        <Screen hasGradient style={styles.container}>
+          <Text style={styles.titleText}>{props.title}</Text>
+          <Text style={styles.contentText}>{props.content}</Text>
           <View style={styles.buttonContainer}>
-            <GradientButton 
+            <GradientButton
               text={"Okay"}
               textStyle={styles.buttonText}
               containerStyle={styles.buttonStyle}
-              onPress={props.onDismiss} />
+              onPress={props.onDismiss}
+            />
           </View>
         </Screen>
       </View>

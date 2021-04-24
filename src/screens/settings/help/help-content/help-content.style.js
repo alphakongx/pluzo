@@ -1,5 +1,9 @@
 import { StyleSheet } from "react-native";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp, FontHelper } from "@helpers";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  FontHelper,
+} from "@helpers";
 
 export default StyleSheet.create({
   flexFill: {

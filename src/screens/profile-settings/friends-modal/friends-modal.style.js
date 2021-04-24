@@ -11,7 +11,7 @@ export default StyleSheet.create({
   container: {
     borderRadius: wp(20),
     overflow: "hidden",
-    maxHeight: height * 4 / 5,
+    maxHeight: (height * 4) / 5,
   },
 
   header: {

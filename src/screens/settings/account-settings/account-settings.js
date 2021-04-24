@@ -16,9 +16,9 @@ const AccountSettings: () => React$Node = props => {
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visiblePhone, setVisiblePhone] = useState(false);
 
-  const onUpdatePhoneNumber = (phone) => {
-    props.navigation.navigate(SCREENS.UPDATE_PHONE_VERIFICATION, {phoneNumber: phone});
-  }
+  const onUpdatePhoneNumber = phone => {
+    props.navigation.navigate(SCREENS.UPDATE_PHONE_VERIFICATION, { phoneNumber: phone });
+  };
 
   const renderItem = (title, text, isArrow) => {
     return (
@@ -64,11 +64,11 @@ const AccountSettings: () => React$Node = props => {
           isVisible={visiblePassword}
           onSwipeComplete={() => setVisiblePassword(false)}
         />
-        
+
         <UpdatePhoneModal
           isVisible={visiblePhone}
           onSwipeComplete={() => setVisiblePhone(false)}
-          updatePhoneNumber={(phone) => onUpdatePhoneNumber(phone)}
+          updatePhoneNumber={phone => onUpdatePhoneNumber(phone)}
         />
       </SafeAreaView>
     </Screen>

@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { View, FlatList } from "react-native";
-import { Text, Screen, BlurView, Touchable, NotificationModal, ModalBase as Modal } from "@components";
+import {
+  Text,
+  Screen,
+  BlurView,
+  Touchable,
+  NotificationModal,
+  ModalBase as Modal,
+} from "@components";
 import SearchPeopleItem from "../../search/search-people-item";
 import { API } from "@helpers";
 import { API_ENDPOINTS } from "@config";
@@ -18,7 +25,7 @@ const FriendsModal: () => React$Node = props => {
       let userId = this.removeUser.id || this.removeUser._id;
 
       let data = new FormData();
-      data.append("username", this.removeUser.username || user.name);
+      data.append("username", this.removeUser.username);
       data.append("user_target_id", userId);
 
       let url = `${API_ENDPOINTS.REMOVE_FRIEND}`;
@@ -33,7 +40,7 @@ const FriendsModal: () => React$Node = props => {
         data,
       });
     }
-  }
+  };
 
   return (
     <Modal

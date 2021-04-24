@@ -65,7 +65,7 @@ class LoginPhoneCodeVerification extends React.Component {
     }
   }
 
-  resetCountdwon = (seconds) => {
+  resetCountdwon = seconds => {
     this.setState({
       canResend: false,
       countdownTime: moment().add(seconds, "seconds").unix(),
@@ -144,7 +144,7 @@ class LoginPhoneCodeVerification extends React.Component {
             </View>
           </View>
 
-          <View style={{flex: 1}} />
+          <View style={{ flex: 1 }} />
           <View style={styles.footer}>
             <GradientButton
               loading={this.props.verificationInProgress}

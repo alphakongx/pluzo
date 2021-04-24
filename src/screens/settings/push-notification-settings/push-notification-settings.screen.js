@@ -22,7 +22,7 @@ class PushNotificationSettings extends Component {
       live: user_setting.push_live === 1 ? true : false,
       message: user_setting.push_message === 1 ? true : false,
       likes: user_setting.push_likes === 1 ? true : false,
-    }
+    };
   }
 
   componentWillUnmount() {
@@ -43,7 +43,7 @@ class PushNotificationSettings extends Component {
 
   render() {
     const { newFriends, requestFriend, live, message, likes } = this.state;
-    
+
     return (
       <Screen
         hasGradient
@@ -52,7 +52,7 @@ class PushNotificationSettings extends Component {
         <SafeAreaView style={this.props.isModal ? {} : styles.safeAreaContainer}>
           <View>
             <Header title={"Push notifications"} onBack={this.goBack} />
-            
+
             <View style={[styles.flexRow, styles.itemPadding]}>
               <Text style={styles.titleText}>New Friends</Text>
               <Switch

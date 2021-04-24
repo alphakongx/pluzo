@@ -33,20 +33,21 @@ class WhiteButton extends Component {
 
     return (
       <Touchable disabled={disabled} onPress={onPress}>
-        {!noShadow &&
-        <BoxShadow
-          setting={{
-            width: width,
-            height: height,
-            color: shadowColor,
-            opacity: 0.25,
-            _borderRadius: radius,
-            spread: 0,
-            blur: blur,
-            offsetX: 0,
-            offsetY: 0,
-          }}
-        />}
+        {!noShadow && (
+          <BoxShadow
+            setting={{
+              width: width,
+              height: height,
+              color: shadowColor,
+              opacity: 0.25,
+              _borderRadius: radius,
+              spread: 0,
+              blur: blur,
+              offsetX: 0,
+              offsetY: 0,
+            }}
+          />
+        )}
         <View
           style={[styles.container, containerStyle]}
           onLayout={e => {

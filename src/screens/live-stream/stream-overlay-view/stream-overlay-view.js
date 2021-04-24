@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { SafeAreaView, View, FlatList, TouchableOpacity, Keyboard, Platform } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Keyboard,
+  Platform,
+} from "react-native";
 import { BoostConfirmModal } from "@components";
 import AsyncStorage from "@react-native-community/async-storage";
 import moment from "moment";
@@ -60,23 +67,23 @@ const StreamOverlayView: () => React$Node = props => {
   useEffect(() => {
     let keyboardShowListener, keyboardHideListener;
     if (Platform.OS === "ios") {
-      keyboardShowListener = Keyboard.addListener("keyboardWillShow", (e) => {
+      keyboardShowListener = Keyboard.addListener("keyboardWillShow", e => {
         if (visibleInviteFriends) return;
         setKeyboardHeight(e.endCoordinates.height);
         setMessageBoxHeight(300);
       });
-      keyboardHideListener = Keyboard.addListener("keyboardWillHide", (e) => {
+      keyboardHideListener = Keyboard.addListener("keyboardWillHide", e => {
         if (visibleInviteFriends) return;
         setKeyboardHeight(0);
         setMessageBoxHeight("50%");
       });
     } else {
-      keyboardShowListener = Keyboard.addListener("keyboarDidShow", (e) => {
+      keyboardShowListener = Keyboard.addListener("keyboarDidShow", e => {
         if (visibleInviteFriends) return;
         setKeyboardHeight(e.endCoordinates.height);
         setMessageBoxHeight(300);
       });
-      keyboardHideListener = Keyboard.addListener("keyboardDidHide", (e) => {
+      keyboardHideListener = Keyboard.addListener("keyboardDidHide", e => {
         if (visibleInviteFriends) return;
         setKeyboardHeight(0);
         setMessageBoxHeight("50%");
@@ -85,7 +92,7 @@ const StreamOverlayView: () => React$Node = props => {
     return () => {
       keyboardShowListener.remove();
       keyboardHideListener.remove();
-    }
+    };
   }, [visibleInviteFriends]);
 
   useEffect(() => {
@@ -113,7 +120,7 @@ const StreamOverlayView: () => React$Node = props => {
     }
     return () => {
       clearInterval(boostInterval.current);
-    }
+    };
   }, [props.boostEndTime, props.inviteOnly]);
 
   return (
@@ -122,12 +129,13 @@ const StreamOverlayView: () => React$Node = props => {
         <View style={styles.opacityFill} />
       )}
       {props.streamStatus === StreamStatus.PREPARING && (
-      <LinearGradient
-        colors={GRADIENT.FADE_UP}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={[styles.opacityBottom]}
-      />)}
+        <LinearGradient
+          colors={GRADIENT.FADE_UP}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={[styles.opacityBottom]}
+        />
+      )}
 
       {props.streamStatus === StreamStatus.PREPARING ? (
         <StreamStart
@@ -145,20 +153,22 @@ const StreamOverlayView: () => React$Node = props => {
                 if (showPlayerSetting) {
                   setShowPlayerSetting(false);
                 } else {
-                  Keyboard.dismiss()
+                  Keyboard.dismiss();
                 }
               }}
             />
           )}
           {props.streamerCount > 0 && (
-            <TouchableOpacity style={[styles.broadcasterContainer, { top: insets.top + wp(50) }]}
+            <TouchableOpacity
+              style={[styles.broadcasterContainer, { top: insets.top + wp(50) }]}
               onPress={() => {
                 if (showPlayerSetting) {
                   setShowPlayerSetting(false);
                 } else {
-                  Keyboard.dismiss()
+                  Keyboard.dismiss();
                 }
-              }}>
+              }}
+            >
               <FlatList
                 keyboardShouldPersistTaps={"always"}
                 data={props.broadcasters}
@@ -170,33 +180,41 @@ const StreamOverlayView: () => React$Node = props => {
                     style={styles.streamUserContainer}
                     imageStyle={styles.streamUser}
                     onShowProfile={props.onShowProfile}
-                    isGesture={isOwner ? 
-                      (parseInt(broadcaster._id, 10) || parseInt(broadcaster.id, 10)) === parseInt(userId, 10) ? false : true : false}
+                    isGesture={
+                      isOwner
+                        ? (parseInt(broadcaster._id, 10) ||
+                            parseInt(broadcaster.id, 10)) === parseInt(userId, 10)
+                          ? false
+                          : true
+                        : false
+                    }
                   />
                 )}
               />
             </TouchableOpacity>
           )}
 
-          {!showPlayerSetting &&
-          <View
-            style={[
-              styles.messageBox,
-              Platform.OS === "ios" ? 
-              { bottom: keyboardHeight, height: messageBoxHeight } : {},
-            ]}
-          >
-            <StreamMessageBox
-              streamStatus={props.streamStatus}
-              isBroadcaster={props.isBroadcaster}
-              streamParams={props.streamParams}
-              keyboardHeight={keyboardHeight}
-              onPlayerSetting={() => setShowPlayerSetting(true)}
-              onAskToJoin={() => props.onShowAskModal && props.onShowAskModal(true)}
-              onShowProfile={props.onShowProfile}
-              bottomPadding={keyboardHeight > 0 ? 5 : insets.bottom + 5}
-            />
-          </View>}
+          {!showPlayerSetting && (
+            <View
+              style={[
+                styles.messageBox,
+                Platform.OS === "ios"
+                  ? { bottom: keyboardHeight, height: messageBoxHeight }
+                  : {},
+              ]}
+            >
+              <StreamMessageBox
+                streamStatus={props.streamStatus}
+                isBroadcaster={props.isBroadcaster}
+                streamParams={props.streamParams}
+                keyboardHeight={keyboardHeight}
+                onPlayerSetting={() => setShowPlayerSetting(true)}
+                onAskToJoin={() => props.onShowAskModal && props.onShowAskModal(true)}
+                onShowProfile={props.onShowProfile}
+                bottomPadding={keyboardHeight > 0 ? 5 : insets.bottom + 5}
+              />
+            </View>
+          )}
 
           {showUsers && (
             <TouchableOpacity
@@ -238,11 +256,14 @@ const StreamOverlayView: () => React$Node = props => {
             showTutorial={visibleTutorialUsers}
           />
 
-          {showFilters &&
-          <StreamFilters onBack={() => {
-            setShowFilters(false);
-            setShowPlayerSetting(true);
-          }} />}
+          {showFilters && (
+            <StreamFilters
+              onBack={() => {
+                setShowFilters(false);
+                setShowPlayerSetting(true);
+              }}
+            />
+          )}
           {showPlayerSetting && (
             <StreamPlayerSetting
               onHidePlayerSetting={() => setShowPlayerSetting(false)}
@@ -293,7 +314,7 @@ const StreamOverlayView: () => React$Node = props => {
             onDismiss={() => setVisibleInviteFriends(false)}
           />
 
-          <BoostTimeModal 
+          <BoostTimeModal
             isVisible={visibleRemainingBoost}
             onBack={() => setVisibleRemainingBoost(false)}
             onBoost={() => {
@@ -320,9 +341,9 @@ const StreamOverlayView: () => React$Node = props => {
             onBoost={() => {
               props.runBoost(props.token, 2, props.streamParams.channelName);
               setVisibleBoostConfirm(false);
-            }} 
+            }}
           />
-            
+
           <SwipePurchaseModal
             isVisible={visibleBoost}
             uptoLogo

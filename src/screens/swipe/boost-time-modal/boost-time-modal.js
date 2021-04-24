@@ -1,6 +1,15 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState, useRef } from "react";
 import { View } from "react-native";
-import { Screen, Text, Image, BoxShadow, GradientButton, AnimatedButton, ModalBase as Modal } from "@components";
+import {
+  Screen,
+  Text,
+  Image,
+  BoxShadow,
+  GradientButton,
+  AnimatedButton,
+  ModalBase as Modal,
+} from "@components";
 import moment from "moment";
 import Images from "@assets/Images";
 
@@ -24,12 +33,15 @@ const BoostTimeModal: () => React$Node = props => {
     offsetY: 6,
   };
 
-  const {buttonDisable=false, ...rest } = props;
+  const { buttonDisable = false, ...rest } = props;
 
   if (props.isSwipe) {
     useEffect(() => {
       clearInterval(boostInterval.current);
-      let boostTime = parseInt(props.user.advanced.last_boost_time.boost_swipe_remaining_time, 10);
+      let boostTime = parseInt(
+        props.user.advanced.last_boost_time.boost_swipe_remaining_time,
+        10,
+      );
       if (boostTime > 0) {
         let duration = boostTime; //moment.unix(boostTime).diff(moment(), "seconds");
         if (duration > 0) {
@@ -56,7 +68,7 @@ const BoostTimeModal: () => React$Node = props => {
       }
       return () => {
         clearInterval(boostInterval.current);
-      }
+      };
     }, [props.user.advanced.last_boost_time.boost_swipe_remaining_time]);
   } else {
     useEffect(() => {
@@ -84,10 +96,9 @@ const BoostTimeModal: () => React$Node = props => {
       }
       return () => {
         clearInterval(boostInterval.current);
-      }
+      };
     }, [props.inviteOnly, props.boostEndTime]);
   }
-  
 
   const getRestTime = () => {
     let secs = restTime === null ? 0 : restTime;
@@ -111,7 +122,7 @@ const BoostTimeModal: () => React$Node = props => {
       }
       return `${hours}:${minutes}:${seconds}`;
     }
-  }
+  };
 
   return (
     <Modal
@@ -134,24 +145,32 @@ const BoostTimeModal: () => React$Node = props => {
         <BoxShadow setting={backShadowOpt} />
         <Screen hasGradient style={styles.modalContainer}>
           <Text style={styles.titleText}>
-            {boosting ? props.isSwipe ? "You are at the top" : "Your live is at the top." : "Boost has ended"}
+            {boosting
+              ? props.isSwipe
+                ? "You are at the top"
+                : "Your live is at the top."
+              : "Boost has ended"}
           </Text>
           <Text style={styles.messageText}>
-            {props.isSwipe ? "Keep swiping for the best results." : "Get ready to entertain the crowd, people are joining."}
+            {props.isSwipe
+              ? "Keep swiping for the best results."
+              : "Get ready to entertain the crowd, people are joining."}
           </Text>
           <Text style={styles.remainTime}>{getRestTime()} remaining</Text>
           <View style={styles.buttonContainer}>
             <AnimatedButton
               text={"Boost now"}
               disabled={buttonDisable}
-              onPress={() => props.onBoost(boosting)} />
+              onPress={() => props.onBoost(boosting)}
+            />
           </View>
           <View style={[styles.closeButton]}>
             <GradientButton
               colors={["#312446", "#312446"]}
               noShadow
               text={"Close"}
-              onPress={props.onBack}/>
+              onPress={props.onBack}
+            />
           </View>
         </Screen>
         <View style={styles.logoContainer}>

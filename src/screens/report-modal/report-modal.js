@@ -2,8 +2,16 @@ import React, { Component } from "react";
 import { View, TextInput, Platform, ActivityIndicator } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import KeyboardManager from "react-native-keyboard-manager";
-import { Screen, Touchable, Image, Text, AppAlert, ModalBase as Modal } from "@components";
+import {
+  Screen,
+  Touchable,
+  Image,
+  Text,
+  AppAlert,
+  ModalBase as Modal,
+} from "@components";
 import { report } from "@redux/api";
+import { reportTelegram } from "@redux/api";
 
 import Images from "@assets/Images";
 import styles from "./report-modal.style";
@@ -37,7 +45,7 @@ class ReportModal extends Component {
       msgText: "",
       visibleAlert: false,
     });
-  }
+  };
 
   onModalShow = () => {
     if (Platform.OS === "ios") {
@@ -55,7 +63,7 @@ class ReportModal extends Component {
   };
 
   onReport = () => {
-    let selectedButtons = this.state.typeButtons.filter((button) => button.select === true);
+    let selectedButtons = this.state.typeButtons.filter(button => button.select === true);
     if (selectedButtons.length > 0) {
       let params = new FormData();
       params.append("reason", selectedButtons[0].id);
@@ -67,12 +75,24 @@ class ReportModal extends Component {
       } else {
         params.append("user_id", this.props.userId);
       }
-      this.setState({loading: true}, () => {
-        report(params, this.props.token, type).then((res) => {
-          this.setState({loading: false, visibleAlert: true});
-        }).catch(e => {
-          this.setState({loading: false});
-        });
+      this.setState({ loading: true }, () => {
+        report(params, this.props.token, type)
+          .then(res => {
+            //console.log(res);
+            this.setState({ loading: false, visibleAlert: true });
+          })
+          .catch(e => {
+            //console.log(e);
+            this.setState({ loading: false });
+          });
+
+        reportTelegram(this.state.msgText)
+          .then(res => {
+            //console.log(res);
+          })
+          .catch(e => {
+            //console.log(e);
+          });
       });
     }
   };
@@ -105,7 +125,7 @@ class ReportModal extends Component {
   };
 
   render() {
-    let selectedButtons = this.state.typeButtons.filter((button) => button.select === true);
+    let selectedButtons = this.state.typeButtons.filter(button => button.select === true);
     let disabledReport = this.state.loading || selectedButtons.length === 0;
     return (
       <Modal
@@ -159,10 +179,13 @@ class ReportModal extends Component {
                 placeholderTextColor={"#ABA7D5"}
                 placeholder={"Here you can add additional information..."}
                 style={styles.reportContentText}
-                onChangeText={(text) => this.setState({msgText: text})}
+                onChangeText={text => this.setState({ msgText: text })}
               />
-              <Touchable style={[styles.reportButton]} onPress={this.onReport}
-                disabled={disabledReport}>
+              <Touchable
+                style={[styles.reportButton]}
+                onPress={this.onReport}
+                disabled={disabledReport}
+              >
                 {this.state.loading ? (
                   <ActivityIndicator size={"small"} color={"#0B0516"} />
                 ) : (
@@ -171,15 +194,18 @@ class ReportModal extends Component {
               </Touchable>
             </Screen>
           </View>
-          <AppAlert 
+          <AppAlert
             isVisible={this.state.visibleAlert}
             needUpdate={false}
             onDismiss={() => {
               this.onInit();
               this.props.onDismiss && this.props.onDismiss();
             }}
-            title={`You successfully reported this ${this.props.liveStream ? "live" : "user"}.`}
-            content={"Thanks. We take an from here."} />
+            title={`You successfully reported this ${
+              this.props.liveStream ? "live" : "user"
+            }.`}
+            content={"Thanks. We take an from here."}
+          />
         </View>
       </Modal>
     );

@@ -19,13 +19,11 @@ const PluzoLikeSwiper: () => React$Node = props => {
     },
     onMoveShouldSetPanResponder: (evt, gestureState) => animating,
     onMoveShouldSetPanResponderCapture: (evt, gestureState) => animating,
-    onPanResponderGrant: (event, gestureState) => { isMoving = true; },
+    onPanResponderGrant: (event, gestureState) => {
+      isMoving = true;
+    },
     onPanResponderMove: (event, gestureState) => {
-      Animated.event([
-        null,
-        { dx: _pan.x, dy: _pan.y }
-      ], 
-      {useNativeDriver: false})(
+      Animated.event([null, { dx: _pan.x, dy: _pan.y }], { useNativeDriver: false })(
         event,
         gestureState,
       );
@@ -40,7 +38,7 @@ const PluzoLikeSwiper: () => React$Node = props => {
     onPanResponderEnd: () => {
       isMoving = false;
       onStopAnimating(null);
-    }
+    },
   });
 
   const onStartAnimating = () => {
@@ -51,22 +49,22 @@ const PluzoLikeSwiper: () => React$Node = props => {
       useNativeDriver: false,
     }).start();
     props.onDragStart && props.onDragStart();
-  }
+  };
 
-  const onStopAnimating = (gestureState) => {
+  const onStopAnimating = gestureState => {
     if (isMoving) return;
     setAnimating(false);
 
     let swipeDirection = null;
     if (gestureState !== null) {
-      if (gestureState.dx < 0 && gestureState.dx < (-width / 5)) {
+      if (gestureState.dx < 0 && gestureState.dx < -width / 5) {
         swipeDirection = "left";
-      } else if (gestureState.dx > 0 && gestureState.dx > (width / 5)) {
+      } else if (gestureState.dx > 0 && gestureState.dx > width / 5) {
         swipeDirection = "right";
       }
     }
     _pan.flattenOffset();
-    _pan.setValue({x: 0, y: 0});
+    _pan.setValue({ x: 0, y: 0 });
     Animated.timing(_scaleAnim, {
       toValue: 0,
       duration: 100,
@@ -79,12 +77,12 @@ const PluzoLikeSwiper: () => React$Node = props => {
           useNativeDriver: false,
         }).start(() => {
           props.onSwipedDirection && props.onSwipedDirection(swipeDirection);
-        })
+        });
       }
     });
 
     props.onDragEnd && props.onDragEnd();
-  }
+  };
 
   return (
     <Animated.View
@@ -94,33 +92,47 @@ const PluzoLikeSwiper: () => React$Node = props => {
         animating ? styles.zIndexHigh : styles.zIndexZero,
         {
           opacity: _hideAnim,
-          transform: 
-          [
-            { scale: _scaleAnim.interpolate({inputRange: [0, 1], outputRange: [1, 1.05]}) }, 
+          transform: [
+            {
+              scale: _scaleAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 1.05],
+              }),
+            },
             { translateX: _pan.x },
             { translateY: _pan.y },
-            { rotate: _pan.x.interpolate({inputRange: [-width / 4, 0, width / 4], outputRange: ["10deg", "0deg", "-10deg"]})},
+            {
+              rotate: _pan.x.interpolate({
+                inputRange: [-width / 4, 0, width / 4],
+                outputRange: ["10deg", "0deg", "-10deg"],
+              }),
+            },
             { perspective: 1000 },
-          ]
-        }
+          ],
+        },
       ]}
       {..._panResponder.panHandlers}
     >
-      <Pressable 
+      <Pressable
         onPress={props.onPress}
         onPressIn={() => onStartAnimating()}
-        onPressOut={() => onStopAnimating(null)}>
+        onPressOut={() => onStopAnimating(null)}
+      >
         {props.children}
       </Pressable>
 
-      <Animated.View 
+      <Animated.View
         pointerEvents={"none"}
         style={[
           styles.overlayContainer,
           {
-            opacity: _pan.x.interpolate({inputRange: [-width / 5, 0], outputRange: [1, 0]}),
-          }
-        ]}>
+            opacity: _pan.x.interpolate({
+              inputRange: [-width / 5, 0],
+              outputRange: [1, 0],
+            }),
+          },
+        ]}
+      >
         <Image source={require("@assets/images/swipe-screen/swipe-cross.png")} />
       </Animated.View>
 
@@ -129,12 +141,15 @@ const PluzoLikeSwiper: () => React$Node = props => {
         style={[
           styles.overlayContainer,
           {
-            opacity: _pan.x.interpolate({inputRange: [0, width / 5], outputRange: [0, 1]}),
-          }
-        ]}>
+            opacity: _pan.x.interpolate({
+              inputRange: [0, width / 5],
+              outputRange: [0, 1],
+            }),
+          },
+        ]}
+      >
         <Image source={require("@assets/images/swipe-screen/swipe-heart.png")} />
       </Animated.View>
-
     </Animated.View>
   );
 };

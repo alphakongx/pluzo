@@ -5,8 +5,7 @@ import { COLOR } from "@config";
 export const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
-  modalContainer: {
-  },
+  modalContainer: {},
 
   container: {
     borderRadius: wp(22),

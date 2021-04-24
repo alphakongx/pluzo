@@ -10,7 +10,7 @@ class ZoomImageModal extends React.Component {
     super(props);
     this.state = {
       loading: false,
-    }
+    };
   }
 
   render() {
@@ -29,10 +29,17 @@ class ZoomImageModal extends React.Component {
         style={styles.container}
       >
         <View style={styles.flexFill} pointerEvents={"box-none"}>
-          <ImageZoomViewer imageUrl={{ uri: this.props.zoomImage }}
-            onSwipeDown={this.props.onSwipeComplete} />
-          {this.state.loading &&
-          <ActivityIndicator color={"white"} size={"small"} style={styles.loadingIndicator} />}
+          <ImageZoomViewer
+            imageUrl={{ uri: this.props.zoomImage }}
+            onSwipeDown={this.props.onSwipeComplete}
+          />
+          {this.state.loading && (
+            <ActivityIndicator
+              color={"white"}
+              size={"small"}
+              style={styles.loadingIndicator}
+            />
+          )}
           <Touchable
             style={[styles.closeButton, { top: this.props.insets.top + 15 }]}
             onPress={this.props.onSwipeComplete}

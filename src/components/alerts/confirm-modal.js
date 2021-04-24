@@ -16,7 +16,7 @@ class ConfirmModal extends Component {
   }
 
   render() {
-    const {user, typeText="block", ...rest} = this.props;
+    const { user, typeText = "block", ...rest } = this.props;
     return (
       <Modal
         {...rest}
@@ -49,20 +49,23 @@ class ConfirmModal extends Component {
                 {`Are you sure you want to ${typeText} ${user.first_name}?`}
               </Text>
 
-              <SolidButton noShadow
+              <SolidButton
+                noShadow
                 containerStyle={[styles.buttonContainer, styles.unfriendButton]}
                 text={Format.capitalize(typeText)}
                 textStyle={styles.buttonText}
-                onPress={this.props.onConfirm} />
+                onPress={this.props.onConfirm}
+              />
 
-              <SolidButton noShadow
+              <SolidButton
+                noShadow
                 containerStyle={[styles.buttonContainer, styles.cancelButton]}
                 text={"Cancel"}
                 textStyle={styles.buttonText}
-                onPress={this.props.onDismiss} />
+                onPress={this.props.onDismiss}
+              />
             </Screen>
           </SafeAreaView>
-          
         </View>
       </Modal>
     );

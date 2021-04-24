@@ -1,11 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import {
-  Image,
-  Touchable,
-  GradientButton,
-  BoxShadow,
-} from "@components";
+import { Image, Touchable, GradientButton, BoxShadow } from "@components";
 import { COLOR } from "@config";
 import { InputToolbar as RNInputToolbar, Send, Composer } from "react-native-gifted-chat";
 import { widthPercentageToDP as wp } from "@helpers";
@@ -58,9 +53,9 @@ class InputToolbar extends React.Component {
               autoCorrect: true,
               allowFontScaling: false,
               returnKeyType: "send",
-              onSubmitEditing: (e) => {
+              onSubmitEditing: e => {
                 props.onSendMessage();
-              }
+              },
             }}
           />
         </View>

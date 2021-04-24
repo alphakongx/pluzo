@@ -71,7 +71,10 @@ class PushNotification extends React.Component {
             NavigationService.popToTop();
           }
           setTimeout(() => {
-            NavigationService.navigate(SCREENS.CHAT, {chatId: data.chat_id, chatUser: data.user_model});
+            NavigationService.navigate(SCREENS.CHAT, {
+              chatId: data.chat_id,
+              chatUser: data.user_model,
+            });
           }, 500);
         }
       } else if (data.action === "friend_request") {
@@ -85,7 +88,7 @@ class PushNotification extends React.Component {
             NavigationService.popToTop();
           }
           setTimeout(() => {
-            NavigationService.navigate(SCREENS.CHAT, {chatUser: data.user_model});
+            NavigationService.navigate(SCREENS.CHAT, { chatUser: data.user_model });
           }, 500);
         }
       } else if (data.action === "stream") {
@@ -103,7 +106,7 @@ class PushNotification extends React.Component {
           isBroadcaster: false,
           isJoin: true,
         };
-        setTimeout(() => {          
+        setTimeout(() => {
           EventBus.publish("APP_END_STREAM_ACTION", params);
         }, 1000);
       } else if (data.action === "likes") {

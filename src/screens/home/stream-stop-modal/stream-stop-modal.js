@@ -7,7 +7,7 @@ import {
   BoxShadow,
   GradientButton,
   SolidButton,
-  ModalBase as Modal
+  ModalBase as Modal,
 } from "@components";
 
 import styles from "./stream-stop-modal.style";

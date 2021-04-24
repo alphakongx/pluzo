@@ -185,7 +185,9 @@ class GestureRecognizer extends Component {
         {...this._panResponder.panHandlers}
         style={[
           this.props.style,
-          (this.props.enableMoveUp || this.props.enableMoveDown) ? { transform: [{ translateY: this.pan.y }] } : {},
+          this.props.enableMoveUp || this.props.enableMoveDown
+            ? { transform: [{ translateY: this.pan.y }] }
+            : {},
         ]}
       />
     );

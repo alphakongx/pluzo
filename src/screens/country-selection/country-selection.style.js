@@ -15,7 +15,7 @@ export default StyleSheet.create({
   },
 
   locationContainer: {
-    flexDirection: "column-reverse"
+    flexDirection: "column-reverse",
   },
   locationRow: {
     flexDirection: "row",
@@ -85,5 +85,4 @@ export default StyleSheet.create({
   //   backgroundColor: "white",
   //   opacity: 0.15,
   // },
-
 });

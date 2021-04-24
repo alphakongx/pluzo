@@ -24,38 +24,38 @@ const ActionButtonsView: () => React$Node = props => {
         Animated.timing(_opacity1, {
           duration: 100,
           toValue: 1,
-          useNativeDriver: false
+          useNativeDriver: false,
         }),
         Animated.parallel([
           Animated.timing(_opacity1, {
             duration: 500,
             toValue: 0,
-            useNativeDriver: false
+            useNativeDriver: false,
           }),
           Animated.timing(_moveY1, {
             duration: 500,
             toValue: 1,
-            useNativeDriver: false
+            useNativeDriver: false,
           }),
         ]),
         Animated.timing(_opacity2, {
           duration: 100,
           toValue: 1,
-          useNativeDriver: false
+          useNativeDriver: false,
         }),
         Animated.parallel([
           Animated.timing(_opacity2, {
             duration: 500,
             toValue: 0,
-            useNativeDriver: false
+            useNativeDriver: false,
           }),
           Animated.timing(_moveY2, {
             duration: 500,
             toValue: 1,
-            useNativeDriver: false
+            useNativeDriver: false,
           }),
         ]),
-      ])
+      ]),
     );
     if (boosting) {
       animations.current.start();
@@ -64,7 +64,10 @@ const ActionButtonsView: () => React$Node = props => {
 
   useEffect(() => {
     clearInterval(boostInterval.current);
-    let boostTime = parseInt(props.user.advanced.last_boost_time.boost_swipe_remaining_time, 0);
+    let boostTime = parseInt(
+      props.user.advanced.last_boost_time.boost_swipe_remaining_time,
+      0,
+    );
     if (boostTime > 0) {
       let duration = boostTime; //moment.unix(boostTime).diff(moment(), "seconds");
       if (duration > 0) {
@@ -88,7 +91,7 @@ const ActionButtonsView: () => React$Node = props => {
     }
     return () => {
       clearInterval(boostInterval.current);
-    }
+    };
   }, [props.user.advanced.last_boost_time.boost_swipe_remaining_time]);
 
   return (
@@ -96,44 +99,69 @@ const ActionButtonsView: () => React$Node = props => {
       <SafeAreaView pointerEvents={"box-none"}>
         <View style={styles.bottomContainer} pointerEvents={"box-none"}>
           <View style={[styles.buttonRow]} pointerEvents={"box-none"}>
-            <Touchable onPress={() => props.onReload()}
-              disabled={!props.isRewinds}>
+            <Touchable onPress={() => props.onReload()} disabled={!props.isRewinds}>
               <Image
                 style={[styles.buttonSmall]}
                 source={require("@assets/images/swipe-screen/swipe-refresh.png")}
               />
             </Touchable>
-            <Touchable onPress={() => props.onRocket(boosting, true)}
-              disabled={props.isBoosting}>
-              {!boosting &&
-              <Image
-                style={styles.buttonSmall}
-                source={require("@assets/images/swipe-screen/swipe-rocket.png")}
-              />}
-              {boosting &&
-              <View style={styles.boostButtonContainer}>
-                <Text style={styles.boostText}>
-                  {(props.user.advanced.last_boost_time.count_swipe * 10 - remainTime * (props.user.advanced.last_boost_time.count_swipe * 10 - 1) / (600 * props.user.advanced.last_boost_time.count_swipe)).toFixed(1)}x
-                </Text>
-                <Animated.Image
-                  style={[styles.boostRocketView1, 
-                    {
-                      opacity: _opacity1,
-                      transform: [{translateY: _moveY1.interpolate({inputRange: [0, 1], outputRange: [0, -50]})}]
-                    }
-                  ]}
-                  source={require("@assets/images/swipe-screen/swipe-boost-rocket.png")}
+            <Touchable
+              onPress={() => props.onRocket(boosting, true)}
+              disabled={props.isBoosting}
+            >
+              {!boosting && (
+                <Image
+                  style={styles.buttonSmall}
+                  source={require("@assets/images/swipe-screen/swipe-rocket.png")}
                 />
-                <Animated.Image
-                  style={[styles.boostRocketView2, 
-                    {
-                      opacity: _opacity2,
-                      transform: [{translateY: _moveY2.interpolate({inputRange: [0, 1], outputRange: [0, -50]})}]
-                    }
-                  ]}
-                  source={require("@assets/images/swipe-screen/swipe-boost-rocket.png")}
-                />
-              </View>}
+              )}
+              {boosting && (
+                <View style={styles.boostButtonContainer}>
+                  <Text style={styles.boostText}>
+                    {(
+                      props.user.advanced.last_boost_time.count_swipe * 10 -
+                      (remainTime *
+                        (props.user.advanced.last_boost_time.count_swipe * 10 - 1)) /
+                        (600 * props.user.advanced.last_boost_time.count_swipe)
+                    ).toFixed(1)}
+                    x
+                  </Text>
+                  <Animated.Image
+                    style={[
+                      styles.boostRocketView1,
+                      {
+                        opacity: _opacity1,
+                        transform: [
+                          {
+                            translateY: _moveY1.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0, -50],
+                            }),
+                          },
+                        ],
+                      },
+                    ]}
+                    source={require("@assets/images/swipe-screen/swipe-boost-rocket.png")}
+                  />
+                  <Animated.Image
+                    style={[
+                      styles.boostRocketView2,
+                      {
+                        opacity: _opacity2,
+                        transform: [
+                          {
+                            translateY: _moveY2.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0, -50],
+                            }),
+                          },
+                        ],
+                      },
+                    ]}
+                    source={require("@assets/images/swipe-screen/swipe-boost-rocket.png")}
+                  />
+                </View>
+              )}
             </Touchable>
           </View>
           <View
@@ -151,10 +179,11 @@ const ActionButtonsView: () => React$Node = props => {
                 props.addSuperLikeStart();
                 props.onSuperLike();
               }}
-              disabled={props.isSuperLiking}>
+              disabled={props.isSuperLiking}
+            >
               <Image
                 source={require("@assets/images/swipe-screen/swipe-star.png")}
-                style={[styles.buttonSmall, props.isSuperLiking ? {opacity: 0.5} : {}]}
+                style={[styles.buttonSmall, props.isSuperLiking ? { opacity: 0.5 } : {}]}
               />
             </Touchable>
             <Touchable onPress={() => props.onLike()}>

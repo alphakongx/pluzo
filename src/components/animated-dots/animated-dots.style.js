@@ -12,5 +12,5 @@ export default StyleSheet.create({
     marginHorizontal: wp(1.5),
     borderRadius: wp(3),
     backgroundColor: "white",
-  }
+  },
 });

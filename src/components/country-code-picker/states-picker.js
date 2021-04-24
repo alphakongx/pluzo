@@ -12,10 +12,7 @@ const StatesPicker: () => React$Node = props => {
   const [showPicker, setShowPicker] = useState(false);
   const [usState, setUsState] = useState(props.usState);
   let visibility = new Animated.Value(0);
-  const {
-    spacerStyle=styles.spacer,
-    arrowIcon=false,
-  } = props;
+  const { spacerStyle = styles.spacer, arrowIcon = false } = props;
 
   useEffect(() => {
     Animated.timing(visibility, {
@@ -37,8 +34,13 @@ const StatesPicker: () => React$Node = props => {
           setShowPicker(!showPicker);
         }}
       >
-        <Text style={[styles.itemText, arrowIcon && styles.itemTextPadding]} numberOfLines={1}>{usState.name}</Text>
-        {arrowIcon && <View style={styles.arrowDown}/>}
+        <Text
+          style={[styles.itemText, arrowIcon && styles.itemTextPadding]}
+          numberOfLines={1}
+        >
+          {usState.name}
+        </Text>
+        {arrowIcon && <View style={styles.arrowDown} />}
       </Touchable>
       {showPicker && (
         <Animated.View

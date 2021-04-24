@@ -8,7 +8,6 @@ import Header from "../header";
 import styles from "./legal.style";
 
 const LegalScreen: () => React$Node = props => {
-
   const renderItem = (title, text, hint) => {
     return (
       <View style={styles.itemPadding}>
@@ -28,17 +27,21 @@ const LegalScreen: () => React$Node = props => {
         <View style={styles.flexFill}>
           <Header title={"Legal"} onBack={props.navigation.goBack} />
 
-          <Touchable onPress={() => {
-            // props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {content: "Privacy"});
-            Linking.openURL(SERVER.PRIVACY);
-          }}>
+          <Touchable
+            onPress={() => {
+              // props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {content: "Privacy"});
+              Linking.openURL(SERVER.PRIVACY);
+            }}
+          >
             {renderItem("Privacy Policy", "", null)}
           </Touchable>
           <View style={styles.seperator} />
-          <Touchable onPress={() => {
-            // props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {});
-            Linking.openURL(SERVER.TOS);
-          }}>
+          <Touchable
+            onPress={() => {
+              // props.navigation.navigate(SCREENS.TERMS_OF_SERVICE, {});
+              Linking.openURL(SERVER.TOS);
+            }}
+          >
             {renderItem("Terms of Service", "", null)}
           </Touchable>
         </View>

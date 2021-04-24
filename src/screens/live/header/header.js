@@ -23,8 +23,7 @@ const Header: () => React$Node = props => {
   return (
     <View style={isSearchActive ? styles.bottomMargin : styles.bottomMarginSmall}>
       <View style={styles.header}>
-        <LeftElement isSearchActive={isSearchActive}
-          onSearch={props.onSearch} />
+        <LeftElement isSearchActive={isSearchActive} onSearch={props.onSearch} />
         <RightElement
           isSearchActive={isSearchActive}
           onSearchPress={onSearchPress}

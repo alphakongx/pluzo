@@ -1,5 +1,14 @@
 import React from "react";
-import { View, ScrollView, ActivityIndicator, TextInput, Animated, Keyboard, NativeModules, Platform } from "react-native";
+import {
+  View,
+  ScrollView,
+  ActivityIndicator,
+  TextInput,
+  Animated,
+  Keyboard,
+  NativeModules,
+  Platform,
+} from "react-native";
 import KeyboardManager from "react-native-keyboard-manager";
 import * as Animatable from "react-native-animatable";
 import FastImage from "react-native-fast-image";
@@ -20,7 +29,7 @@ import {
   GradientButton,
   BoxShadow,
   SortableList,
-  NotificationModal
+  NotificationModal,
 } from "@components";
 import { Notification, widthPercentageToDP as wp, Format } from "@helpers";
 import Images from "@assets/Images";
@@ -108,7 +117,7 @@ class ProfileSettings extends React.Component {
     this.updateFailureAction();
   }
 
-  onWillFocus = (payload) => {
+  onWillFocus = payload => {
     if (this.pageStartTime == 0) {
       this.pageStartTime = moment().unix();
     }
@@ -120,19 +129,19 @@ class ProfileSettings extends React.Component {
       KeyboardManager.setEnableAutoToolbar(false);
       KeyboardManager.setShouldResignOnTouchOutside(true);
     }
-  }
+  };
 
-  onWillBlur = (payload) => {
+  onWillBlur = payload => {
     if (payload.lastState.key !== payload.state.key) {
       const params = {
         timeStart: this.pageStartTime,
         timeEnd: moment().unix(),
         page: "Profile",
-      }
+      };
       this.pageStartTime = 0;
       this.props.requestPageTime(params, this.props.token);
     }
-  }
+  };
 
   uploadingDone = () => {
     this.setState({ uploading: false, avatarUploading: false });
@@ -144,7 +153,10 @@ class ProfileSettings extends React.Component {
 
   onAddImage = () => {
     if (this.props.user.images.length > 8) {
-      this.setState({notificationText: "You already uploaded 9 photos.", visibleNotification: true});
+      this.setState({
+        notificationText: "You already uploaded 9 photos.",
+        visibleNotification: true,
+      });
       return;
     }
     this.setState({ editingImage: false });
@@ -157,8 +169,23 @@ class ProfileSettings extends React.Component {
       height: 800,
       cropping: true,
       compressImageQuality: 0.7,
-      mediaType: 'photo',
-      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'LongExposure'],
+      mediaType: "photo",
+      smartAlbums: [
+        "PhotoStream",
+        "Generic",
+        "Panoramas",
+        "Favorites",
+        "Timelapses",
+        "AllHidden",
+        "RecentlyAdded",
+        "Bursts",
+        "UserLibrary",
+        "SelfPortraits",
+        "Screenshots",
+        "DepthEffect",
+        "LivePhotos",
+        "LongExposure",
+      ],
     };
 
     if (index === 0) {
@@ -174,7 +201,7 @@ class ProfileSettings extends React.Component {
 
   onUploadImage = data => {
     let photoUriSplit = data.path.split("/");
-    NativeModules.ImageDetector.check(data.path, (value) => {
+    NativeModules.ImageDetector.check(data.path, value => {
       if (value === "SFW") {
         const image = {
           uri: data.path,
@@ -187,7 +214,10 @@ class ProfileSettings extends React.Component {
           this.props.updateUser(params, this.props.token);
         });
       } else {
-        this.setState({notificationText: "This photo can't be used here.", visibleNotification: true});
+        this.setState({
+          notificationText: "This photo can't be used here.",
+          visibleNotification: true,
+        });
       }
     });
   };
@@ -205,9 +235,15 @@ class ProfileSettings extends React.Component {
       this.setState({ editingImage: false });
       return;
     }
-    Notification.confirmAlert("Delete", "Do you want to delete this image?", "OK", "Cancel", () => {
-      this.props.deleteImage(imageId, this.props.token);
-    });
+    Notification.confirmAlert(
+      "Delete",
+      "Do you want to delete this image?",
+      "OK",
+      "Cancel",
+      () => {
+        this.props.deleteImage(imageId, this.props.token);
+      },
+    );
   };
 
   onEditingImage = () => {
@@ -354,8 +390,10 @@ class ProfileSettings extends React.Component {
             <View style={styles.sectionContainer}>
               <Text style={styles.settingsText}>About Me</Text>
               {editingBio && (
-                <Touchable onPress={() => Keyboard.dismiss()}
-                  style={styles.bioDoneButton}>
+                <Touchable
+                  onPress={() => Keyboard.dismiss()}
+                  style={styles.bioDoneButton}
+                >
                   <Text style={styles.sectionText}>Done</Text>
                 </Touchable>
               )}
@@ -381,10 +419,10 @@ class ProfileSettings extends React.Component {
                   const params = new FormData();
                   params.append("bio", cleanText);
                   this.props.updateUser(params, this.props.token);
-                  this.setState({editingBio: false, bioText: cleanText});
+                  this.setState({ editingBio: false, bioText: cleanText });
                 }}
-                onFocus={(e) => {
-                  this.setState({editingBio: true});
+                onFocus={e => {
+                  this.setState({ editingBio: true });
                 }}
               />
             </View>
@@ -405,33 +443,48 @@ class ProfileSettings extends React.Component {
                   }}
                 />
                 <View style={styles.premiumView}>
-                  <FastImage 
+                  <FastImage
                     source={Images.app.pluzoplusMask1}
                     style={styles.premiumMask1}
-                    resizeMode={FastImage.resizeMode.cover} />
-                  <FastImage 
+                    resizeMode={FastImage.resizeMode.cover}
+                  />
+                  <FastImage
                     source={Images.app.pluzoplusMask2}
                     style={styles.premiumMask2}
-                    resizeMode={FastImage.resizeMode.cover} />
-                  <FastImage 
+                    resizeMode={FastImage.resizeMode.cover}
+                  />
+                  <FastImage
                     source={Images.app.pluzoplusLogo}
-                    style={this.props.user.premium === 1 ? styles.premiumLogoCenter : styles.premiumLogo} />
-                  {this.props.user.premium === 0 && <Text style={styles.premiumText}>
-                    {"Exclusive features to enhance\nyour experience."}
-                  </Text>}
+                    style={
+                      this.props.user.premium === 1
+                        ? styles.premiumLogoCenter
+                        : styles.premiumLogo
+                    }
+                  />
+                  {this.props.user.premium === 0 && (
+                    <Text style={styles.premiumText}>
+                      {"Exclusive features to enhance\nyour experience."}
+                    </Text>
+                  )}
                   <AnimatableView
                     style={styles.premiumPlusView}
                     animation={plusAnimation}
                     iterationCount={"infinite"}
-                    direction="alternate"
-                    duration={4000}>
-                    <Image source={Images.app.pluzoplusPlus} style={styles.premiumPlusImage} />
+                    direction='alternate'
+                    duration={4000}
+                  >
+                    <Image
+                      source={Images.app.pluzoplusPlus}
+                      style={styles.premiumPlusImage}
+                    />
                   </AnimatableView>
                 </View>
               </View>
               <View style={styles.buttonContainer}>
                 <GradientButton
-                  text={this.props.user.premium === 1 ? "My Pluzo Plus" : "Get Pluzo Plus"}
+                  text={
+                    this.props.user.premium === 1 ? "My Pluzo Plus" : "Get Pluzo Plus"
+                  }
                   colors={GRADIENT.PURCHASE_BUTTON}
                   shadowColor={"#FF6F00"}
                   onPress={() => this.props.showPurchase(true)}
@@ -468,13 +521,15 @@ class ProfileSettings extends React.Component {
                 barColors={["rgba(255, 168, 55, 0)", "rgba(255, 168, 55, 0.57)"]}
                 barHeight={wp(123)}
                 iconWidth={wp(35)}
-                amounts={user.premium === 1 ? "∞" : user.advanced ? user.advanced.rewinds : 0}
+                amounts={
+                  user.premium === 1 ? "∞" : user.advanced ? user.advanced.rewinds : 0
+                }
                 icon={Images.app.icRewind}
                 onPress={() => {
                   if (user.premium === 1) {
                     return;
                   } else {
-                    this.setState({ visibleRewind: true })
+                    this.setState({ visibleRewind: true });
                   }
                 }}
               />
@@ -535,7 +590,7 @@ class ProfileSettings extends React.Component {
           onHide={() => this.setState({ visibleRewind: false })}
         />
 
-        <NotificationModal 
+        <NotificationModal
           isVisible={this.state.visibleNotification}
           title={this.state.notificationText}
           message={""}
@@ -544,9 +599,10 @@ class ProfileSettings extends React.Component {
           buttonColors={["#ABA7D5", "#ABA7D5"]}
           buttonText={"Okay"}
           buttonTextStyle={"#0B0516"}
-          buttonContainerStyle={{marginTop: 32}}
-          onBack={() => this.setState({visibleNotification: false})}
-          onConfirm={(a, b) => this.setState({visibleNotification: false})} />
+          buttonContainerStyle={{ marginTop: 32 }}
+          onBack={() => this.setState({ visibleNotification: false })}
+          onConfirm={(a, b) => this.setState({ visibleNotification: false })}
+        />
 
         <ActionSheet
           ref={o => (this.ActionSheet = o)}
@@ -555,10 +611,11 @@ class ProfileSettings extends React.Component {
           cancelButtonIndex={2}
           onPress={index => this.onSelectImage(index)}
         />
-        
-        <NavigationEvents 
-          onWillFocus={(payload) => this.onWillFocus(payload)}
-          onWillBlur={(payload) => this.onWillBlur(payload)} />
+
+        <NavigationEvents
+          onWillFocus={payload => this.onWillFocus(payload)}
+          onWillBlur={payload => this.onWillBlur(payload)}
+        />
       </Screen>
     );
   }

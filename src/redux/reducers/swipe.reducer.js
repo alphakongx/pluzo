@@ -23,7 +23,7 @@ const requestCardsUpdate = (state, action) => ({
   ...state,
   removedIndex: action.removedIndex,
   cards: action.swipeData.swipe === undefined ? [] : action.swipeData.swipe,
-})
+});
 
 const addLike = (state, action) => ({
   ...state,

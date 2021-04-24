@@ -132,5 +132,5 @@ export default StyleSheet.create({
   },
   footer1: {
     height: wp(45),
-  }
+  },
 });

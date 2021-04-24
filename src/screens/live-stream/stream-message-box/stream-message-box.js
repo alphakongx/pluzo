@@ -19,10 +19,10 @@ const { createAnimatableComponent } = Animatable;
 const AnimatableView = createAnimatableComponent(View);
 
 const StreamMessageBox: () => React$Node = props => {
-  const[currentTime, setCurrentTime] = useState(new Date().getTime());
+  const [currentTime, setCurrentTime] = useState(new Date().getTime());
   const hideMessages = useRef();
   const { streamStatus, bottomPadding, messages } = props;
-  let showedMessages = messages.filter((value) => value.created_at > (currentTime - 15000));
+  let showedMessages = messages.filter(value => value.created_at > currentTime - 15000);
 
   useEffect(() => {
     if (Platform.OS === "ios") {
@@ -39,7 +39,7 @@ const StreamMessageBox: () => React$Node = props => {
       }
       clearInterval(hideMessages.current);
       hideMessages.current = null;
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const StreamMessageBox: () => React$Node = props => {
 
     return () => {
       newMessageAction();
-    }
+    };
   }, [props.messages, props.streamParams, props.user]);
 
   const onSendMessage = (msg, msgType) => {
@@ -76,7 +76,7 @@ const StreamMessageBox: () => React$Node = props => {
     const { channelName } = props.streamParams;
     props.requestChatAdd(channelName, msg, msgType, props.token);
     if (props.streamStatus === StreamStatus.JOINED) {
-      props.setStreamStatus(StreamStatus.JOIN_MESSAGED);  
+      props.setStreamStatus(StreamStatus.JOIN_MESSAGED);
     }
   };
 
@@ -88,9 +88,11 @@ const StreamMessageBox: () => React$Node = props => {
   const renderMessageItem = message => {
     if (message.type === "system") {
       return (
-        <AnimatableView style={styles.messageItemContainer}
+        <AnimatableView
+          style={styles.messageItemContainer}
           animation={"fadeIn"}
-          delay={200}>
+          delay={200}
+        >
           <View style={styles.messageSystemTextContainer}>
             <Text style={styles.messageSystemText}>{message.message}</Text>
           </View>
@@ -98,9 +100,11 @@ const StreamMessageBox: () => React$Node = props => {
       );
     } else {
       return (
-        <AnimatableView style={styles.messageItemContainer}
+        <AnimatableView
+          style={styles.messageItemContainer}
           animation={"fadeIn"}
-          delay={200}>
+          delay={200}
+        >
           <View style={styles.messageTextContainer}>
             <Text style={styles.messageUser}>{message.user.first_name}</Text>
             {message.message === "(laugh)" && <Image source={Images.live.emojiLaugh} />}
@@ -123,7 +127,7 @@ const StreamMessageBox: () => React$Node = props => {
   };
 
   return (
-    <KeyboardAvoidingView style={[styles.container, {paddingBottom: bottomPadding}]}>
+    <KeyboardAvoidingView style={[styles.container, { paddingBottom: bottomPadding }]}>
       <LinearGradient
         colors={GRADIENT.FADE_UP}
         start={{ x: 0, y: 0 }}
@@ -187,6 +191,6 @@ const StreamMessageBox: () => React$Node = props => {
       )}
     </KeyboardAvoidingView>
   );
-}
+};
 
 export default StreamMessageBox;

@@ -40,7 +40,8 @@ class AnimatedDots extends Component {
       which_dot = 0;
     }
 
-    let prev_dot = (which_dot - 1) < 0 ? this._animation_state.dot_opacities.length - 1 : (which_dot - 1);
+    let prev_dot =
+      which_dot - 1 < 0 ? this._animation_state.dot_opacities.length - 1 : which_dot - 1;
     let next_dot = which_dot + 1;
 
     Animated.parallel([
@@ -53,7 +54,7 @@ class AnimatedDots extends Component {
         toValue: 1,
         duration: this.props.animationDelay,
         useNativeDriver: false,
-      })
+      }),
     ]).start(() => {
       this.animate_dots(next_dot);
     });
@@ -62,16 +63,27 @@ class AnimatedDots extends Component {
   render() {
     return (
       <View style={styles.container}>
-      {this._animation_state.dot_opacities.map((opacity, index) => {
-        return <Animated.View key={index} style={[styles.dot, this.props.style, {opacity: opacity.interpolate({
-          inputRange: [0, 1],
-          outputRange: [this.props.minOpacity, 1],
-        })}]}/>
-      })}
+        {this._animation_state.dot_opacities.map((opacity, index) => {
+          return (
+            <Animated.View
+              key={index}
+              style={[
+                styles.dot,
+                this.props.style,
+                {
+                  opacity: opacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [this.props.minOpacity, 1],
+                  }),
+                },
+              ]}
+            />
+          );
+        })}
       </View>
     );
   }
-};
+}
 
 AnimatedDots.propTypes = {
   numberOfDots: PropTypes.number,

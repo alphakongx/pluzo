@@ -17,26 +17,21 @@ const Screen: () => React$Node = props => {
     >
       {props.children}
     </LinearGradient>
-  ) : (
-    props.noFill ? (      
-      <ContainerComponent style={props.containerStyle}>
-        <ImageBackground
-          source={require("@assets/images/bg.png")}
-          style={props.style}
-        >
-          {props.children}
-        </ImageBackground>
-      </ContainerComponent>
-    ) : (
-      <ImageBackground
-        source={require("@assets/images/bg.png")}
-        style={styles.imageBackground}
-      >
-        <ContainerComponent style={[styles.container, props.style]}>
-          {props.children}
-        </ContainerComponent>
+  ) : props.noFill ? (
+    <ContainerComponent style={props.containerStyle}>
+      <ImageBackground source={require("@assets/images/bg.png")} style={props.style}>
+        {props.children}
       </ImageBackground>
-    )
+    </ContainerComponent>
+  ) : (
+    <ImageBackground
+      source={require("@assets/images/bg.png")}
+      style={styles.imageBackground}
+    >
+      <ContainerComponent style={[styles.container, props.style]}>
+        {props.children}
+      </ContainerComponent>
+    </ImageBackground>
   );
 };
 

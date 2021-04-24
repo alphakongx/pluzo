@@ -460,8 +460,8 @@ const Images = {
     141: require("@assets/images/badges/badge141.png"),
     142: require("@assets/images/badges/badge142.png"),
     143: require("@assets/images/badges/badge143.png"),
-    144: require("@assets/images/badges/badge144.png")
-  }
+    144: require("@assets/images/badges/badge144.png"),
+  },
 };
 
 export default Images;

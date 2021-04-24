@@ -1,6 +1,6 @@
 import React from "react";
 import { View, ActivityIndicator } from "react-native";
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
+import { SwipeListView, SwipeRow } from "react-native-swipe-list-view";
 import EventBus from "eventing-bus";
 import moment from "moment";
 import FastImage from "react-native-fast-image";
@@ -56,33 +56,33 @@ class Messages extends React.Component {
   onReportUser = (rowRef, reportUser) => {
     rowRef.closeRow();
     this.props.onReport && this.props.onReport(reportUser);
-  }
+  };
 
   onRemoveUser = (rowRef, deleteUser) => {
     rowRef.closeRow();
     this.props.onRemove && this.props.onRemove(deleteUser);
-  }
+  };
 
   renderRowItem = (channel, index, rowMap) => {
-    moment.updateLocale('en', {
-      relativeTime : {
-          future: "in %s",
-          past:   "%s ago",
-          s  : '%ds',
-          ss : '%ds',
-          m:  "%dm",
-          mm: "%dm",
-          h:  "%dh",
-          hh: "%dh",
-          d:  "%dd",
-          dd: "%dd",
-          w:  "%dw",
-          ww: "%dw",
-          M:  "%dmo",
-          MM: "%dmo",
-          y:  "%dy",
-          yy: "%dy"
-      }
+    moment.updateLocale("en", {
+      relativeTime: {
+        future: "in %s",
+        past: "%s ago",
+        s: "%ds",
+        ss: "%ds",
+        m: "%dm",
+        mm: "%dm",
+        h: "%dh",
+        hh: "%dh",
+        d: "%dd",
+        dd: "%dd",
+        w: "%dw",
+        ww: "%dw",
+        M: "%dmo",
+        MM: "%dmo",
+        y: "%dy",
+        yy: "%dy",
+      },
     });
 
     let createdTime = channel.messages[0].created_at || channel.messages[0].createdAt;
@@ -100,16 +100,23 @@ class Messages extends React.Component {
     let isMyMessage = channel.messages[0].user._id !== partner._id;
 
     return (
-      <SwipeRow 
+      <SwipeRow
         disableRightSwipe
         rightOpenValue={typeof partner === "string" ? -wp(75) : -wp(150)}
         stopRightSwipe={typeof partner === "string" ? -wp(75) : -wp(150)}
-        closeOnRowPress={true}>
+        closeOnRowPress={true}
+      >
         <View style={typeof partner === "string" ? styles.rowBack1 : styles.rowBack}>
-          {typeof partner === "object" && <Touchable style={[styles.flexFill, styles.backReportContainer]}
-            onPress={() => this.onReportUser(rowMap[index], partner)} />}
-          <Touchable style={[styles.flexFill, styles.backRemoveContainer]}
-              onPress={() => this.onRemoveUser(rowMap[index], partner)} />
+          {typeof partner === "object" && (
+            <Touchable
+              style={[styles.flexFill, styles.backReportContainer]}
+              onPress={() => this.onReportUser(rowMap[index], partner)}
+            />
+          )}
+          <Touchable
+            style={[styles.flexFill, styles.backRemoveContainer]}
+            onPress={() => this.onRemoveUser(rowMap[index], partner)}
+          />
         </View>
         <View style={styles.rowFront}>
           <Touchable
@@ -141,8 +148,11 @@ class Messages extends React.Component {
                   {badges.map(badge => {
                     if (badge > AppBadges.length) return null;
                     return (
-                      <Image key={`user-badge-${badge}`} style={styles.badgeImage} 
-                        source={Images.badges[AppBadges[badge-1].id]} />
+                      <Image
+                        key={`user-badge-${badge}`}
+                        style={styles.badgeImage}
+                        source={Images.badges[AppBadges[badge - 1].id]}
+                      />
                     );
                   })}
                 </View>
@@ -151,11 +161,20 @@ class Messages extends React.Component {
                   numberOfLines={1}
                 >
                   {isMyMessage && "You: "}
-                  {channel.messages[0].type === "invite" && "invited you to join their live!"}
+                  {channel.messages[0].type === "invite" &&
+                    "invited you to join their live!"}
                   {channel.messages[0].type === "close" && "The Live has ended."}
-                  {channel.messages[0].type === "message" && channel.messages[0].image !== null && !isMyMessage && `${channel.messages[0].user.first_name} sent an image`}
-                  {channel.messages[0].type === "message" && channel.messages[0].image !== null && isMyMessage && `You sent an image`}
-                  {channel.messages[0].type === "message" && channel.messages[0].image === null && `${channel.messages[0].text}`}
+                  {channel.messages[0].type === "message" &&
+                    channel.messages[0].image !== null &&
+                    !isMyMessage &&
+                    `${channel.messages[0].user.first_name} sent an image`}
+                  {channel.messages[0].type === "message" &&
+                    channel.messages[0].image !== null &&
+                    isMyMessage &&
+                    `You sent an image`}
+                  {channel.messages[0].type === "message" &&
+                    channel.messages[0].image === null &&
+                    `${channel.messages[0].text}`}
                 </Text>
               </View>
               <View style={styles.timeContainer}>
@@ -166,18 +185,36 @@ class Messages extends React.Component {
               </View>
             </View>
           </Touchable>
-          <View style={typeof partner === "string" ? styles.hiddenContainer1 : styles.hiddenContainer}>
-            {typeof partner === "object" && <Touchable style={[styles.flexFill, styles.hiddenReportContainer]}
-              onPress={() => this.onReportUser(rowMap[index], partner)}>
+          <View
+            style={
+              typeof partner === "string"
+                ? styles.hiddenContainer1
+                : styles.hiddenContainer
+            }
+          >
+            {typeof partner === "object" && (
+              <Touchable
+                style={[styles.flexFill, styles.hiddenReportContainer]}
+                onPress={() => this.onReportUser(rowMap[index], partner)}
+              >
+                <View style={styles.hiddenButton}>
+                  <Image
+                    source={require("@assets/images/report.png")}
+                    style={styles.hiddenIcon}
+                  />
+                  <Text style={styles.hiddenText}>REPORT</Text>
+                </View>
+              </Touchable>
+            )}
+            <Touchable
+              style={[styles.flexFill, styles.hiddenRemoveContainer]}
+              onPress={() => this.onRemoveUser(rowMap[index], partner)}
+            >
               <View style={styles.hiddenButton}>
-                <Image source={require("@assets/images/report.png")} style={styles.hiddenIcon}/>
-                <Text style={styles.hiddenText}>REPORT</Text>
-              </View>
-            </Touchable>}
-            <Touchable style={[styles.flexFill, styles.hiddenRemoveContainer]}
-              onPress={() => this.onRemoveUser(rowMap[index], partner)}>
-              <View style={styles.hiddenButton}>
-                <Image source={require("@assets/images/ic-cross.png")} style={styles.hiddenIcon}/>
+                <Image
+                  source={require("@assets/images/ic-cross.png")}
+                  style={styles.hiddenIcon}
+                />
                 <Text style={styles.hiddenText}>REMOVE</Text>
               </View>
             </Touchable>
@@ -185,7 +222,7 @@ class Messages extends React.Component {
         </View>
       </SwipeRow>
     );
-  }
+  };
 
   render() {
     const { isLoadingChannels, channels } = this.props;
@@ -208,12 +245,12 @@ class Messages extends React.Component {
         renderItem={(rowData, rowMap) => {
           return this.renderRowItem(rowData.item, `room-${rowData.item.chat_id}`, rowMap);
         }}
-        ref={(ref) => this.swipeListRef = ref}
+        ref={ref => (this.swipeListRef = ref)}
         onRowOpen={(rowKey, rowMap) => {
-          this.setState({rowOpened: true});
+          this.setState({ rowOpened: true });
         }}
         onRowClose={(rowKey, rowMap) => {
-          this.setState({rowOpened: false});
+          this.setState({ rowOpened: false });
         }}
       />
     );

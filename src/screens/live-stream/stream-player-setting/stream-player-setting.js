@@ -40,7 +40,7 @@ const StreamPlayerSetting: () => React$Node = props => {
       setShareScreen(!shareScreen);
       EventBus.publish(StreamSetting.CHANGE_SHARE);
     } else {
-      props.onShowFilters && props.onShowFilters()
+      props.onShowFilters && props.onShowFilters();
     }
   };
 

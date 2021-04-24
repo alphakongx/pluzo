@@ -41,8 +41,7 @@ export default StyleSheet.create({
   noMarginRight: {
     marginRight: wp(0),
   },
-  sendButton: {
-  },
+  sendButton: {},
   sendButtonIcon: {
     tintColor: "white",
     width: wp(15),

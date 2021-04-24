@@ -25,14 +25,14 @@ function popToTop(routeName, params) {
   _navigator.dispatch(StackActions.popToTop());
 }
 
-function getCurrentRoute(nav){
+function getCurrentRoute(nav) {
   if (nav === null) {
     nav = _navigator.state.nav;
   }
-  if(Array.isArray(nav.routes)&&nav.routes.length>0){
-      return getCurrentRoute(nav.routes[nav.index])
-  }else {
-      return nav.routeName
+  if (Array.isArray(nav.routes) && nav.routes.length > 0) {
+    return getCurrentRoute(nav.routes[nav.index]);
+  } else {
+    return nav.routeName;
   }
 }
 

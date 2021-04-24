@@ -14,7 +14,7 @@ import RtcEngine, {
   VideoRemoteState,
   VideoRenderMode,
   RtcEngineConfig,
-  DataStreamConfig
+  DataStreamConfig,
 } from "react-native-agora";
 import { Screen, Text, Image, Touchable, NotificationModal } from "@components";
 import { RTCENGINE } from "@config";
@@ -111,15 +111,21 @@ class StreamPlayer extends Component {
       if (!this.props.isEnabledMic) {
         this.props.updateMutedUsers([...this.props.mutedUsers, this.props.user.id]);
       } else {
-        this.props.updateMutedUsers(this.props.mutedUsers.filter(id => id !== this.props.user.id));
+        this.props.updateMutedUsers(
+          this.props.mutedUsers.filter(id => id !== this.props.user.id),
+        );
       }
     }
 
-    if (prevProps.broadcasters.length > 0 && 
-      this.props.broadcasters.length === 0 && 
-      this.props.streamParams.isBroadcaster === false) {
+    if (
+      prevProps.broadcasters.length > 0 &&
+      this.props.broadcasters.length === 0 &&
+      this.props.streamParams.isBroadcaster === false
+    ) {
       EventBus.publish("Modal_Close");
-      setTimeout(() => { this.props.onEndedStream(); }, 600);
+      setTimeout(() => {
+        this.props.onEndedStream();
+      }, 600);
     }
   }
 
@@ -127,7 +133,9 @@ class StreamPlayer extends Component {
     if (action === "StreamStopped") {
       if (this.state.channelName === jsonData) {
         EventBus.publish("Modal_Close");
-        setTimeout(() => { this.props.onEndedStream(); }, 600);
+        setTimeout(() => {
+          this.props.onEndedStream();
+        }, 600);
       }
     } else if (action === "Stream_join_user") {
       if (jsonData === undefined) return;
@@ -140,7 +148,10 @@ class StreamPlayer extends Component {
           this.props.updateAudiences(newAudiences);
         }
         if (data.user._id === this.props.user.id) {
-          this.props.updateStreamInfo(data.stream_info.boost_end_time, parseInt(data.stream_info.invite_only, 10));
+          this.props.updateStreamInfo(
+            data.stream_info.boost_end_time,
+            parseInt(data.stream_info.invite_only, 10),
+          );
         }
       }
     } else if (action === "Stream_disconnect_user") {
@@ -148,11 +159,17 @@ class StreamPlayer extends Component {
       const { streamParams, audiences } = this.props;
       let data = JSON.parse(jsonData);
       if (streamParams.channelName === data.stream) {
-        this.props.updateAskedUsers(this.props.askedUsers.filter((value) => value !== data.user._id));
+        this.props.updateAskedUsers(
+          this.props.askedUsers.filter(value => value !== data.user._id),
+        );
         let newAudiences = audiences.filter(audience => audience._id !== data.user._id);
         this.props.updateAudiences(newAudiences);
-        this.props.updateMutedUsers(this.props.mutedUsers.filter((value) => value !== data.user._id));
-        this.props.updateRemoteMutedUsers(this.props.remoteMutedUsers.filter((value) => value !== data.user._id));
+        this.props.updateMutedUsers(
+          this.props.mutedUsers.filter(value => value !== data.user._id),
+        );
+        this.props.updateRemoteMutedUsers(
+          this.props.remoteMutedUsers.filter(value => value !== data.user._id),
+        );
       }
     } else if (action === "Stream_ask_join") {
       if (jsonData === undefined) return;
@@ -189,16 +206,16 @@ class StreamPlayer extends Component {
         this.props.onChangeRole(false);
         let mutedUsers = this.props.mutedUsers;
         this.props.resetEnabledSettings();
-        this.props.updateMutedUsers(mutedUsers.filter((value) => value !== data.user._id));
+        this.props.updateMutedUsers(mutedUsers.filter(value => value !== data.user._id));
       }
     } else if (action === "Stream_user_ask_join") {
       if (jsonData === undefined) return;
       let data = JSON.parse(jsonData);
       if (data.host._id === this.props.user.id) {
         // this.setState({ askedByUser: true, askedUser: data.user, visibleJoin: true });
-        let users = this.props.audiences.filter((value) => value._id === data.user._id);
+        let users = this.props.audiences.filter(value => value._id === data.user._id);
         if (users.length > 0) {
-          if(!this.props.askedUsers.includes(data.user._id)) {
+          if (!this.props.askedUsers.includes(data.user._id)) {
             this.props.updateAskedUsers([data.user._id, ...this.props.askedUsers]);
           }
         }
@@ -206,8 +223,10 @@ class StreamPlayer extends Component {
     } else if (action === "Stream_user_cancel_ask") {
       if (jsonData === undefined) return;
       let data = JSON.parse(jsonData);
-      if (data.stream === this.props.streamParams.channelName ) {
-        this.props.updateAskedUsers(this.props.askedUsers.filter((value) => value !== data.user._id));
+      if (data.stream === this.props.streamParams.channelName) {
+        this.props.updateAskedUsers(
+          this.props.askedUsers.filter(value => value !== data.user._id),
+        );
       }
     } else if (action === "Stream_user_accept_join") {
       if (jsonData === undefined) return;
@@ -243,37 +262,48 @@ class StreamPlayer extends Component {
     } else if (action === "REMOTE_USER_MUTE") {
       this._engine.muteRemoteAudioStream(jsonData.userId, jsonData.mute);
       if (jsonData.mute === true) {
-        this.props.updateRemoteMutedUsers([jsonData.userId, ...this.props.remoteMutedUsers]);
+        this.props.updateRemoteMutedUsers([
+          jsonData.userId,
+          ...this.props.remoteMutedUsers,
+        ]);
       } else {
-        this.props.updateRemoteMutedUsers(this.props.remoteMutedUsers.filter((value) => value !== jsonData.userId));
+        this.props.updateRemoteMutedUsers(
+          this.props.remoteMutedUsers.filter(value => value !== jsonData.userId),
+        );
       }
     } else if (action === "Stream_user_kick") {
       if (jsonData === undefined) return;
       let data = JSON.parse(jsonData);
       if (parseInt(data.user, 10) === this.props.user.id) {
         this.onLeaveRoom();
-        this.setState({notificationData: {
-          text: "You've been kicked from this live",
-          logoBackground: "#312446",
-          logoTintColor: "white",
-          buttonColors: ["#312446", "#312446"],
-          buttonText: "Okay",
-          buttonTextStyle: "white",
-        }, visibleNotification: true});
+        this.setState({
+          notificationData: {
+            text: "You've been kicked from this live",
+            logoBackground: "#312446",
+            logoTintColor: "white",
+            buttonColors: ["#312446", "#312446"],
+            buttonText: "Okay",
+            buttonTextStyle: "white",
+          },
+          visibleNotification: true,
+        });
       }
     } else if (action === "Stream_user_ban") {
       if (jsonData === undefined) return;
       let data = JSON.parse(jsonData);
       if (parseInt(data.user, 10) === this.props.user.id) {
         this.onLeaveRoom();
-        this.setState({notificationData: {
-          text: "You've been banned from this live",
-          logoBackground: "#FF0036",
-          logoTintColor: "black",
-          buttonColors: ["#FF0036", "#FF0036"],
-          buttonText: "Okay",
-          buttonTextStyle: "black",
-        }, visibleNotification: true});
+        this.setState({
+          notificationData: {
+            text: "You've been banned from this live",
+            logoBackground: "#FF0036",
+            logoTintColor: "black",
+            buttonColors: ["#FF0036", "#FF0036"],
+            buttonText: "Okay",
+            buttonTextStyle: "black",
+          },
+          visibleNotification: true,
+        });
       }
     } else if (action === "User_update") {
       const { broadcasters, audiences } = this.props;
@@ -293,10 +323,13 @@ class StreamPlayer extends Component {
       // this.setState({frontCamera: !this.state.frontCamera});
     } else if (action === "REMOVE_FROM_BROADCASTER") {
       if (this._dataStreamId !== null) {
-        this._engine.sendStreamMessage(this._dataStreamId, `${jsonData.userId}-remove_from_broadcaster`);
+        this._engine.sendStreamMessage(
+          this._dataStreamId,
+          `${jsonData.userId}-remove_from_broadcaster`,
+        );
       }
     }
-  }
+  };
 
   initRtcEngine = async () => {
     const { appId, channelName } = this.state;
@@ -321,14 +354,19 @@ class StreamPlayer extends Component {
     this.addRtcListeners();
     await this._engine.joinChannel(null, channelName, null, this.props.user.id);
     if (this._dataStreamId === null) {
-      this._engine.createDataStreamWithConfig(new DataStreamConfig({
-        syncWithAudio: false,
-        ordered: false,
-      })).then((value) => {
-        this._dataStreamId = value;
-      }).catch((reason) => {
-        console.log(reason);
-      });
+      this._engine
+        .createDataStreamWithConfig(
+          new DataStreamConfig({
+            syncWithAudio: false,
+            ordered: false,
+          }),
+        )
+        .then(value => {
+          this._dataStreamId = value;
+        })
+        .catch(reason => {
+          console.log(reason);
+        });
     }
   };
 
@@ -347,7 +385,7 @@ class StreamPlayer extends Component {
       }
       this.props.streamLeave(this.props.streamParams.channelName, this.props.token);
     }
-  }
+  };
 
   addRtcListeners = () => {
     this._engine.enableAudioVolumeIndication(200, 3, true);
@@ -359,7 +397,7 @@ class StreamPlayer extends Component {
         this.props.updateAudiences(audiences.filter(audience => audience._id !== uid));
         this.props.updateBroadcasters([tmpUsers[0], ...broadcasters]);
 
-        this.props.updateAskedUsers(this.props.askedUsers.filter((value) => value !== uid));
+        this.props.updateAskedUsers(this.props.askedUsers.filter(value => value !== uid));
       }
     });
     this._engine.addListener("UserOffline", (uid, reason) => {
@@ -373,8 +411,10 @@ class StreamPlayer extends Component {
         this.props.updateBroadcasters(
           broadcasters.filter(broadcaster => broadcaster._id !== uid),
         );
-        this.props.updateMutedUsers(this.props.mutedUsers.filter((value) => value !== uid));
-        this.props.updateRemoteMutedUsers(this.props.remoteMutedUsers.filter((value) => value !== uid));
+        this.props.updateMutedUsers(this.props.mutedUsers.filter(value => value !== uid));
+        this.props.updateRemoteMutedUsers(
+          this.props.remoteMutedUsers.filter(value => value !== uid),
+        );
       }
     });
 
@@ -383,9 +423,9 @@ class StreamPlayer extends Component {
         this.addStreamer(uid);
         if (uid === this.props.user.id) {
           this.setState({
-            externalVideo: !this.state.externalVideo, 
+            externalVideo: !this.state.externalVideo,
             frontCamera: this.state.frontCamera,
-            capturing: true
+            capturing: true,
           });
         }
       } else {
@@ -433,21 +473,22 @@ class StreamPlayer extends Component {
       }
     });
 
-    this._engine.addListener("RemoteVideoStateChanged", (uid, state, reason, elapsed) => {console.log(state);
+    this._engine.addListener("RemoteVideoStateChanged", (uid, state, reason, elapsed) => {
+      console.log(state);
       const { frozenIds } = this.state;
       if (state === VideoRemoteState.Decoding) {
         if (frozenIds.indexOf(uid) !== -1) {
-          this.setState({frozenIds: frozenIds.filter(id => id !== uid)});
+          this.setState({ frozenIds: frozenIds.filter(id => id !== uid) });
         }
         this.addStreamer(uid);
       } else if (state === VideoRemoteState.Stopped) {
         this.removeStreamer(uid);
         if (frozenIds.indexOf(uid) !== -1) {
-          this.setState({frozenIds: frozenIds.filter(id => id !== uid)});
+          this.setState({ frozenIds: frozenIds.filter(id => id !== uid) });
         }
       } else if (state === VideoRemoteState.Frozen) {
         if (frozenIds.indexOf(uid) === -1) {
-          this.setState({frozenIds: [uid, ...frozenIds]});
+          this.setState({ frozenIds: [uid, ...frozenIds] });
         }
       }
     });
@@ -467,13 +508,18 @@ class StreamPlayer extends Component {
     this._engine.addListener("StreamMessage", (uid, streamId, data) => {
       let values = data.split("-");
       if (values.length > 1) {
-        if (parseInt(values[0], 10) === this.props.user.id && values[1] === "remove_from_broadcaster") {
+        if (
+          parseInt(values[0], 10) === this.props.user.id &&
+          values[1] === "remove_from_broadcaster"
+        ) {
           this._engine.setClientRole(ClientRole.Audience);
           this.props.setAskedToJoin(false);
           this.props.onChangeRole(false);
           let mutedUsers = this.props.mutedUsers;
           this.props.resetEnabledSettings();
-          this.props.updateMutedUsers(mutedUsers.filter((value) => value !== parseInt(values[0], 10)));
+          this.props.updateMutedUsers(
+            mutedUsers.filter(value => value !== parseInt(values[0], 10)),
+          );
         }
       }
     });
@@ -484,7 +530,8 @@ class StreamPlayer extends Component {
     if (streamerIds.indexOf(uid) === -1) {
       this.setState(
         {
-          streamerIds: uid === this.props.user.id ? [uid, ...streamerIds] : [...streamerIds, uid],
+          streamerIds:
+            uid === this.props.user.id ? [uid, ...streamerIds] : [...streamerIds, uid],
         },
         () => {
           this.props.onChangeStreamers(this.state.streamerIds.length);
@@ -528,10 +575,10 @@ class StreamPlayer extends Component {
     await this._engine.enableVideo();
     this.setState({
       externalVideo: !this.state.externalVideo,
-      frontCamera:  this.state.frontCamera,
-      capturing: true
+      frontCamera: this.state.frontCamera,
+      capturing: true,
     });
-  }
+  };
 
   renderNoVideos = () => {
     return (
@@ -595,18 +642,20 @@ class StreamPlayer extends Component {
             renderMode={VideoRenderMode.Hidden}
             zOrderMediaOverlay={true}
           />
-          {frozenIds.indexOf(uid) !== -1 &&
-          <View style={[styles.absolute, styles.pausedContainer]}>
-            { Platform.OS === "ios" &&
-            <BlurView
-              style={styles.absolute}
-              blurType='dark'
-              blurAmount={10}
-              reducedTransparencyFallbackColor='rgba(11, 5, 22, 0.9)'
-            />}
-            <Image source={Images.live.icPaused} style={styles.pausedIcon} />
-            <Text style={styles.pausedText}>Paused</Text>
-          </View>}
+          {frozenIds.indexOf(uid) !== -1 && (
+            <View style={[styles.absolute, styles.pausedContainer]}>
+              {Platform.OS === "ios" && (
+                <BlurView
+                  style={styles.absolute}
+                  blurType='dark'
+                  blurAmount={10}
+                  reducedTransparencyFallbackColor='rgba(11, 5, 22, 0.9)'
+                />
+              )}
+              <Image source={Images.live.icPaused} style={styles.pausedIcon} />
+              <Text style={styles.pausedText}>Paused</Text>
+            </View>
+          )}
         </View>
       );
     }
@@ -624,7 +673,7 @@ class StreamPlayer extends Component {
         >
           {this.renderVideoView(streamUsers[i])}
           {i + 1 < userCount && this.renderVideoView(streamUsers[i + 1])}
-        </View>
+        </View>,
       );
     }
     return videoViews;
@@ -677,7 +726,7 @@ class StreamPlayer extends Component {
           }}
         />
 
-        <NotificationModal 
+        <NotificationModal
           isVisible={this.state.visibleNotification}
           title={this.state.notificationData.text}
           message={""}
@@ -687,11 +736,14 @@ class StreamPlayer extends Component {
           buttonColors={this.state.notificationData.buttonColors}
           buttonText={this.state.notificationData.buttonText}
           buttonTextStyle={this.state.notificationData.buttonTextStyle}
-          buttonContainerStyle={{marginTop: 32}}
+          buttonContainerStyle={{ marginTop: 32 }}
           onBack={() => {}}
-          onConfirm={(a, b) => this.setState({visibleNotification: false}, () => {
-            this.props.onLeaveRoom && this.props.onLeaveRoom();
-          })} />
+          onConfirm={(a, b) =>
+            this.setState({ visibleNotification: false }, () => {
+              this.props.onLeaveRoom && this.props.onLeaveRoom();
+            })
+          }
+        />
       </View>
     );
   }

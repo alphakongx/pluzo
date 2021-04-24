@@ -7,16 +7,21 @@ import Header from "../header";
 import styles from "./help.style";
 
 const HelpScreen: () => React$Node = props => {
+  const helpButtons = [
+    "I have a question",
+    "I found a bug",
+    "I'd like to report a Safety Concern",
+    "I have a suggestion",
+  ];
 
-  const helpButtons = ["I have a question", "I found a bug", "I'd like to report a Safety Concern", "I have a suggestion"];
-
-  const onHelp = (index) => {
-    props.navigation.navigate(SCREENS.HELP_CONTENT, {type: index + 1, 
+  const onHelp = index => {
+    props.navigation.navigate(SCREENS.HELP_CONTENT, {
+      type: index + 1,
       onGoBack: () => {
         props.navigation.goBack();
-      }
+      },
     });
-  }
+  };
 
   return (
     <Screen hasGradient style={styles.flexFill}>
@@ -27,14 +32,16 @@ const HelpScreen: () => React$Node = props => {
           <View style={styles.contentContainer}>
             {helpButtons.map((button, index) => {
               return (
-                <Touchable style={styles.buttonContainer} key={`help-button-${index}`}
-                  onPress={() => onHelp(index)}>
+                <Touchable
+                  style={styles.buttonContainer}
+                  key={`help-button-${index}`}
+                  onPress={() => onHelp(index)}
+                >
                   <Text style={styles.buttonText}>{button}</Text>
                 </Touchable>
-              )
+              );
             })}
           </View>
-          
         </View>
       </SafeAreaView>
     </Screen>

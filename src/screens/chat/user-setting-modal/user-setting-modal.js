@@ -11,7 +11,7 @@ class UserSettingModal extends Component {
   }
 
   render() {
-    const {user, isFriend=true, ...rest} = this.props;
+    const { user, isFriend = true, ...rest } = this.props;
     return (
       <Modal
         {...rest}
@@ -44,43 +44,51 @@ class UserSettingModal extends Component {
                 {`Anything wrong with ${user.first_name}?`}
               </Text>
 
-              {isFriend &&
-              <SolidButton noShadow
-                containerStyle={[styles.buttonContainer, styles.unfriendButton]}
-                text={"Unfriend"}
-                textStyle={styles.buttonText}
-                onPress={() => {
-                  this.props.onDismiss();
-                  this.props.onUnfriend();
-                }} />}
-              
-              <SolidButton noShadow
+              {isFriend && (
+                <SolidButton
+                  noShadow
+                  containerStyle={[styles.buttonContainer, styles.unfriendButton]}
+                  text={"Unfriend"}
+                  textStyle={styles.buttonText}
+                  onPress={() => {
+                    this.props.onDismiss();
+                    this.props.onUnfriend();
+                  }}
+                />
+              )}
+
+              <SolidButton
+                noShadow
                 containerStyle={[styles.buttonContainer, styles.blockButton]}
                 text={"Block"}
                 textStyle={styles.buttonText}
                 onPress={() => {
                   this.props.onDismiss();
                   this.props.onBlock();
-                }} />
-              
-              <SolidButton noShadow
+                }}
+              />
+
+              <SolidButton
+                noShadow
                 containerStyle={[styles.buttonContainer, styles.blockButton]}
                 text={"Report"}
                 textStyle={styles.buttonText}
                 onPress={() => {
                   this.props.onDismiss();
                   this.props.onReport();
-                }} />
-              
+                }}
+              />
+
               <View style={styles.seperator} />
-              <SolidButton noShadow
+              <SolidButton
+                noShadow
                 containerStyle={[styles.buttonContainer, styles.cancelButton]}
                 text={"Cancel"}
                 textStyle={styles.buttonText}
-                onPress={this.props.onDismiss} />
+                onPress={this.props.onDismiss}
+              />
             </Screen>
           </SafeAreaView>
-          
         </View>
       </Modal>
     );

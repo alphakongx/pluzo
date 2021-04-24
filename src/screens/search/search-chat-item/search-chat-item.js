@@ -15,7 +15,7 @@ const SearchChatItem: () => React$Node = props => {
     new RegExp(searchKeyword, "ig"),
     `<previewBold>${searchKeyword}</previewBold>`,
   );
-  
+
   return (
     <Touchable
       onPress={() => {
@@ -36,7 +36,7 @@ const SearchChatItem: () => React$Node = props => {
         <View style={styles.imageContainer}>
           <FastImage
             source={
-              (image === null || image === undefined)
+              image === null || image === undefined
                 ? require("@assets/images/app-icon.png")
                 : { uri: image }
             }
@@ -45,7 +45,7 @@ const SearchChatItem: () => React$Node = props => {
         </View>
         <View style={styles.messageContentContainer}>
           <Text style={styles.subject}>
-            {(first_name === null || first_name === undefined) ? username : first_name}
+            {first_name === null || first_name === undefined ? username : first_name}
           </Text>
           <StyledText style={styles.preview} textStyles={styles} numberOfLines={1}>
             {styledText}

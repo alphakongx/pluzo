@@ -49,5 +49,5 @@ export default StyleSheet.create({
     width: wp(25),
     height: wp(25),
     marginRight: wp(13),
-  }
+  },
 });

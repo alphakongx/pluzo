@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Platform, View, TextInput, KeyboardAvoidingView } from "react-native";
-import { Screen, Text, Touchable, Image, AppAlert, KeyboardListener, SolidButton } from "@components";
+import {
+  Screen,
+  Text,
+  Touchable,
+  Image,
+  AppAlert,
+  KeyboardListener,
+  SolidButton,
+} from "@components";
 import ActionSheet from "react-native-actionsheet";
 import ImagePicker from "react-native-image-crop-picker";
 import { requestHelp } from "@redux/api";
@@ -31,13 +39,28 @@ const HelpContentScreen: () => React$Node = props => {
     setVisibleAlert(false);
     setContent("");
     setSelectedFile(null);
-  }
+  };
 
-  const onSelectImage = (index) => {
+  const onSelectImage = index => {
     const options = {
       compressImageQuality: 0.7,
-      mediaType: 'photo',
-      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'LongExposure'],
+      mediaType: "photo",
+      smartAlbums: [
+        "PhotoStream",
+        "Generic",
+        "Panoramas",
+        "Favorites",
+        "Timelapses",
+        "AllHidden",
+        "RecentlyAdded",
+        "Bursts",
+        "UserLibrary",
+        "SelfPortraits",
+        "Screenshots",
+        "DepthEffect",
+        "LivePhotos",
+        "LongExposure",
+      ],
     };
 
     if (index === 0) {
@@ -49,7 +72,7 @@ const HelpContentScreen: () => React$Node = props => {
         setSelectedFile(image);
       });
     }
-  }
+  };
 
   const onSend = () => {
     let params = new FormData();
@@ -59,60 +82,77 @@ const HelpContentScreen: () => React$Node = props => {
       params.append("file", selectedFile);
     }
     setLoading(true);
-    requestHelp(params, props.token).then((res) => {
-      setVisibleAlert(true);
-      setLoading(false);
-    }).catch(e => {
-      setLoading(false);
-    });
-  }
+    requestHelp(params, props.token)
+      .then(res => {
+        setVisibleAlert(true);
+        setLoading(false);
+      })
+      .catch(e => {
+        setLoading(false);
+      });
+  };
 
   return (
     <Screen hasGradient style={styles.flexFill}>
       <SafeAreaView style={styles.flexFill}>
-      <KeyboardAvoidingView style={styles.flexFill}
-        behavior={Platform.OS === "ios" ? "height" : "height"}>
-        <Header title={""} onBack={props.navigation.goBack} />
+        <KeyboardAvoidingView
+          style={styles.flexFill}
+          behavior={Platform.OS === "ios" ? "height" : "height"}
+        >
+          <Header title={""} onBack={props.navigation.goBack} />
 
-        <View 
-          style={[styles.contentContainer, keyboardShowing ? styles.contentMarginZero : styles.contentMargin]}>
-          <Text style={styles.titleText}>{title}</Text>
+          <View
+            style={[
+              styles.contentContainer,
+              keyboardShowing ? styles.contentMarginZero : styles.contentMargin,
+            ]}
+          >
+            <Text style={styles.titleText}>{title}</Text>
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={content}
-              style={styles.inputField}
-              placeholder={"Enter your text here..."}
-              placeholderTextColor={"#ABA7D5"}
-              multiline
-              onChangeText={(text) => setContent(text)} />
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={content}
+                style={styles.inputField}
+                placeholder={"Enter your text here..."}
+                placeholderTextColor={"#ABA7D5"}
+                multiline
+                onChangeText={text => setContent(text)}
+              />
+            </View>
+
+            <Touchable
+              style={styles.attachButtonContainer}
+              onPress={() => actionSheet.show()}
+            >
+              {selectedFile === null && (
+                <Image source={Images.app.icPlus} style={styles.plusIcon} />
+              )}
+              <Text style={styles.attachButtonText} numberOfLines={1}>
+                {selectedFile === null
+                  ? "Attach a file"
+                  : `Attach the ${selectedFile.filename}${selectedFile.filename}${selectedFile.filename}${selectedFile.filename}${selectedFile.filename}`}
+              </Text>
+            </Touchable>
+            <View style={styles.buttonContainer}>
+              <SolidButton
+                text={"Send"}
+                textStyle={styles.buttonText}
+                containerStyle={styles.sendButton}
+                onPress={() => onSend()}
+                disabled={loading}
+                loading={loading}
+                loadingColor='#0B0516'
+              />
+            </View>
           </View>
-
-          <Touchable style={styles.attachButtonContainer} onPress={() => actionSheet.show()}>
-            {selectedFile === null && <Image source={Images.app.icPlus} style={styles.plusIcon} />}
-            <Text style={styles.attachButtonText} numberOfLines={1}>
-              {selectedFile === null ? "Attach a file" : `Attach the ${selectedFile.filename}${selectedFile.filename}${selectedFile.filename}${selectedFile.filename}${selectedFile.filename}`}
-            </Text>
-          </Touchable>
-          <View style={styles.buttonContainer}>
-            <SolidButton
-              text={"Send"}
-              textStyle={styles.buttonText}
-              containerStyle={styles.sendButton}
-              onPress={() => onSend()}
-              disabled={loading}
-              loading={loading}
-              loadingColor="#0B0516">
-            </SolidButton>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
-      <KeyboardListener 
+      <KeyboardListener
         onWillShow={() => setKeyboardShowing(true)}
         onWillHide={() => setKeyboardShowing(false)}
         onDidShow={() => Platform.OS === "android" && setKeyboardShowing(true)}
-        onDidHide={() => Platform.OS === "android" && setKeyboardShowing(false)}/>
+        onDidHide={() => Platform.OS === "android" && setKeyboardShowing(false)}
+      />
       <ActionSheet
         ref={o => (actionSheet = o)}
         title={"Select"}
@@ -120,7 +160,7 @@ const HelpContentScreen: () => React$Node = props => {
         cancelButtonIndex={2}
         onPress={index => onSelectImage(index)}
       />
-      <AppAlert 
+      <AppAlert
         isVisible={visibleAlert}
         onDismiss={() => {
           onInit();
@@ -128,7 +168,8 @@ const HelpContentScreen: () => React$Node = props => {
           props.navigation.goBack();
         }}
         title={"You successfully submitted a ticket."}
-        content={"Thanks. We will get back to you within 24 hours."} />
+        content={"Thanks. We will get back to you within 24 hours."}
+      />
     </Screen>
   );
 };

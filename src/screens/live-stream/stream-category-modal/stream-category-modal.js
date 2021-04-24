@@ -13,7 +13,10 @@ class StreamCategoryModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      category: parseInt(this.props.stream.category, 10) > 6 ? 0 : parseInt(this.props.stream.category, 10),
+      category:
+        parseInt(this.props.stream.category, 10) > 6
+          ? 0
+          : parseInt(this.props.stream.category, 10),
     };
   }
 
@@ -72,19 +75,24 @@ class StreamCategoryModal extends Component {
         <SafeAreaView style={styles.container} pointerEvents={"box-none"}>
           <View style={styles.emojiButtonContainer} pointerEvents={"box-none"}>
             <View style={styles.emojiButton} pointerEvents={"box-none"}>
-              {this.state.category === 0 ?
-              (
+              {this.state.category === 0 ? (
                 <Text style={styles.emptyCategoryText}>Category</Text>
-              ): (
-              <LinearGradient
-                colors={Object.values(AppTags[this.state.category].color)}
-                start={{x: 1, y: 0}}
-                end={{x: 0, y: 1}}
-                style={styles.emojiCategoryContainer}>
-                <Text style={[styles.itemText, {textShadowColor: AppTags[this.state.category].shadowColor}]}>
-                  {AppTags[this.state.category].name}
-                </Text>
-              </LinearGradient>
+              ) : (
+                <LinearGradient
+                  colors={Object.values(AppTags[this.state.category].color)}
+                  start={{ x: 1, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.emojiCategoryContainer}
+                >
+                  <Text
+                    style={[
+                      styles.itemText,
+                      { textShadowColor: AppTags[this.state.category].shadowColor },
+                    ]}
+                  >
+                    {AppTags[this.state.category].name}
+                  </Text>
+                </LinearGradient>
               )}
             </View>
           </View>

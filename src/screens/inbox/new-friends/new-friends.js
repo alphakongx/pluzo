@@ -18,7 +18,7 @@ class NewFriends extends React.Component {
     super(props);
     this.state = {
       visiblePurchase: false,
-    }
+    };
   }
 
   componentDidMount() {
@@ -57,7 +57,7 @@ class NewFriends extends React.Component {
     //     return -1;
     //   }
     // });
-    
+
     let allFriends = [user, ...friends];
     return (
       <View style={styles.container}>
@@ -114,19 +114,20 @@ class NewFriends extends React.Component {
                   <View style={styles.friendItemContainer}>
                     <FastImage
                       source={
-                        friend.id === 0 ? placeHolder :
-                        friend.images[0] === null
+                        friend.id === 0
+                          ? placeHolder
+                          : friend.images[0] === null
                           ? placeHolder
                           : { uri: friend.images[0].path }
                       }
                       style={styles.friendImage}
                     />
-                    {(friend.flag === 2 || friend.flag === 3) ? (
+                    {friend.flag === 2 || friend.flag === 3 ? (
                       <View style={styles.favouriteIcon}>
                         <Image source={require("@assets/images/favourite.png")} />
                       </View>
                     ) : null}
-                    {(friend.flag === 1 || friend.flag === 3) ? (
+                    {friend.flag === 1 || friend.flag === 3 ? (
                       <View style={styles.onlineIconContainer}>
                         <LinearGradient
                           colors={GRADIENT.FRIEND_ONLINE_ICON}

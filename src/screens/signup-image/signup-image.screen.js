@@ -7,7 +7,7 @@ import {
   SolidButton,
   Text,
   Touchable,
-  NotificationModal
+  NotificationModal,
 } from "@components";
 import styles from "./signup-image.style.js";
 import ImagePicker from "react-native-image-crop-picker";
@@ -19,7 +19,7 @@ const SignupImage: () => React$Node = props => {
   let actionSheetRef = React.createRef();
   let currentImageIndex = 1;
 
-  const onPressUpload = (index) => {
+  const onPressUpload = index => {
     if (index === 0) {
       if (props.picture1) {
         if (props.picture2) {
@@ -42,8 +42,23 @@ const SignupImage: () => React$Node = props => {
       height: 800,
       cropping: true,
       compressImageQuality: 0.7,
-      mediaType: 'photo',
-      smartAlbums: ['PhotoStream', 'Generic', 'Panoramas', 'Favorites', 'Timelapses', 'AllHidden', 'RecentlyAdded', 'Bursts', 'UserLibrary', 'SelfPortraits', 'Screenshots', 'DepthEffect', 'LivePhotos', 'LongExposure'],
+      mediaType: "photo",
+      smartAlbums: [
+        "PhotoStream",
+        "Generic",
+        "Panoramas",
+        "Favorites",
+        "Timelapses",
+        "AllHidden",
+        "RecentlyAdded",
+        "Bursts",
+        "UserLibrary",
+        "SelfPortraits",
+        "Screenshots",
+        "DepthEffect",
+        "LivePhotos",
+        "LongExposure",
+      ],
     };
 
     if (index === 0) {
@@ -59,7 +74,7 @@ const SignupImage: () => React$Node = props => {
 
   const onUploadImage = data => {
     let photoUriSplit = data.path.split("/");
-    NativeModules.ImageDetector.check(data.path, (value) => {
+    NativeModules.ImageDetector.check(data.path, value => {
       if (value === "SFW") {
         const image = {
           uri: data.path,
@@ -77,7 +92,6 @@ const SignupImage: () => React$Node = props => {
         setVisibleNotification(true);
       }
     });
-    
   };
 
   const goBack = () => {
@@ -103,8 +117,12 @@ const SignupImage: () => React$Node = props => {
           <View style={styles.imageUploadContainer}>
             <View style={styles.imagesContainer}>
               <Touchable
-                style={[styles.imageContainer, props.picture1 ? {} : styles.imageSelected]}
-                onPress={() => onPressUpload(1)}>
+                style={[
+                  styles.imageContainer,
+                  props.picture1 ? {} : styles.imageSelected,
+                ]}
+                onPress={() => onPressUpload(1)}
+              >
                 {props.picture1 ? (
                   <Image
                     key={`upload-image-1`}
@@ -117,9 +135,17 @@ const SignupImage: () => React$Node = props => {
               </Touchable>
 
               <Touchable
-                style={[styles.imageContainer, props.picture2 ? {} : props.picture1 ? styles.imageSelected : styles.imageNone]}
+                style={[
+                  styles.imageContainer,
+                  props.picture2
+                    ? {}
+                    : props.picture1
+                    ? styles.imageSelected
+                    : styles.imageNone,
+                ]}
                 disabled={props.picture1 ? false : true}
-                onPress={() => onPressUpload(2)}>
+                onPress={() => onPressUpload(2)}
+              >
                 {props.picture2 ? (
                   <Image
                     key={`upload-image-2`}
@@ -127,14 +153,25 @@ const SignupImage: () => React$Node = props => {
                     style={styles.imageContainer}
                   />
                 ) : (
-                  <Image source={Images.app.icPlus} style={props.picture1 ? styles.plusIcon : styles.plusWhite} />
+                  <Image
+                    source={Images.app.icPlus}
+                    style={props.picture1 ? styles.plusIcon : styles.plusWhite}
+                  />
                 )}
               </Touchable>
 
               <Touchable
-                style={[styles.imageContainer, props.picture3 ? {} : props.picture2 ? styles.imageSelected : styles.imageNone]}
+                style={[
+                  styles.imageContainer,
+                  props.picture3
+                    ? {}
+                    : props.picture2
+                    ? styles.imageSelected
+                    : styles.imageNone,
+                ]}
                 disabled={props.picture2 ? false : true}
-                onPress={() => onPressUpload(3)}>
+                onPress={() => onPressUpload(3)}
+              >
                 {props.picture3 ? (
                   <Image
                     key={`upload-image-3`}
@@ -142,7 +179,10 @@ const SignupImage: () => React$Node = props => {
                     style={styles.imageContainer}
                   />
                 ) : (
-                  <Image source={Images.app.icPlus} style={props.picture2 ? styles.plusIcon : styles.plusWhite} />
+                  <Image
+                    source={Images.app.icPlus}
+                    style={props.picture2 ? styles.plusIcon : styles.plusWhite}
+                  />
                 )}
               </Touchable>
             </View>
@@ -170,8 +210,8 @@ const SignupImage: () => React$Node = props => {
           cancelButtonIndex={2}
           onPress={index => onSelectImage(index)}
         />
-        
-        <NotificationModal 
+
+        <NotificationModal
           isVisible={visibleNotification}
           title={"This photo can't be used here."}
           message={""}
@@ -180,9 +220,10 @@ const SignupImage: () => React$Node = props => {
           buttonColors={["#ABA7D5", "#ABA7D5"]}
           buttonText={"Okay"}
           buttonTextStyle={"#0B0516"}
-          buttonContainerStyle={{marginTop: 32}}
+          buttonContainerStyle={{ marginTop: 32 }}
           onBack={() => setVisibleNotification(false)}
-          onConfirm={(a, b) => setVisibleNotification(false)} />
+          onConfirm={(a, b) => setVisibleNotification(false)}
+        />
       </View>
     </Screen>
   );

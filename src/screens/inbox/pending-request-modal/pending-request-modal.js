@@ -16,7 +16,7 @@ class PendingRequestModal extends Component {
     this.state = {
       visibleProfile: false,
       selectedUser: null,
-    }
+    };
     this.updateAction = null;
   }
 
@@ -96,8 +96,9 @@ class PendingRequestModal extends Component {
                 renderItem={({ item: item, index }) => (
                   <Touchable
                     onPress={() => {
-                      this.setState({selectedUser: item, visibleProfile: true});
-                    }}>
+                      this.setState({ selectedUser: item, visibleProfile: true });
+                    }}
+                  >
                     <View style={styles.requestContainer}>
                       <View style={styles.imageContainer}>
                         <FastImage
@@ -136,7 +137,9 @@ class PendingRequestModal extends Component {
               {this.state.selectedUser && (
                 <ProfileView
                   user={this.state.selectedUser}
-                  goBack={() => this.setState({ visibleProfile: false, selectedUser: null })}
+                  goBack={() =>
+                    this.setState({ visibleProfile: false, selectedUser: null })
+                  }
                 />
               )}
             </View>
