@@ -1,5 +1,6 @@
 import { call, put, takeEvery, select, take } from "redux-saga/effects";
 import { UserCreators, UserTypes } from "../actions";
+import DeviceInfo from "react-native-device-info";
 import {
   login,
   phoneLoginSendCode,
@@ -80,12 +81,17 @@ export function* watchUserRequests() {
 
 function* requestLogin(action) {
   try {
+    let uniqueId = DeviceInfo.getUniqueId();
+    //console.log(uniqueId);
+
     const { params } = action;
     const requestParams = new FormData();
     requestParams.append("username", params.username);
     requestParams.append("password", params.password);
+    requestParams.append("uniqueId", uniqueId);
     const response = yield call(login, requestParams);
 
+    console.log(response.data);
     yield put(UserCreators.loginSuccess(response.data.data));
   } catch (error) {
     yield put(UserCreators.loginFailure());
@@ -94,10 +100,14 @@ function* requestLogin(action) {
 
 function* requestRegistration(action) {
   try {
+    let uniqueId = DeviceInfo.getUniqueId();
+    console.log(uniqueId);
+
     const registrationData = yield select(registrationSelector);
     const userData = yield select(userSelector);
     const params = new FormData();
 
+    params.append("uniqueId", uniqueId);
     params.append("first_name", registrationData.firstName);
     params.append("birthday", moment(registrationData.birthDate).unix());
     params.append("gender", registrationData.gender);

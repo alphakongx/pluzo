@@ -1,5 +1,5 @@
-const BASE_URL = "https://api.pluzo.com";
-// const BASE_URL = "http://10.0.2.2/api/web/index.php";
+//const BASE_URL = "https://api.pluzo.com";
+const BASE_URL = "http://10.0.2.2/api/web/index.php";
 
 export const API_ENDPOINTS = {
   LOGIN: `${BASE_URL}/login`,
