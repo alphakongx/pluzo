@@ -34,6 +34,7 @@ import styles from "./stream-overlay-view.style";
 
 const StreamOverlayView: () => React$Node = props => {
   const insets = useSafeAreaInsets();
+  const [activeUser, setActiveUser] = useState(null);
   const [showUsers, setShowUsers] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [showPlayerSetting, setShowPlayerSetting] = useState(false);
@@ -51,6 +52,12 @@ const StreamOverlayView: () => React$Node = props => {
   let splitedNames = props.streamParams.channelName.split("-");
   const isOwner = parseInt(splitedNames[1], 10) === parseInt(userId, 10);
 
+  const onUserReport = user => {
+    if (user) {
+      setActiveUser(user);
+      setVisibleReport(true);
+    }
+  };
   const onStartLivestream = () => {
     // call the api to create new stream
     props.setStreamStatus(StreamStatus.STARTED);
@@ -280,6 +287,7 @@ const StreamOverlayView: () => React$Node = props => {
                 isBroadcaster={props.isBroadcaster}
                 streamParams={props.streamParams}
                 onReport={() => setVisibleReport(true)}
+                onUserReport={onUserReport}
                 onInviteFriends={() => setVisibleInviteFriends(true)}
                 onShowProfile={user => {
                   props.onShowProfile(user);
@@ -304,6 +312,7 @@ const StreamOverlayView: () => React$Node = props => {
             isVisible={visibleReport}
             liveStream
             channelId={props.streamParams.channelName}
+            userId={activeUser != null ? activeUser.id || activeUser._id : null}
             keyboardDisable={true}
             onDismiss={() => setVisibleReport(false)}
           />

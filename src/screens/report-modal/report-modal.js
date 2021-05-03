@@ -72,6 +72,10 @@ class ReportModal extends Component {
       if (this.props.liveStream) {
         type = "stream";
         params.append("channel_id", this.props.channelId);
+
+        if (this.props.userId != null) {
+          params.append("user_id", this.props.userId);
+        }
       } else {
         params.append("user_id", this.props.userId);
       }

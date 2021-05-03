@@ -416,12 +416,12 @@ class StreamUsers extends Component {
         >
           <SafeAreaView style={styles.flexFill}>
             <View style={styles.header}>
-              <Touchable
+              {/* <Touchable
                 style={styles.headerButtonTouchable}
                 onPress={this.props.onReport}
               >
                 <Image source={require("@assets/images/report.png")} />
-              </Touchable>
+              </Touchable> */}
               {isBroadcaster && isOwner ? (
                 <Touchable
                   onPress={() => {
@@ -561,6 +561,18 @@ class StreamUsers extends Component {
                     <View style={styles.broadcasterContainer}>
                       {this.renderBroadCasterRow(index, user, isBroadcaster, true)}
                     </View>
+
+                    {/* {
+                      console.log(user)
+                    } */}
+
+                    <Touchable
+                      style={styles.headerButtonTouchable}
+                      // onPress={this.props.onReport}
+                      onPress={() => this.props.onUserReport(user)}
+                    >
+                      <Image source={require("@assets/images/report.png")} />
+                    </Touchable>
                   </View>
                 );
               })}

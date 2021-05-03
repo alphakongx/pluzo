@@ -35,6 +35,7 @@
     "react-native-calendars": "^1.300.0",
     "react-native-countdown-text": "^1.0.5",
     "react-native-deck-swiper": "^1.6.7",
+    "react-native-device-info": "^8.1.2",
     "react-native-fast-image": "^8.3.2",
     "react-native-geolocation-service": "^5.0.0",
     "react-native-gesture-handler": "^1.6.1",
