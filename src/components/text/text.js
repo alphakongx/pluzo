@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { StyleSheet, Text as NativeText } from "react-native";
 import ScaleSheet from "react-native-scalesheet";
 import { FontHelper } from "@helpers";
-import _ from "lodash";
 
 class Text extends Component {
   render() {
@@ -10,10 +9,9 @@ class Text extends Component {
     let propsStyle;
 
     if (style instanceof Array) {
-      propsStyle = _.map(style, s => s && FontHelper.font(StyleSheet.flatten(s)));
-      propsStyle = Object.assign({}, ...propsStyle);
+      propsStyle = FontHelper.font(StyleSheet.flatten(style));
     } else {
-      propsStyle = FontHelper.font(StyleSheet.flatten(style || {}));
+      propsStyle = FontHelper.font(style || {});
     }
 
     const defaultStyle = { color: link ? "blue" : "black" };
@@ -26,7 +24,7 @@ class Text extends Component {
     });
 
     return (
-      <NativeText {...rest} style={styles.text}>
+      <NativeText {...rest} style={styles.text} allowFontScaling={false}>
         {children}
       </NativeText>
     );

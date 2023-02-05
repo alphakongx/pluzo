@@ -1,24 +1,27 @@
-import { StyleSheet } from "react-native";
-import { COLOR } from "@config";
+import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
+
+export const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     flex: 1,
   },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   contentContainer: {
     flex: 1,
-    backgroundColor: "white",
-  },
-  card: {
-    flex: 1,
-    borderRadius: 4,
-    // borderWidth: 2,
-    // borderColor: "#E8E8E8",
     justifyContent: "center",
-    backgroundColor: "white",
   },
-  cardImage: {
-    flex: 1,
+  heartIcon: {
+    width: wp(120),
+    height: wp(120),
+    resizeMode: "contain",
+    alignSelf: "center",
+    marginTop: -wp(50),
   },
   topActions: {
     position: "absolute",
@@ -26,61 +29,51 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 1000,
-    paddingBottom: 50,
+    paddingBottom: wp(50),
   },
-  topActionRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
-  topRowMargin: {
-    marginTop: 20,
-  },
-  topRowMarginSmall: {
-    marginTop: 8,
-  },
-  onlineStatus: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 5,
-  },
-  topBarName: {
-    fontSize: 26,
+
+  noUsers: {
+    fontSize: wp(24),
     fontWeight: "600",
-    color: COLOR.TEXT_PRIMARY,
+    color: "white",
   },
-  topBarLocation: {
-    fontSize: 10,
-    color: COLOR.TEXT_SECONDARY_2,
-    marginLeft: 5,
-  },
-  flexSpace: {
-    flex: 1,
-  },
-  bottomActions: {
+
+  matchesContainer: {
     position: "absolute",
-    bottom: 0,
+    top: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
+    bottom: 0,
+    backgroundColor: "rgba(11, 5, 22, 0.5)",
   },
-  iconHeart: {
-    // width: 100,
-    // height: 100,
-    // backgroundColor: "pink",
-  },
-  buttonRow: {
+
+  tutorialContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(11, 5, 22, 0.5)",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginHorizontal: 20,
   },
-  buttonRowMargin: {
-    marginBottom: 40,
-    marginTop: 20,
+  tutorialSeperator: {
+    width: 1,
+    height: "100%",
+    backgroundColor: "white",
   },
-  buttonSmall: {
-    marginHorizontal: 10,
+  tutorialPointerLeft: {
+    alignItems: "center",
+    flex: 140,
+  },
+  tutorialPointerRight: {
+    alignItems: "center",
+    flex: 235,
+  },
+  tutorialText: {
+    fontFamily: "OpenSans",
+    fontSize: wp(12),
+    fontWeight: "600",
+    color: "white",
   },
 });

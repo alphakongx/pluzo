@@ -1,69 +1,174 @@
-import React from "react";
-import { Image, View } from "react-native";
-import { GradientButton, ProgressBar, Screen, Text, Touchable } from "@components";
-import CodeInput from "react-native-confirmation-code-input";
+import React, { Component } from "react";
+import { View, Platform, Keyboard } from "react-native";
+import { BackButton, GradientButton, ProgressBar, Screen, Text } from "@components";
+import OTPInputView from "@twotalltotems/react-native-otp-input";
+import RNOtpVerify from "react-native-otp-verify";
+import Clipboard from "@react-native-community/clipboard";
+import { Countdown } from "react-native-countdown-text";
+import moment from "moment";
+import EventBus from "eventing-bus";
+import { UserTypes } from "@redux/actions";
+import { NavigationService } from "@helpers";
+import AsyncStorage from "@react-native-community/async-storage";
+import { TUTORIAL } from "@constants";
+
 import styles from "./signup-code-verification.style.js";
 
-const SignupCodeVerification: () => React$Node = props => {
-  const goBack = () => {
-    props.navigation.goBack();
+class SignupCodeVerification extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      code: "",
+      canResend: false,
+      countdownTime: moment().add(60, "seconds").unix(),
+    };
+  }
+
+  async componentDidMount() {
+    this.codeActionSubscription = EventBus.on(
+      UserTypes.PHONE_VERIFICATION_SEND_CODE_SUCCESS,
+      () => {
+        AsyncStorage.setItem(TUTORIAL.SMS_LAST_TIME, `${moment().unix()}`);
+        this.startCountDown(60);
+      },
+    );
+    if (Platform.OS === "android") {
+      RNOtpVerify.getOtp()
+        .then(p => {
+          RNOtpVerify.addListener(this.otpHandler);
+        })
+        .catch(p => console.log(p));
+    }
+
+    let lastTime = 0;
+    try {
+      lastTime = await AsyncStorage.getItem(TUTORIAL.SMS_LAST_TIME);
+    } catch (error) {
+      lastTime = 0;
+    }
+    if (lastTime === 0 || lastTime === null) {
+      this.resendCode();
+    } else {
+      let passTime = moment().diff(moment.unix(lastTime), "seconds");
+      if (passTime < 60) {
+        this.startCountDown(60 - passTime);
+      } else {
+        this.resendCode();
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.codeActionSubscription();
+    if (Platform.OS === "android") {
+      RNOtpVerify.removeListener();
+    }
+  }
+
+  otpHandler = message => {
+    const otp = /(\d{4})/.exec(message);
+    if (otp !== null) {
+      Clipboard.setString(otp[1]);
+      RNOtpVerify.removeListener();
+      Keyboard.dismiss();
+    }
   };
 
-  return (
-    <Screen>
-      <View style={styles.container}>
-        <ProgressBar />
-        <Touchable onPress={goBack}>
-          <View style={styles.backButtonContainer}>
-            <Image source={require("@assets/images/chevron-left.png")} />
-          </View>
-        </Touchable>
-        <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>Check your messages.</Text>
-          <Text style={styles.subTitleText}>
-            We've sent you a verification code to ensure you are you.
-          </Text>
+  goBack = () => {
+    NavigationService.popToTop();
+  };
 
-          <View style={styles.codeContainer}>
-            <CodeInput
-              className={"border-b"}
-              codeLength={4}
-              space={10}
-              size={68}
-              inputPosition='center'
-              onFulfill={code => {}}
-              activeColor={"#9892A3"}
-              cellBorderWidth={0}
-              codeInputStyle={styles.codeInputStyle}
+  resendCode = () => {
+    var phoneNumber = "";
+    if (this.props.navigation.state.params !== undefined) {
+      phoneNumber = this.props.navigation.state.params.phoneNumber;
+    }
+    this.props.requestPhoneVerificationSendCode(phoneNumber);
+  };
+
+  startCountDown = seconds => {
+    this.setState({
+      countdownTime: moment().add(seconds, "seconds").unix(),
+      canResend: false,
+    });
+  };
+
+  submit = () => {
+    const { code } = this.state;
+    var phoneNumber = "";
+    if (this.props.navigation.state.params !== undefined) {
+      phoneNumber = this.props.navigation.state.params.phoneNumber;
+    }
+
+    this.props.requestPhoneVerificationConfirmCode(phoneNumber, code, true);
+  };
+
+  render() {
+    const { code, countdownTime, canResend } = this.state;
+    const { verificationInProgress, isSendingPhoneVerificationCode } = this.props;
+
+    return (
+      <Screen>
+        <View style={styles.container}>
+          <ProgressBar width={100} />
+          <BackButton onPress={this.goBack} />
+          <View style={styles.contentContainer}>
+            <Text style={styles.titleText}>Phone Verification</Text>
+            <Text style={styles.subTitleText}>
+              We've sent you a verification code to ensure you are you.
+            </Text>
+
+            <View style={styles.codeContainer}>
+              <OTPInputView
+                codeInputFieldStyle={styles.codeInputStyle}
+                style={styles.codeContentContainer}
+                pinCount={4}
+                autoFocusOnLoad
+                onCodeChanged={c => this.setState({ code: c })}
+                onCodeFilled={c => this.setState({ code: c })}
+              />
+            </View>
+
+            <View style={styles.informationContainer}>
+              <View style={styles.instructionContainer}>
+                <Text style={styles.instructionText}>Didn't receive it?</Text>
+              </View>
+
+              <View style={styles.resendButtonContainer}>
+                <GradientButton
+                  loading={isSendingPhoneVerificationCode}
+                  disabled={!canResend}
+                  text={"Resend"}
+                  onPress={this.resendCode}
+                />
+              </View>
+
+              {!canResend ? (
+                <View style={styles.instructionContainer}>
+                  <Countdown
+                    format={"ss"}
+                    textStyle={styles.instructionText}
+                    finishTime={countdownTime}
+                    onFinish={() => this.setState({ canResend: true })}
+                  />
+                </View>
+              ) : null}
+            </View>
+          </View>
+          <View style={{ flex: 1 }} />
+          <View style={styles.footer}>
+            <GradientButton
+              loading={verificationInProgress}
+              disabled={!code || code.length < 4}
+              onPress={this.submit}
+              text={"Confirm account"}
             />
           </View>
-
-          <View style={styles.informationContainer}>
-            <View style={styles.instructionContainer}>
-              <Text style={styles.instructionText}>Didn't receive it?</Text>
-            </View>
-
-            <View style={styles.resendButtonContainer}>
-              <GradientButton title={"Resend"} />
-            </View>
-
-            <View style={styles.instructionContainer}>
-              <Text style={styles.instructionText}>60</Text>
-            </View>
-          </View>
         </View>
-
-        <View style={styles.footer}>
-          <GradientButton
-            onPress={() => {
-              props.navigation.navigate("SIGNUP_SUCCESS", {});
-            }}
-            title={"Confirm account"}
-          />
-        </View>
-      </View>
-    </Screen>
-  );
-};
+      </Screen>
+    );
+  }
+}
 
 export default SignupCodeVerification;

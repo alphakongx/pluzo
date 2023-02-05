@@ -1,36 +1,37 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 20,
+    paddingBottom: wp(20),
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
   },
   titleFieldContainer: {
     flex: 1,
-    paddingTop: 120,
+    paddingTop: (height / 100) * 18,
+    alignItems: "center",
   },
   titleText: {
-    fontSize: 24,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 50,
+    marginBottom: wp(10),
   },
-  selectedDateContainer: {
-    flexDirection: "row",
-  },
+
   buttonContainer: {
-    marginTop: 40,
+    marginBottom: wp(20),
   },
 });

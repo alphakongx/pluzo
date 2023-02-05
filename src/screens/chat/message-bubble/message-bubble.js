@@ -1,37 +1,137 @@
-import React from "react";
-import { View } from "react-native";
-import { Image, Text } from "@components";
+import React, { useState } from "react";
+import { Linking, View, ActivityIndicator, Image } from "react-native";
+import FastImage from "react-native-fast-image";
+import { Touchable, Text } from "@components";
 import styles from "./message-bubble.style.js";
+import Images from "@assets/Images";
+import ParsedText from "react-native-parsed-text";
+import MessageLiveItem from "./message-live-item.js";
 
 const MessageBubble: () => React$Node = props => {
-  const { currentMessage, user } = props;
+  const [loading, setLoading] = useState(true);
+  const { currentMessage, user, nextMessage, previousMessage } = props;
   const isCurrentUser = currentMessage.user._id === user._id;
   const hasImage = currentMessage.image ? true : false;
+  const hasText =
+    currentMessage.text !== null && currentMessage.text !== "" ? true : false;
+  const largeSpacer =
+    previousMessage &&
+    previousMessage.user &&
+    currentMessage.user._id !== previousMessage.user._id;
 
-  return (
-    <View style={styles.container}>
-      {hasImage ? (
-        <Image
-          source={{ uri: currentMessage.image + " asd " }}
-          style={styles.messageImage}
-          resizeMode={"cover"}
-        />
-      ) : null}
+  const renderTicks = () => {
+    if (!isCurrentUser) {
+      return null;
+    }
+
+    if (currentMessage && nextMessage._id === undefined) {
+      return (
+        <View style={styles.tickContainer}>
+          <View
+            style={[
+              styles.tickView,
+              currentMessage.message_info.sent === 0
+                ? styles.tickViewSent
+                : currentMessage.message_info.received
+                ? styles.tickViewReceived
+                : styles.tickViewSent,
+            ]}
+          >
+            {currentMessage.message_info.sent === 0 ? (
+              <FastImage source={Images.app.icClock} style={styles.tickPedning} />
+            ) : (
+              <FastImage source={Images.app.icCheck} style={styles.tick} />
+            )}
+          </View>
+        </View>
+      );
+    }
+    return null;
+  };
+
+  const handleUrlPress = url => {
+    Linking.openURL(url);
+  };
+
+  if (currentMessage.type === "invite" || currentMessage.type === "close") {
+    if (currentMessage.stream_info === null) return null;
+    return (
       <View
         style={[
-          styles.textContainer,
-          isCurrentUser ? styles.currentUserTextContainer : styles.otherUserTextContainer,
+          styles.container,
+          largeSpacer ? styles.containerMarginLarge : styles.containerMargin,
         ]}
       >
-        <Text
+        <MessageLiveItem
+          currentMessage={currentMessage}
+          isCurrentUser={isCurrentUser}
+          currentUser={user}
+        />
+      </View>
+    );
+  }
+
+  return (
+    <View
+      style={[
+        styles.container,
+        hasImage && hasText
+          ? {}
+          : largeSpacer
+          ? styles.containerMarginLarge
+          : styles.containerMargin,
+      ]}
+    >
+      {hasImage ? (
+        <Touchable
+          style={styles.imageContainer}
+          onPress={() => props.onFullImage(currentMessage.image)}
+        >
+          <FastImage
+            source={{ uri: currentMessage.image }}
+            style={[
+              styles.messageImage,
+              hasText ? styles.imageTextRound : styles.imageFullRound,
+            ]}
+            // resizeMode={FastImage.resizeMode.cover}
+            onLoad={e => {
+              setLoading(false);
+            }}
+          />
+          {loading && (
+            <ActivityIndicator
+              size={"large"}
+              style={styles.loadingIndicator}
+              color={"white"}
+            />
+          )}
+        </Touchable>
+      ) : null}
+      {currentMessage.text !== null && currentMessage.text !== "" && (
+        <View
           style={[
-            styles.text,
-            isCurrentUser ? styles.currentUserText : styles.otherUserText,
+            styles.textContainer,
+            isCurrentUser
+              ? styles.currentUserTextContainer
+              : styles.otherUserTextContainer,
+            hasImage ? styles.imageText : {},
           ]}
         >
-          {currentMessage.text}
-        </Text>
-      </View>
+          <ParsedText
+            style={[
+              styles.text,
+              isCurrentUser ? styles.currentUserText : styles.otherUserText,
+            ]}
+            parse={[{ type: "url", style: styles.urlText, onPress: handleUrlPress }]}
+            allowFontScaling={false}
+            selectable
+          >
+            {currentMessage.text}
+            {/* <Text style={styles.timeText}>{"7:55"}</Text> */}
+          </ParsedText>
+        </View>
+      )}
+      {renderTicks()}
     </View>
   );
 };

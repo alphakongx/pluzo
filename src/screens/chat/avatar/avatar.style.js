@@ -1,10 +1,11 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
-  container: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    // backgroundColor: "red",
+  avatar: {
+    width: wp(40),
+    height: wp(40),
+    borderRadius: wp(20),
+    marginRight: Platform.OS === "ios" ? -wp(4) : -wp(3),
   },
 });

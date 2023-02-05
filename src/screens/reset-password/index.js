@@ -1,3 +1,15 @@
 import ResetPassword from "./reset-password.screen";
+import { connect } from "react-redux";
+import { UserCreators } from "@redux/actions";
 
-export default ResetPassword;
+function mapStateToProps(state) {
+  return {
+    isResettingPassword: state.user.isResettingPassword,
+  };
+}
+
+const mapDispatchToProps = {
+  requestResetPassword: UserCreators.requestResetPassword,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);

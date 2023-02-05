@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, View } from "react-native";
+import { Image, NativeModules, View } from "react-native";
 import {
   GradientButton,
   ProgressBar,
@@ -7,27 +7,89 @@ import {
   SolidButton,
   Text,
   Touchable,
+  NotificationModal,
 } from "@components";
 import styles from "./signup-image.style.js";
-import ImagePicker from "react-native-image-picker";
+import ImagePicker from "react-native-image-crop-picker";
+import ActionSheet from "react-native-actionsheet";
+import Images from "@assets/Images";
 
 const SignupImage: () => React$Node = props => {
-  const onPressUpload = () => {
+  const [visibleNotification, setVisibleNotification] = useState(false);
+  let actionSheetRef = React.createRef();
+  let currentImageIndex = 1;
+
+  const onPressUpload = index => {
+    if (index === 0) {
+      if (props.picture1) {
+        if (props.picture2) {
+          currentImageIndex = 3;
+        } else {
+          currentImageIndex = 2;
+        }
+      } else {
+        currentImageIndex = 1;
+      }
+    } else {
+      currentImageIndex = index;
+    }
+    actionSheetRef.show();
+  };
+
+  const onSelectImage = index => {
     const options = {
-      title: "Select Avatar",
-      customButtons: [{ name: "fb", title: "Choose Photo from Facebook" }],
-      storageOptions: {
-        skipBackup: true,
-        path: "images",
-      },
+      width: 600,
+      height: 800,
+      cropping: true,
+      compressImageQuality: 0.7,
+      mediaType: "photo",
+      smartAlbums: [
+        "PhotoStream",
+        "Generic",
+        "Panoramas",
+        "Favorites",
+        "Timelapses",
+        "AllHidden",
+        "RecentlyAdded",
+        "Bursts",
+        "UserLibrary",
+        "SelfPortraits",
+        "Screenshots",
+        "DepthEffect",
+        "LivePhotos",
+        "LongExposure",
+      ],
     };
 
-    ImagePicker.showImagePicker(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
+    if (index === 0) {
+      ImagePicker.openCamera(options).then(image => {
+        onUploadImage(image);
+      });
+    } else if (index === 1) {
+      ImagePicker.openPicker(options).then(image => {
+        onUploadImage(image);
+      });
+    }
+  };
+
+  const onUploadImage = data => {
+    let photoUriSplit = data.path.split("/");
+    NativeModules.ImageDetector.check(data.path, value => {
+      if (value === "SFW") {
+        const image = {
+          uri: data.path,
+          name: photoUriSplit[photoUriSplit.length - 1],
+          type: data.mime,
+        };
+        if (currentImageIndex === 1) {
+          props.setPicture1(image);
+        } else if (currentImageIndex === 2) {
+          props.setPicture2(image);
+        } else {
+          props.setPicture3(image);
+        }
       } else {
-        props.setPicture(response);
+        setVisibleNotification(true);
       }
     });
   };
@@ -42,7 +104,7 @@ const SignupImage: () => React$Node = props => {
   return (
     <Screen>
       <View style={styles.container}>
-        <ProgressBar />
+        <ProgressBar width={80} />
         <Touchable onPress={goBack}>
           <View style={styles.backButtonContainer}>
             <Image source={require("@assets/images/chevron-left.png")} />
@@ -53,27 +115,115 @@ const SignupImage: () => React$Node = props => {
           <Text style={styles.subTitleText}>Upload a profile picture.</Text>
 
           <View style={styles.imageUploadContainer}>
-            {props.picture ? (
-              <Image style={styles.imageContainer} source={{ uri: props.picture.uri }} />
-            ) : (
-              <View style={styles.imageContainer}>
-                <Image source={require("@assets/images/image.png")} />
-              </View>
-            )}
+            <View style={styles.imagesContainer}>
+              <Touchable
+                style={[
+                  styles.imageContainer,
+                  props.picture1 ? {} : styles.imageSelected,
+                ]}
+                onPress={() => onPressUpload(1)}
+              >
+                {props.picture1 ? (
+                  <Image
+                    key={`upload-image-1`}
+                    source={{ uri: props.picture1.uri }}
+                    style={styles.imageContainer}
+                  />
+                ) : (
+                  <Image source={Images.app.icPlus} style={styles.plusIcon} />
+                )}
+              </Touchable>
+
+              <Touchable
+                style={[
+                  styles.imageContainer,
+                  props.picture2
+                    ? {}
+                    : props.picture1
+                    ? styles.imageSelected
+                    : styles.imageNone,
+                ]}
+                disabled={props.picture1 ? false : true}
+                onPress={() => onPressUpload(2)}
+              >
+                {props.picture2 ? (
+                  <Image
+                    key={`upload-image-2`}
+                    source={{ uri: props.picture2.uri }}
+                    style={styles.imageContainer}
+                  />
+                ) : (
+                  <Image
+                    source={Images.app.icPlus}
+                    style={props.picture1 ? styles.plusIcon : styles.plusWhite}
+                  />
+                )}
+              </Touchable>
+
+              <Touchable
+                style={[
+                  styles.imageContainer,
+                  props.picture3
+                    ? {}
+                    : props.picture2
+                    ? styles.imageSelected
+                    : styles.imageNone,
+                ]}
+                disabled={props.picture2 ? false : true}
+                onPress={() => onPressUpload(3)}
+              >
+                {props.picture3 ? (
+                  <Image
+                    key={`upload-image-3`}
+                    source={{ uri: props.picture3.uri }}
+                    style={styles.imageContainer}
+                  />
+                ) : (
+                  <Image
+                    source={Images.app.icPlus}
+                    style={props.picture2 ? styles.plusIcon : styles.plusWhite}
+                  />
+                )}
+              </Touchable>
+            </View>
 
             <View style={styles.imageSeparator} />
 
-            <SolidButton text={"Upload"} onPress={onPressUpload} />
+            <View style={styles.imageUploadButton}>
+              <SolidButton text={"Upload"} onPress={() => onPressUpload(0)} />
+            </View>
           </View>
         </View>
 
         <View style={styles.footer}>
           <GradientButton
-            disabled={!props.picture}
+            disabled={!props.picture1}
             onPress={navigateNext}
             text={"Continue"}
           />
         </View>
+
+        <ActionSheet
+          ref={o => (actionSheetRef = o)}
+          title={"Select Image"}
+          options={["Take Photo...", "Choose from Library...", "Cancel"]}
+          cancelButtonIndex={2}
+          onPress={index => onSelectImage(index)}
+        />
+
+        <NotificationModal
+          isVisible={visibleNotification}
+          title={"This photo can't be used here."}
+          message={""}
+          logoIcon={Images.app.icInfo}
+          logoBackground={"#ABA7D5"}
+          buttonColors={["#ABA7D5", "#ABA7D5"]}
+          buttonText={"Okay"}
+          buttonTextStyle={"#0B0516"}
+          buttonContainerStyle={{ marginTop: 32 }}
+          onBack={() => setVisibleNotification(false)}
+          onConfirm={(a, b) => setVisibleNotification(false)}
+        />
       </View>
     </Screen>
   );

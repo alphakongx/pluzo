@@ -1,52 +1,80 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
+
+const { width, height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 20,
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
-    paddingHorizontal: 37,
+    paddingTop: (height / 100) * 18,
+    paddingHorizontal: wp(37),
   },
   titleText: {
-    fontSize: 24,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
   subTitleText: {
-    fontSize: 20,
-    color: "rgba(255, 255, 255, 0.5)",
-    fontWeight: "bold",
+    fontSize: wp(16),
+    color: "#ABA7D5",
+    fontWeight: "600",
     textAlign: "center",
-    marginBottom: 40,
+    marginBottom: wp(25),
   },
   imageUploadContainer: {
+    justifyContent: "center",
     alignSelf: "center",
   },
+  imagesContainer: {
+    flexDirection: "row",
+    width: width - wp(55),
+    height: (width - wp(75)) / 2,
+    justifyContent: "space-between",
+  },
   imageContainer: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    backgroundColor: "white",
-    alignSelf: "center",
-    marginHorizontal: 25,
+    width: (width - wp(75)) / 3,
+    height: (width - wp(75)) / 2,
+    borderRadius: wp(22),
+    backgroundColor: "#0B0516",
     justifyContent: "center",
     alignItems: "center",
   },
+  imageSelected: {
+    backgroundColor: "white",
+  },
+  imageNone: {
+    borderWidth: wp(2),
+    borderColor: "white",
+  },
+  plusIcon: {
+    width: wp(21),
+    height: wp(21),
+    tintColor: "#0B0516",
+  },
+  plusWhite: {
+    width: wp(21),
+    height: wp(21),
+    tintColor: "white",
+  },
   imageSeparator: {
-    height: 25,
+    height: wp(25),
+  },
+  imageUploadButton: {
+    width: wp(180),
+    alignSelf: "center",
   },
   footer: {
-    marginTop: 40,
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
+    paddingBottom: wp(40),
   },
 });
