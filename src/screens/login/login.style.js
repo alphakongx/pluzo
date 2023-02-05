@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -7,34 +8,36 @@ export default StyleSheet.create({
   centeredContentContainer: {
     justifyContent: "center",
     flex: 1,
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
+    marginTop: -wp(30),
   },
   titleText: {
-    fontSize: 32,
-    color: "white",
-    fontWeight: "600",
-    textAlign: "center",
-    marginBottom: 25,
-  },
-  inputFieldSeparator: {
-    marginBottom: 24,
-  },
-  buttonContainer: {
-    marginTop: 25,
-  },
-  orText: {
-    fontSize: 20,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginVertical: 11,
+    marginBottom: wp(18),
+  },
+  inputFieldSeparator: {
+    marginBottom: wp(20),
+  },
+  buttonContainer: {
+    marginTop: wp(25),
+  },
+  orText: {
+    fontSize: wp(14),
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: wp(10),
   },
   forgotPasswordContainer: {
-    marginTop: 30,
+    marginTop: wp(25),
     alignItems: "center",
   },
   forgotPasswordText: {
-    fontSize: 14,
+    fontFamily: "OpenSans",
+    fontSize: wp(12),
     color: "white",
     textDecorationLine: "underline",
   },

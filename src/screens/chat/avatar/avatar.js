@@ -1,18 +1,25 @@
 import React from "react";
-import { Image } from "@components";
+import { Touchable } from "@components";
+import FastImage from "react-native-fast-image";
 import styles from "./avatar.style";
 
 const Avatar: () => React$Node = props => {
-  // const {
-  //   currentMessage: { user },
-  // } = props;
-
-  // return <Image style={styles.container} source={{ uri: user.avatar }} />;/
+  const {
+    currentMessage: { user },
+  } = props;
   return (
-    <Image
-      style={styles.container}
-      source={require("@assets/images/message-image.png")}
-    />
+    <Touchable onPress={props.onPress} disabled={user._id === 0}>
+      <FastImage
+        style={styles.avatar}
+        source={
+          user.avatar === null || user.avatar === undefined
+            ? require("@assets/images/message-image.png")
+            : typeof user.avatar === "string"
+            ? { uri: user.avatar }
+            : user.avatar
+        }
+      />
+    </Touchable>
   );
 };
 

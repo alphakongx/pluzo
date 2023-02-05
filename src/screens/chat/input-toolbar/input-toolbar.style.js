@@ -1,44 +1,103 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
+import { widthPercentageToDP as wp, FontHelper } from "@helpers";
 import { COLOR } from "@config";
-import { FontHelper } from "@helpers";
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: COLOR.MESSAGE_INPUT_TOOLBAR_BACKGROUND,
-    borderTopWidth: 1,
+    borderTopWidth: wp(1),
+    borderTopColor: "#FFFFFF10",
+    paddingBottom: wp(12),
   },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  contentContainer: {
+  composerContainer: {
     flexDirection: "row",
     flex: 1,
+    marginLeft: wp(20),
+    marginRight: wp(10),
   },
-  attachmentsButtonContainer: {
-    paddingHorizontal: 10,
+  composerShadow: {
+    marginLeft: 0,
+    marginTop: wp(10),
   },
-  attachmentIcon: {
-    width: 35,
-    height: 35,
-    borderRadius: 17.5,
-    justifyContent: "center",
+  inputContainer: {
+    flexDirection: "row",
+    flex: 1,
+    marginTop: wp(10),
+    backgroundColor: "white",
+    borderRadius: wp(25),
     alignItems: "center",
   },
-  inputFieldContainer: {
-    flex: 1,
-    flexDirection: "row",
-    height: 35,
-    borderRadius: 25,
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    marginRight: 10,
-  },
   inputField: FontHelper.font({
-    flex: 1,
-    fontSize: 12,
-    fontWeight: "600",
-    color: COLOR.SEARCH_INPUT_TEXT,
-    backgroundColor: "white",
+    fontFamily: "OpenSans",
+    fontSize: 16,
+    color: COLOR.TEXT_INPUT,
+    marginLeft: wp(15),
+    marginRight: wp(45),
+    ...Platform.select({
+      ios: {
+        marginTop: wp(3),
+        marginBottom: wp(2),
+        lineHeight: 20,
+      },
+      android: {
+        marginBottom: wp(0),
+        lineHeight: 20,
+      },
+    }),
   }),
+  sendButtonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: wp(18),
+    top: Platform.OS === "ios" ? wp(15) : wp(17),
+    ...Platform.select({
+      ios: {
+        width: wp(25),
+        height: wp(25),
+      },
+      android: {
+        width: wp(28),
+        height: wp(28),
+      },
+    }),
+  },
+  sendButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    ...Platform.select({
+      ios: {
+        width: wp(25),
+        height: wp(25),
+      },
+      android: {
+        width: wp(28),
+        height: wp(28),
+      },
+    }),
+  },
+  sendButtonIcon: {
+    width: wp(16),
+    height: wp(10),
+    tintColor: "white",
+  },
+  cameraButton: {
+    height: wp(30),
+    justifyContent: "center",
+    position: "absolute",
+    right: wp(23),
+    ...Platform.select({
+      ios: {
+        top: wp(12),
+      },
+      android: {
+        top: wp(15),
+      },
+    }),
+  },
+  cameraButtonIcon: {
+    width: wp(20),
+    height: wp(16),
+    resizeMode: "stretch",
+  },
 });

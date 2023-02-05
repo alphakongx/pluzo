@@ -1,21 +1,25 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 import { COLOR } from "@config";
 
 export default StyleSheet.create({
+  flexFill: {
+    flex: 1,
+  },
   headerContainer: {
     backgroundColor: COLOR.HEADER_BACKGROUND,
   },
   header: {
-    height: 60,
+    height: wp(70),
     flexDirection: "row",
   },
   backButtonContainer: {
     justifyContent: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(10),
   },
   backButtonTouchable: {
-    width: 35,
-    height: 35,
+    width: wp(35),
+    height: wp(35),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -25,24 +29,50 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   headerImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginHorizontal: 10,
+    width: wp(50),
+    height: wp(50),
+    borderRadius: wp(25),
+    marginRight: wp(10),
+  },
+  headerNameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    overflow: "hidden",
   },
   headerTitle: {
-    fontSize: 14,
+    fontFamily: "OpenSans",
+    fontSize: wp(18),
     fontWeight: "700",
     color: COLOR.TEXT_PRIMARY,
+    marginRight: wp(5),
+  },
+  badgeImage: {
+    width: wp(14),
+    height: wp(14),
+    marginRight: wp(3),
+  },
+  lastSeenText: {
+    fontFamily: "OpenSans",
+    fontSize: wp(10),
+    fontWeight: "600",
+    color: "#ABA7D5",
+  },
+  activeUser: {
+    color: "#00FF77",
   },
   reportButtonContainer: {
     justifyContent: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(10),
   },
   reportButtonTouchable: {
-    width: 35,
-    height: 35,
+    width: wp(35),
+    height: wp(35),
     justifyContent: "center",
     alignItems: "center",
+  },
+  reportIcon: {
+    width: wp(16.67),
+    height: wp(20),
+    resizeMode: "contain",
   },
 });

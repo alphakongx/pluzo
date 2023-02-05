@@ -1,69 +1,136 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
-    justifyContent: "center",
     flex: 1,
-    paddingVertical: 20,
+  },
+  verticalCenter: {
+    justifyContent: "center",
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
-    paddingHorizontal: 37,
+    paddingHorizontal: wp(37),
+  },
+  contentPadding: {
+    paddingTop: (height / 100) * 18,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: wp(45),
   },
   inputFieldSeparator: {
-    height: 20,
+    height: wp(20),
+  },
+  takenPosition: {
+    position: "absolute",
+    right: wp(8),
+  },
+  takenIcon: {
+    width: wp(15),
+    height: wp(15),
+    resizeMode: "contain",
+  },
+  checkIcon: {
+    tintColor: "#00FF77",
+  },
+  crossIcon: {
+    tintColor: "#FF0036",
+  },
+  takenUsername: {
+    marginTop: wp(7),
+    fontFamily: "OpenSans",
+    fontSize: wp(12),
+    fontWeight: "600",
+    color: "#FF0036",
+    textAlign: "center",
+  },
+  availableScroll: {
+    minHeight: wp(70),
+    maxHeight: wp(70),
+    marginHorizontal: -wp(17),
+  },
+  availableContainer: {
+    flexDirection: "row",
+  },
+  availableButton: {
+    height: wp(35),
+    marginTop: wp(16),
+    paddingHorizontal: wp(17),
+    backgroundColor: "#312446",
+    borderRadius: wp(25),
+    justifyContent: "center",
+  },
+  avaliableText: {
+    fontSize: wp(14),
+    fontWeight: "bold",
+    color: "white",
+  },
+  availableSeparator: {
+    width: wp(10),
+  },
+  visiblePass: {
+    tintColor: "#0B0516",
+  },
+  invisiblePass: {
+    tintColor: "#ABA7D5",
   },
   informationContainer: {
     alignItems: "center",
-    marginTop: 25,
+    marginTop: wp(25),
   },
   passwordRequirementTitle: {
-    fontSize: 14,
-    color: "rgba(255, 255, 255, 0.5)",
+    fontFamily: "OpenSans",
+    fontSize: wp(12),
+    color: "#ABA7D5",
     textDecorationLine: "underline",
   },
   passwordRequirement: {
-    marginTop: 3,
-    fontSize: 14,
-    color: "rgba(255, 255, 255, 0.5)",
+    marginTop: wp(3),
+    fontFamily: "OpenSans",
+    fontSize: wp(12),
+    color: "#ABA7D5",
   },
   instructionContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
   instructionInvalidIcon: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: "#FFFFFF",
-    marginTop: 3,
-    marginRight: 5,
+    width: wp(7),
+    height: wp(7),
+    borderRadius: wp(4),
+    borderWidth: wp(1),
+    borderColor: "#ABA7D5",
+    marginTop: wp(3),
+    marginRight: wp(5),
   },
   instructionValidIcon: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+    width: wp(7),
+    height: wp(7),
+    borderRadius: wp(4),
     backgroundColor: "#00FF6F",
-    marginTop: 3,
-    marginRight: 5,
+    marginTop: wp(3),
+    marginRight: wp(5),
+  },
+  buttonSeparator: {
+    flex: 1,
   },
   footer: {
-    marginTop: 40,
-    paddingHorizontal: 37,
+    marginTop: wp(10),
+    marginBottom: wp(40),
+  },
+  footer1: {
+    height: wp(45),
   },
 });

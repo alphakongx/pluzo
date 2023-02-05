@@ -1,11 +1,29 @@
 import React from "react";
-import { ImageBackground, SafeAreaView, View } from "react-native";
+import { ImageBackground, View, SafeAreaView } from "react-native";
+// import { SafeAreaView } from "react-navigation";
+import LinearGradient from "react-native-linear-gradient";
+import { GRADIENT } from "@config";
 import styles from "./screen.style";
 
 const Screen: () => React$Node = props => {
   const ContainerComponent = props.hasHeader ? View : SafeAreaView;
 
-  return (
+  return props.hasGradient ? (
+    <LinearGradient
+      colors={GRADIENT.SCREEN_BACKGROUND}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      style={props.style}
+    >
+      {props.children}
+    </LinearGradient>
+  ) : props.noFill ? (
+    <ContainerComponent style={props.containerStyle}>
+      <ImageBackground source={require("@assets/images/bg.png")} style={props.style}>
+        {props.children}
+      </ImageBackground>
+    </ContainerComponent>
+  ) : (
     <ImageBackground
       source={require("@assets/images/bg.png")}
       style={styles.imageBackground}

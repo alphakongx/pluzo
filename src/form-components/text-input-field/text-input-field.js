@@ -9,7 +9,15 @@ const TextInputField = props => {
   } = props;
   const showError = touched && error;
 
-  return <TextInput {...input} {...rest} error={showError ? error : ""} />;
+  return (
+    <TextInput
+      onChange={input.onChange}
+      name={input.name}
+      {...rest}
+      error={showError ? error : ""}
+      allowFontScaling={false}
+    />
+  );
 };
 
 export default TextInputField;

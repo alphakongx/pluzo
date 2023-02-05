@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP as wp } from "@helpers";
 
 export default StyleSheet.create({
   container: {
@@ -6,56 +7,64 @@ export default StyleSheet.create({
     flex: 1,
   },
   backButtonContainer: {
-    width: 60,
-    height: 60,
+    width: wp(60),
+    height: wp(60),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 120,
-    paddingHorizontal: 37,
+    flexDirection: "column-reverse",
+    paddingHorizontal: wp(37),
+    justifyContent: "center",
+    marginTop: -wp(30),
   },
   titleText: {
-    fontSize: 24,
+    fontSize: wp(20),
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: wp(50),
   },
   phoneContainer: {
     flexDirection: "row",
   },
   phoneLabel: {
+    fontFamily: "OpenSans",
+    fontWeight: "700",
     textAlign: "center",
-    fontSize: 11,
+    fontSize: wp(8),
     color: "rgba(255, 255, 255, 0.5)",
-    height: 20,
+    height: wp(15),
   },
   phoneCodeContainer: {
-    width: 90,
+    width: wp(70),
+  },
+  codePicker: {
+    height: wp(35),
   },
   phoneNumberContainer: {
-    paddingTop: 20,
+    paddingTop: wp(15),
     flex: 3,
   },
   phoneSeparator: {
-    width: 15,
+    width: wp(15),
   },
   informationContainer: {
     alignItems: "center",
-    marginTop: 25,
+    marginTop: wp(25),
   },
   passwordRequirementTitle: {
-    fontSize: 14,
+    fontSize: wp(14),
     color: "rgba(255, 255, 255, 0.5)",
     textDecorationLine: "underline",
   },
   instructionText: {
+    fontFamily: "OpenSans",
     textAlign: "center",
-    marginTop: 3,
-    fontSize: 14,
-    fontWeight: "600",
+    marginTop: wp(3),
+    fontSize: wp(14),
+    fontWeight: "400",
     color: "rgba(255, 255, 255, 0.5)",
   },
   instructionContainer: {
@@ -63,15 +72,16 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   instructionValidIcon: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+    width: wp(7),
+    height: wp(7),
+    borderRadius: wp(4),
     backgroundColor: "#00FF6F",
-    marginTop: 3,
-    marginRight: 5,
+    marginTop: wp(3),
+    marginRight: wp(5),
   },
   footer: {
-    marginTop: 40,
-    paddingHorizontal: 37,
+    marginTop: wp(30),
+    marginBottom: wp(40),
+    paddingHorizontal: wp(37),
   },
 });

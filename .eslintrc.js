@@ -12,6 +12,7 @@ module.exports = {
         "prettier/prettier": "error",
         "func-names": ["error", "never"],
         "global-require": 0,
+        "react-hooks/exhaustive-deps": "off"
     },
     globals: {
         navigator: true,

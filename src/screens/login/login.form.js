@@ -12,6 +12,7 @@ const LoginForm: () => React$Node = props => {
   return (
     <View>
       <Field
+        autoCapitalize={"none"}
         name={"username"}
         component={TextInputField}
         keyboardType={"email-address"}
